@@ -1,0 +1,918 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="HJGraphics" targetName="HJGraphics" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1abe225c-fa90-4461-a691-18ba3a0c3b70" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/../ShadowMapTest/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ShadowMapTest/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestingField/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestingField/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/3.7.1/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/3.7.1/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/3.7.1/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Camera.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/Camera" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/Camera" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/Camera.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/Camera.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Camera/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Camera/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/3.7.1/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/3.7.1/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/3.7.1/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/FrameBuffer.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/FrameBuffer" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/FrameBuffer" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/FrameBuffer.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/FrameBuffer.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrameBuffer/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../FrameBuffer/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/Model.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/Model.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/Shader.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/Shader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/3.7.1/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/3.7.1/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/3.7.1/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/DependInfo.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/cmake_clean.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/Model.dir/progress.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/Model" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/Model" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/Model.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/Model.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/cmake-build-debug/fragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/cmake-build-debug/fragment.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/3.7.1/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/3.7.1/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/3.7.1/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/Spotlight.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/Spotlight" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/Spotlight" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/Spotlight.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/Spotlight.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Spotlight/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Spotlight/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/3.7.1/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/3.7.1/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/3.7.1/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/OpenGL.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/OpenGL.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/OpenGL.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/OpenGL.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/OpenGL.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/OpenGL.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/OpenGL.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/Texture.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/Texture" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/Texture" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/Texture.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/Texture.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Texture/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Texture/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/3.7.1/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/3.7.1/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/3.7.1/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/3.7.1/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/3.7.1/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/Transform.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/Transform" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/Transform" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/Transform.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/Transform.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Transform/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Transform/main.cpp" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Scene.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Shader.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+              <folding>
+                <element signature="e#119#142#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Scene.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+              <folding>
+                <element signature="e#129#151#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Shader.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="GLSL Shader" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>gridVertice</find>
+      <find>gridIndex</find>
+      <find>66</find>
+      <find>30</find>
+      <find>30.</find>
+      <find>cout</find>
+      <find>sharedMatrices</find>
+      <find>sharedBlock</find>
+      <find />
+      <find>&quot;</find>
+      <find>\n</find>
+      <find>stb</find>
+      <find>newLight</find>
+      <find>newLightPos</find>
+      <find>curLight.color;</find>
+      <find>vec3</find>
+      <find>curLight</find>
+      <find>draw(def</find>
+      <find>6</find>
+      <find>DefaultShader</find>
+      <find>defaultShader.</find>
+      <find>shadowShader.</find>
+      <find>model</find>
+      <find>defaultShader</find>
+      <find>hasShadow</find>
+      <find>何振邦</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/cmake-build-debug/commonShadowFragment.glsl" />
+        <option value="$PROJECT_DIR$/cmake-build-debug/cylinderFragment.glsl" />
+        <option value="$PROJECT_DIR$/cmake-build-debug/cylinderShadowVertex.glsl" />
+        <option value="$PROJECT_DIR$/cmake-build-debug/cylinderVertex.glsl" />
+        <option value="$PROJECT_DIR$/cmake-build-debug/planeFragment.glsl" />
+        <option value="$PROJECT_DIR$/geometryFragment.glsl" />
+        <option value="$PROJECT_DIR$/cmake-build-debug/geometryVertex.glsl" />
+        <option value="$PROJECT_DIR$/cmake-build-debug/geometryFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryAmbientVertext.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryParallelLightVertex.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryParallesLightFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryParalleLightFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/coordVertex.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryVertex.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/gridVertex.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/skyboxVertex.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryAmbientVertex.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/debugFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryLightVertex.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryPointShadowVertex.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryPointShadowGeometry.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/skyboxFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryPointShadowFragment.glsl" />
+        <option value="$PROJECT_DIR$/MyModel.h" />
+        <option value="$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryAmbientFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl" />
+        <option value="$PROJECT_DIR$/MyModel.cpp" />
+        <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/Material.h" />
+        <option value="$PROJECT_DIR$/ElementObjects.cpp" />
+        <option value="$PROJECT_DIR$/Material.cpp" />
+        <option value="$PROJECT_DIR$/Model.cpp" />
+        <option value="$PROJECT_DIR$/Model.h" />
+        <option value="$PROJECT_DIR$/Scene.cpp" />
+        <option value="$PROJECT_DIR$/BasicGLObject.cpp" />
+        <option value="$PROJECT_DIR$/BasicGLObject.h" />
+        <option value="$PROJECT_DIR$/Camera.cpp" />
+        <option value="$PROJECT_DIR$/Camera.h" />
+        <option value="$PROJECT_DIR$/DebugUtility.cpp" />
+        <option value="$PROJECT_DIR$/DebugUtility.h" />
+        <option value="$PROJECT_DIR$/ElementObjects.h" />
+        <option value="$PROJECT_DIR$/GLFWWindowObject.cpp" />
+        <option value="$PROJECT_DIR$/GLFWWindowObject.h" />
+        <option value="$PROJECT_DIR$/Light.cpp" />
+        <option value="$PROJECT_DIR$/Light.h" />
+        <option value="$PROJECT_DIR$/Shader.cpp" />
+        <option value="$PROJECT_DIR$/Scene.h" />
+        <option value="$PROJECT_DIR$/Shader.h" />
+      </list>
+    </option>
+  </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="97" />
+    <option name="y" value="26" />
+    <option name="width" value="1443" />
+    <option name="height" value="969" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="HJGraphics" type="b2602c69:ProjectViewProjectNode" />
+              <item name="HJGraphics" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="HJGraphics" type="b2602c69:ProjectViewProjectNode" />
+              <item name="HJGraphics" type="462c0819:PsiDirectoryNode" />
+              <item name="Shaders" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.HJGraphics">
+    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="HJGraphics" RUN_TARGET_NAME="TestingField" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HJGraphics" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="HJGraphics" TARGET_NAME="HJGraphics" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="HJGraphics" RUN_TARGET_NAME="HJGraphics">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Build All" />
+      <item itemvalue="Application.HJGraphics" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1abe225c-fa90-4461-a691-18ba3a0c3b70" name="Default" comment="" />
+      <created>1544773309042</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1544773309042</updated>
+      <workItem from="1544773310599" duration="22416000" />
+      <workItem from="1544939786143" duration="1707000" />
+      <workItem from="1544947990282" duration="28053000" />
+      <workItem from="1545062627001" duration="35075000" />
+      <workItem from="1545306606112" duration="18600000" />
+      <workItem from="1545493082468" duration="55377000" />
+      <workItem from="1545803182670" duration="51401000" />
+      <workItem from="1546082358938" duration="24677000" />
+      <workItem from="1546241296060" duration="332000" />
+      <workItem from="1546241750549" duration="876000" />
+      <workItem from="1546255758281" duration="1613000" />
+      <workItem from="1547652359888" duration="203000" />
+      <workItem from="1547697231258" duration="43418000" />
+      <workItem from="1548081034136" duration="14560000" />
+      <workItem from="1548465978803" duration="3149000" />
+      <workItem from="1549072378597" duration="51721000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="353178000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="97" y="26" width="1443" height="969" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6533524" visible="true" weight="0.20342612" />
+      <window_info id="Structure" order="1" sideWeight="0.34664765" side_tool="true" visible="true" weight="0.20342612" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3237792" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49920508" visible="true" weight="0.17915691" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39707536" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32131147" />
+      <window_info anchor="bottom" id="Code comment" order="7" weight="0.32786885" />
+      <window_info anchor="bottom" id="Messages" order="8" weight="0.31264636" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.3283582" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5007949" side_tool="true" weight="0.28429753" />
+      <window_info anchor="bottom" id="Version Control" order="11" weight="0.3295082" />
+      <window_info anchor="bottom" id="CMake" order="12" weight="0.32781458" />
+      <window_info anchor="bottom" id="Database Changes" order="13" />
+      <window_info anchor="bottom" id="CPU Profiler" order="14" weight="0.4039409" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="right" id="Key Promoter X" order="4" />
+    </layout>
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19793323" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32615894" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49920508" visible="true" weight="0.26490065" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39900663" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3245033" />
+      <window_info anchor="bottom" id="Code comment" order="7" weight="0.3283582" />
+      <window_info anchor="bottom" id="Messages" order="8" weight="0.32119206" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.3283582" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5007949" side_tool="true" weight="0.28429753" />
+      <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="CMake" order="12" weight="0.32781458" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="CMakeRunConfiguration">
+        <watch expression="i" language="ObjectiveC" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>i</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/geometryFragment.glsl" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/geometryVertex.glsl" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/geometryFragment.glsl" />
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryAmbientVertext.glsl" />
+    <entry file="file://$PROJECT_DIR$/Shaders/coordVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/skyboxVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/gridVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="28" lean-forward="true" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/debugFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="1" lean-forward="true" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/debugVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryAmbientVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/sys/_types.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="42" column="26" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/sys/_types/_null.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryShadowVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="19" lean-forward="true" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryShadowFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryLightVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="40" lean-forward="true" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/skyboxFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="42" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryPointShadowGeometry.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryPointShadowFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryPointShadowVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/include/assimp/types.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1491">
+          <caret line="251" column="7" selection-start-line="251" selection-start-column="7" selection-end-line="251" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/include/assimp/material.inl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="65" column="50" selection-start-line="65" selection-start-column="50" selection-end-line="65" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="27" column="25" lean-forward="true" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="19" lean-forward="true" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+          <folding>
+            <element signature="e#114#137#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="438">
+          <caret line="51" column="25" selection-start-line="51" selection-start-column="25" selection-end-line="51" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="464">
+          <caret line="57" column="31" lean-forward="true" selection-start-line="57" selection-start-column="31" selection-end-line="57" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/include/assimp/material.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="226" column="4" selection-start-line="226" selection-start-column="4" selection-end-line="226" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="75" column="10" lean-forward="true" selection-start-line="75" selection-start-column="10" selection-end-line="75" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryAmbientFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="82">
+          <caret line="201" column="5" selection-start-line="201" selection-start-column="5" selection-end-line="201" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+          <folding>
+            <element signature="e#99#126#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Material.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Material.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="30" />
+          <folding>
+            <element signature="e#105#127#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BasicGLObject.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BasicGLObject.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+          <folding>
+            <element signature="e#145#167#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Camera.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Camera.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+          <folding>
+            <element signature="e#100#122#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DebugUtility.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+          <folding>
+            <element signature="e#606#615#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="31" selection-start-line="20" selection-start-column="31" selection-end-line="20" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GLFWWindowObject.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Light.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GLFWWindowObject.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Light.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+          <folding>
+            <element signature="e#99#121#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ElementObjects.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+          <folding>
+            <element signature="e#117#143#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ElementObjects.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DebugUtility.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scene.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+          <folding>
+            <element signature="e#129#151#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scene.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shader.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+          <folding>
+            <element signature="e#119#142#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
