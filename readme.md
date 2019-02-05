@@ -35,13 +35,21 @@ HJGraphics has...
 
 # Gallery
 ![](Attachments/multiLight.png)
+
 <center>Fig.1 unlimited number of lights support</center>
+
 ![](Attachments/pointLightShadow.png)
+
 <center>Fig.2 shadow support</center>
+
 ![](Attachments/modelLoading.png)
+
 <center>Fig.3 model loading support (only `obj` format fully supported now)</center>
+
 ![](Attachments/material.png)
+
 <center>Fig.4 basic material</center>
+
 # Continue advancing
 - [ ] SSAO
 - [ ] Load scene via JSON file
