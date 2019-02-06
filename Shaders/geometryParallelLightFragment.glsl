@@ -61,13 +61,23 @@ float parallelShadowCalculation(vec4 fragPosLightSpace)
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     // 变换到[0,1]的范围
     projCoords = projCoords * 0.5 + 0.5;
-    // 取得最近点的深度(使用[0,1]范围下的fragPosLight当坐标)
-    float closestDepth = texture(shadowMap,projCoords.xy).r;
-    // 取得当前片元在光源视角下的深度
     float currentDepth = projCoords.z;
-    // 检查当前片元是否在阴影中
     float bias=0.0005f/ fragPosLightSpace.w;// if we don't do divide to bias, then spotlight bias=0.0005f parallels bias = 0.005f
-    float shadow = currentDepth - bias > closestDepth  ? 0.0 : 1.0;
+    //Original Version without PCF shadow
+//    float closestDepth = texture(shadowMap,projCoords.xy).r;
+//    float shadow = currentDepth - bias > closestDepth  ? 0.0 : 1.0;
+//    return shadow;
+
+    //PCF shadow
+    float shadow = 0.0f;
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for(int x = -2; x <= 2; ++x){
+        for(int y = -2; y <= 2; ++y){
+            float closestDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+            shadow += currentDepth - bias > closestDepth ? 0.0 : 1.0;
+        }
+    }
+    shadow/= 25.0f;
     return shadow;
 }
 vec3 parallelLight(vec3 diffColor,vec3 specColor){

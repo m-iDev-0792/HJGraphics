@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/cmake-build-debug"/>
+				<Option working_dir="/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/cmake-build-debug"/>
+				<Option working_dir="/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/cmake-build-debug"/>
+				<Option working_dir="/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="HJGraphics">
-				<Option output="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/cmake-build-debug/HJGraphics" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/cmake-build-debug"/>
+				<Option output="/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/HJGraphics" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -52,15 +52,15 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 HJGraphics"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 HJGraphics"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="HJGraphics/fast">
-				<Option output="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/cmake-build-debug/HJGraphics" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/cmake-build-debug"/>
+				<Option output="/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/HJGraphics" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -73,77 +73,77 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 HJGraphics/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/OpenGL\ Projects/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 HJGraphics/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/BasicGLObject.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/BasicGLObject.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/BasicGLObject.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/BasicGLObject.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Camera.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Camera.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Camera.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Camera.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/DebugUtility.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/DebugUtility.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/DebugUtility.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/DebugUtility.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/ElementObjects.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/ElementObjects.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/ElementObjects.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/ElementObjects.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/GLFWWindowObject.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/GLFWWindowObject.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/GLFWWindowObject.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/GLFWWindowObject.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Light.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Light.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Light.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Light.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Material.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Material.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Material.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Material.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Model.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Model.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Model.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Model.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Scene.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Scene.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Scene.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Scene.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Shader.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Shader.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Shader.h">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/Shader.h">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/main.cpp">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/main.cpp">
 			<Option target="HJGraphics"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/CMakeLists.txt">
+		<Unit filename="/Users/hezhenbang/Documents/HJGraphics/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

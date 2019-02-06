@@ -6,21 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/BasicGLObject.cpp
-BasicGLObject.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/BasicGLObject.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/BasicGLObject.h
+/Users/hezhenbang/Documents/HJGraphics/BasicGLObject.h
 OpenGL/gl.h
 -
 OpenGL/gl3.h
 -
 Shader.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Shader.h
+/Users/hezhenbang/Documents/HJGraphics/Shader.h
 Material.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Material.h
+/Users/hezhenbang/Documents/HJGraphics/Material.h
 Light.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Light.h
+/Users/hezhenbang/Documents/HJGraphics/Light.h
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -28,11 +24,7 @@ glm/gtc/matrix_transform.hpp
 glm/gtc/type_ptr.hpp
 -
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Camera.cpp
-Camera.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Camera.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Camera.h
+/Users/hezhenbang/Documents/HJGraphics/Camera.h
 OpenGL/gl.h
 -
 OpenGL/gl3.h
@@ -46,11 +38,7 @@ glm/gtc/type_ptr.hpp
 iostream
 -
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/DebugUtility.cpp
-DebugUtility.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/DebugUtility.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/DebugUtility.h
+/Users/hezhenbang/Documents/HJGraphics/DebugUtility.h
 OpenGL/gl.h
 -
 OpenGL/gl3.h
@@ -60,15 +48,11 @@ glm/glm.hpp
 iostream
 -
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/ElementObjects.cpp
-ElementObjects.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/ElementObjects.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/ElementObjects.h
+/Users/hezhenbang/Documents/HJGraphics/ElementObjects.h
 BasicGLObject.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/BasicGLObject.h
+/Users/hezhenbang/Documents/HJGraphics/BasicGLObject.h
 Light.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Light.h
+/Users/hezhenbang/Documents/HJGraphics/Light.h
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -78,11 +62,7 @@ glm/gtc/type_ptr.hpp
 cmath
 -
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/GLFWWindowObject.cpp
-GLFWWindowObject.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/GLFWWindowObject.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/GLFWWindowObject.h
+/Users/hezhenbang/Documents/HJGraphics/GLFWWindowObject.h
 GLFW/glfw3.h
 -
 GLFW/glfw3native.h
@@ -90,11 +70,7 @@ GLFW/glfw3native.h
 iostream
 -
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Light.cpp
-Light.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Light.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Light.h
+/Users/hezhenbang/Documents/HJGraphics/Light.h
 OpenGL/gl.h
 -
 OpenGL/gl3.h
@@ -110,15 +86,11 @@ iostream
 vector
 -
 DebugUtility.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/DebugUtility.h
+/Users/hezhenbang/Documents/HJGraphics/DebugUtility.h
 Shader.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Shader.h
+/Users/hezhenbang/Documents/HJGraphics/Shader.h
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Material.cpp
-Material.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Material.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Material.h
+/Users/hezhenbang/Documents/HJGraphics/Material.h
 OpenGL/gl.h
 -
 OpenGL/gl3.h
@@ -130,17 +102,13 @@ iostream
 vector
 -
 stb_image.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/stb_image.h
+/Users/hezhenbang/Documents/HJGraphics/stb_image.h
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Model.cpp
-Model.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Model.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Model.h
+/Users/hezhenbang/Documents/HJGraphics/Model.h
 ElementObjects.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/ElementObjects.h
+/Users/hezhenbang/Documents/HJGraphics/ElementObjects.h
 stb_image.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/stb_image.h
+/Users/hezhenbang/Documents/HJGraphics/stb_image.h
 assimp/Importer.hpp
 -
 assimp/scene.h
@@ -148,11 +116,7 @@ assimp/scene.h
 assimp/postprocess.h
 -
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Scene.cpp
-Scene.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Scene.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Scene.h
+/Users/hezhenbang/Documents/HJGraphics/Scene.h
 OpenGL/gl.h
 -
 OpenGL/gl3.h
@@ -166,19 +130,15 @@ glm/gtc/type_ptr.hpp
 vector
 -
 Model.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Model.h
+/Users/hezhenbang/Documents/HJGraphics/Model.h
 Camera.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Camera.h
+/Users/hezhenbang/Documents/HJGraphics/Camera.h
 Light.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Light.h
+/Users/hezhenbang/Documents/HJGraphics/Light.h
 DebugUtility.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/DebugUtility.h
+/Users/hezhenbang/Documents/HJGraphics/DebugUtility.h
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Shader.cpp
-Shader.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Shader.h
-
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Shader.h
+/Users/hezhenbang/Documents/HJGraphics/Shader.h
 OpenGL/gl3.h
 -
 iostream
@@ -190,7 +150,7 @@ glm/glm.hpp
 glm/gtc/type_ptr.hpp
 -
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/main.cpp
+/Users/hezhenbang/Documents/HJGraphics/main.cpp
 iostream
 -
 OpenGL/gl.h
@@ -198,17 +158,17 @@ OpenGL/gl.h
 OpenGL/gl3.h
 -
 GLFWWindowObject.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/GLFWWindowObject.h
+/Users/hezhenbang/Documents/HJGraphics/GLFWWindowObject.h
 ElementObjects.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/ElementObjects.h
+/Users/hezhenbang/Documents/HJGraphics/ElementObjects.h
 Scene.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/Scene.h
+/Users/hezhenbang/Documents/HJGraphics/Scene.h
 DebugUtility.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/DebugUtility.h
+/Users/hezhenbang/Documents/HJGraphics/DebugUtility.h
 
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/stb_image.h
+/Users/hezhenbang/Documents/HJGraphics/stb_image.h
 stb_image.h
-/Users/hezhenbang/Documents/OpenGL Projects/HJGraphics/stb_image.h
+/Users/hezhenbang/Documents/HJGraphics/stb_image.h
 stdio.h
 -
 stdarg.h
@@ -419,12 +379,6 @@ types.h
 /usr/local/include/assimp/quaternion.h
 defs.h
 /usr/local/include/assimp/defs.h
-
-/usr/local/include/assimp/quaternion.inl
-quaternion.h
-/usr/local/include/assimp/quaternion.h
-cmath
--
 
 /usr/local/include/assimp/scene.h
 types.h

@@ -41,6 +41,14 @@ uniform float shadowZFar;
 uniform samplerCube shadowMap;
 float pointShadowCalculation(vec3 fragPosLightSpace);
 vec3 pointLight(vec3 diffColor,vec3 specColor);
+const vec3 sampleOffsetDirections[20] = vec3[]
+(
+   vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1),
+   vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1),
+   vec3( 1,  1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1,  1,  0),
+   vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1),
+   vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
+);
 void main()
 {
     vec3 diffuseSampler=material.diffuseColor;
@@ -58,15 +66,24 @@ void main()
 float pointShadowCalculation(vec3 fragPosLightSpace)
 {
     vec3 lightToFrag = fragPosLightSpace-lightPosition;
-    float closestDepth = texture(shadowMap,lightToFrag).r;
-
-//    return closestDepth==1.0f?1.0f:0.0f;
-
-    closestDepth *= shadowZFar;
     float currentDepth = length(lightToFrag);
     float bias = 0.05f;
+//    Original Version without PCF shadow
+//    float closestDepth = texture(shadowMap,lightToFrag).r;
+//    closestDepth *= shadowZFar;
+//    return (currentDepth - bias > closestDepth) ? 0.0 : 1.0;
 
-    return (currentDepth - bias > closestDepth) ? 0.0 : 1.0;
+    //Add percentage-closer filtering algorithm
+    float shadow=0.0f;
+    float diskRadius = (1.0 + (currentDepth / shadowZFar)) / 100.0;// a too large diskRadius value produces a strange effect
+    for(int i = 0; i < 20; ++i){
+        float closestDepth = texture(shadowMap, lightToFrag + sampleOffsetDirections[i] * diskRadius).r;
+        closestDepth *= shadowZFar;
+        if(currentDepth - bias <= closestDepth)
+            shadow += 1.0;
+    }
+    shadow /= float(20);
+    return shadow;
 }
 
 vec3 pointLight(vec3 diffColor,vec3 specColor){
