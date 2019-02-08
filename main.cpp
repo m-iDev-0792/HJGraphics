@@ -1,26 +1,14 @@
 #include <iostream>
-#include <OpenGL/gl.h>
-#include <OpenGL/gl3.h>
-#include "GLFWWindowObject.h"
-#include "ElementObjects.h"
-#include "Scene.h"
-
-#include "DebugUtility.h"
+#include "HJGraphics.h"
 
 using namespace HJGraphics;
 using namespace std;
 using namespace glm;
 int main() {
 
-	GLFWWindowObject::InitGLFWEnvironment();
-	GLFWWindowObject window(800,600,"HJGraphics");
-	glm::vec3 cameraPos=glm::vec3(0.0f,5.0f,4.0f);
-	glm::vec3 cameraDirection=glm::vec3(0.0f, -1.0f, -1.0f);
+	Window window(800,600,"HJGraphics");
 
 	Coordinate coord;
-	glm::mat4 coordModel(1.0f);
-	coord.defaultShader->use();
-	coord.defaultShader->set4fm("model",coordModel);
 
 	Grid grid(1,5,GRIDMODE::XZ);
 
@@ -47,7 +35,6 @@ int main() {
 	Plane plane(8,8,"../Textures/chessboard.jpg");
 
 	Model nanosuit("/Users/hezhenbang/Documents/Models/nanosuit/nanosuit.obj");
-
 	nanosuit.scale(0.2);
 
 
@@ -63,9 +50,11 @@ int main() {
 
 	PointLight pointLight(glm::vec3(-1.0f,3.0f,0.5f));
 
-	Scene scene;
+	glm::vec3 cameraPos=glm::vec3(0.0f,5.0f,4.0f);
+	glm::vec3 cameraDirection=glm::vec3(0.0f, -1.0f, -1.0f);
 	Camera camera(cameraPos,cameraDirection);
 
+	Scene scene;
 	scene.addCamera(camera);
 	scene.addObject(coord);
 	scene.addObject(skybox);
@@ -78,24 +67,12 @@ int main() {
 //	scene.addLight(paraLight);
 //	scene.addLight(spotLight);
 //	scene.addLight(s1);scene.addLight(s2);scene.addLight(s3);scene.addLight(s4);scene.addLight(s5);
+
 	scene.addLight(pointLight);
 
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LINE_SMOOTH);
+	window.addScene(scene);
+	window.run();
 
-	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-	scene.writeSharedUBOData();
-
-	getGLError(__LINE__,__FILE__);
-
-	while(!window.shouldClose()){
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0, 0, 0, 1);
-		scene.draw();
-
-		window.swapBuffer();
-		glfwPollEvents();
-	}
 	glfwTerminate();
 	return 0;
 }

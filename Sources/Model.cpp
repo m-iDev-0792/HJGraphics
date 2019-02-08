@@ -22,7 +22,7 @@ HJGraphics::Mesh::Mesh(std::vector<HJGraphics::MeshVertex> _vertices, std::vecto
 	indices=_indices;
 	vertices=_vertices;
 	writeVerticesData();
-	material.shininess=32;
+//	material.shininess=32;
 	material.specularStrength=glm::vec3(1.0f);
 }
 void HJGraphics::Mesh::draw() {

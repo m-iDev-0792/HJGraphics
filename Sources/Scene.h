@@ -55,6 +55,8 @@ namespace HJGraphics {
 
 		void setMainCamera(Camera &camera);
 
+		Camera* getMainCamera(){return mainCamera;}
+
 		void draw();
 
 		void drawShadow();

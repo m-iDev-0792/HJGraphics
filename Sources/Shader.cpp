@@ -3,11 +3,11 @@
 //
 
 #include "Shader.h"
-char *Shader::readShader(const char *filename) {
+char *HJGraphics::Shader::readShader(const char *filename) {
 	using namespace std;
 	ifstream file(filename, ios::in);
 	if (!file.is_open()) {
-		cout << "ERROR WHEN LOAD SHADER FILE！ CAN'T OPEN FILE:" << filename << endl;
+		cout << "ERROR @ Shader::readShader(const char*) : can't load shader file:" << filename << endl;
 		return nullptr;
 	} else {
 		string text;
@@ -22,7 +22,7 @@ char *Shader::readShader(const char *filename) {
 	}
 }
 
-Shader::Shader(const char *vertexPath, const char *fragmentPath) {
+HJGraphics::Shader::Shader(const char *vertexPath, const char *fragmentPath) {
 	char *vertexCode = readShader(vertexPath);
 	char *fragmentCode = readShader(fragmentPath);
 	GLuint vertexID, fragmentID;
@@ -49,7 +49,7 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
 	glDeleteShader(vertexID);
 	glDeleteShader(fragmentID);
 }
-Shader::Shader(const char * vertexPath,const char *fragmentPath,const char *geometryPath){
+HJGraphics::Shader::Shader(const char * vertexPath,const char *fragmentPath,const char *geometryPath){
 	char *vertexCode = readShader(vertexPath);
 	char *fragmentCode = readShader(fragmentPath);
 	char *geometryCode = readShader(geometryPath);
@@ -86,21 +86,21 @@ Shader::Shader(const char * vertexPath,const char *fragmentPath,const char *geom
 	glDeleteShader(geometryID);
 }
 
-void Shader::checkCompileError(GLuint shader, std::string type){
+void HJGraphics::Shader::checkCompileError(GLuint shader, std::string type){
 	int success;
 	char infoLog[1024];
 	if (type != "PROGRAM") {
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 		if (!success) {
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog
+			std::cout << "ERROR @ Shader::checkCompileError(GLuint,std::string) : SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog
 			          << "\n -- --------------------------------------------------- -- " << std::endl;
 		}
 	} else {
 		glGetProgramiv(shader, GL_LINK_STATUS, &success);
 		if (!success) {
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog
+			std::cout << "ERROR @ Shader::checkCompileError(GLuint,std::string) : PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog
 			          << "\n -- --------------------------------------------------- -- " << std::endl;
 		}
 	}

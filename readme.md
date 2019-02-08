@@ -2,18 +2,20 @@
 # HJGraphics
 HJGraphics is a very simple 3D graphic framework based on OpenGL API, and also my attempt to build a relatively complete tiny 3D graphic framework from the ground up. It is a part of my graduation project as well.
 
-By using HJGraphics, you can create OpenGL environment and draw some funny 3D objects with  a few lines of code.
+By using HJGraphics, you can create OpenGL environment and draw some funny 3D objects with  a few lines of codes.
 
 eg.
 ```
-Box box(2,2,2);
-Camera camera(cameraPos,cameraDirection);
-PointLight pointLight(glm::vec3(-1.0f,3.0f,0.5f));
+Window window(windowWidth,windowHeight,windowTitle);
+Box box(boxWidth,boxDepth,boxHeight);
+Camera camera(cameraPosition,cameraDirection);
+PointLight pointLight(lightPosition);
 Scene scene;
 scene.addCamera(camera);
 scene.addObject(box);
 scene.addLight(pointLight);
-scene.draw();
+window.addScene(scene);
+window.run();
 ```
 
 # Features

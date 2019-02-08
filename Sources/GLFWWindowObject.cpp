@@ -4,12 +4,18 @@
 
 #include "GLFWWindowObject.h"
 HJGraphics::GLFWWindowObject* HJGraphics::GLFWWindowObject::currentWindow= nullptr;
+bool HJGraphics::GLFWWindowObject::isFirstInit=true;
 
 HJGraphics::GLFWWindowObject::GLFWWindowObject(int _width, int _height, std::string _title):width(_width),height(_height),windowTitle(_title) {
+	if(isFirstInit){
+		isFirstInit=false;
+		InitGLFWEnvironment();
+	}
+
 	windowPtr=glfwCreateWindow(_width,_height,_title.c_str(), nullptr, nullptr);
 	if(windowPtr== nullptr){
-		std::cerr<<"ERROR:Can't create window "<<windowTitle<<std::endl;
-		throw "failed to create glfw window";
+		std::cout<<"ERROR @ GLFWWindows : Can't create window "<<windowTitle<<std::endl;
+		throw "ERROR @ GLFWWindows : failed to create glfw window";
 	}
 	glfwSetFramebufferSizeCallback(windowPtr, staticFramebufferSizeCallback);
 	glfwSetCursorPosCallback(windowPtr,staticMouseCallback);

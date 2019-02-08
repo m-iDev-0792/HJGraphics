@@ -68,10 +68,10 @@ CMAKE_BINARY_DIR = /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug
 # Target rules for target CMakeFiles/HJGraphics.dir
 
 # All Build rule for target.
-CMakeFiles/HJGraphics.dir/all:
+CMakeFiles/HJGraphics.dir/all: Sources/CMakeFiles/HJGRAPHICS.dir/all
 	$(MAKE) -f CMakeFiles/HJGraphics.dir/build.make CMakeFiles/HJGraphics.dir/depend
 	$(MAKE) -f CMakeFiles/HJGraphics.dir/build.make CMakeFiles/HJGraphics.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12 "Built target HJGraphics"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=13,14 "Built target HJGraphics"
 .PHONY : CMakeFiles/HJGraphics.dir/all
 
 # Include target in all.
@@ -81,7 +81,7 @@ all: CMakeFiles/HJGraphics.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/HJGraphics.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles 14
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/HJGraphics.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/HJGraphics.dir/rule
@@ -98,6 +98,61 @@ CMakeFiles/HJGraphics.dir/clean:
 
 # clean rule for target.
 clean: CMakeFiles/HJGraphics.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory Sources
+
+# Convenience name for "all" pass in the directory.
+Sources/all: Sources/CMakeFiles/HJGRAPHICS.dir/all
+
+.PHONY : Sources/all
+
+# Convenience name for "clean" pass in the directory.
+Sources/clean: Sources/CMakeFiles/HJGRAPHICS.dir/clean
+
+.PHONY : Sources/clean
+
+# Convenience name for "preinstall" pass in the directory.
+Sources/preinstall:
+
+.PHONY : Sources/preinstall
+
+#=============================================================================
+# Target rules for target Sources/CMakeFiles/HJGRAPHICS.dir
+
+# All Build rule for target.
+Sources/CMakeFiles/HJGRAPHICS.dir/all:
+	$(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/depend
+	$(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12 "Built target HJGRAPHICS"
+.PHONY : Sources/CMakeFiles/HJGRAPHICS.dir/all
+
+# Include target in all.
+all: Sources/CMakeFiles/HJGRAPHICS.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+Sources/CMakeFiles/HJGRAPHICS.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles 12
+	$(MAKE) -f CMakeFiles/Makefile2 Sources/CMakeFiles/HJGRAPHICS.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles 0
+.PHONY : Sources/CMakeFiles/HJGRAPHICS.dir/rule
+
+# Convenience name for target.
+HJGRAPHICS: Sources/CMakeFiles/HJGRAPHICS.dir/rule
+
+.PHONY : HJGRAPHICS
+
+# clean rule for target.
+Sources/CMakeFiles/HJGRAPHICS.dir/clean:
+	$(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/clean
+.PHONY : Sources/CMakeFiles/HJGRAPHICS.dir/clean
+
+# clean rule for target.
+clean: Sources/CMakeFiles/HJGRAPHICS.dir/clean
 
 .PHONY : clean
 

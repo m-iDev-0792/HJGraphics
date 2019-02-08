@@ -70,169 +70,20 @@ CMakeFiles/HJGraphics.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/main.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/main.cpp -o CMakeFiles/HJGraphics.dir/main.cpp.s
 
-CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.o: ../GLFWWindowObject.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/GLFWWindowObject.cpp
-
-CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/GLFWWindowObject.cpp > CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.i
-
-CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/GLFWWindowObject.cpp -o CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.s
-
-CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.o: ../BasicGLObject.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/BasicGLObject.cpp
-
-CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/BasicGLObject.cpp > CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.i
-
-CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/BasicGLObject.cpp -o CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.s
-
-CMakeFiles/HJGraphics.dir/Shader.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/Shader.cpp.o: ../Shader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/HJGraphics.dir/Shader.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/Shader.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/Shader.cpp
-
-CMakeFiles/HJGraphics.dir/Shader.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/Shader.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/Shader.cpp > CMakeFiles/HJGraphics.dir/Shader.cpp.i
-
-CMakeFiles/HJGraphics.dir/Shader.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/Shader.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/Shader.cpp -o CMakeFiles/HJGraphics.dir/Shader.cpp.s
-
-CMakeFiles/HJGraphics.dir/ElementObjects.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/ElementObjects.cpp.o: ../ElementObjects.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/HJGraphics.dir/ElementObjects.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/ElementObjects.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/ElementObjects.cpp
-
-CMakeFiles/HJGraphics.dir/ElementObjects.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/ElementObjects.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/ElementObjects.cpp > CMakeFiles/HJGraphics.dir/ElementObjects.cpp.i
-
-CMakeFiles/HJGraphics.dir/ElementObjects.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/ElementObjects.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/ElementObjects.cpp -o CMakeFiles/HJGraphics.dir/ElementObjects.cpp.s
-
-CMakeFiles/HJGraphics.dir/Scene.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/Scene.cpp.o: ../Scene.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/HJGraphics.dir/Scene.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/Scene.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/Scene.cpp
-
-CMakeFiles/HJGraphics.dir/Scene.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/Scene.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/Scene.cpp > CMakeFiles/HJGraphics.dir/Scene.cpp.i
-
-CMakeFiles/HJGraphics.dir/Scene.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/Scene.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/Scene.cpp -o CMakeFiles/HJGraphics.dir/Scene.cpp.s
-
-CMakeFiles/HJGraphics.dir/Camera.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/Camera.cpp.o: ../Camera.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/HJGraphics.dir/Camera.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/Camera.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/Camera.cpp
-
-CMakeFiles/HJGraphics.dir/Camera.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/Camera.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/Camera.cpp > CMakeFiles/HJGraphics.dir/Camera.cpp.i
-
-CMakeFiles/HJGraphics.dir/Camera.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/Camera.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/Camera.cpp -o CMakeFiles/HJGraphics.dir/Camera.cpp.s
-
-CMakeFiles/HJGraphics.dir/Light.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/Light.cpp.o: ../Light.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/HJGraphics.dir/Light.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/Light.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/Light.cpp
-
-CMakeFiles/HJGraphics.dir/Light.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/Light.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/Light.cpp > CMakeFiles/HJGraphics.dir/Light.cpp.i
-
-CMakeFiles/HJGraphics.dir/Light.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/Light.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/Light.cpp -o CMakeFiles/HJGraphics.dir/Light.cpp.s
-
-CMakeFiles/HJGraphics.dir/Material.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/Material.cpp.o: ../Material.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/HJGraphics.dir/Material.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/Material.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/Material.cpp
-
-CMakeFiles/HJGraphics.dir/Material.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/Material.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/Material.cpp > CMakeFiles/HJGraphics.dir/Material.cpp.i
-
-CMakeFiles/HJGraphics.dir/Material.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/Material.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/Material.cpp -o CMakeFiles/HJGraphics.dir/Material.cpp.s
-
-CMakeFiles/HJGraphics.dir/Model.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/Model.cpp.o: ../Model.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/HJGraphics.dir/Model.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/Model.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/Model.cpp
-
-CMakeFiles/HJGraphics.dir/Model.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/Model.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/Model.cpp > CMakeFiles/HJGraphics.dir/Model.cpp.i
-
-CMakeFiles/HJGraphics.dir/Model.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/Model.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/Model.cpp -o CMakeFiles/HJGraphics.dir/Model.cpp.s
-
-CMakeFiles/HJGraphics.dir/DebugUtility.cpp.o: CMakeFiles/HJGraphics.dir/flags.make
-CMakeFiles/HJGraphics.dir/DebugUtility.cpp.o: ../DebugUtility.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/HJGraphics.dir/DebugUtility.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HJGraphics.dir/DebugUtility.cpp.o -c /Users/hezhenbang/Documents/HJGraphics/DebugUtility.cpp
-
-CMakeFiles/HJGraphics.dir/DebugUtility.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HJGraphics.dir/DebugUtility.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hezhenbang/Documents/HJGraphics/DebugUtility.cpp > CMakeFiles/HJGraphics.dir/DebugUtility.cpp.i
-
-CMakeFiles/HJGraphics.dir/DebugUtility.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HJGraphics.dir/DebugUtility.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hezhenbang/Documents/HJGraphics/DebugUtility.cpp -o CMakeFiles/HJGraphics.dir/DebugUtility.cpp.s
-
 # Object files for target HJGraphics
 HJGraphics_OBJECTS = \
-"CMakeFiles/HJGraphics.dir/main.cpp.o" \
-"CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.o" \
-"CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.o" \
-"CMakeFiles/HJGraphics.dir/Shader.cpp.o" \
-"CMakeFiles/HJGraphics.dir/ElementObjects.cpp.o" \
-"CMakeFiles/HJGraphics.dir/Scene.cpp.o" \
-"CMakeFiles/HJGraphics.dir/Camera.cpp.o" \
-"CMakeFiles/HJGraphics.dir/Light.cpp.o" \
-"CMakeFiles/HJGraphics.dir/Material.cpp.o" \
-"CMakeFiles/HJGraphics.dir/Model.cpp.o" \
-"CMakeFiles/HJGraphics.dir/DebugUtility.cpp.o"
+"CMakeFiles/HJGraphics.dir/main.cpp.o"
 
 # External object files for target HJGraphics
 HJGraphics_EXTERNAL_OBJECTS =
 
 HJGraphics: CMakeFiles/HJGraphics.dir/main.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/Shader.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/ElementObjects.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/Scene.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/Camera.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/Light.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/Material.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/Model.cpp.o
-HJGraphics: CMakeFiles/HJGraphics.dir/DebugUtility.cpp.o
 HJGraphics: CMakeFiles/HJGraphics.dir/build.make
 HJGraphics: /usr/local/lib/libglfw.3.2.dylib
 HJGraphics: /usr/local/Cellar/assimp/4.0.1/lib/libassimp.4.0.1.dylib
+HJGraphics: Sources/libHJGRAPHICS.a
 HJGraphics: CMakeFiles/HJGraphics.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable HJGraphics"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable HJGraphics"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/HJGraphics.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

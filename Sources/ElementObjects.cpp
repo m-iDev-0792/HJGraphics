@@ -6,15 +6,15 @@
 /*
  * Implement of Coordinate Object
  */
-Shader* HJGraphics::Coordinate::defaultShader= nullptr;
-Shader* HJGraphics::Grid::defaultShader= nullptr;
-Shader* HJGraphics::Skybox::defaultShader= nullptr;
-Shader* HJGraphics::GeometryObject::defaultShader= nullptr;
-Shader* HJGraphics::GeometryObject::shadowShader= nullptr;
-Shader* HJGraphics::GeometryObject::pointShadowShader=nullptr;
-Shader* HJGraphics::GeometryObject::parallelLightShader= nullptr;
-Shader* HJGraphics::GeometryObject::spotLightShader= nullptr;
-Shader* HJGraphics::GeometryObject::pointLightShader= nullptr;
+HJGraphics::Shader* HJGraphics::Coordinate::defaultShader= nullptr;
+HJGraphics::Shader* HJGraphics::Grid::defaultShader= nullptr;
+HJGraphics::Shader* HJGraphics::Skybox::defaultShader= nullptr;
+HJGraphics::Shader* HJGraphics::GeometryObject::defaultShader= nullptr;
+HJGraphics::Shader* HJGraphics::GeometryObject::shadowShader= nullptr;
+HJGraphics::Shader* HJGraphics::GeometryObject::pointShadowShader=nullptr;
+HJGraphics::Shader* HJGraphics::GeometryObject::parallelLightShader= nullptr;
+HJGraphics::Shader* HJGraphics::GeometryObject::spotLightShader= nullptr;
+HJGraphics::Shader* HJGraphics::GeometryObject::pointLightShader= nullptr;
 
 HJGraphics::GeometryObject::GeometryObject(){
 	//Ambient Light Shader
@@ -31,7 +31,7 @@ HJGraphics::GeometryObject::GeometryObject(){
 
 	needUpdateVertices=false;
 }
-Shader* HJGraphics::GeometryObject::getDefaultShader() {
+HJGraphics::Shader* HJGraphics::GeometryObject::getDefaultShader() {
 	return defaultShader;
 }
 
@@ -66,6 +66,7 @@ HJGraphics::Coordinate::Coordinate(GLfloat _xLen, GLfloat _yLen, GLfloat _zLen, 
 	xLen=_xLen;yLen=_yLen;zLen=_zLen;
 	xColor=_xColor;yColor=_yColor;zColor=_zColor;
 	if(defaultShader== nullptr)defaultShader=new Shader("../Shaders/coordVertex.glsl","../Shaders/coordFragment.glsl");
+	model=glm::mat4(1.0f);
 	refreshData();
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER,VBO);
@@ -76,7 +77,7 @@ HJGraphics::Coordinate::Coordinate(GLfloat _xLen, GLfloat _yLen, GLfloat _zLen, 
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 }
-Shader* HJGraphics::Coordinate::getDefaultShader() {
+HJGraphics::Shader* HJGraphics::Coordinate::getDefaultShader() {
 	return defaultShader;
 }
 void HJGraphics::Coordinate::refreshData() {
@@ -93,6 +94,7 @@ void HJGraphics::Coordinate::refreshData() {
 
 void HJGraphics::Coordinate::draw() {
 	defaultShader->use();
+	defaultShader->set4fm("model",model);
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_LINES,0,6);
 	glBindVertexArray(0);
@@ -141,7 +143,7 @@ HJGraphics::Grid::Grid(GLfloat _unit, GLuint _cellNum, int _mode, glm::vec3 _col
 HJGraphics::Grid::Grid():Grid(0.1f,2,GRIDMODE::XZ|GRIDMODE::YZ|GRIDMODE::XY){
 
 }
-Shader* HJGraphics::Grid::getDefaultShader() {
+HJGraphics::Shader* HJGraphics::Grid::getDefaultShader() {
 	return defaultShader;
 }
 void HJGraphics::Grid::refreshData() {
@@ -265,7 +267,7 @@ HJGraphics::Skybox::Skybox(float _radius,std::string rightTex, std::string leftT
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 }
-Shader* HJGraphics::Skybox::getDefaultShader() {
+HJGraphics:: Shader* HJGraphics::Skybox::getDefaultShader() {
 	return defaultShader;
 }
 void HJGraphics::Skybox::draw() {

@@ -9,7 +9,7 @@
 #include <iostream>
 namespace HJGraphics {
 	class GLFWWindowObject {
-	private:
+	protected:
 		GLFWwindow *windowPtr;
 		std::string windowTitle;
 		int width;
@@ -32,6 +32,8 @@ namespace HJGraphics {
 		virtual void customInit();
 
 		static GLFWWindowObject *currentWindow;
+		static bool isFirstInit;
+
 	public:
 		GLFWWindowObject();
 
@@ -57,13 +59,11 @@ namespace HJGraphics {
 
 		void setCurrentContext();
 
-		static void
-		InitGLFWEnvironment(int versionMajor = 3, int versionMinor = 3, int profile = GLFW_OPENGL_CORE_PROFILE,
-		                    int COMPAT = GL_TRUE);
-
-		void run();
-
 		void swapBuffer();
+
+		virtual void run();
+
+		static void InitGLFWEnvironment(int versionMajor = 3, int versionMinor = 3, int profile = GLFW_OPENGL_CORE_PROFILE,int COMPAT = GL_TRUE);
 
 		static void staticMouseCallback(GLFWwindow *window, double xpos, double ypos);
 
