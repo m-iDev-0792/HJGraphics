@@ -39,8 +39,8 @@ int main() {
 
 
 	//-----------------------Direction------------------------Position-----------------------Color
-	ParallelLight paraLight(glm::vec3(-1.0f,-0.7f,0.0f),glm::vec3(4.0f,4.0f,0.0f));
-	SpotLight spotLight(glm::vec3(-1.0f,-1.0f,0.6f),glm::vec3(5.0f,5.0f,-3.0f),glm::vec3(0.0f,0.6f,0.6f));
+	ParallelLight paraLight(glm::vec3(-1.0f,-0.7f,-2.0f),glm::vec3(4.0f,4.0f,0.0f));
+	SpotLight spotLight(glm::vec3(1.0f,-1.0f,-1.0f),glm::vec3(-5.0f,5.0f,3.0f),glm::vec3(0.0f,0.6f,0.6f));
 
 	SpotLight s1(glm::vec3(-1.0f,-1.0f,-1.0f),glm::vec3(5.0f,5.0f,5.0f),glm::vec3(0.0f,0.6f,0.6f));
 	SpotLight s2(glm::vec3(-1.0f,-1.0f,1.0f),glm::vec3(5.0f,5.0f,-5.0f),glm::vec3(0.6f,0.6f,0.0f));
@@ -48,7 +48,7 @@ int main() {
 	SpotLight s4(glm::vec3(1.0f,-1.0f,-1.0f),glm::vec3(-5.0f,5.0f,5.0f),glm::vec3(0.6f,0.0f,0.0f));
 	SpotLight s5(glm::vec3(0.0f,-1.0f,0.0f),glm::vec3(0.0f,5.0f,0.0f),glm::vec3(0.6f,0.6f,0.6f));
 
-	PointLight pointLight(glm::vec3(-1.0f,3.0f,0.5f));
+	PointLight pointLight(glm::vec3(-0.0f,3.0f,0.5f));
 
 	glm::vec3 cameraPos=glm::vec3(0.0f,5.0f,4.0f);
 	glm::vec3 cameraDirection=glm::vec3(0.0f, -1.0f, -1.0f);

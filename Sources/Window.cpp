@@ -79,6 +79,7 @@ void HJGraphics::Window::framebufferSizeCallback(GLFWwindow *window, int width, 
 void HJGraphics::Window::customInit() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_CULL_FACE);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 }
 void HJGraphics::Window::run() {

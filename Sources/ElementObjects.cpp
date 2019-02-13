@@ -374,22 +374,24 @@ void HJGraphics::Cylinder::writeVerticesData() {
 	}
 	loadVBOData(data, sizeof(GLfloat)*((2*(partition+1)+4*partition)*VERTEX_FLOAT_NUM));
 	delete[] data;
-	GLuint *indice=new GLuint[(partition+2)+partition*6];//6 in here means 6 vertices per face
+	GLuint *indice=new GLuint[(partition+2)*2+partition*6];//6 in here means 6 vertices per face
 	//triangle fans index
 	indice[0]=partition;//center point
+	indice[partition+2]=partition+ partition+1;
 	for(int i=1;i<partition+2;++i){
 		indice[i]=(i-1)%partition;
+		indice[i+partition]=(partition+1-i)%partition+ partition+1;
 	}
 	//profile triangles index
 	int profileIndexBase=2*(partition+1);
-	GLuint *profileIndice=indice+partition+2;
+	GLuint *profileIndice=indice+(partition+2)*2;
 	for(int i=0;i<partition;++i){
 		profileIndice[0]=profileIndexBase;profileIndice[1]=profileIndexBase+1;profileIndice[2]=profileIndexBase+2;
 		profileIndice[3]=profileIndexBase+2;profileIndice[4]=profileIndexBase+1;profileIndice[5]=profileIndexBase+3;
 		profileIndexBase+=4;
 		profileIndice+=6;
 	}
-	loadEBOData(indice, sizeof(GLuint)*((partition+2)+partition*6));//6 in here means 6 vertices per face
+	loadEBOData(indice, sizeof(GLuint)*((partition+2)*2+partition*6));//6 in here means 6 vertices per face
 	delete[] indice;
 }
 void HJGraphics::Cylinder::writeObjectPropertyUniform(Shader *shader) {
@@ -431,8 +433,8 @@ void HJGraphics::Cylinder::draw(Shader shader) {
 	shader.use();
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLE_FAN,(partition+2),GL_UNSIGNED_INT, nullptr);
-	glDrawElementsBaseVertex(GL_TRIANGLE_FAN,(partition+2),GL_UNSIGNED_INT, nullptr,(partition+1));
-	glDrawElements(GL_TRIANGLES,6*partition,GL_UNSIGNED_INT,(void*)(sizeof(GLuint)*((partition+2))));
+	glDrawElements(GL_TRIANGLE_FAN,(partition+2),GL_UNSIGNED_INT, (void*)(sizeof(GLuint)*((partition+2))));
+	glDrawElements(GL_TRIANGLES,6*partition,GL_UNSIGNED_INT,(void*)(sizeof(GLuint)*((partition+2)*2)));
 	glBindVertexArray(0);
 }
 void HJGraphics::Cylinder::drawLight(HJGraphics::Light *light) {

@@ -4,6 +4,8 @@ in vec3 pos;
 in vec3 normal;
 in vec2 texCoord;
 in vec3 cameraPos;
+in mat3 TBN;
+
 struct Material{
     vec3 ambientStrength;
     vec3 diffuseStrength;
@@ -40,18 +42,11 @@ uniform mat4 lightSpaceMatrix;
 
 uniform sampler2D shadowMap;
 float parallelShadowCalculation(vec4 fragPosLightSpace);
-vec3 parallelLight(vec3 diffColor,vec3 specColor);
+vec3 parallelLight();
 void main()
 {
-    vec3 diffuseSampler=material.diffuseColor;
-    vec3 specularSampler=material.specularColor;
-    if(material.diffuseMapNum>0){
-        diffuseSampler=texture(material.diffuseMap,texCoord).rgb;
-    }
-    if(material.specularMapNum>0){
-        specularSampler=texture(material.specularMap,texCoord).rgb;
-    }
-    vec3 Color=parallelLight(diffuseSampler,specularSampler);
+
+    vec3 Color=parallelLight();
     FragColor=vec4(Color,1.0f);
 }
 //////////////////////////////////////////////////////////////////
@@ -80,18 +75,32 @@ float parallelShadowCalculation(vec4 fragPosLightSpace)
     shadow/= 25.0f;
     return shadow;
 }
-vec3 parallelLight(vec3 diffColor,vec3 specColor){
+vec3 parallelLight(){
+    vec3 diffuseSampler=material.diffuseColor;
+    vec3 specularSampler=material.specularColor;
+    if(material.diffuseMapNum>0){
+        diffuseSampler=texture(material.diffuseMap,texCoord).rgb;
+    }
+    if(material.specularMapNum>0){
+        specularSampler=texture(material.specularMap,texCoord).rgb;
+    }
+    vec3 normalSampler;
+    if(material.normalMapNum>0){
+        normalSampler=texture(material.normalMap,texCoord).rgb;
+        normalSampler=2*normalSampler-1;
+        normalSampler=normalize(TBN*normalSampler);
+    }else normalSampler=normal;
     //计算阴影
     vec4 lightSpacePos=lightSpaceMatrix*vec4(pos,1.0f);//replaced original code
     float shadowFactor=parallelShadowCalculation(lightSpacePos);
     //漫反射光
     vec3 lightDir=normalize(lightDirection);
-    float diff=max(dot(-lightDir,normal),0.0);
-    vec3 diffuse=diff * diffColor * material.diffuseStrength * lightColor;
+    float diff=max(dot(-lightDir,normalSampler),0.0);
+    vec3 diffuse=diff * diffuseSampler * material.diffuseStrength * lightColor;
     //反射高光
     vec3 viewDir=normalize(cameraPos-pos);
-    vec3 reflectDir=reflect(lightDir,normal);
+    vec3 reflectDir=reflect(lightDir,normalSampler);
     float spec=pow(max(dot(viewDir,reflectDir),0.0),material.shininess);
-    vec3 specular=spec * specColor * material.specularStrength * lightColor;
+    vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
     return (diffuse+specular)*shadowFactor;
 }

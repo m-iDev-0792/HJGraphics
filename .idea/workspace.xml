@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="HJGraphics" targetName="HJGRAPHICS" />
       <config projectName="HJGraphics" targetName="HJGraphics" />
+      <config projectName="HJGraphics" targetName="HJGRAPHICS" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -14,59 +14,15 @@
   <component name="ChangeListManager">
     <list default="true" id="1abe225c-fa90-4461-a691-18ba3a0c3b70" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BasicGLObject.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BasicGLObject.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Camera.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Camera.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DebugUtility.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DebugUtility.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ElementObjects.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ElementObjects.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GLFWWindowObject.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GLFWWindowObject.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Light.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Light.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Material.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Material.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scene.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scene.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Shader.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Shader.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/BasicGLObject.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/Camera.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/DebugUtility.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/DependInfo.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/ElementObjects.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/GLFWWindowObject.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/Light.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/Material.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/Model.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/Scene.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/Shader.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/build.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/cmake_clean.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/depend.internal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/depend.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/link.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/main.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shaders/geometryLightVertex.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/Shaders/geometryLightVertex.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/ElementObjects.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/ElementObjects.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/Window.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/Window.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/HJGraphics" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/HJGraphics" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/HJGraphics.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/HJGraphics.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Sources/libHJGRAPHICS.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Sources/libHJGRAPHICS.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stb_image.h" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -81,8 +37,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="32">
-              <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
+            <state relative-caret-position="357">
+              <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -93,45 +49,53 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Sources/ElementObjects.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="96" column="41" selection-start-line="96" selection-start-column="41" selection-end-line="96" selection-end-column="41" />
+            <state relative-caret-position="614">
+              <caret line="395" column="1" lean-forward="true" selection-start-line="395" selection-start-column="1" selection-end-line="395" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Sources/ElementObjects.h">
+        <entry file="file://$PROJECT_DIR$/Sources/Window.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-655" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/readme.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="203">
-                <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
-              </first_editor>
-              <second_editor />
+            <state relative-caret-position="102">
+              <caret line="77" column="1" lean-forward="true" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+        <entry file="file://$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="42" lean-forward="true" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
+            <state relative-caret-position="237">
+              <caret line="90" column="4" selection-start-line="90" selection-start-column="4" selection-end-line="95" selection-end-column="31" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Sources/CMakeLists.txt">
+        <entry file="file://$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+            <state relative-caret-position="297">
+              <caret line="95" column="10" lean-forward="true" selection-start-line="95" selection-start-column="10" selection-end-line="95" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-72">
+              <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Sources/Model.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2190">
+              <caret line="189" column="49" lean-forward="true" selection-start-line="189" selection-start-column="49" selection-end-line="189" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -174,6 +138,7 @@
       <find>defaultShader</find>
       <find>hasShadow</find>
       <find>何振邦</find>
+      <find>normal</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -182,7 +147,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/cmake-build-debug/geometryFragment.glsl" />
         <option value="$PROJECT_DIR$/Shaders/geometryFragment.glsl" />
         <option value="$PROJECT_DIR$/Shaders/geometryAmbientVertext.glsl" />
         <option value="$PROJECT_DIR$/Shaders/geometryParallelLightVertex.glsl" />
@@ -194,7 +158,6 @@
         <option value="$PROJECT_DIR$/Shaders/skyboxVertex.glsl" />
         <option value="$PROJECT_DIR$/Shaders/geometryAmbientVertex.glsl" />
         <option value="$PROJECT_DIR$/Shaders/debugFragment.glsl" />
-        <option value="$PROJECT_DIR$/Shaders/geometryLightVertex.glsl" />
         <option value="$PROJECT_DIR$/Shaders/geometryPointShadowVertex.glsl" />
         <option value="$PROJECT_DIR$/Shaders/geometryPointShadowGeometry.glsl" />
         <option value="$PROJECT_DIR$/Shaders/skyboxFragment.glsl" />
@@ -214,9 +177,6 @@
         <option value="$PROJECT_DIR$/ElementObjects.h" />
         <option value="$PROJECT_DIR$/Light.cpp" />
         <option value="$PROJECT_DIR$/Light.h" />
-        <option value="$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl" />
-        <option value="$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl" />
-        <option value="$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl" />
         <option value="$PROJECT_DIR$/Model.cpp" />
         <option value="$PROJECT_DIR$/Scene.h" />
         <option value="$PROJECT_DIR$/Scene.cpp" />
@@ -232,16 +192,21 @@
         <option value="$PROJECT_DIR$/Source/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/Sources/ElementObjects.cpp" />
+        <option value="$PROJECT_DIR$/Sources/Window.cpp" />
+        <option value="$PROJECT_DIR$/Shaders/geometryLightVertex.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl" />
+        <option value="$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl" />
         <option value="$PROJECT_DIR$/main.cpp" />
       </list>
     </option>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="125" />
-    <option name="y" value="100" />
+    <option name="x" value="223" />
+    <option name="y" value="120" />
     <option name="width" value="1507" />
-    <option name="height" value="816" />
+    <option name="height" value="724" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -251,6 +216,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -261,13 +227,17 @@
             <path>
               <item name="HJGraphics" type="b2602c69:ProjectViewProjectNode" />
               <item name="HJGraphics" type="462c0819:PsiDirectoryNode" />
+              <item name="Shaders" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="HJGraphics" type="b2602c69:ProjectViewProjectNode" />
+              <item name="HJGraphics" type="462c0819:PsiDirectoryNode" />
               <item name="Sources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -337,12 +307,13 @@
       <workItem from="1548465978803" duration="3149000" />
       <workItem from="1549072378597" duration="51721000" />
       <workItem from="1549421850431" duration="13413000" />
-      <workItem from="1549636685093" duration="1532000" />
+      <workItem from="1549636685093" duration="2269000" />
+      <workItem from="1550030004004" duration="9143000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="368123000" />
+    <option name="totallyTimeSpent" value="378003000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -354,23 +325,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="125" y="100" width="1507" height="816" extended-state="0" />
+    <frame x="223" y="120" width="1507" height="724" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.649635" visible="true" weight="0.2" />
-      <window_info id="Structure" order="1" sideWeight="0.35036495" side_tool="true" visible="true" weight="0.2" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6477987" visible="true" weight="0.20273037" />
+      <window_info id="Structure" order="1" sideWeight="0.35220125" side_tool="true" visible="true" weight="0.20273037" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3237792" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49920508" visible="true" weight="0.21825963" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49920508" visible="true" weight="0.21674877" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39707536" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3208431" />
       <window_info anchor="bottom" id="Code comment" order="7" weight="0.32786885" />
-      <window_info anchor="bottom" id="Messages" order="8" weight="0.30955777" />
+      <window_info anchor="bottom" id="Messages" order="8" sideWeight="0.4996587" weight="0.3087028" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.3283582" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5007949" side_tool="true" weight="0.28429753" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5003413" side_tool="true" weight="0.3087028" />
       <window_info anchor="bottom" id="Version Control" order="11" weight="0.3290398" />
       <window_info anchor="bottom" id="CMake" order="12" weight="0.3266762" />
       <window_info anchor="bottom" id="Database Changes" order="13" />
@@ -423,20 +394,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Shaders/skyboxVertex.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/gridVertex.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="28" lean-forward="true" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Shaders/debugFragment.glsl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
@@ -477,13 +434,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Shaders/geometryShadowFragment.glsl">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometryLightVertex.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="40" lean-forward="true" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Shaders/skyboxFragment.glsl">
       <provider selected="true" editor-type-id="text-editor">
@@ -541,64 +491,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Material.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Material.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="30" />
-          <folding>
-            <element signature="e#105#127#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BasicGLObject.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DebugUtility.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-          <folding>
-            <element signature="e#606#615#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Light.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Light.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-          <folding>
-            <element signature="e#99#121#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DebugUtility.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Material.cpp" />
+    <entry file="file://$PROJECT_DIR$/Material.h" />
+    <entry file="file://$PROJECT_DIR$/BasicGLObject.cpp" />
+    <entry file="file://$PROJECT_DIR$/DebugUtility.cpp" />
+    <entry file="file://$PROJECT_DIR$/Light.cpp" />
+    <entry file="file://$PROJECT_DIR$/Light.h" />
+    <entry file="file://$PROJECT_DIR$/DebugUtility.h" />
     <entry file="file://$PROJECT_DIR$/Shaders/geometryPointShadowFragment.glsl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -606,157 +505,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="65" column="4" lean-forward="true" selection-start-line="65" selection-start-column="4" selection-end-line="65" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="72" column="16" lean-forward="true" selection-start-line="72" selection-start-column="16" selection-end-line="72" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="78" column="32" lean-forward="true" selection-start-line="78" selection-start-column="32" selection-end-line="78" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="73">
-          <caret line="12" column="23" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Camera.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ElementObjects.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="590">
-          <caret line="267" column="13" selection-start-line="267" selection-start-column="13" selection-end-line="267" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shader.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-333">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-          <folding>
-            <element signature="e#132#155#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scene.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shader.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1710">
-          <caret line="102" column="82" selection-start-line="102" selection-start-column="82" selection-end-line="102" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="27" lean-forward="true" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BasicGLObject.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-          <folding>
-            <element signature="e#158#180#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HJGraphics.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scene.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="30" />
-          <folding>
-            <element signature="e#142#164#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Window.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
-          <folding>
-            <element signature="e#110#139#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GLFWWindowObject.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="e#133#156#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GLFWWindowObject.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Camera.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ElementObjects.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="140" column="10" selection-start-line="140" selection-start-column="10" selection-end-line="140" selection-end-column="10" />
-          <folding>
-            <element signature="e#130#156#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Window.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="63" column="17" selection-start-line="63" selection-start-column="17" selection-end-line="63" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Model.cpp" />
+    <entry file="file://$PROJECT_DIR$/Camera.cpp" />
+    <entry file="file://$PROJECT_DIR$/ElementObjects.cpp" />
+    <entry file="file://$PROJECT_DIR$/Shader.h" />
+    <entry file="file://$PROJECT_DIR$/Scene.cpp" />
+    <entry file="file://$PROJECT_DIR$/Shader.cpp" />
+    <entry file="file://$PROJECT_DIR$/Model.h" />
+    <entry file="file://$PROJECT_DIR$/BasicGLObject.h" />
+    <entry file="file://$PROJECT_DIR$/HJGraphics.h" />
+    <entry file="file://$PROJECT_DIR$/Scene.h" />
+    <entry file="file://$PROJECT_DIR$/Window.h" />
+    <entry file="file://$PROJECT_DIR$/GLFWWindowObject.h" />
+    <entry file="file://$PROJECT_DIR$/GLFWWindowObject.cpp" />
+    <entry file="file://$PROJECT_DIR$/Camera.h" />
+    <entry file="file://$PROJECT_DIR$/ElementObjects.h" />
+    <entry file="file://$PROJECT_DIR$/Window.cpp" />
     <entry file="file://$PROJECT_DIR$/Sources/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -764,12 +528,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="42" lean-forward="true" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/Sources/ElementObjects.h">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/readme.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
@@ -786,22 +546,66 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/ElementObjects.h">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-655" />
+        <state relative-caret-position="136">
+          <caret line="8" column="42" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Sources/Window.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="77" column="1" lean-forward="true" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Sources/ElementObjects.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="96" column="41" selection-start-line="96" selection-start-column="41" selection-end-line="96" selection-end-column="41" />
+        <state relative-caret-position="614">
+          <caret line="395" column="1" lean-forward="true" selection-start-line="395" selection-start-column="1" selection-end-line="395" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Sources/Model.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2190">
+          <caret line="189" column="49" lean-forward="true" selection-start-line="189" selection-start-column="49" selection-end-line="189" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryLightVertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="90" column="4" selection-start-line="90" selection-start-column="4" selection-end-line="95" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="95" column="10" lean-forward="true" selection-start-line="95" selection-start-column="10" selection-end-line="95" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-72">
+          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32">
-          <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
+        <state relative-caret-position="357">
+          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
