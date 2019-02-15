@@ -7,6 +7,7 @@
 
 #include "ElementObjects.h"
 #include "stb_image.h"
+#include <algorithm>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -44,6 +45,7 @@ namespace HJGraphics {
 		std::vector<Texture2D> textures_loaded;
 		std::vector<Mesh*> meshes;
 		std::string directory;//used for reading images from same directory of model
+		std::string format;
 		bool gammaCorrection;
 
 		Model(const std::string _path,bool _gamma = false);

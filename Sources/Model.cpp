@@ -24,6 +24,7 @@ HJGraphics::Mesh::Mesh(std::vector<HJGraphics::MeshVertex> _vertices, std::vecto
 	writeVerticesData();
 //	material.shininess=32;
 	material.specularStrength=glm::vec3(1.0f);
+	material.diffuseStrength=glm::vec3(2.0f);
 }
 void HJGraphics::Mesh::draw() {
 	writeObjectPropertyUniform(defaultShader);
@@ -111,8 +112,6 @@ void HJGraphics::Mesh::writeObjectPropertyUniform(Shader *shader) {
 	shader->setInt("material.heightMapNum",material.heightMaps.size());
 	shader->setInt("material.heightMap",3);
 
-//	std::cout<<"But in uniform writing stage\n diffuseMap Num: "<<material.diffuseMaps.size()<<"  specularMap num: "<<material.specularMaps.size()<<" normalMap num: "<<material.normalMaps.size()<<" heightMap num: "<<material.heightMaps.size()<<std::endl;
-
 	shader->set3fv("material.ambientStrength",material.ambientStrength);
 	shader->set3fv("material.diffuseStrength",material.diffuseStrength);
 	shader->set3fv("material.specularStrength",material.specularStrength);
@@ -148,7 +147,7 @@ void HJGraphics::Model::loadModel(std::string _path) {
 	}
 	// retrieve the directory path of the filepath
 	directory = _path.substr(0, _path.find_last_of('/'));
-
+	format = _path.substr(_path.find_last_of(".")+1,_path.size());
 	std::cout<<"load model from path:"<<_path<<std::endl;
 	std::cout<<"model's directory:"<<directory<<std::endl;
 
@@ -225,10 +224,10 @@ HJGraphics::Mesh* HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *sc
 	std::vector<Texture2D> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "specular");
 	if(!specularMaps.empty())textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	// 3. normal maps
-	std::vector<Texture2D> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "normal");
+	std::vector<Texture2D> normalMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_HEIGHT:aiTextureType_NORMALS, "normal");
 	if(!normalMaps.empty())textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 	// 4. height maps
-	std::vector<Texture2D> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "height");
+	std::vector<Texture2D> heightMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_AMBIENT:aiTextureType_HEIGHT, "height");
 	if(!heightMaps.empty())textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 //	std::cout<<" diffuseMap Num: "<<diffuseMaps.size()<<"  specularMap num: "<<specularMaps.size()<<" normalMap num: "<<normalMaps.size()<<" heightMap num: "<<heightMaps.size()<<std::endl;
@@ -243,6 +242,7 @@ std::vector<HJGraphics::Texture2D> HJGraphics::Model::loadMaterialTextures(aiMat
 		aiString texAiStrPath;
 		mat->GetTexture(type, i, &texAiStrPath);
 		std::string texStdStrPath(texAiStrPath.C_Str());
+		std::replace(texStdStrPath.begin(),texStdStrPath.end(),'\\','/');
 
 		bool skip = false;
 		for(unsigned int j = 0; j < textures_loaded.size(); j++){

@@ -39,8 +39,11 @@ namespace HJGraphics {
 		float lastY;
 		float yaw;
 		float pitch;
+		float moveSpeed;
+		glm::vec3 originalDirection;
 
 		int fps;
+
 
 		void framebufferSizeCallback(GLFWwindow *window, int width, int height) override;
 

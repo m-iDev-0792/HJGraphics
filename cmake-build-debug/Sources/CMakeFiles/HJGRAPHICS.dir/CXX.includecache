@@ -109,6 +109,8 @@ ElementObjects.h
 /Users/hezhenbang/Documents/HJGraphics/Sources/ElementObjects.h
 stb_image.h
 /Users/hezhenbang/Documents/HJGraphics/Sources/stb_image.h
+algorithm
+-
 assimp/Importer.hpp
 -
 assimp/scene.h

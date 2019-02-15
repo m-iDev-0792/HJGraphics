@@ -113,6 +113,8 @@ ElementObjects.h
 ../Sources/ElementObjects.h
 stb_image.h
 ../Sources/stb_image.h
+algorithm
+-
 assimp/Importer.hpp
 -
 assimp/scene.h
