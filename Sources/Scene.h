@@ -5,16 +5,14 @@
 #ifndef TESTINGFIELD_SCENE_H
 #define TESTINGFIELD_SCENE_H
 #define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl.h>
-#include <OpenGL/gl3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <vector>
 #include "Model.h"
 #include "Camera.h"
 #include "Light.h"
 #include "DebugUtility.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <vector>
 namespace HJGraphics {
 	const int BIND_POINT_MAX = 74;
 

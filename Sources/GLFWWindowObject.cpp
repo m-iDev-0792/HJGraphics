@@ -23,6 +23,11 @@ HJGraphics::GLFWWindowObject::GLFWWindowObject(int _width, int _height, std::str
 	glfwSetMouseButtonCallback(windowPtr,staticMouseButtonCallback);
 	glfwGetFramebufferSize(windowPtr, &bufferWidth, &bufferHeight);
 	glfwMakeContextCurrent(windowPtr);
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return;
+	}
 	currentWindow=this;
 }
 HJGraphics::GLFWWindowObject::GLFWWindowObject() {
@@ -51,6 +56,7 @@ void HJGraphics::GLFWWindowObject::InitGLFWEnvironment(int versionMajor, int ver
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,versionMinor);
 	glfwWindowHint(GLFW_OPENGL_PROFILE,profile);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,compat);
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //These functions are set to empty intentionally!!!

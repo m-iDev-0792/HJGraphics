@@ -34,8 +34,10 @@ int main() {
 	SpotLight spotLight(glm::vec3(1.0f,-1.0f,-1.0f),glm::vec3(-5.0f,5.0f,3.0f),glm::vec3(0.0f,0.6f,0.6f));
 	PointLight pointLight(glm::vec3(0.0f,4.0f,1.0f));
 
-	glm::vec3 cameraPos=glm::vec3(0.0f,4.0f,4.0f);
-	glm::vec3 cameraDirection=glm::vec3(-1.0f, -0.5f, -1.0f);
+//	glm::vec3 cameraPos=glm::vec3(0.0f,4.0f,4.0f);
+//	glm::vec3 cameraDirection=glm::vec3(-1.0f, -0.5f, -1.0f);
+	glm::vec3 cameraPos=glm::vec3(5.0f,5.0f,10.0f);
+	glm::vec3 cameraDirection=glm::vec3(0.0f, 0.0f, 0.0f)-cameraPos;
 	Camera camera(cameraPos,cameraDirection);
 
 	Scene scene;

@@ -10,11 +10,12 @@ file(REMOVE_RECURSE
   "CMakeFiles/HJGRAPHICS.dir/Scene.cpp.o"
   "CMakeFiles/HJGRAPHICS.dir/Shader.cpp.o"
   "CMakeFiles/HJGRAPHICS.dir/Window.cpp.o"
+  "CMakeFiles/HJGRAPHICS.dir/glad.c.o"
   "libHJGRAPHICS.pdb"
   "libHJGRAPHICS.a"
 )
 
 # Per-language clean rules from dependency scanning.
-foreach(lang CXX)
+foreach(lang C CXX)
   include(CMakeFiles/HJGRAPHICS.dir/cmake_clean_${lang}.cmake OPTIONAL)
 endforeach()

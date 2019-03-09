@@ -5,8 +5,7 @@
 #ifndef TESTINGFIELD_MATERIAL_H
 #define TESTINGFIELD_MATERIAL_H
 
-#include <OpenGL/gl.h>
-#include <OpenGL/gl3.h>
+#include "glad/glad.h"
 #include <glm/glm.hpp>
 #include <iostream>
 #include <vector>

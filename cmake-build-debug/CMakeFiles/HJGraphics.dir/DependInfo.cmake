@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/hezhenbang/Documents/HJGraphics/main.cpp" "/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles/HJGraphics.dir/main.cpp.o"
+  "/Users/hezhenbang/Documents/HJGraphics copy/main.cpp" "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug/CMakeFiles/HJGraphics.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
@@ -16,7 +16,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/DependInfo.cmake"
+  "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

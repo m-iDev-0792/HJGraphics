@@ -13,6 +13,8 @@ CMakeFiles/HJGraphics.dir/main.cpp.o: ../Sources/Model.h
 CMakeFiles/HJGraphics.dir/main.cpp.o: ../Sources/Scene.h
 CMakeFiles/HJGraphics.dir/main.cpp.o: ../Sources/Shader.h
 CMakeFiles/HJGraphics.dir/main.cpp.o: ../Sources/Window.h
+CMakeFiles/HJGraphics.dir/main.cpp.o: ../Sources/glad/glad.h
+CMakeFiles/HJGraphics.dir/main.cpp.o: ../Sources/glad/khrplatform.h
 CMakeFiles/HJGraphics.dir/main.cpp.o: ../Sources/stb_image.h
 CMakeFiles/HJGraphics.dir/main.cpp.o: ../main.cpp
 CMakeFiles/HJGraphics.dir/main.cpp.o: /usr/local/include/GLFW/glfw3.h

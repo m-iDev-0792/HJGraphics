@@ -7,10 +7,6 @@
 #IncludeRegexTransform: 
 
 ../Sources/BasicGLObject.h
-OpenGL/gl.h
--
-OpenGL/gl3.h
--
 Shader.h
 ../Sources/Shader.h
 Material.h
@@ -25,10 +21,8 @@ glm/gtc/type_ptr.hpp
 -
 
 ../Sources/Camera.h
-OpenGL/gl.h
--
-OpenGL/gl3.h
--
+glad/glad.h
+../Sources/glad/glad.h
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -39,10 +33,8 @@ iostream
 -
 
 ../Sources/DebugUtility.h
-OpenGL/gl.h
--
-OpenGL/gl3.h
--
+glad/glad.h
+../Sources/glad/glad.h
 glm/glm.hpp
 -
 iostream
@@ -63,6 +55,8 @@ cmath
 -
 
 ../Sources/GLFWWindowObject.h
+glad/glad.h
+../Sources/glad/glad.h
 GLFW/glfw3.h
 -
 GLFW/glfw3native.h
@@ -75,10 +69,8 @@ Window.h
 ../Sources/Window.h
 
 ../Sources/Light.h
-OpenGL/gl.h
--
-OpenGL/gl3.h
--
+glad/glad.h
+../Sources/glad/glad.h
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -95,10 +87,8 @@ Shader.h
 ../Sources/Shader.h
 
 ../Sources/Material.h
-OpenGL/gl.h
--
-OpenGL/gl3.h
--
+glad/glad.h
+../Sources/glad/glad.h
 glm/glm.hpp
 -
 iostream
@@ -123,18 +113,6 @@ assimp/postprocess.h
 -
 
 ../Sources/Scene.h
-OpenGL/gl.h
--
-OpenGL/gl3.h
--
-glm/glm.hpp
--
-glm/gtc/matrix_transform.hpp
--
-glm/gtc/type_ptr.hpp
--
-vector
--
 Model.h
 ../Sources/Model.h
 Camera.h
@@ -143,10 +121,18 @@ Light.h
 ../Sources/Light.h
 DebugUtility.h
 ../Sources/DebugUtility.h
+glm/glm.hpp
+-
+glm/gtc/matrix_transform.hpp
+-
+glm/gtc/type_ptr.hpp
+-
+vector
+-
 
 ../Sources/Shader.h
-OpenGL/gl3.h
--
+glad/glad.h
+../Sources/glad/glad.h
 iostream
 -
 fstream
@@ -157,11 +143,25 @@ glm/gtc/type_ptr.hpp
 -
 
 ../Sources/Window.h
-GLFWWindowObject.h
-../Sources/GLFWWindowObject.h
 Scene.h
 ../Sources/Scene.h
 chrono
+-
+GLFWWindowObject.h
+../Sources/GLFWWindowObject.h
+
+../Sources/glad/glad.h
+windows.h
+-
+khrplatform.h
+../Sources/glad/khrplatform.h
+
+../Sources/glad/khrplatform.h
+stdint.h
+-
+inttypes.h
+-
+stdint.h
 -
 
 ../Sources/stb_image.h
@@ -194,11 +194,11 @@ intrin.h
 arm_neon.h
 -
 
-/Users/hezhenbang/Documents/HJGraphics/main.cpp
+/Users/hezhenbang/Documents/HJGraphics copy/main.cpp
 iostream
 -
 HJGraphics.h
-/Users/hezhenbang/Documents/HJGraphics/HJGraphics.h
+/Users/hezhenbang/Documents/HJGraphics copy/HJGraphics.h
 
 /usr/local/include/GLFW/glfw3.h
 stddef.h

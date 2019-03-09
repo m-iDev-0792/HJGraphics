@@ -1,4 +1,4 @@
-# Install script for directory: /Users/hezhenbang/Documents/HJGraphics/Sources
+# Install script for directory: /Users/hezhenbang/Documents/HJGraphics copy/Sources
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

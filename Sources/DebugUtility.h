@@ -5,8 +5,7 @@
 #ifndef TESTINGFIELD_DEBUGUTILITY_H
 #define TESTINGFIELD_DEBUGUTILITY_H
 
-#include <OpenGL/gl.h>
-#include <OpenGL/gl3.h>
+#include "glad/glad.h"
 #include <glm/glm.hpp>
 #include <iostream>
 void getUniformBlockOffsets(GLuint shaderID,int length,const char* uniformNames[]);

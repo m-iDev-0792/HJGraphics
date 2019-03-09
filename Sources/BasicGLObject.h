@@ -5,8 +5,6 @@
 #define TESTINGFIELD_BASICGLOBJECT_H
 #define GL_SILENCE_DEPRECATION
 
-#include <OpenGL/gl.h>
-#include <OpenGL/gl3.h>
 #include "Shader.h"
 #include "Material.h"
 #include "Light.h"

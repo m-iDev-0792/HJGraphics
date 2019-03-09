@@ -4,8 +4,7 @@
 
 #ifndef TESTINGFIELD_CAMERA_H
 #define TESTINGFIELD_CAMERA_H
-#include <OpenGL/gl.h>
-#include <OpenGL/gl3.h>
+#include "glad/glad.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

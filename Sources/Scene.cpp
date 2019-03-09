@@ -4,7 +4,7 @@
 
 #include "Scene.h"
 bool HJGraphics::Scene::bindPointList[BIND_POINT_MAX]={false};
-HJGraphics::Scene::Scene():Scene(800*2,600*2,0.2f,glm::vec3(0.0f,0.0f,1.0f)) {
+HJGraphics::Scene::Scene():Scene(800,600,0.2f,glm::vec3(0.0f,0.0f,1.0f)) {
 
 }
 HJGraphics::Scene::Scene(GLuint _sceneWidth,GLuint _sceneHeight,GLfloat _ambient, glm::vec3 _clearColor) {

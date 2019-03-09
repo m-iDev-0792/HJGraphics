@@ -14,8 +14,10 @@ CMakeFiles/HJGraphics.dir/main.cpp.o
  ../Sources/Scene.h
  ../Sources/Shader.h
  ../Sources/Window.h
+ ../Sources/glad/glad.h
+ ../Sources/glad/khrplatform.h
  ../Sources/stb_image.h
- /Users/hezhenbang/Documents/HJGraphics/main.cpp
+ /Users/hezhenbang/Documents/HJGraphics copy/main.cpp
  /usr/local/include/GLFW/glfw3.h
  /usr/local/include/GLFW/glfw3native.h
  /usr/local/include/assimp/./Compiler/poppack1.h

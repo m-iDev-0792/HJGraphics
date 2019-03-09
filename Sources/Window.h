@@ -5,9 +5,9 @@
 #ifndef HJGRAPHICS_WINDOW_H
 #define HJGRAPHICS_WINDOW_H
 
-#include "GLFWWindowObject.h"
 #include "Scene.h"
 #include <chrono>
+#include "GLFWWindowObject.h"
 namespace HJGraphics {
 
 	class Window : public GLFWWindowObject {
