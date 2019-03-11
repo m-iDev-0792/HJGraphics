@@ -5,7 +5,7 @@
 #ifndef TESTINGFIELD_LIGHT_H
 #define TESTINGFIELD_LIGHT_H
 
-#include "glad/glad.h"
+#include "OpenGLHeader.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

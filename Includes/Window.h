@@ -6,8 +6,8 @@
 #define HJGRAPHICS_WINDOW_H
 
 #include "Scene.h"
-#include <chrono>
 #include "GLFWWindowObject.h"
+#include <chrono>
 namespace HJGraphics {
 
 	class Window : public GLFWWindowObject {

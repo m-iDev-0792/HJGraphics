@@ -14,11 +14,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 namespace HJGraphics {
-	const int BIND_POINT_MAX = 74;
+	const int BIND_POINT_MAX = 74;//different graphics card has different bind point
 
 /*
  * Declare of Scene class ,which is used to manage objects lights and cameras in a scene
- * 用于管理一个对象 灯光 相机等物件的场景类
  */
 	class Scene {
 	private:
@@ -30,6 +29,13 @@ namespace HJGraphics {
 		GLuint sceneWidth;
 		GLuint sceneHeight;
 		GLfloat ambientFactor;
+		GLint defaultFramebuffer;
+	public:
+		GLint getDefaultFramebuffer() const;
+
+		void setDefaultFramebuffer(GLint _defaultFramebuffer);
+
+	private:
 		glm::vec3 clearColor;
 		std::vector<BasicGLObject *> objects;
 		std::vector<Camera *> cameras;

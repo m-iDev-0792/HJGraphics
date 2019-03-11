@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(HJGraphics)
-include_directories("Sources")
+include_directories("Includes")
 include_directories("/usr/local/include")
 
 link_directories(${GLFW_LIBRARY_DIRS})

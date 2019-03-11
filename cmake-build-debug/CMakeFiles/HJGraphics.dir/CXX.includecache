@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-../Sources/BasicGLObject.h
+../Includes/BasicGLObject.h
 Shader.h
-../Sources/Shader.h
+../Includes/Shader.h
 Material.h
-../Sources/Material.h
+../Includes/Material.h
 Light.h
-../Sources/Light.h
+../Includes/Light.h
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -20,9 +20,9 @@ glm/gtc/matrix_transform.hpp
 glm/gtc/type_ptr.hpp
 -
 
-../Sources/Camera.h
-glad/glad.h
-../Sources/glad/glad.h
+../Includes/Camera.h
+OpenGLHeader.h
+../Includes/OpenGLHeader.h
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -32,19 +32,19 @@ glm/gtc/type_ptr.hpp
 iostream
 -
 
-../Sources/DebugUtility.h
-glad/glad.h
-../Sources/glad/glad.h
+../Includes/DebugUtility.h
+OpenGLHeader.h
+../Includes/OpenGLHeader.h
 glm/glm.hpp
 -
 iostream
 -
 
-../Sources/ElementObjects.h
+../Includes/ElementObjects.h
 BasicGLObject.h
-../Sources/BasicGLObject.h
+../Includes/BasicGLObject.h
 Light.h
-../Sources/Light.h
+../Includes/Light.h
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -54,9 +54,9 @@ glm/gtc/type_ptr.hpp
 cmath
 -
 
-../Sources/GLFWWindowObject.h
-glad/glad.h
-../Sources/glad/glad.h
+../Includes/GLFWWindowObject.h
+OpenGLHeader.h
+../Includes/OpenGLHeader.h
 GLFW/glfw3.h
 -
 GLFW/glfw3native.h
@@ -64,13 +64,13 @@ GLFW/glfw3native.h
 iostream
 -
 
-../Sources/HJGraphics.h
+../Includes/HJGraphics.h
 Window.h
-../Sources/Window.h
+../Includes/Window.h
 
-../Sources/Light.h
-glad/glad.h
-../Sources/glad/glad.h
+../Includes/Light.h
+OpenGLHeader.h
+../Includes/OpenGLHeader.h
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -82,13 +82,13 @@ iostream
 vector
 -
 DebugUtility.h
-../Sources/DebugUtility.h
+../Includes/DebugUtility.h
 Shader.h
-../Sources/Shader.h
+../Includes/Shader.h
 
-../Sources/Material.h
-glad/glad.h
-../Sources/glad/glad.h
+../Includes/Material.h
+OpenGLHeader.h
+../Includes/OpenGLHeader.h
 glm/glm.hpp
 -
 iostream
@@ -96,13 +96,13 @@ iostream
 vector
 -
 stb_image.h
-../Sources/stb_image.h
+../Includes/stb_image.h
 
-../Sources/Model.h
+../Includes/Model.h
 ElementObjects.h
-../Sources/ElementObjects.h
+../Includes/ElementObjects.h
 stb_image.h
-../Sources/stb_image.h
+../Includes/stb_image.h
 algorithm
 -
 assimp/Importer.hpp
@@ -112,15 +112,25 @@ assimp/scene.h
 assimp/postprocess.h
 -
 
-../Sources/Scene.h
+../Includes/OpenGLHeader.h
+glad/glad.h
+../Includes/glad/glad.h
+OpenGL/gl3
+-
+QOpenGLFunctions_3_3_Core
+-
+QDebug
+-
+
+../Includes/Scene.h
 Model.h
-../Sources/Model.h
+../Includes/Model.h
 Camera.h
-../Sources/Camera.h
+../Includes/Camera.h
 Light.h
-../Sources/Light.h
+../Includes/Light.h
 DebugUtility.h
-../Sources/DebugUtility.h
+../Includes/DebugUtility.h
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -130,9 +140,9 @@ glm/gtc/type_ptr.hpp
 vector
 -
 
-../Sources/Shader.h
-glad/glad.h
-../Sources/glad/glad.h
+../Includes/Shader.h
+OpenGLHeader.h
+../Includes/OpenGLHeader.h
 iostream
 -
 fstream
@@ -142,21 +152,21 @@ glm/glm.hpp
 glm/gtc/type_ptr.hpp
 -
 
-../Sources/Window.h
+../Includes/Window.h
 Scene.h
-../Sources/Scene.h
+../Includes/Scene.h
+GLFWWindowObject.h
+../Includes/GLFWWindowObject.h
 chrono
 -
-GLFWWindowObject.h
-../Sources/GLFWWindowObject.h
 
-../Sources/glad/glad.h
+../Includes/glad/glad.h
 windows.h
 -
 khrplatform.h
-../Sources/glad/khrplatform.h
+../Includes/glad/khrplatform.h
 
-../Sources/glad/khrplatform.h
+../Includes/glad/khrplatform.h
 stdint.h
 -
 inttypes.h
@@ -164,9 +174,9 @@ inttypes.h
 stdint.h
 -
 
-../Sources/stb_image.h
+../Includes/stb_image.h
 stb_image.h
-../Sources/stb_image.h
+../Includes/stb_image.h
 stdio.h
 -
 stdarg.h

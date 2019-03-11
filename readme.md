@@ -21,7 +21,7 @@ window.run();
 # Features
 HJGraphics has...
 
-* Window : a GLFW wrapped window system.
+* Window : a GLFW wrapped window system(now HJGraphics supports Qt, see HJGraphics-Qt).
 * Camera 
 * Scene : an easy way to manage and draw objects.
 * Object : a few build-in 3D objects support include

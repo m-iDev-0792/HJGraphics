@@ -8,7 +8,8 @@
 #ifndef MODEL_SHADER_H
 #define MODEL_SHADER_H
 
-#include "glad/glad.h"
+
+#include "OpenGLHeader.h"
 #include <iostream>
 #include <fstream>
 #include <glm/glm.hpp>

@@ -44,7 +44,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/hezhenbang/Documents/HJGraphics copy/Sources"/>
+					<Add directory="/Users/hezhenbang/Documents/HJGraphics copy/Includes"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
@@ -66,7 +66,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/hezhenbang/Documents/HJGraphics copy/Sources"/>
+					<Add directory="/Users/hezhenbang/Documents/HJGraphics copy/Includes"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
@@ -88,7 +88,7 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/hezhenbang/Documents/HJGraphics copy/Sources"/>
+					<Add directory="/Users/hezhenbang/Documents/HJGraphics copy/Includes"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
@@ -110,7 +110,7 @@
 				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/hezhenbang/Documents/HJGraphics copy/Sources"/>
+					<Add directory="/Users/hezhenbang/Documents/HJGraphics copy/Includes"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
@@ -129,67 +129,34 @@
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/BasicGLObject.cpp">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/BasicGLObject.h">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Camera.cpp">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Camera.h">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/DebugUtility.cpp">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/DebugUtility.h">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/ElementObjects.cpp">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/ElementObjects.h">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/GLFWWindowObject.cpp">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/GLFWWindowObject.h">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Light.cpp">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Light.h">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Material.cpp">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Material.h">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Model.cpp">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Model.h">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Scene.cpp">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Scene.h">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Shader.cpp">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Shader.h">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Window.cpp">
-			<Option target="HJGRAPHICS"/>
-		</Unit>
-		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/Window.h">
 			<Option target="HJGRAPHICS"/>
 		</Unit>
 		<Unit filename="/Users/hezhenbang/Documents/HJGraphics copy/Sources/glad.c">
