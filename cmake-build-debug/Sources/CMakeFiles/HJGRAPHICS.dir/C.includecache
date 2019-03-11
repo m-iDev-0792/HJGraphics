@@ -6,33 +6,3 @@
 
 #IncludeRegexTransform: 
 
-../Includes/glad/glad.h
-windows.h
--
-khrplatform.h
-../Includes/glad/khrplatform.h
-
-../Includes/glad/khrplatform.h
-stdint.h
--
-inttypes.h
--
-stdint.h
--
-
-/Users/hezhenbang/Documents/HJGraphics copy/Sources/glad.c
-stdio.h
--
-stdlib.h
--
-string.h
--
-glad/glad.h
-/Users/hezhenbang/Documents/HJGraphics copy/Sources/glad/glad.h
-windows.h
--
-winapifamily.h
--
-dlfcn.h
--
-

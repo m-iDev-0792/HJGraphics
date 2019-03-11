@@ -7,11 +7,11 @@ C_FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacO
 
 C_DEFINES = 
 
-C_INCLUDES = -I"/Users/hezhenbang/Documents/HJGraphics copy/Includes" -I/usr/local/include 
+C_INCLUDES = -I/Users/hezhenbang/Documents/HJGraphics/Includes -I/usr/local/include 
 
 CXX_FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/Users/hezhenbang/Documents/HJGraphics copy/Includes" -I/usr/local/include 
+CXX_INCLUDES = -I/Users/hezhenbang/Documents/HJGraphics/Includes -I/usr/local/include 
 

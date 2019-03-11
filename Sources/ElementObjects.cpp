@@ -93,14 +93,11 @@ void HJGraphics::Coordinate::refreshData() {
 }
 
 void HJGraphics::Coordinate::draw() {
-	defaultShader->use();
-	defaultShader->set4fm("model",model);
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_LINES,0,6);
-	glBindVertexArray(0);
+	draw(*defaultShader);
 }
 void HJGraphics::Coordinate::draw(Shader shader) {
 	shader.use();
+	shader.set4fm("model",model);
 	shader.bindBlock("sharedMatrices",sharedBindPoint);
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_LINES,0,6);
@@ -119,8 +116,7 @@ HJGraphics::Grid::Grid(GLfloat _unit, GLuint _cellNum, int _mode, glm::vec3 _col
 	mode=_mode;
 	lineColor=_color;
 	if(defaultShader== nullptr)defaultShader=new Shader("../Shaders/gridVertex.glsl","../Shaders/gridFragment.glsl");
-	defaultShader->use();
-	defaultShader->set3fv("lineColor",lineColor);
+
 	XYModel=glm::mat4(1.0f);
 	XYModel=glm::rotate(XYModel,glm::radians(90.0f),glm::vec3(1.0f,0.0f,0.0f));
 	XYModel=glm::translate(XYModel,glm::vec3(0.0f,0.0f,-0.01f));
@@ -140,7 +136,7 @@ HJGraphics::Grid::Grid(GLfloat _unit, GLuint _cellNum, int _mode, glm::vec3 _col
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 }
-HJGraphics::Grid::Grid():Grid(0.1f,2,GRIDMODE::XZ|GRIDMODE::YZ|GRIDMODE::XY){
+HJGraphics::Grid::Grid():Grid(1.0f,5,GRIDMODE::XZ|GRIDMODE::YZ|GRIDMODE::XY){
 
 }
 HJGraphics::Shader* HJGraphics::Grid::getDefaultShader() {
@@ -177,6 +173,7 @@ void HJGraphics::Grid::draw() {
 }
 void HJGraphics::Grid::draw(Shader shader) {
 	shader.use();
+	shader.set3fv("lineColor",lineColor);
 	shader.bindBlock("sharedMatrices",sharedBindPoint);
 	glBindVertexArray(VAO);
 	const int n=(2*cellNum+1)*2*2;

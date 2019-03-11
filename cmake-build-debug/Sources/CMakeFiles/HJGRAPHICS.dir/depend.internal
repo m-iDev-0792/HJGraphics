@@ -4,7 +4,7 @@
 Sources/CMakeFiles/HJGRAPHICS.dir/glad.c.o
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/glad.c
+ /Users/hezhenbang/Documents/HJGraphics/Sources/glad.c
 Sources/CMakeFiles/HJGRAPHICS.dir/BasicGLObject.cpp.o
  ../Includes/BasicGLObject.h
  ../Includes/DebugUtility.h
@@ -15,7 +15,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/BasicGLObject.cpp.o
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
  ../Includes/stb_image.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/BasicGLObject.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/BasicGLObject.cpp
  /usr/local/include/glm/common.hpp
  /usr/local/include/glm/detail/_fixes.hpp
  /usr/local/include/glm/detail/_swizzle.hpp
@@ -122,7 +122,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/Camera.cpp.o
  ../Includes/OpenGLHeader.h
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/Camera.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/Camera.cpp
  /usr/local/include/glm/common.hpp
  /usr/local/include/glm/detail/_fixes.hpp
  /usr/local/include/glm/detail/_swizzle.hpp
@@ -229,7 +229,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/DebugUtility.cpp.o
  ../Includes/OpenGLHeader.h
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/DebugUtility.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/DebugUtility.cpp
  /usr/local/include/glm/common.hpp
  /usr/local/include/glm/detail/_fixes.hpp
  /usr/local/include/glm/detail/_swizzle.hpp
@@ -333,7 +333,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/ElementObjects.cpp.o
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
  ../Includes/stb_image.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/ElementObjects.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/ElementObjects.cpp
  /usr/local/include/glm/common.hpp
  /usr/local/include/glm/detail/_fixes.hpp
  /usr/local/include/glm/detail/_swizzle.hpp
@@ -440,7 +440,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/GLFWWindowObject.cpp.o
  ../Includes/OpenGLHeader.h
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/GLFWWindowObject.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/GLFWWindowObject.cpp
  /usr/local/include/GLFW/glfw3.h
  /usr/local/include/GLFW/glfw3native.h
 Sources/CMakeFiles/HJGRAPHICS.dir/Light.cpp.o
@@ -450,7 +450,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/Light.cpp.o
  ../Includes/Shader.h
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/Light.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/Light.cpp
  /usr/local/include/glm/common.hpp
  /usr/local/include/glm/detail/_fixes.hpp
  /usr/local/include/glm/detail/_swizzle.hpp
@@ -558,7 +558,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/Material.cpp.o
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
  ../Includes/stb_image.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/Material.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/Material.cpp
  /usr/local/include/glm/common.hpp
  /usr/local/include/glm/detail/_fixes.hpp
  /usr/local/include/glm/detail/_swizzle.hpp
@@ -663,7 +663,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/Model.cpp.o
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
  ../Includes/stb_image.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/Model.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/Model.cpp
  /usr/local/include/assimp/./Compiler/poppack1.h
  /usr/local/include/assimp/./Compiler/pushpack1.h
  /usr/local/include/assimp/Compiler/pstdint.h
@@ -806,7 +806,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/Scene.cpp.o
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
  ../Includes/stb_image.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/Scene.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/Scene.cpp
  /usr/local/include/assimp/./Compiler/poppack1.h
  /usr/local/include/assimp/./Compiler/pushpack1.h
  /usr/local/include/assimp/Compiler/pstdint.h
@@ -941,7 +941,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/Shader.cpp.o
  ../Includes/Shader.h
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/Shader.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/Shader.cpp
  /usr/local/include/glm/common.hpp
  /usr/local/include/glm/detail/_fixes.hpp
  /usr/local/include/glm/detail/_swizzle.hpp
@@ -1057,7 +1057,7 @@ Sources/CMakeFiles/HJGRAPHICS.dir/Window.cpp.o
  ../Includes/glad/glad.h
  ../Includes/glad/khrplatform.h
  ../Includes/stb_image.h
- /Users/hezhenbang/Documents/HJGraphics copy/Sources/Window.cpp
+ /Users/hezhenbang/Documents/HJGraphics/Sources/Window.cpp
  /usr/local/include/GLFW/glfw3.h
  /usr/local/include/GLFW/glfw3native.h
  /usr/local/include/assimp/./Compiler/poppack1.h

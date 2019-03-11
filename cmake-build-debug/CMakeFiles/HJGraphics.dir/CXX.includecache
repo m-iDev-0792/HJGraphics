@@ -204,11 +204,11 @@ intrin.h
 arm_neon.h
 -
 
-/Users/hezhenbang/Documents/HJGraphics copy/main.cpp
+/Users/hezhenbang/Documents/HJGraphics/main.cpp
 iostream
 -
 HJGraphics.h
-/Users/hezhenbang/Documents/HJGraphics copy/HJGraphics.h
+/Users/hezhenbang/Documents/HJGraphics/HJGraphics.h
 
 /usr/local/include/GLFW/glfw3.h
 stddef.h

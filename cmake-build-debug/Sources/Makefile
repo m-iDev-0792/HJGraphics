@@ -48,10 +48,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/hezhenbang/Documents/HJGraphics copy"
+CMAKE_SOURCE_DIR = /Users/hezhenbang/Documents/HJGraphics
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug"
+CMAKE_BINARY_DIR = /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(CMAKE_COMMAND) -E cmake_progress_start "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug/CMakeFiles" "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug/Sources/CMakeFiles/progress.marks"
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f CMakeFiles/Makefile2 Sources/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug/CMakeFiles" 0
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_progress_start /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/Sources/CMakeFiles/progress.marks
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 Sources/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f CMakeFiles/Makefile2 Sources/clean
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 Sources/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,22 +97,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f CMakeFiles/Makefile2 Sources/preinstall
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 Sources/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f CMakeFiles/Makefile2 Sources/preinstall
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 Sources/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 Sources/CMakeFiles/HJGRAPHICS.dir/rule:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f CMakeFiles/Makefile2 Sources/CMakeFiles/HJGRAPHICS.dir/rule
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 Sources/CMakeFiles/HJGRAPHICS.dir/rule
 .PHONY : Sources/CMakeFiles/HJGRAPHICS.dir/rule
 
 # Convenience name for target.
@@ -122,7 +122,7 @@ HJGRAPHICS: Sources/CMakeFiles/HJGRAPHICS.dir/rule
 
 # fast build rule for target.
 HJGRAPHICS/fast:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/build
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/build
 .PHONY : HJGRAPHICS/fast
 
 BasicGLObject.o: BasicGLObject.cpp.o
@@ -131,7 +131,7 @@ BasicGLObject.o: BasicGLObject.cpp.o
 
 # target to build an object file
 BasicGLObject.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/BasicGLObject.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/BasicGLObject.cpp.o
 .PHONY : BasicGLObject.cpp.o
 
 BasicGLObject.i: BasicGLObject.cpp.i
@@ -140,7 +140,7 @@ BasicGLObject.i: BasicGLObject.cpp.i
 
 # target to preprocess a source file
 BasicGLObject.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/BasicGLObject.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/BasicGLObject.cpp.i
 .PHONY : BasicGLObject.cpp.i
 
 BasicGLObject.s: BasicGLObject.cpp.s
@@ -149,7 +149,7 @@ BasicGLObject.s: BasicGLObject.cpp.s
 
 # target to generate assembly for a file
 BasicGLObject.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/BasicGLObject.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/BasicGLObject.cpp.s
 .PHONY : BasicGLObject.cpp.s
 
 Camera.o: Camera.cpp.o
@@ -158,7 +158,7 @@ Camera.o: Camera.cpp.o
 
 # target to build an object file
 Camera.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Camera.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Camera.cpp.o
 .PHONY : Camera.cpp.o
 
 Camera.i: Camera.cpp.i
@@ -167,7 +167,7 @@ Camera.i: Camera.cpp.i
 
 # target to preprocess a source file
 Camera.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Camera.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Camera.cpp.i
 .PHONY : Camera.cpp.i
 
 Camera.s: Camera.cpp.s
@@ -176,7 +176,7 @@ Camera.s: Camera.cpp.s
 
 # target to generate assembly for a file
 Camera.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Camera.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Camera.cpp.s
 .PHONY : Camera.cpp.s
 
 DebugUtility.o: DebugUtility.cpp.o
@@ -185,7 +185,7 @@ DebugUtility.o: DebugUtility.cpp.o
 
 # target to build an object file
 DebugUtility.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/DebugUtility.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/DebugUtility.cpp.o
 .PHONY : DebugUtility.cpp.o
 
 DebugUtility.i: DebugUtility.cpp.i
@@ -194,7 +194,7 @@ DebugUtility.i: DebugUtility.cpp.i
 
 # target to preprocess a source file
 DebugUtility.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/DebugUtility.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/DebugUtility.cpp.i
 .PHONY : DebugUtility.cpp.i
 
 DebugUtility.s: DebugUtility.cpp.s
@@ -203,7 +203,7 @@ DebugUtility.s: DebugUtility.cpp.s
 
 # target to generate assembly for a file
 DebugUtility.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/DebugUtility.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/DebugUtility.cpp.s
 .PHONY : DebugUtility.cpp.s
 
 ElementObjects.o: ElementObjects.cpp.o
@@ -212,7 +212,7 @@ ElementObjects.o: ElementObjects.cpp.o
 
 # target to build an object file
 ElementObjects.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/ElementObjects.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/ElementObjects.cpp.o
 .PHONY : ElementObjects.cpp.o
 
 ElementObjects.i: ElementObjects.cpp.i
@@ -221,7 +221,7 @@ ElementObjects.i: ElementObjects.cpp.i
 
 # target to preprocess a source file
 ElementObjects.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/ElementObjects.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/ElementObjects.cpp.i
 .PHONY : ElementObjects.cpp.i
 
 ElementObjects.s: ElementObjects.cpp.s
@@ -230,7 +230,7 @@ ElementObjects.s: ElementObjects.cpp.s
 
 # target to generate assembly for a file
 ElementObjects.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/ElementObjects.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/ElementObjects.cpp.s
 .PHONY : ElementObjects.cpp.s
 
 GLFWWindowObject.o: GLFWWindowObject.cpp.o
@@ -239,7 +239,7 @@ GLFWWindowObject.o: GLFWWindowObject.cpp.o
 
 # target to build an object file
 GLFWWindowObject.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/GLFWWindowObject.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/GLFWWindowObject.cpp.o
 .PHONY : GLFWWindowObject.cpp.o
 
 GLFWWindowObject.i: GLFWWindowObject.cpp.i
@@ -248,7 +248,7 @@ GLFWWindowObject.i: GLFWWindowObject.cpp.i
 
 # target to preprocess a source file
 GLFWWindowObject.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/GLFWWindowObject.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/GLFWWindowObject.cpp.i
 .PHONY : GLFWWindowObject.cpp.i
 
 GLFWWindowObject.s: GLFWWindowObject.cpp.s
@@ -257,7 +257,7 @@ GLFWWindowObject.s: GLFWWindowObject.cpp.s
 
 # target to generate assembly for a file
 GLFWWindowObject.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/GLFWWindowObject.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/GLFWWindowObject.cpp.s
 .PHONY : GLFWWindowObject.cpp.s
 
 Light.o: Light.cpp.o
@@ -266,7 +266,7 @@ Light.o: Light.cpp.o
 
 # target to build an object file
 Light.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Light.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Light.cpp.o
 .PHONY : Light.cpp.o
 
 Light.i: Light.cpp.i
@@ -275,7 +275,7 @@ Light.i: Light.cpp.i
 
 # target to preprocess a source file
 Light.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Light.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Light.cpp.i
 .PHONY : Light.cpp.i
 
 Light.s: Light.cpp.s
@@ -284,7 +284,7 @@ Light.s: Light.cpp.s
 
 # target to generate assembly for a file
 Light.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Light.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Light.cpp.s
 .PHONY : Light.cpp.s
 
 Material.o: Material.cpp.o
@@ -293,7 +293,7 @@ Material.o: Material.cpp.o
 
 # target to build an object file
 Material.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Material.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Material.cpp.o
 .PHONY : Material.cpp.o
 
 Material.i: Material.cpp.i
@@ -302,7 +302,7 @@ Material.i: Material.cpp.i
 
 # target to preprocess a source file
 Material.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Material.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Material.cpp.i
 .PHONY : Material.cpp.i
 
 Material.s: Material.cpp.s
@@ -311,7 +311,7 @@ Material.s: Material.cpp.s
 
 # target to generate assembly for a file
 Material.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Material.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Material.cpp.s
 .PHONY : Material.cpp.s
 
 Model.o: Model.cpp.o
@@ -320,7 +320,7 @@ Model.o: Model.cpp.o
 
 # target to build an object file
 Model.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Model.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Model.cpp.o
 .PHONY : Model.cpp.o
 
 Model.i: Model.cpp.i
@@ -329,7 +329,7 @@ Model.i: Model.cpp.i
 
 # target to preprocess a source file
 Model.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Model.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Model.cpp.i
 .PHONY : Model.cpp.i
 
 Model.s: Model.cpp.s
@@ -338,7 +338,7 @@ Model.s: Model.cpp.s
 
 # target to generate assembly for a file
 Model.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Model.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Model.cpp.s
 .PHONY : Model.cpp.s
 
 Scene.o: Scene.cpp.o
@@ -347,7 +347,7 @@ Scene.o: Scene.cpp.o
 
 # target to build an object file
 Scene.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Scene.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Scene.cpp.o
 .PHONY : Scene.cpp.o
 
 Scene.i: Scene.cpp.i
@@ -356,7 +356,7 @@ Scene.i: Scene.cpp.i
 
 # target to preprocess a source file
 Scene.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Scene.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Scene.cpp.i
 .PHONY : Scene.cpp.i
 
 Scene.s: Scene.cpp.s
@@ -365,7 +365,7 @@ Scene.s: Scene.cpp.s
 
 # target to generate assembly for a file
 Scene.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Scene.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Scene.cpp.s
 .PHONY : Scene.cpp.s
 
 Shader.o: Shader.cpp.o
@@ -374,7 +374,7 @@ Shader.o: Shader.cpp.o
 
 # target to build an object file
 Shader.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Shader.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Shader.cpp.o
 .PHONY : Shader.cpp.o
 
 Shader.i: Shader.cpp.i
@@ -383,7 +383,7 @@ Shader.i: Shader.cpp.i
 
 # target to preprocess a source file
 Shader.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Shader.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Shader.cpp.i
 .PHONY : Shader.cpp.i
 
 Shader.s: Shader.cpp.s
@@ -392,7 +392,7 @@ Shader.s: Shader.cpp.s
 
 # target to generate assembly for a file
 Shader.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Shader.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Shader.cpp.s
 .PHONY : Shader.cpp.s
 
 Window.o: Window.cpp.o
@@ -401,7 +401,7 @@ Window.o: Window.cpp.o
 
 # target to build an object file
 Window.cpp.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Window.cpp.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Window.cpp.o
 .PHONY : Window.cpp.o
 
 Window.i: Window.cpp.i
@@ -410,7 +410,7 @@ Window.i: Window.cpp.i
 
 # target to preprocess a source file
 Window.cpp.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Window.cpp.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Window.cpp.i
 .PHONY : Window.cpp.i
 
 Window.s: Window.cpp.s
@@ -419,7 +419,7 @@ Window.s: Window.cpp.s
 
 # target to generate assembly for a file
 Window.cpp.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Window.cpp.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/Window.cpp.s
 .PHONY : Window.cpp.s
 
 glad.o: glad.c.o
@@ -428,7 +428,7 @@ glad.o: glad.c.o
 
 # target to build an object file
 glad.c.o:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/glad.c.o
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/glad.c.o
 .PHONY : glad.c.o
 
 glad.i: glad.c.i
@@ -437,7 +437,7 @@ glad.i: glad.c.i
 
 # target to preprocess a source file
 glad.c.i:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/glad.c.i
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/glad.c.i
 .PHONY : glad.c.i
 
 glad.s: glad.c.s
@@ -446,7 +446,7 @@ glad.s: glad.c.s
 
 # target to generate assembly for a file
 glad.c.s:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/glad.c.s
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(MAKE) -f Sources/CMakeFiles/HJGRAPHICS.dir/build.make Sources/CMakeFiles/HJGRAPHICS.dir/glad.c.s
 .PHONY : glad.c.s
 
 # Help Target
@@ -505,6 +505,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd "/Users/hezhenbang/Documents/HJGraphics copy/cmake-build-debug" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /Users/hezhenbang/Documents/HJGraphics/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
