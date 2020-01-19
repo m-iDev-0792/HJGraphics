@@ -29,8 +29,8 @@ HJGraphics::GLFWWindowObject::GLFWWindowObject(int _width, int _height, std::str
 	}
 	currentWindow=this;
 }
-HJGraphics::GLFWWindowObject::GLFWWindowObject() {
-	GLFWWindowObject(800,600,"Window");
+HJGraphics::GLFWWindowObject::GLFWWindowObject():GLFWWindowObject(800,600,"Window"){
+
 }
 HJGraphics::GLFWWindowObject::~GLFWWindowObject() {
 	glfwDestroyWindow(windowPtr);
