@@ -1,4 +1,0 @@
-cmake_minimum_required(VERSION 3.10)
-include_directories("Includes")
-AUX_SOURCE_DIRECTORY(. DIR_HJGRAPHICS_SRCS)
-ADD_LIBRARY ( HJGRAPHICS ${DIR_HJGRAPHICS_SRCS})

@@ -1,13 +1,26 @@
 cmake_minimum_required(VERSION 3.10)
 project(HJGraphics)
-include_directories("Includes")
-include_directories("/usr/local/include")
-
-link_directories(${GLFW_LIBRARY_DIRS})
-include_directories(${GLFW_INCLUDE_DIR})
-set(GLFW3_LIB "/usr/local/lib/libglfw.3.2.dylib")
-set(ASSIMP_LIB "/usr/local/Cellar/assimp/4.0.1/lib/libassimp.4.0.1.dylib")
 set(CMAKE_CXX_STANDARD 11)
-add_subdirectory(Sources)
-add_executable(HJGraphics main.cpp )
-target_link_libraries(HJGraphics ${GLFW3_LIB}  ${ASSIMP_LIB} HJGRAPHICS)
+include_directories(3rd-party)
+include_directories(include)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src HJGRAPHICS_SRC)
+#-----------set up 3rd-party lib src-----------
+set(GLAD_SRC 3rd-party/glad/glad.c)
+#-----------set up 3rd-party lib link-----------
+#GLFW3.3
+IF(WIN32)
+    set(GLFW3_LIB glfw3dll.lib)
+ELSEIF(APPLE)
+    set(GLFW3_LIB libglfw.3.3.dylib)
+ENDIF()
+#assimp5.0.1
+IF(WIN32)
+    set(ASSIMP_LIB)
+ELSEIF(APPLE)
+    set(ASSIMP_LIB libassimp.dylib)
+ENDIF()
+link_directories(lib)
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+add_executable(HJGraphics main.cpp ${HJGRAPHICS_SRC} ${GLAD_SRC})
+target_link_libraries(HJGraphics ${GLFW3_LIB}  ${ASSIMP_LIB})
