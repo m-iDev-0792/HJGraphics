@@ -11,6 +11,7 @@
 #include <cmath>
 #include "BasicGLObject.h"
 #include "Light.h"
+#include "Vertex.h"
 namespace HJGraphics {
 //-----------------------------------------------------
 //                  INTRODUCTION
@@ -107,8 +108,6 @@ namespace HJGraphics {
 
 		void drawShadow(Light *light) override;
 
-		virtual void writeVerticesData()=0;
-
 		virtual void writeObjectPropertyUniform(Shader *shader)=0;
 
 	};
@@ -132,7 +131,7 @@ namespace HJGraphics {
 
 		void drawLight(Light *light) override;
 
-		void writeVerticesData()override ;
+		void writeVerticesData();
 
 		void writeObjectPropertyUniform(Shader *shader)override ;
 
@@ -158,7 +157,7 @@ namespace HJGraphics {
 
 		void drawLight(Light *light) override;
 
-		void writeVerticesData()override ;
+		void writeVerticesData();
 
 		void writeObjectPropertyUniform(Shader *shader)override ;
 	};
@@ -184,7 +183,7 @@ namespace HJGraphics {
 
 		void drawLight(Light *light) override;
 
-		void writeVerticesData()override ;
+		void writeVerticesData();
 
 		void writeObjectPropertyUniform(Shader *shader)override ;
 	};

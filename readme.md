@@ -1,4 +1,4 @@
-![HJGraphics](Attachments/HJGraphics.png)
+![HJGraphics](attachment/HJGraphics.png)
 # HJGraphics
 HJGraphics is a very simple 3D graphic framework based on OpenGL API, and also my attempt to build a relatively complete tiny 3D graphic framework from the ground up. It is a part of my graduation project as well.
 
@@ -37,19 +37,19 @@ HJGraphics has...
 * Material : basic material support like diffuse map, specular map, normal map and height map.
 
 # Gallery
-![](Attachments/multiLight.png)
+![](attachment/multiLight.png)
 
 Fig.1 unlimited number of lights support
 
-![](Attachments/pointLightShadow.png)
+![](attachment/pointLightShadow.png)
 
 Fig.2 shadow support
 
-![](Attachments/modelLoading.png)
+![](attachment/modelLoading.png)
 
 Fig.3 model loading support (only `obj` format fully supported now)
 
-![](Attachments/material.png)
+![](attachment/material.png)
 
 Fig.4 basic material
 

@@ -3,7 +3,7 @@
 //
 
 #include "Model.h"
-HJGraphics::Mesh::Mesh(std::vector<HJGraphics::MeshVertex> _vertices, std::vector<unsigned int> _indices,
+HJGraphics::Mesh::Mesh(std::vector<HJGraphics::Vertex14> _vertices, std::vector<unsigned int> _indices,
                        std::vector<HJGraphics::Texture2D> _textures) {
 	hasShadow=true;
 	const std::string usageList[4]={"diffuse","specular","normal","height"};
@@ -82,21 +82,21 @@ void HJGraphics::Mesh::writeVerticesData() {
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(MeshVertex), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex14), &vertices[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(MeshVertex), nullptr);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), nullptr);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(MeshVertex), (void *) offsetof(MeshVertex, normal));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, normal));
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(MeshVertex), (void *) offsetof(MeshVertex, texCoord));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, texCoord));
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(MeshVertex), (void *) offsetof(MeshVertex, tangent));
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, tangent));
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(MeshVertex), (void *) offsetof(MeshVertex, bitangent));
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, bitangent));
 
 	glBindVertexArray(0);
 }
@@ -164,13 +164,13 @@ void HJGraphics::Model::processNode(aiNode *node, const aiScene *scene) {
 	}
 }
 HJGraphics::Mesh* HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
-	std::vector<MeshVertex> vertices;
+	std::vector<Vertex14> vertices;
 	std::vector<GLuint> indices;
 	std::vector<Texture2D> textures;
 
 	for(unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
-		MeshVertex vertex;
+		Vertex14 vertex;
 		glm::vec3 vector;
 		// positions
 		vector.x = mesh->mVertices[i].x;

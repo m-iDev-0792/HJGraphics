@@ -13,21 +13,14 @@
 #include "assimp/postprocess.h"
 
 namespace HJGraphics {
-	struct MeshVertex {
-		glm::vec3 position;
-		glm::vec3 normal;
-		glm::vec2 texCoord;
-		glm::vec3 tangent;
-		glm::vec3 bitangent;
-	};
 
 	class Mesh:public GeometryObject{
 	public:
 		std::vector<GLuint> indices;
-		std::vector<MeshVertex> vertices;
+		std::vector<Vertex14> vertices;
 		Material material;
 
-		explicit Mesh(std::vector<MeshVertex> _vertices, std::vector<GLuint> _indices, std::vector<Texture2D> _textures);
+		explicit Mesh(std::vector<Vertex14> _vertices, std::vector<GLuint> _indices, std::vector<Texture2D> _textures);
 
 		void draw() override;
 
@@ -35,7 +28,7 @@ namespace HJGraphics {
 
 		void drawLight(Light *light) override;
 
-		void writeVerticesData()override ;
+		void writeVerticesData();
 
 		void writeObjectPropertyUniform(Shader *shader)override ;
 	};

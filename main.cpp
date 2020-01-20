@@ -5,7 +5,6 @@ using namespace std;
 using namespace glm;
 using namespace HJGraphics;
 int main() {
-
 	Window window(800,600,"HJGraphics");
 	Coordinate coord;
 	Grid grid(1,5,GRIDMODE::XZ);
@@ -23,9 +22,13 @@ int main() {
 	Box box(2,2,2);
 	box.model=translate(box.model,vec3(0.0f,0.0f,-2.5f));
 
-	Plane plane(8,8,"../Textures/chessboard.jpg");
-
+	Plane plane(8,8,"../texture/chessboard.jpg");
+	auto start=chrono::high_resolution_clock::now();
 	Model nanosuit("/Users/hezhenbang/Documents/Models/nanosuit/nanosuit.obj");
+	auto end=chrono::high_resolution_clock::now();
+	chrono::high_resolution_clock::duration dura=end-start;
+	auto milliDura=chrono::duration_cast<chrono::milliseconds>(dura);
+	cout<<"model loading time = "<<milliDura.count()<<"ms"<<endl;
 	nanosuit.scale(0.2);
 
 

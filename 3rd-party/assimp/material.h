@@ -593,13 +593,13 @@ struct aiMaterialProperty
      */
     C_STRUCT aiString mKey;
 
-    /** Textures: Specifies their exact usage semantic.
+    /** texture: Specifies their exact usage semantic.
      * For non-texture properties, this member is always 0
      * (or, better-said, #aiTextureType_NONE).
      */
     unsigned int mSemantic;
 
-    /** Textures: Specifies the index of the texture.
+    /** texture: Specifies the index of the texture.
      *  For non-texture properties, this member is always 0.
      */
     unsigned int mIndex;

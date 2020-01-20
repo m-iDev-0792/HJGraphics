@@ -39,7 +39,7 @@ void HJGWidget::initializeGL(){
   Box* box=new Box(2,2,2);
   box->model=translate(box->model,vec3(0.0f,0.0f,-2.5f));
 
-  Plane* plane=new Plane(8,8,"/Users/hezhenbang/Documents/HJGraphics/Textures/chessboard.jpg");
+  Plane* plane=new Plane(8,8,"/Users/hezhenbang/Documents/HJGraphics/texture/chessboard.jpg");
 
   //-----------------------Direction------------------------Position-----------------------Color
   SpotLight* spotLight=new SpotLight(glm::vec3(1.0f,-1.0f,-1.0f),glm::vec3(-5.0f,5.0f,3.0f),glm::vec3(0.0f,0.6f,0.6f));

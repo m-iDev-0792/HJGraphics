@@ -3,7 +3,6 @@
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
       <config projectName="HJGraphics" targetName="HJGraphics" />
-      <config projectName="HJGraphics" targetName="HJGRAPHICS" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -14,31 +13,32 @@
   <component name="ChangeListManager">
     <list default="true" id="1abe225c-fa90-4461-a691-18ba3a0c3b70" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HJGraphics-Qt/HJGraphics-Qt.pro.user" beforeDir="false" afterPath="$PROJECT_DIR$/HJGraphics-Qt/HJGraphics-Qt.pro.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/GLFWWindowObject.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/GLFWWindowObject.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/build.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HJGraphics.dir/flags.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/HJGraphics" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/HJGraphics" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/HJGraphics.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/HJGraphics.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/DependInfo.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/build.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Sources/CMakeFiles/HJGRAPHICS.dir/flags.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Sources/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Sources/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Sources/libHJGRAPHICS.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Sources/libHJGRAPHICS.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3rd-party/assimp/material.h" beforeDir="false" afterPath="$PROJECT_DIR$/3rd-party/assimp/material.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attachments/HJGraphics.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/HJGraphics.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attachments/material copy.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/material copy.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attachments/material.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/material.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attachments/modelLoading copy.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/modelLoading copy.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attachments/modelLoading.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/modelLoading.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attachments/multiLight copy.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/multiLight copy.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attachments/multiLight.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/multiLight.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attachments/pointLightShadow copy.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/pointLightShadow copy.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attachments/pointLightShadow.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/pointLightShadow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HJGraphics-Qt/HJGWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/HJGraphics-Qt/HJGWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Textures/chessboard.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/texture/chessboard.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/HJGraphics" beforeDir="false" afterPath="$PROJECT_DIR$/bin/HJGraphics" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/BasicGLObject.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/BasicGLObject.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/ElementObjects.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/ElementObjects.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/Model.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Model.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/Scene.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Scene.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shader/geometryFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/[outdated]geometryFragment.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shader/geometryVertex.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/[outdated]geometryVertex.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ElementObjects.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ElementObjects.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Scene.cpp" afterDir="false" />
     </list>
-    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,82 +48,6 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Sources/Model.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Sources/Scene.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1802">
-              <caret line="106" column="38" selection-start-line="106" selection-start-column="38" selection-end-line="106" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="68" selection-start-line="12" selection-start-column="68" selection-end-line="12" selection-end-column="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Includes/GLFWWindowObject.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="127">
-              <caret line="57" column="35" selection-start-line="57" selection-start-column="35" selection-end-line="57" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Sources/GLFWWindowObject.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="208">
-              <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Sources/ElementObjects.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="26" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Sources/CMakeLists.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -167,129 +91,32 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/MyModel.h" />
-        <option value="$PROJECT_DIR$/Shaders/geometryAmbientFragment.glsl" />
-        <option value="$PROJECT_DIR$/MyModel.cpp" />
-        <option value="$PROJECT_DIR$/Material.h" />
-        <option value="$PROJECT_DIR$/Material.cpp" />
-        <option value="$PROJECT_DIR$/Model.h" />
-        <option value="$PROJECT_DIR$/BasicGLObject.cpp" />
-        <option value="$PROJECT_DIR$/BasicGLObject.h" />
-        <option value="$PROJECT_DIR$/Camera.cpp" />
-        <option value="$PROJECT_DIR$/Camera.h" />
-        <option value="$PROJECT_DIR$/DebugUtility.cpp" />
-        <option value="$PROJECT_DIR$/DebugUtility.h" />
-        <option value="$PROJECT_DIR$/ElementObjects.h" />
-        <option value="$PROJECT_DIR$/Light.cpp" />
-        <option value="$PROJECT_DIR$/Light.h" />
-        <option value="$PROJECT_DIR$/Model.cpp" />
-        <option value="$PROJECT_DIR$/Scene.h" />
-        <option value="$PROJECT_DIR$/Scene.cpp" />
-        <option value="$PROJECT_DIR$/Shader.h" />
-        <option value="$PROJECT_DIR$/ElementObjects.cpp" />
-        <option value="$PROJECT_DIR$/Window.cpp" />
-        <option value="$PROJECT_DIR$/Shader.cpp" />
-        <option value="$PROJECT_DIR$/HJGraphics.h" />
-        <option value="$PROJECT_DIR$/Window.h" />
-        <option value="$PROJECT_DIR$/GLFWWindowObject.h" />
-        <option value="$PROJECT_DIR$/GLFWWindowObject.cpp" />
-        <option value="$PROJECT_DIR$/readme.md" />
-        <option value="$PROJECT_DIR$/Source/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/Shaders/geometryLightVertex.glsl" />
-        <option value="$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl" />
-        <option value="$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl" />
-        <option value="$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl" />
-        <option value="$PROJECT_DIR$/Sources/Model.h" />
-        <option value="$PROJECT_DIR$/Sources/Window.cpp" />
-        <option value="$PROJECT_DIR$/Sources/BasicGLObject.h" />
-        <option value="$PROJECT_DIR$/Sources/Shader.h" />
-        <option value="$PROJECT_DIR$/Sources/Material.h" />
-        <option value="$PROJECT_DIR$/Sources/Light.h" />
-        <option value="$PROJECT_DIR$/Sources/GLFWWindowObject.h" />
-        <option value="$PROJECT_DIR$/Sources/DebugUtility.h" />
-        <option value="$PROJECT_DIR$/Sources/Camera.h" />
-        <option value="$PROJECT_DIR$/Sources/OpenGLHeader.h" />
-        <option value="$PROJECT_DIR$/Sources/Window.h" />
-        <option value="$PROJECT_DIR$/main.cpp" />
-        <option value="$PROJECT_DIR$/Sources/Scene.cpp" />
-        <option value="$PROJECT_DIR$/Sources/Scene.h" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/Sources/ElementObjects.cpp" />
-        <option value="$PROJECT_DIR$/Sources/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/Sources/Model.cpp" />
-        <option value="$PROJECT_DIR$/Sources/GLFWWindowObject.cpp" />
-      </list>
-    </option>
-  </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
-  <component name="ProjectFrameBounds">
-    <option name="x" value="152" />
-    <option name="y" value="23" />
-    <option name="width" value="1606" />
-    <option name="height" value="726" />
-  </component>
+  <component name="ProjectId" id="1Wb3APVT550dvwQ2UiGsLy4nUzX" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="HJGraphics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="HJGraphics" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="HJGraphics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="HJGraphics" type="462c0819:PsiDirectoryNode" />
-              <item name="Includes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="HJGraphics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="HJGraphics" type="462c0819:PsiDirectoryNode" />
-              <item name="Sources" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="CMake Application.Build All">
+  <component name="RunManager" selected="CMake Application.HJGraphics">
     <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="HJGraphics" RUN_TARGET_NAME="TestingField" EXPLICIT_BUILD_TARGET_NAME="all">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="HJGRAPHICS" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="HJGraphics" TARGET_NAME="HJGRAPHICS" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -301,9 +128,20 @@
     </configuration>
     <list>
       <item itemvalue="CMake Application.Build All" />
-      <item itemvalue="CMake Application.HJGRAPHICS" />
       <item itemvalue="CMake Application.HJGraphics" />
     </list>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -360,11 +198,9 @@
       <workItem from="1559375544219" duration="132000" />
       <workItem from="1559378839809" duration="7000" />
       <workItem from="1560048392103" duration="1296000" />
+      <workItem from="1579404324811" duration="12528000" />
     </task>
     <servers />
-  </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="409225000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -375,58 +211,26 @@
       <is-autoscroll-to-source value="true" />
     </todo-panel>
   </component>
-  <component name="ToolWindowManager">
-    <frame x="152" y="23" width="1606" height="726" extended-state="0" />
-    <editor active="true" />
-    <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5490506" weight="0.18430884" />
-      <window_info id="Structure" order="1" sideWeight="0.45094937" side_tool="true" weight="0.18430884" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3234811" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49920508" weight="0.16049382" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3957307" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3208431" />
-      <window_info anchor="bottom" id="Code comment" order="7" weight="0.32786885" />
-      <window_info anchor="bottom" id="Messages" order="8" sideWeight="0.4996587" weight="0.3037037" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.3283582" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5003413" side_tool="true" weight="0.3087028" />
-      <window_info anchor="bottom" id="Version Control" order="11" weight="0.3290398" />
-      <window_info anchor="bottom" id="CMake" order="12" weight="0.3266762" />
-      <window_info anchor="bottom" id="Database Changes" order="13" />
-      <window_info anchor="bottom" id="CPU Profiler" order="14" weight="0.4039409" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" />
-      <window_info anchor="right" id="Key Promoter X" order="4" />
-    </layout>
-    <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19793323" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32615894" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49920508" visible="true" weight="0.26490065" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39900663" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3245033" />
-      <window_info anchor="bottom" id="Code comment" order="7" weight="0.3283582" />
-      <window_info anchor="bottom" id="Messages" order="8" weight="0.32119206" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.3283582" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5007949" side_tool="true" weight="0.28429753" />
-      <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="CMake" order="12" weight="0.32781458" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-    </layout-to-restore>
-  </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1356" height="107" key="GridCell.Tab.0.bottom" timestamp="1579506118851">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1356" height="107" key="GridCell.Tab.0.bottom/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579506118851" />
+    <state width="1356" height="107" key="GridCell.Tab.0.center" timestamp="1579506118848">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1356" height="107" key="GridCell.Tab.0.center/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579506118848" />
+    <state width="1356" height="107" key="GridCell.Tab.0.left" timestamp="1579506118841">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1356" height="107" key="GridCell.Tab.0.left/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579506118841" />
+    <state width="1356" height="107" key="GridCell.Tab.0.right" timestamp="1579506118849">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1356" height="107" key="GridCell.Tab.0.right/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579506118849" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
@@ -443,199 +247,6 @@
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Scene.cpp" />
-    <entry file="file://$PROJECT_DIR$/Shader.cpp" />
-    <entry file="file://$PROJECT_DIR$/Model.h" />
-    <entry file="file://$PROJECT_DIR$/BasicGLObject.h" />
-    <entry file="file://$PROJECT_DIR$/HJGraphics.h" />
-    <entry file="file://$PROJECT_DIR$/Scene.h" />
-    <entry file="file://$PROJECT_DIR$/Window.h" />
-    <entry file="file://$PROJECT_DIR$/GLFWWindowObject.h" />
-    <entry file="file://$PROJECT_DIR$/GLFWWindowObject.cpp" />
-    <entry file="file://$PROJECT_DIR$/Camera.h" />
-    <entry file="file://$PROJECT_DIR$/ElementObjects.h" />
-    <entry file="file://$PROJECT_DIR$/Window.cpp" />
-    <entry file="file://$PROJECT_DIR$/readme.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="203">
-            <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometryLightVertex.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometrySpotLightFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-72">
-          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/include/glm/detail/type_vec.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5215">
-          <caret line="105" column="46" selection-start-line="105" selection-start-column="46" selection-end-line="105" selection-end-column="46" />
-          <folding>
-            <element signature="e#1851#1876#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/DebugUtility.cpp">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometryShadowVertex.glsl">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometryParallelLightFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="95" column="10" selection-start-line="95" selection-start-column="10" selection-end-line="95" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometryShadowFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/geometryPointLightFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="77" column="24" selection-start-line="77" selection-start-column="24" selection-end-line="77" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/Light.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="31" column="1" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/Camera.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="43" selection-start-line="18" selection-start-column="43" selection-end-line="18" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/include/GLFW/glfw3.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="4022" column="37" selection-start-line="4022" selection-start-column="19" selection-end-line="4022" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/glad.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12274">
-          <caret line="722" column="30" selection-start-line="722" selection-start-column="30" selection-end-line="722" selection-end-column="30" />
-          <folding>
-            <element signature="e#38795#38883#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/glad/glad.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/Window.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1819">
-          <caret line="107" column="4" selection-start-line="107" selection-start-column="4" selection-end-line="110" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/BasicGLObject.cpp">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/Shader.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/HJGraphics.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/BasicGLObject.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/Camera.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/DebugUtility.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/ElementObjects.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/GLFWWindowObject.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/Light.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/Material.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/Window.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/Scene.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/Model.h" />
-    <entry file="file://$PROJECT_DIR$/Sources/OpenGLHeader.h" />
-    <entry file="file://$PROJECT_DIR$/Shaders/coordFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Shaders/gridFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/Model.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/Scene.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1802">
-          <caret line="106" column="38" selection-start-line="106" selection-start-column="38" selection-end-line="106" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/ElementObjects.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="26" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="68" selection-start-line="12" selection-start-column="68" selection-end-line="12" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Includes/GLFWWindowObject.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="57" column="35" selection-start-line="57" selection-start-column="35" selection-end-line="57" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sources/GLFWWindowObject.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
   </component>
   <component name="masterDetails">
     <states>

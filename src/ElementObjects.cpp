@@ -314,70 +314,49 @@ void HJGraphics::Cylinder::writeVerticesData() {
 	//NOTE:There are 2*(partition+1) points
 	//No.partition and No.2*partition+1 are center points
 	constexpr int VERTEX_FLOAT_NUM=8;//how many float values a vertex has
-	GLfloat *data=new GLfloat[(2*(partition+1)+4*partition)*VERTEX_FLOAT_NUM];
-	const uint stride=(partition+1)*VERTEX_FLOAT_NUM;//rightPoint[x]=leftPoint[x]+stride
-	GLfloat *leftFan,*rightFan;
-	leftFan=data;
-	rightFan=data+stride;
+	Vertex8* vertices=new Vertex8[2*(partition+1)+4*partition];
+	Vertex8* frontFanPtr=vertices;
+	Vertex8* backFanPtr=vertices+(partition+1);
 	//generate data for left and right side triangle fans
 	for(int i=0;i<partition+1;++i){
-		//left vertex
-		leftFan[i*VERTEX_FLOAT_NUM]=radius*cos(radio*i);
-		leftFan[i*VERTEX_FLOAT_NUM+1]=radius*sin(radio*i);
-		leftFan[i*VERTEX_FLOAT_NUM+2]=length/2;
-		//right vertex
-		rightFan[i*VERTEX_FLOAT_NUM]=radius*cos(radio*i);
-		rightFan[i*VERTEX_FLOAT_NUM+1]=radius*sin(radio*i);
-		rightFan[i*VERTEX_FLOAT_NUM+2]=-length/2;
-		//left normal
-		leftFan[i*VERTEX_FLOAT_NUM+3]=0; leftFan[i*VERTEX_FLOAT_NUM+4]=0; leftFan[i*VERTEX_FLOAT_NUM+5]=1;
-		//right normal
-		rightFan[i*VERTEX_FLOAT_NUM+3]=0; rightFan[i*VERTEX_FLOAT_NUM+4]=0; rightFan[i*VERTEX_FLOAT_NUM+5]=-1;
+		frontFanPtr[i].position=glm::vec3(radius * cos(radio * i),radius * sin(radio * i),length / 2);
+		backFanPtr[i].position=glm::vec3(frontFanPtr[i].position.x,frontFanPtr[i].position.y,-frontFanPtr[i].position.z);
+		frontFanPtr[i].normal=glm::vec3(0,0,1);
+		backFanPtr[i].normal=glm::vec3(0,0,-1);
 	}
 
-	//modify center points x y
-	leftFan[partition*VERTEX_FLOAT_NUM]=0;leftFan[partition*VERTEX_FLOAT_NUM+1]=0;
-	rightFan[partition*VERTEX_FLOAT_NUM]=0;rightFan[partition*VERTEX_FLOAT_NUM+1]=0;
+	//modify center points
+	frontFanPtr[partition].position=glm::vec3(0,0,length/2);
+	backFanPtr[partition].position=glm::vec3(0,0,-length/2);
 
 	//generate data for profile triangles
-	const int profileBase=VERTEX_FLOAT_NUM*2*(partition+1);
-	constexpr int FACE_VERTEX_FLOAT_NUM=VERTEX_FLOAT_NUM*4;
-	GLfloat *profile=data+profileBase;
+	Vertex8* profilePtr=vertices+2*(partition+1);
 	for(int i=0;i<partition;++i){//there are partition profile faces
 		glm::vec3 normal(cos(radio/2+radio*i),sin(radio/2+radio*i),0.0f);
 		int iNext=(i+1)%partition;
+		int pi=i*4;
 		//point 0 in profile i
-		profile[i*FACE_VERTEX_FLOAT_NUM+0]=leftFan[i*VERTEX_FLOAT_NUM+0];
-		profile[i*FACE_VERTEX_FLOAT_NUM+1]=leftFan[i*VERTEX_FLOAT_NUM+1];
-		profile[i*FACE_VERTEX_FLOAT_NUM+2]=leftFan[i*VERTEX_FLOAT_NUM+2];
+		profilePtr[pi].position=frontFanPtr[i].position;
+		profilePtr[pi].normal=normal;
 		//proint1 in profile i
-		profile[i*FACE_VERTEX_FLOAT_NUM+8]=rightFan[i*VERTEX_FLOAT_NUM+0];
-		profile[i*FACE_VERTEX_FLOAT_NUM+9]=rightFan[i*VERTEX_FLOAT_NUM+1];
-		profile[i*FACE_VERTEX_FLOAT_NUM+10]=rightFan[i*VERTEX_FLOAT_NUM+2];
+		profilePtr[pi+1].position=backFanPtr[i].position;
+		profilePtr[pi+1].normal=normal;
 		//point2 in profile i
-		profile[i*FACE_VERTEX_FLOAT_NUM+16]=leftFan[iNext*VERTEX_FLOAT_NUM+0];
-		profile[i*FACE_VERTEX_FLOAT_NUM+17]=leftFan[iNext*VERTEX_FLOAT_NUM+1];
-		profile[i*FACE_VERTEX_FLOAT_NUM+18]=leftFan[iNext*VERTEX_FLOAT_NUM+2];
+		profilePtr[pi+2].position=frontFanPtr[iNext].position;
+		profilePtr[pi+2].normal=normal;
 		//point3 in profile i
-		profile[i*FACE_VERTEX_FLOAT_NUM+24]=rightFan[iNext*VERTEX_FLOAT_NUM+0];
-		profile[i*FACE_VERTEX_FLOAT_NUM+25]=rightFan[iNext*VERTEX_FLOAT_NUM+1];
-		profile[i*FACE_VERTEX_FLOAT_NUM+26]=rightFan[iNext*VERTEX_FLOAT_NUM+2];
-		//4 points have same normal
-		for(int j=0;j<4;++j){
-			profile[i*FACE_VERTEX_FLOAT_NUM+3+j*VERTEX_FLOAT_NUM]=normal.x;
-			profile[i*FACE_VERTEX_FLOAT_NUM+4+j*VERTEX_FLOAT_NUM]=normal.y;
-			profile[i*FACE_VERTEX_FLOAT_NUM+5+j*VERTEX_FLOAT_NUM]=normal.z;
-		}
+		profilePtr[pi+3].position=backFanPtr[iNext].position;
+		profilePtr[pi+3].normal=normal;
 	}
-	loadVBOData(data, sizeof(GLfloat)*((2*(partition+1)+4*partition)*VERTEX_FLOAT_NUM));
-	delete[] data;
+	loadVBOData(reinterpret_cast<GLfloat*>(vertices), sizeof(Vertex8)*(2*(partition+1)+4*partition));
+	delete[] vertices;
 	GLuint *indice=new GLuint[(partition+2)*2+partition*6];//6 in here means 6 vertices per face
 	//triangle fans index
 	indice[0]=partition;//center point
 	indice[partition+2]=partition+ partition+1;
 	for(int i=1;i<partition+2;++i){
 		indice[i]=(i-1)%partition;
-		indice[i+partition]=(partition+1-i)%partition+ partition+1;
+		indice[i+partition+2]=(partition+1-i)%partition+ partition+1;
 	}
 	//profile triangles index
 	int profileIndexBase=2*(partition+1);

@@ -68,6 +68,7 @@ void HJGraphics::Scene::writeSharedUBOData() {
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4)*2+ sizeof(glm::vec3), sizeof(float),&ambientFactor);
 }
 void HJGraphics::Scene::draw() {
+//	glPolygonMode(GL_FRONT_AND_BACK ,GL_LINE);
 	drawShadow();
 	glViewport(0,0,sceneWidth,sceneHeight);
 	for(auto& o:objects){
