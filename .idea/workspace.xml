@@ -13,31 +13,16 @@
   <component name="ChangeListManager">
     <list default="true" id="1abe225c-fa90-4461-a691-18ba3a0c3b70" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/3rd-party/assimp/material.h" beforeDir="false" afterPath="$PROJECT_DIR$/3rd-party/assimp/material.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Attachments/HJGraphics.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/HJGraphics.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Attachments/material copy.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/material copy.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Attachments/material.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/material.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Attachments/modelLoading copy.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/modelLoading copy.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Attachments/modelLoading.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/modelLoading.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Attachments/multiLight copy.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/multiLight copy.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Attachments/multiLight.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/multiLight.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Attachments/pointLightShadow copy.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/pointLightShadow copy.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Attachments/pointLightShadow.png" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/pointLightShadow.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HJGraphics-Qt/HJGWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/HJGraphics-Qt/HJGWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Textures/chessboard.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/texture/chessboard.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/HJGraphics" beforeDir="false" afterPath="$PROJECT_DIR$/bin/HJGraphics" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/BasicGLObject.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/BasicGLObject.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/ElementObjects.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/ElementObjects.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Model.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Model.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Scene.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Scene.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shader/geometryFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/[outdated]geometryFragment.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shader/geometryVertex.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/[outdated]geometryVertex.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/Material.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Material.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shader/geometryAmbientFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/geometryAmbientFragment.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shader/geometryParallelLightFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/geometryParallelLightFragment.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shader/geometryPointLightFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/geometryPointLightFragment.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shader/geometrySpotLightFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/geometrySpotLightFragment.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ElementObjects.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ElementObjects.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Material.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Material.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Model.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Scene.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,38 +40,6 @@
         <option value="CMakeLists.txt" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>gridVertice</find>
-      <find>gridIndex</find>
-      <find>66</find>
-      <find>30</find>
-      <find>30.</find>
-      <find>cout</find>
-      <find>sharedMatrices</find>
-      <find>sharedBlock</find>
-      <find />
-      <find>&quot;</find>
-      <find>\n</find>
-      <find>stb</find>
-      <find>newLight</find>
-      <find>newLightPos</find>
-      <find>curLight.color;</find>
-      <find>vec3</find>
-      <find>curLight</find>
-      <find>draw(def</find>
-      <find>6</find>
-      <find>DefaultShader</find>
-      <find>defaultShader.</find>
-      <find>shadowShader.</find>
-      <find>model</find>
-      <find>defaultShader</find>
-      <find>hasShadow</find>
-      <find>何振邦</find>
-      <find>normal</find>
-      <find>glBindFramebuffer</find>
-    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -198,7 +151,7 @@
       <workItem from="1559375544219" duration="132000" />
       <workItem from="1559378839809" duration="7000" />
       <workItem from="1560048392103" duration="1296000" />
-      <workItem from="1579404324811" duration="12528000" />
+      <workItem from="1579404324811" duration="21473000" />
     </task>
     <servers />
   </component>
@@ -215,22 +168,26 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1356" height="107" key="GridCell.Tab.0.bottom" timestamp="1579506118851">
+    <state width="1775" height="339" key="GridCell.Tab.0.bottom" timestamp="1579533542378">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state width="1356" height="107" key="GridCell.Tab.0.bottom/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579506118851" />
-    <state width="1356" height="107" key="GridCell.Tab.0.center" timestamp="1579506118848">
+    <state width="1775" height="339" key="GridCell.Tab.0.bottom/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579533185766" />
+    <state width="1775" height="339" key="GridCell.Tab.0.bottom/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579533542378" />
+    <state width="1775" height="339" key="GridCell.Tab.0.center" timestamp="1579533542377">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state width="1356" height="107" key="GridCell.Tab.0.center/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579506118848" />
-    <state width="1356" height="107" key="GridCell.Tab.0.left" timestamp="1579506118841">
+    <state width="1775" height="339" key="GridCell.Tab.0.center/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579533185765" />
+    <state width="1775" height="339" key="GridCell.Tab.0.center/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579533542377" />
+    <state width="1775" height="339" key="GridCell.Tab.0.left" timestamp="1579533542376">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state width="1356" height="107" key="GridCell.Tab.0.left/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579506118841" />
-    <state width="1356" height="107" key="GridCell.Tab.0.right" timestamp="1579506118849">
+    <state width="1775" height="339" key="GridCell.Tab.0.left/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579533185764" />
+    <state width="1775" height="339" key="GridCell.Tab.0.left/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579533542376" />
+    <state width="1775" height="339" key="GridCell.Tab.0.right" timestamp="1579533542378">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state width="1356" height="107" key="GridCell.Tab.0.right/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579506118849" />
+    <state width="1775" height="339" key="GridCell.Tab.0.right/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579533185765" />
+    <state width="1775" height="339" key="GridCell.Tab.0.right/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579533542378" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

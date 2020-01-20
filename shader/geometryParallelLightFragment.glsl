@@ -11,10 +11,6 @@ struct Material{
     vec3 diffuseStrength;
     vec3 specularStrength;
 
-    vec3 ambientColor;
-    vec3 diffuseColor;
-    vec3 specularColor;
-
     float shininess;
     float alpha;
     float reflective;
@@ -76,8 +72,9 @@ float parallelShadowCalculation(vec4 fragPosLightSpace)
     return shadow;
 }
 vec3 parallelLight(){
-    vec3 diffuseSampler=material.diffuseColor;
-    vec3 specularSampler=material.specularColor;
+    //default color
+    vec3 diffuseSampler=vec3(1.0,1.0,1.0);
+    vec3 specularSampler=vec3(1.0,1.0,1.0);
     if(material.diffuseMapNum>0){
         diffuseSampler=texture(material.diffuseMap,texCoord).rgb;
     }

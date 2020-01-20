@@ -7,7 +7,10 @@ HJGraphics::Mesh::Mesh(std::vector<HJGraphics::Vertex14> _vertices, std::vector<
                        std::vector<HJGraphics::Texture2D> _textures) {
 	hasShadow=true;
 	const std::string usageList[4]={"diffuse","specular","normal","height"};
-
+	material.diffuseMaps.clear();
+	material.specularMaps.clear();
+	material.normalMaps.clear();
+	material.heightMaps.clear();
 	for(auto& t:_textures){
 		if(usageList[0] == t.usage){
 			material.diffuseMaps.push_back(t);
@@ -115,10 +118,6 @@ void HJGraphics::Mesh::writeObjectPropertyUniform(Shader *shader) {
 	shader->set3fv("material.ambientStrength",material.ambientStrength);
 	shader->set3fv("material.diffuseStrength",material.diffuseStrength);
 	shader->set3fv("material.specularStrength",material.specularStrength);
-
-	shader->set3fv("material.ambientColor",material.ambientColor);
-	shader->set3fv("material.diffuseColor",material.diffuseColor);
-	shader->set3fv("material.specularColor",material.specularColor);
 
 	shader->setFloat("material.shininess",material.shininess);
 	shader->setFloat("material.alpha",material.alpha);
@@ -229,8 +228,6 @@ HJGraphics::Mesh* HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *sc
 	// 4. height maps
 	std::vector<Texture2D> heightMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_AMBIENT:aiTextureType_HEIGHT, "height");
 	if(!heightMaps.empty())textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-
-//	std::cout<<" diffuseMap Num: "<<diffuseMaps.size()<<"  specularMap num: "<<specularMaps.size()<<" normalMap num: "<<normalMaps.size()<<" heightMap num: "<<heightMaps.size()<<std::endl;
 
 	return new Mesh(vertices, indices, textures);
 }

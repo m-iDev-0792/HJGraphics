@@ -47,6 +47,17 @@ namespace HJGraphics {
 
 		void loadFromPath(const std::string path);
 	};
+	class SolidTexture : public Texture{
+	public:
+		SolidTexture();
+		SolidTexture(glm::vec3 _color);
+		void setColor(glm::vec3 _color);
+
+	private:
+		glm::vec3 color;
+
+
+	};
 	class ShadowMap : public Texture{
 	public:
 		ShadowMap();
@@ -82,10 +93,10 @@ namespace HJGraphics {
 		float reflective;
 		float refractive;
 
-		std::vector<Texture2D> diffuseMaps;
-		std::vector<Texture2D> specularMaps;
-		std::vector<Texture2D> normalMaps;
-		std::vector<Texture2D> heightMaps;
+		std::vector<Texture> diffuseMaps;
+		std::vector<Texture> specularMaps;
+		std::vector<Texture> normalMaps;
+		std::vector<Texture> heightMaps;
 
 		Material();
 

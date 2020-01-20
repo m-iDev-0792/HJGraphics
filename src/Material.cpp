@@ -71,12 +71,45 @@ void HJGraphics::Texture2D::loadFromPath(const std::string _path) {
 	}
 
 }
+
+HJGraphics::SolidTexture::SolidTexture():Texture(GL_TEXTURE_2D){
+	glGenTextures(1,&id);
+	texWrapS=GL_REPEAT;
+	texWrapT=GL_REPEAT;
+	texMinFilter=GL_LINEAR;
+	texMagFilter=GL_LINEAR;
+	setColor(glm::vec3(1));
+}
+HJGraphics::SolidTexture::SolidTexture(glm::vec3 _color):Texture(GL_TEXTURE_2D){
+	glGenTextures(1,&id);
+	texWrapS=GL_REPEAT;
+	texWrapT=GL_REPEAT;
+	texMinFilter=GL_NEAREST;
+	texMagFilter=GL_NEAREST;
+	setColor(_color);
+}
+void HJGraphics::SolidTexture::setColor(glm::vec3 _color) {
+	color=_color;
+	unsigned char r,g,b;
+	r= static_cast<unsigned char>(color.r*255);
+	g= static_cast<unsigned char>(color.g*255);
+	b= static_cast<unsigned char>(color.b*255);
+	unsigned char data[12]={r,g,b,r,g,b,r,g,b,r,g,b};
+	glActiveTexture(GL_TEXTURE0+textureN);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB,
+	             GL_UNSIGNED_BYTE, data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texMinFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texMagFilter);
+}
 /*
  * Implementation of Shadow Map
  */
 HJGraphics::ShadowMap::ShadowMap():ShadowMap(1024,1024) {
-	texWrapS=GL_CLAMP_TO_BORDER;
-	texWrapT=GL_CLAMP_TO_BORDER;
+	texWrapS=GL_CLAMP_TO_EDGE;
+	texWrapT=GL_CLAMP_TO_EDGE;
 	texMinFilter=GL_LINEAR;
 	texMagFilter=GL_LINEAR;
 }
@@ -166,6 +199,9 @@ HJGraphics::Material::Material(glm::vec3 _ambientColor, glm::vec3 _diffuseColor,
 	ambientColor=_ambientColor;
 	diffuseColor=_diffuseColor;
 	specularColor= _specularColor;
+
+	diffuseMaps.push_back(SolidTexture(_diffuseColor));
+	specularMaps.push_back(SolidTexture(_specularColor));
 
 	ambientStrength=glm::vec3(1.0f);
 	diffuseStrength=glm::vec3(1.0f);

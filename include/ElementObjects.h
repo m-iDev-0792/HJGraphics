@@ -170,7 +170,6 @@ namespace HJGraphics {
 		GLfloat texStretchRatio;
 
 		//properties that affect uniform data
-		bool hasTexture;
 		Material material;
 
 		Plane();

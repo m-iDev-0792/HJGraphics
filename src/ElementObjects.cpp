@@ -379,16 +379,15 @@ void HJGraphics::Cylinder::writeObjectPropertyUniform(Shader *shader) {
 	shader->setInt("material.diffuseMapNum",material.diffuseMaps.size());
 	shader->setInt("material.diffuseMap",0);
 	shader->setInt("material.specularMapNum",material.specularMaps.size());
+	shader->setInt("material.specularMap",1);
 	shader->setInt("material.normalMapNum",material.normalMaps.size());
+	shader->setInt("material.normalMap",2);
 	shader->setInt("material.heightMapNum",material.heightMaps.size());
+	shader->setInt("material.heightMap",3);
 
 	shader->set3fv("material.ambientStrength",material.ambientStrength);
 	shader->set3fv("material.diffuseStrength",material.diffuseStrength);
 	shader->set3fv("material.specularStrength",material.specularStrength);
-
-	shader->set3fv("material.ambientColor",material.ambientColor);
-	shader->set3fv("material.diffuseColor",material.diffuseColor);
-	shader->set3fv("material.specularColor",material.specularColor);
 
 	shader->setFloat("material.shininess",material.shininess);
 	shader->setFloat("material.alpha",material.alpha);
@@ -400,6 +399,14 @@ void HJGraphics::Cylinder::writeObjectPropertyUniform(Shader *shader) {
 
 void HJGraphics::Cylinder::draw() {
 	writeObjectPropertyUniform(defaultShader);
+	if(material.diffuseMaps.size()){
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
+	}
+	if(material.specularMaps.size()){
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
+	}
 	draw(*defaultShader);
 }
 void HJGraphics::Cylinder::draw(Shader shader) {
@@ -421,6 +428,14 @@ void HJGraphics::Cylinder::drawLight(HJGraphics::Light *light) {
 	else return;
 	writeObjectPropertyUniform(lightShader);
 	light->writeLightInfoUniform(lightShader);
+	if(material.diffuseMaps.size()){
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
+	}
+	if(material.specularMaps.size()){
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
+	}
 	draw(*lightShader);
 }
 /*
@@ -507,16 +522,15 @@ void HJGraphics::Box::writeObjectPropertyUniform(Shader *shader) {
 	shader->setInt("material.diffuseMapNum",material.diffuseMaps.size());
 	shader->setInt("material.diffuseMap",0);
 	shader->setInt("material.specularMapNum",material.specularMaps.size());
+	shader->setInt("material.specularMap",1);
 	shader->setInt("material.normalMapNum",material.normalMaps.size());
+	shader->setInt("material.normalMap",2);
 	shader->setInt("material.heightMapNum",material.heightMaps.size());
+	shader->setInt("material.heightMap",3);
 
 	shader->set3fv("material.ambientStrength",material.ambientStrength);
 	shader->set3fv("material.diffuseStrength",material.diffuseStrength);
 	shader->set3fv("material.specularStrength",material.specularStrength);
-
-	shader->set3fv("material.ambientColor",material.ambientColor);
-	shader->set3fv("material.diffuseColor",material.diffuseColor);
-	shader->set3fv("material.specularColor",material.specularColor);
 
 	shader->setFloat("material.shininess",material.shininess);
 	shader->setFloat("material.alpha",material.alpha);
@@ -527,6 +541,14 @@ void HJGraphics::Box::writeObjectPropertyUniform(Shader *shader) {
 }
 void HJGraphics::Box::draw() {
 	writeObjectPropertyUniform(defaultShader);
+	if(material.diffuseMaps.size()){
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
+	}
+	if(material.specularMaps.size()){
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
+	}
 	draw(*defaultShader);
 }
 void HJGraphics::Box::draw(Shader shader) {
@@ -547,6 +569,14 @@ void HJGraphics::Box::drawLight(HJGraphics::Light *light) {
 
 	writeObjectPropertyUniform(lightShader);
 	light->writeLightInfoUniform(lightShader);
+	if(material.diffuseMaps.size()){
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
+	}
+	if(material.specularMaps.size()){
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
+	}
 	draw(*lightShader);
 }
 /*
@@ -557,9 +587,9 @@ std::string PlaneDefaultFragmentCode;
 HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _texPath,GLfloat _texStretchRatio){
 	width=_width;height=_height;texStretchRatio=_texStretchRatio;
 	hasShadow=true;
-	hasTexture=!_texPath.empty();
-	if(hasTexture){
-		material.diffuseMaps.emplace_back(_texPath);
+	if(!_texPath.empty()){
+		if(material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_texPath));
+		else material.diffuseMaps[0]=Texture2D(_texPath);
 	}
 	//change parameters before refreshData!!!
 	writeVerticesData();
@@ -599,16 +629,15 @@ void HJGraphics::Plane::writeObjectPropertyUniform(Shader *shader) {
 	shader->setInt("material.diffuseMapNum",material.diffuseMaps.size());
 	shader->setInt("material.diffuseMap",0);
 	shader->setInt("material.specularMapNum",material.specularMaps.size());
+	shader->setInt("material.specularMap",1);
 	shader->setInt("material.normalMapNum",material.normalMaps.size());
+	shader->setInt("material.normalMap",2);
 	shader->setInt("material.heightMapNum",material.heightMaps.size());
+	shader->setInt("material.heightMap",3);
 
 	shader->set3fv("material.ambientStrength",material.ambientStrength);
 	shader->set3fv("material.diffuseStrength",material.diffuseStrength);
 	shader->set3fv("material.specularStrength",material.specularStrength);
-
-	shader->set3fv("material.ambientColor",material.ambientColor);
-	shader->set3fv("material.diffuseColor",material.diffuseColor);
-	shader->set3fv("material.specularColor",material.specularColor);
 
 	shader->setFloat("material.shininess",material.shininess);
 	shader->setFloat("material.alpha",material.alpha);
@@ -620,9 +649,13 @@ void HJGraphics::Plane::writeObjectPropertyUniform(Shader *shader) {
 
 void HJGraphics::Plane::draw() {
 	writeObjectPropertyUniform(defaultShader);
-	if(hasTexture){
+	if(material.diffuseMaps.size()){
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
+	}
+	if(material.specularMaps.size()){
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
 	}
 	draw(*defaultShader);
 }
@@ -642,9 +675,13 @@ void HJGraphics::Plane::drawLight(HJGraphics::Light *light) {
 	else if(light->type==LightType::PointLightType)lightShader=pointLightShader;
 	else return;
 	writeObjectPropertyUniform(lightShader);
-	if(hasTexture){
+	if(material.diffuseMaps.size()){
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
+	}
+	if(material.specularMaps.size()){
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
 	}
 	light->writeLightInfoUniform(lightShader);
 	draw(*lightShader);
