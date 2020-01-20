@@ -28,12 +28,8 @@ void main()
 {
     //default color
     vec3 diffuseSampler=vec3(1.0,1.0,1.0);
-    vec3 specularSampler=vec3(1.0,1.0,1.0);
     if(material.diffuseMapNum>0){
         diffuseSampler=texture(material.diffuseMap,texCoord).rgb;
-    }
-    if(material.specularMapNum>0){
-        specularSampler=texture(material.specularMap,texCoord).rgb;
     }
     vec3 Color=diffuseSampler*globalAmbientFactor;//全局光
     FragColor=vec4(Color,1.0f);

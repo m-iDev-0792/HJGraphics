@@ -1,4 +1,6 @@
 #version 330 core
+#define BLINN
+#define PCF_SHADOW
 out vec4 FragColor;
 in vec3 pos; //world position
 in vec3 normal;
@@ -57,22 +59,24 @@ float pointShadowCalculation(vec3 fragPosLightSpace)
     vec3 lightToFrag = fragPosLightSpace-lightPosition;
     float currentDepth = length(lightToFrag);
     float bias = 0.05f;
-//    Original Version without PCF shadow
-//    float closestDepth = texture(shadowMap,lightToFrag).r;
-//    closestDepth *= shadowZFar;
-//    return (currentDepth - bias > closestDepth) ? 0.0 : 1.0;
-
-    //Add percentage-closer filtering algorithm
-    float shadow=0.0f;
-    float diskRadius = (1.0 + (currentDepth / shadowZFar)) / 100.0;// a too large diskRadius value produces a strange effect
-    for(int i = 0; i < 20; ++i){
-        float closestDepth = texture(shadowMap, lightToFrag + sampleOffsetDirections[i] * diskRadius).r;
+    #ifndef PCF_SHADOW
+    //Original Version without PCF shadow
+        float closestDepth = texture(shadowMap,lightToFrag).r;
         closestDepth *= shadowZFar;
-        if(currentDepth - bias <= closestDepth)
-            shadow += 1.0;
-    }
-    shadow /= float(20);
-    return shadow;
+        return (currentDepth - bias > closestDepth) ? 0.0 : 1.0;
+    #else
+    //Add percentage-closer filtering algorithm
+        float shadow=0.0f;
+        float diskRadius = (1.0 + (currentDepth / shadowZFar)) / 100.0;// a too large diskRadius value produces a strange effect
+        for(int i = 0; i < 20; ++i){
+            float closestDepth = texture(shadowMap, lightToFrag + sampleOffsetDirections[i] * diskRadius).r;
+            closestDepth *= shadowZFar;
+            if(currentDepth - bias <= closestDepth)
+                shadow += 1.0;
+        }
+        shadow /= float(20);
+        return shadow;
+    #endif
 }
 
 vec3 pointLight(){
@@ -100,9 +104,17 @@ vec3 pointLight(){
     vec3 diffuse=diff * diffuseSampler * material.diffuseStrength * lightColor;
     //反射高光
     vec3 viewDir=normalize(cameraPos-pos);
-    vec3 reflectDir=reflect(lightDir,normalSampler);
-    float spec=pow(max(dot(viewDir,reflectDir),0.0),material.shininess);
-    vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+    #ifdef BLINN
+    //blinn-phong
+        vec3 halfwayDir=normalize(viewDir-lightDir);
+        float spec=pow(max(dot(normalSampler,halfwayDir),0.0),material.shininess);
+        vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+    #else
+    //phong
+        vec3 reflectDir=reflect(lightDir,normalSampler);
+        float spec=pow(max(dot(viewDir,reflectDir),0.0),material.shininess);
+        vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+    #endif
     //计算衰减
     float distance=length(pos-lightPosition);
     float attenuation=1.0/(attenuationVec.z+attenuationVec.x * distance+attenuationVec.y * distance*distance);

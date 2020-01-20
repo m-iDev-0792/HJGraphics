@@ -1,4 +1,6 @@
 #version 330 core
+#define BLINN
+#define PCF_SHADOW
 out vec4 FragColor;
 in vec3 pos;
 in vec3 normal;
@@ -54,22 +56,24 @@ float parallelShadowCalculation(vec4 fragPosLightSpace)
     projCoords = projCoords * 0.5 + 0.5;
     float currentDepth = projCoords.z;
     float bias=0.0005f/ fragPosLightSpace.w;// if we don't do divide to bias, then spotlight bias=0.0005f parallels bias = 0.005f
+    #ifndef PCF_SHADOW
     //Original Version without PCF shadow
-//    float closestDepth = texture(shadowMap,projCoords.xy).r;
-//    float shadow = currentDepth - bias > closestDepth  ? 0.0 : 1.0;
-//    return shadow;
-
+        float closestDepth = texture(shadowMap,projCoords.xy).r;
+        float shadow = currentDepth - bias > closestDepth  ? 0.0 : 1.0;
+        return shadow;
+    #else
     //PCF shadow
-    float shadow = 0.0f;
-    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-    for(int x = -2; x <= 2; ++x){
-        for(int y = -2; y <= 2; ++y){
-            float closestDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
-            shadow += currentDepth - bias > closestDepth ? 0.0 : 1.0;
+        float shadow = 0.0f;
+        vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+        for(int x = -2; x <= 2; ++x){
+            for(int y = -2; y <= 2; ++y){
+                float closestDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+                shadow += currentDepth - bias > closestDepth ? 0.0 : 1.0;
+            }
         }
-    }
-    shadow/= 25.0f;
-    return shadow;
+        shadow/= 25.0f;
+        return shadow;
+    #endif
 }
 vec3 parallelLight(){
     //default color

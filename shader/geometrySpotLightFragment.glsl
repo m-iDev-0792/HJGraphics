@@ -1,4 +1,6 @@
 #version 330 core
+#define BLINN
+#define PCF_SHADOW
 out vec4 FragColor;
 in vec3 pos;
 in vec3 normal;
@@ -54,23 +56,24 @@ float spotShadowCalculation(vec4 fragPosLightSpace)
     projCoords = projCoords * 0.5 + 0.5;
     float bias=0.0005f/ fragPosLightSpace.w;// if we don't do divide to bias, then spotlight bias=0.0005f parallels bias = 0.005f
     float currentDepth = projCoords.z;
-
+    #ifndef PCF_SHADOW
     //Original Version without PCF shadow
-//    float closestDepth = texture(shadowMap,projCoords.xy).r;
-//    float shadow = currentDepth - bias > closestDepth  ? 0.0 : 1.0;
-//    return shadow;
-
+        float closestDepth = texture(shadowMap,projCoords.xy).r;
+        float shadow = currentDepth - bias > closestDepth  ? 0.0 : 1.0;
+        return shadow;
+    #else
     //PCF shadow
-    float shadow = 0.0f;
-    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-    for(int x = -2; x <= 2; ++x){
-        for(int y = -2; y <= 2; ++y){
-            float closestDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
-            shadow += currentDepth - bias > closestDepth ? 0.0 : 1.0;
+        float shadow = 0.0f;
+        vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+        for(int x = -2; x <= 2; ++x){
+            for(int y = -2; y <= 2; ++y){
+                float closestDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+                shadow += currentDepth - bias > closestDepth ? 0.0 : 1.0;
+            }
         }
-    }
-    shadow/= 25.0f;
-    return shadow;
+        shadow/= 25.0f;
+        return shadow;
+    #endif
 }
 
 vec3 spotLight(){
@@ -101,9 +104,17 @@ vec3 spotLight(){
     vec3 diffuse=diff * diffuseSampler * material.diffuseStrength * lightColor;
     //反射高光
     vec3 viewDir=normalize(cameraPos-pos);
-    vec3 reflectDir=reflect(lightDir,normalSampler);
-    float spec=pow(max(dot(viewDir,reflectDir),0.0),material.shininess);
-    vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+    #ifdef BLINN
+    //blinn-phong
+        vec3 halfwayDir=normalize(viewDir-lightDir);
+        float spec=pow(max(dot(normalSampler,halfwayDir),0.0),material.shininess);
+        vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+    #else
+    //phong
+        vec3 reflectDir=reflect(lightDir,normalSampler);
+        float spec=pow(max(dot(viewDir,reflectDir),0.0),material.shininess);
+        vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+    #endif
     //计算衰减
     float distance=length(pos-lightPosition);
     float attenuation=1.0/(attenuationVec.z+attenuationVec.x * distance+attenuationVec.y * distance*distance);
