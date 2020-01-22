@@ -151,6 +151,8 @@ namespace HJGraphics {
 
 		Box(GLfloat _width, GLfloat _depth, GLfloat _height);
 
+		Box(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath);
+
 		void draw() override;
 
 		void draw(Shader shader) override;
@@ -175,6 +177,8 @@ namespace HJGraphics {
 		Plane();
 
 		Plane(GLfloat _width, GLfloat _height, std::string texPath = "", GLfloat _texStretchRatio = 1.0f);
+
+		Plane(GLfloat _width, GLfloat _height, std::string diffuseTexPath,std::string specularTexPath,std::string normalTexPath, GLfloat _texStretchRatio);
 
 		void draw() override;
 

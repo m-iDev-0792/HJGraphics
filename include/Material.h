@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
-#include "OpenGLHeader.h"
+#include "Shader.h"
 #include "stb/stb_image.h"
 namespace HJGraphics {
 	class Texture {
@@ -84,10 +84,6 @@ namespace HJGraphics {
 		glm::vec3 diffuseStrength;
 		glm::vec3 specularStrength;
 
-		glm::vec3 ambientColor;
-		glm::vec3 diffuseColor;
-		glm::vec3 specularColor;
-
 		float shininess;
 		float alpha;
 		float reflective;
@@ -102,7 +98,9 @@ namespace HJGraphics {
 
 		Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor);
 
-		Material(glm::vec3 _ambientColor, glm::vec3 _diffuseColor, glm::vec3 _specularColor);
+		void bindTexture();
+
+		void writeToShader(Shader *shader);
 	};
 
 }

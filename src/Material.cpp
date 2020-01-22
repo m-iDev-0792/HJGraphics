@@ -72,13 +72,8 @@ void HJGraphics::Texture2D::loadFromPath(const std::string _path) {
 
 }
 
-HJGraphics::SolidTexture::SolidTexture():Texture(GL_TEXTURE_2D){
-	glGenTextures(1,&id);
-	texWrapS=GL_REPEAT;
-	texWrapT=GL_REPEAT;
-	texMinFilter=GL_LINEAR;
-	texMagFilter=GL_LINEAR;
-	setColor(glm::vec3(1));
+HJGraphics::SolidTexture::SolidTexture():SolidTexture(glm::vec3(1)){
+
 }
 HJGraphics::SolidTexture::SolidTexture(glm::vec3 _color):Texture(GL_TEXTURE_2D){
 	glGenTextures(1,&id);
@@ -90,14 +85,10 @@ HJGraphics::SolidTexture::SolidTexture(glm::vec3 _color):Texture(GL_TEXTURE_2D){
 }
 void HJGraphics::SolidTexture::setColor(glm::vec3 _color) {
 	color=_color;
-	unsigned char r,g,b;
-	r= static_cast<unsigned char>(color.r*255);
-	g= static_cast<unsigned char>(color.g*255);
-	b= static_cast<unsigned char>(color.b*255);
-	unsigned char data[12]={r,g,b,r,g,b,r,g,b,r,g,b};
+	unsigned char data[3]={static_cast<unsigned char>(color.r*255),static_cast<unsigned char>(color.g*255),static_cast<unsigned char>(color.b*255)};
 	glActiveTexture(GL_TEXTURE0+textureN);
 	glBindTexture(GL_TEXTURE_2D, id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB,
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB,
 	             GL_UNSIGNED_BYTE, data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapT);
@@ -192,14 +183,7 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string rightTex, const 
 HJGraphics::Material::Material():Material(glm::vec3(0.9f,0.9f,0.9f),glm::vec3(1.0f,1.0f,1.0f)) {
 
 }
-HJGraphics::Material::Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor):Material(_diffuseColor,_diffuseColor,_specularColor) {
-
-}
-HJGraphics::Material::Material(glm::vec3 _ambientColor, glm::vec3 _diffuseColor, glm::vec3 _specularColor) {
-	ambientColor=_ambientColor;
-	diffuseColor=_diffuseColor;
-	specularColor= _specularColor;
-
+HJGraphics::Material::Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor) {
 	diffuseMaps.push_back(SolidTexture(_diffuseColor));
 	specularMaps.push_back(SolidTexture(_specularColor));
 
@@ -207,8 +191,46 @@ HJGraphics::Material::Material(glm::vec3 _ambientColor, glm::vec3 _diffuseColor,
 	diffuseStrength=glm::vec3(1.0f);
 	specularStrength=glm::vec3(0.3f);
 
-	shininess=6;
+	shininess=32;
 	alpha=1;
 	reflective=0;
 	refractive=0;
+}
+void HJGraphics::Material::bindTexture() {
+	if(!diffuseMaps.empty()){
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D,diffuseMaps[0].id);
+	}
+	if(!specularMaps.empty()){
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D,specularMaps[0].id);
+	}
+	if(!normalMaps.empty()){
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D,normalMaps[0].id);
+	}
+	if(!heightMaps.empty()){
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D,heightMaps[0].id);
+	}
+}
+void HJGraphics::Material::writeToShader(Shader *shader) {
+	//Caution! call shader->use() before calling this function
+	shader->setInt("material.diffuseMapNum",diffuseMaps.size());
+	shader->setInt("material.diffuseMap",0);
+	shader->setInt("material.specularMapNum",specularMaps.size());
+	shader->setInt("material.specularMap",1);
+	shader->setInt("material.normalMapNum",normalMaps.size());
+	shader->setInt("material.normalMap",2);
+	shader->setInt("material.heightMapNum",heightMaps.size());
+	shader->setInt("material.heightMap",3);
+
+	shader->set3fv("material.ambientStrength",ambientStrength);
+	shader->set3fv("material.diffuseStrength",diffuseStrength);
+	shader->set3fv("material.specularStrength",specularStrength);
+
+	shader->setFloat("material.shininess",shininess);
+	shader->setFloat("material.alpha",alpha);
+	shader->setFloat("material.reflective",reflective);
+	shader->setFloat("material.reflective",refractive);
 }

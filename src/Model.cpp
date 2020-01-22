@@ -3,6 +3,13 @@
 //
 
 #include "Model.h"
+#include <random>
+float random0_1f() {
+	static std::random_device seed;
+	static std::mt19937 engine(seed());
+	static std::uniform_real_distribution<float> dist(0, 1);
+	return dist(engine);
+}
 HJGraphics::Mesh::Mesh(std::vector<HJGraphics::Vertex14> _vertices, std::vector<unsigned int> _indices,
                        std::vector<HJGraphics::Texture2D> _textures) {
 	hasShadow=true;
@@ -25,29 +32,13 @@ HJGraphics::Mesh::Mesh(std::vector<HJGraphics::Vertex14> _vertices, std::vector<
 	indices=_indices;
 	vertices=_vertices;
 	writeVerticesData();
-//	material.shininess=32;
-	material.specularStrength=glm::vec3(1.0f);
-	material.diffuseStrength=glm::vec3(2.0f);
+	material.shininess=48;
+	material.specularStrength=glm::vec3(0.3f);
+	material.diffuseStrength=glm::vec3(0.7f);
 }
 void HJGraphics::Mesh::draw() {
 	writeObjectPropertyUniform(defaultShader);
-	if(material.diffuseMaps.size()){
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
-	}
-	if(material.specularMaps.size()){
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
-	}
-	if(material.normalMaps.size()){
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D,material.normalMaps[0].id);
-	}
-	if(material.heightMaps.size()){
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D,material.heightMaps[0].id);
-	}
-
+	material.bindTexture();
 	draw(*defaultShader);
 }
 void HJGraphics::Mesh::draw(Shader shader){
@@ -63,22 +54,7 @@ void HJGraphics::Mesh::drawLight(HJGraphics::Light *light) {
 	else return;
 	writeObjectPropertyUniform(lightShader);
 	light->writeLightInfoUniform(lightShader);
-	if(material.diffuseMaps.size()){
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
-	}
-	if(material.specularMaps.size()){
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
-	}
-	if(material.normalMaps.size()){
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D,material.normalMaps[0].id);
-	}
-	if(material.heightMaps.size()){
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D,material.heightMaps[0].id);
-	}
+	material.bindTexture();
 	draw(*lightShader);
 }
 void HJGraphics::Mesh::writeVerticesData() {
@@ -106,24 +82,7 @@ void HJGraphics::Mesh::writeVerticesData() {
 void HJGraphics::Mesh::writeObjectPropertyUniform(Shader *shader) {
 	shader->use();
 	shader->set4fm("model",model);
-	shader->setInt("material.diffuseMapNum",material.diffuseMaps.size());
-	shader->setInt("material.diffuseMap",0);
-	shader->setInt("material.specularMapNum",material.specularMaps.size());
-	shader->setInt("material.specularMap",1);
-	shader->setInt("material.normalMapNum",material.normalMaps.size());
-	shader->setInt("material.normalMap",2);
-	shader->setInt("material.heightMapNum",material.heightMaps.size());
-	shader->setInt("material.heightMap",3);
-
-	shader->set3fv("material.ambientStrength",material.ambientStrength);
-	shader->set3fv("material.diffuseStrength",material.diffuseStrength);
-	shader->set3fv("material.specularStrength",material.specularStrength);
-
-	shader->setFloat("material.shininess",material.shininess);
-	shader->setFloat("material.alpha",material.alpha);
-	shader->setFloat("material.reflective",material.reflective);
-	shader->setFloat("material.reflective",material.refractive);
-
+	material.writeToShader(shader);
 	shader->bindBlock("sharedMatrices",sharedBindPoint);
 }
 
@@ -195,6 +154,7 @@ HJGraphics::Mesh* HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *sc
 		if(mesh->HasTangentsAndBitangents()){
 			// tangent
 			vector.x = mesh->mTangents[i].x;
+
 			vector.y = mesh->mTangents[i].y;
 			vector.z = mesh->mTangents[i].z;
 			vertex.tangent = vector;
@@ -204,6 +164,9 @@ HJGraphics::Mesh* HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *sc
 			vector.z = mesh->mBitangents[i].z;
 			vertex.bitangent = vector;
 		}
+//		if (glm::dot(glm::cross(vertex.normal, vertex.tangent), vertex.bitangent) < 0.0f){
+//			vertex.bitangent *= -1.0f;
+//		}
 		vertices.push_back(vertex);
 	}
 

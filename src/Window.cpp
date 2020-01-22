@@ -115,9 +115,9 @@ void HJGraphics::Window::run() {
 	customInit();
 	auto lastTime=std::chrono::high_resolution_clock::now();
 	while(!shouldClose()){
+		inputCallback();
 		auto currentTime=std::chrono::high_resolution_clock::now();
 		if(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime-lastTime).count()<1000.0/fps)continue;
-		inputCallback();
 		render();
 		swapBuffer();
 		glfwPollEvents();

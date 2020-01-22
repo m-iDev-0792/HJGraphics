@@ -19,10 +19,12 @@ int main() {
 	cylinder.model=translate(cylinder.model,vec3(0.0f,0.0f,1.0f));
 	cylinder.model=rotate(cylinder.model,radians(90.0f),vec3(1.0f,0.0f,0.0f));
 
-	Box box(2,2,2);
+	Box box(2,2,2,"../texture/brickwall.jpg","","../texture/brickwall_normal.jpg");
 	box.model=translate(box.model,vec3(0.0f,0.0f,-2.5f));
+//	box.material.diffuseMaps[0]=Texture2D("../texture/brickwall.jpg");
 
-	Plane plane(8,8,"../texture/chessboard.jpg");
+//	Plane plane(8,8,"../texture/chessboard.jpg");
+	Plane plane(8,8,"../texture/brickwall.jpg","","../texture/brickwall_normal.jpg",8);
 	auto start=chrono::high_resolution_clock::now();
 	Model nanosuit("/Users/hezhenbang/Documents/Models/nanosuit/nanosuit.obj");
 	auto end=chrono::high_resolution_clock::now();
@@ -35,7 +37,7 @@ int main() {
 	//-----------------------Direction------------------------Position-----------------------Color
 	ParallelLight paraLight(glm::vec3(-1.0f,-0.7f,-2.0f),glm::vec3(4.0f,4.0f,0.0f));
 	SpotLight spotLight(glm::vec3(1.0f,-1.0f,-1.0f),glm::vec3(-5.0f,5.0f,3.0f),glm::vec3(0.0f,0.6f,0.6f));
-	PointLight pointLight(glm::vec3(0.0f,4.0f,1.0f));
+	PointLight pointLight(glm::vec3(0.0f,2.0f,2.0f));
 
 
 	glm::vec3 cameraPos=glm::vec3(5.0f,5.0f,10.0f);

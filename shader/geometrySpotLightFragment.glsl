@@ -2,12 +2,13 @@
 #define BLINN
 #define PCF_SHADOW
 out vec4 FragColor;
-in vec3 pos;
+in vec3 tangentPos;
+in vec3 worldPos;
 in vec3 normal;
 in vec2 texCoord;
-//cam info
-in vec3 cameraPos;
-in mat3 TBN;
+in vec3 tangentCameraPos;
+in vec3 tangentLightPos;
+in vec3 tangentLightDirection;
 struct Material{
     vec3 ambientStrength;
     vec3 diffuseStrength;
@@ -86,24 +87,23 @@ vec3 spotLight(){
     if(material.specularMapNum>0){
         specularSampler=texture(material.specularMap,texCoord).rgb;
     }
-    vec3 normalSampler;
+    vec3 normalSampler=normal;
     if(material.normalMapNum>0){
         normalSampler=texture(material.normalMap,texCoord).rgb;
-        normalSampler=2*normalSampler-1;
-        normalSampler=normalize(TBN*normalSampler);
-    }else normalSampler=normal;
+        normalSampler=normalize(2*normalSampler-1);
+    }
     //计算阴影
-    vec4 lightSpacePos=lightSpaceMatrix*vec4(pos,1.0f);//replaced original code
+    vec4 lightSpacePos=lightSpaceMatrix*vec4(worldPos,1.0f);//replaced original code
     float shadowFactor=spotShadowCalculation(lightSpacePos);
 
     float innerCos=innerOuterCos.x;
     float outerCos=innerOuterCos.y;
     //漫反射光
-    vec3 lightDir=normalize(lightDirection);
+    vec3 lightDir=normalize(tangentLightDirection);
     float diff=max(dot(-lightDir,normalSampler),0.0);
     vec3 diffuse=diff * diffuseSampler * material.diffuseStrength * lightColor;
     //反射高光
-    vec3 viewDir=normalize(cameraPos-pos);
+    vec3 viewDir=normalize(tangentCameraPos-tangentPos);
     #ifdef BLINN
     //blinn-phong
         vec3 halfwayDir=normalize(viewDir-lightDir);
@@ -116,10 +116,10 @@ vec3 spotLight(){
         vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
     #endif
     //计算衰减
-    float distance=length(pos-lightPosition);
+    float distance=length(tangentPos-tangentLightPos);
     float attenuation=1.0/(attenuationVec.z+attenuationVec.x * distance+attenuationVec.y * distance*distance);
     //聚光灯强度计算
-    float cutOffCos=dot(normalize(pos-lightPosition),lightDir);
+    float cutOffCos=dot(normalize(tangentPos-tangentLightPos),lightDir);
     float intensity=clamp((cutOffCos-outerCos)/(innerCos-outerCos),0.0,1.0);
     return (diffuse+specular)*attenuation*intensity*shadowFactor;
 }

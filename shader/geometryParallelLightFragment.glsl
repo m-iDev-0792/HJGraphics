@@ -2,11 +2,13 @@
 #define BLINN
 #define PCF_SHADOW
 out vec4 FragColor;
-in vec3 pos;
+in vec3 tangentPos;
+in vec3 worldPos;
 in vec3 normal;
 in vec2 texCoord;
-in vec3 cameraPos;
-in mat3 TBN;
+in vec3 tangentCameraPos;
+in vec3 tangentLightPos;
+in vec3 tangentLightDirection;
 
 struct Material{
     vec3 ambientStrength;
@@ -85,23 +87,30 @@ vec3 parallelLight(){
     if(material.specularMapNum>0){
         specularSampler=texture(material.specularMap,texCoord).rgb;
     }
-    vec3 normalSampler;
+    vec3 normalSampler=normal;
     if(material.normalMapNum>0){
         normalSampler=texture(material.normalMap,texCoord).rgb;
-        normalSampler=2*normalSampler-1;
-        normalSampler=normalize(TBN*normalSampler);
-    }else normalSampler=normal;
+        normalSampler=normalize(2*normalSampler-1);
+    }
     //计算阴影
-    vec4 lightSpacePos=lightSpaceMatrix*vec4(pos,1.0f);//replaced original code
+    vec4 lightSpacePos=lightSpaceMatrix*vec4(worldPos,1.0f);//replaced original code
     float shadowFactor=parallelShadowCalculation(lightSpacePos);
     //漫反射光
-    vec3 lightDir=normalize(lightDirection);
+    vec3 lightDir=normalize(tangentLightDirection);
     float diff=max(dot(-lightDir,normalSampler),0.0);
     vec3 diffuse=diff * diffuseSampler * material.diffuseStrength * lightColor;
     //反射高光
-    vec3 viewDir=normalize(cameraPos-pos);
-    vec3 reflectDir=reflect(lightDir,normalSampler);
-    float spec=pow(max(dot(viewDir,reflectDir),0.0),material.shininess);
-    vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+    vec3 viewDir=normalize(tangentCameraPos-tangentPos);
+    #ifdef BLINN
+    //blinn-phong
+        vec3 halfwayDir=normalize(viewDir-lightDir);
+        float spec=pow(max(dot(normalSampler,halfwayDir),0.0),material.shininess);
+        vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+    #else
+    //phong
+        vec3 reflectDir=reflect(lightDir,normalSampler);
+        float spec=pow(max(dot(viewDir,reflectDir),0.0),material.shininess);
+        vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+    #endif
     return (diffuse+specular)*shadowFactor;
 }

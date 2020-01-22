@@ -3,6 +3,7 @@
 //
 #define STB_IMAGE_IMPLEMENTATION
 #include "ElementObjects.h"
+#include "Utility.h"
 /*
  * Implement of Coordinate Object
  */
@@ -376,37 +377,13 @@ void HJGraphics::Cylinder::writeObjectPropertyUniform(Shader *shader) {
 	//-----------------------------------
 	shader->use();
 	shader->set4fm("model",model);
-	shader->setInt("material.diffuseMapNum",material.diffuseMaps.size());
-	shader->setInt("material.diffuseMap",0);
-	shader->setInt("material.specularMapNum",material.specularMaps.size());
-	shader->setInt("material.specularMap",1);
-	shader->setInt("material.normalMapNum",material.normalMaps.size());
-	shader->setInt("material.normalMap",2);
-	shader->setInt("material.heightMapNum",material.heightMaps.size());
-	shader->setInt("material.heightMap",3);
-
-	shader->set3fv("material.ambientStrength",material.ambientStrength);
-	shader->set3fv("material.diffuseStrength",material.diffuseStrength);
-	shader->set3fv("material.specularStrength",material.specularStrength);
-
-	shader->setFloat("material.shininess",material.shininess);
-	shader->setFloat("material.alpha",material.alpha);
-	shader->setFloat("material.reflective",material.reflective);
-	shader->setFloat("material.reflective",material.refractive);
-
+	material.writeToShader(shader);
 	shader->bindBlock("sharedMatrices",sharedBindPoint);
 }
 
 void HJGraphics::Cylinder::draw() {
 	writeObjectPropertyUniform(defaultShader);
-	if(material.diffuseMaps.size()){
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
-	}
-	if(material.specularMaps.size()){
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
-	}
+	material.bindTexture();
 	draw(*defaultShader);
 }
 void HJGraphics::Cylinder::draw(Shader shader) {
@@ -428,20 +405,27 @@ void HJGraphics::Cylinder::drawLight(HJGraphics::Light *light) {
 	else return;
 	writeObjectPropertyUniform(lightShader);
 	light->writeLightInfoUniform(lightShader);
-	if(material.diffuseMaps.size()){
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
-	}
-	if(material.specularMaps.size()){
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
-	}
+	material.bindTexture();
 	draw(*lightShader);
 }
 /*
  * Implement of Box
  */
 HJGraphics::Box::Box():Box(5,5,5) {
+}
+HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath):Box(_width,_depth,_height){
+	if(!_diffPath.empty()){
+		if(material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath));
+		else material.diffuseMaps[0]=Texture2D(_diffPath);
+	}
+	if(!_specPath.empty()){
+		if(material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specPath));
+		else material.specularMaps[0]=Texture2D(_specPath);
+	}
+	if(!_normPath.empty()){
+		if(material.normalMaps.empty())material.normalMaps.push_back(Texture2D(_normPath));
+		else material.normalMaps[0]=Texture2D(_normPath);
+	}
 }
 HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height){
 	width=_width;depth=_depth;height=_height;hasShadow=true;
@@ -450,11 +434,15 @@ HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height){
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER,VBO);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8* sizeof(GLfloat), nullptr);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), nullptr);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,8* sizeof(GLfloat), (void*)(3* sizeof(GLfloat)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, normal));
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,8* sizeof(GLfloat), (void*)(6* sizeof(GLfloat)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, texCoord));
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, tangent));
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, bitangent));
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 }
@@ -466,52 +454,73 @@ void HJGraphics::Box::writeVerticesData() {
 	const GLfloat halfWidth=width/2;
 	const GLfloat halfHeight=height/2;
 	const GLfloat halfDepth=depth/2;
-	GLfloat data[]={
-			// positions                         normals               uv
-			//back
-			-halfWidth, -halfHeight, -halfDepth,  0.0f,  0.0f, -1.0f,   0.0f,0.0f,
-			halfWidth,  halfHeight, -halfDepth,  0.0f,  0.0f, -1.0f,   0.0f,0.0f,
-			halfWidth, -halfHeight, -halfDepth,  0.0f,  0.0f, -1.0f,   0.0f,0.0f,
-			halfWidth,  halfHeight, -halfDepth,  0.0f,  0.0f, -1.0f,   0.0f,0.0f,
-			-halfWidth, -halfHeight, -halfDepth,  0.0f,  0.0f, -1.0f,   0.0f,0.0f,
-			-halfWidth,  halfHeight, -halfDepth,  0.0f,  0.0f, -1.0f,   0.0f,0.0f,
+	const GLfloat w=width/2;
+	const GLfloat h=height/2;
+	const GLfloat d=depth/2;
+	glm::vec3 v[8]={glm::vec3(w,-h,d),glm::vec3(w,-h,-d),glm::vec3(-w,-h,-d),glm::vec3(-w,-h,d),//down
+	                glm::vec3(w,h,d),glm::vec3(w,h,-d),glm::vec3(-w,h,-d),glm::vec3(-w,h,d)};//up
+//	    vertex order of face
+//face1  2     face2 3----2
+//      |  \              |
+//      3   1             1
+	Vertex14 vdata[]={
 			//front
-			-halfWidth, -halfHeight,  halfDepth,  0.0f,  0.0f, 1.0f,   0.0f,0.0f,
-			halfWidth, -halfHeight,  halfDepth,  0.0f,  0.0f, 1.0f,   0.0f,0.0f,
-			halfWidth,  halfHeight,  halfDepth,  0.0f,  0.0f, 1.0f,   0.0f,0.0f,
-			halfWidth,  halfHeight,  halfDepth,  0.0f,  0.0f, 1.0f,   0.0f,0.0f,
-			-halfWidth,  halfHeight,  halfDepth,  0.0f,  0.0f, 1.0f,   0.0f,0.0f,
-			-halfWidth, -halfHeight,  halfDepth,  0.0f,  0.0f, 1.0f,   0.0f,0.0f,
-			//left
-			-halfWidth,  halfHeight,  halfDepth, -1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			-halfWidth,  halfHeight, -halfDepth, -1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			-halfWidth, -halfHeight, -halfDepth, -1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			-halfWidth, -halfHeight, -halfDepth, -1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			-halfWidth, -halfHeight,  halfDepth, -1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			-halfWidth,  halfHeight,  halfDepth, -1.0f,  0.0f,  0.0f,   0.0f,0.0f,
+			Vertex14(v[0],glm::vec3(0,0,1),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[7],glm::vec3(0,0,1),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[3],glm::vec3(0,0,1),glm::vec2(0,0),glm::vec3(0),glm::vec3(0)),
+
+			Vertex14(v[0],glm::vec3(0,0,1),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[4],glm::vec3(0,0,1),glm::vec2(1,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[7],glm::vec3(0,0,1),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
+			//back
+			Vertex14(v[2],glm::vec3(0,0,-1),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[5],glm::vec3(0,0,-1),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[1],glm::vec3(0,0,-1),glm::vec2(0,0),glm::vec3(0),glm::vec3(0)),
+
+			Vertex14(v[2],glm::vec3(0,0,-1),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[6],glm::vec3(0,0,-1),glm::vec2(1,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[5],glm::vec3(0,0,-1),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
 			//right
-			halfWidth,  halfHeight,  halfDepth,  1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			halfWidth, -halfHeight, -halfDepth,  1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			halfWidth,  halfHeight, -halfDepth,  1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			halfWidth, -halfHeight, -halfDepth,  1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			halfWidth,  halfHeight,  halfDepth,  1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			halfWidth, -halfHeight,  halfDepth,  1.0f,  0.0f,  0.0f,   0.0f,0.0f,
-			//down
-			-halfWidth, -halfHeight, -halfDepth,  0.0f, -1.0f,  0.0f,   0.0f,0.0f,
-			halfWidth, -halfHeight, -halfDepth,  0.0f, -1.0f,  0.0f,   0.0f,0.0f,
-			halfWidth, -halfHeight,  halfDepth,  0.0f, -1.0f,  0.0f,   0.0f,0.0f,
-			halfWidth, -halfHeight,  halfDepth,  0.0f, -1.0f,  0.0f,   0.0f,0.0f,
-			-halfWidth, -halfHeight,  halfDepth,  0.0f, -1.0f,  0.0f,   0.0f,0.0f,
-			-halfWidth, -halfHeight, -halfDepth,  0.0f, -1.0f,  0.0f,   0.0f,0.0f,
+			Vertex14(v[1],glm::vec3(1,0,0),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[4],glm::vec3(1,0,0),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[0],glm::vec3(1,0,0),glm::vec2(0,0),glm::vec3(0),glm::vec3(0)),
+
+			Vertex14(v[1],glm::vec3(1,0,0),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[5],glm::vec3(1,0,0),glm::vec2(1,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[4],glm::vec3(1,0,0),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
+			//left
+			Vertex14(v[3],glm::vec3(-1,0,0),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[6],glm::vec3(-1,0,0),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[2],glm::vec3(-1,0,0),glm::vec2(0,0),glm::vec3(0),glm::vec3(0)),
+
+			Vertex14(v[3],glm::vec3(-1,0,0),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[7],glm::vec3(-1,0,0),glm::vec2(1,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[6],glm::vec3(-1,0,0),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
 			//up
-			-halfWidth,  halfHeight, -halfDepth,  0.0f,  1.0f,  0.0f,   0.0f,0.0f,
-			halfWidth,  halfHeight,  halfDepth,  0.0f,  1.0f,  0.0f,   0.0f,0.0f,
-			halfWidth,  halfHeight, -halfDepth,  0.0f,  1.0f,  0.0f,   0.0f,0.0f,
-			halfWidth,  halfHeight,  halfDepth,  0.0f,  1.0f,  0.0f,   0.0f,0.0f,
-			-halfWidth,  halfHeight, -halfDepth,  0.0f,  1.0f,  0.0f,   0.0f,0.0f,
-			-halfWidth,  halfHeight,  halfDepth,  0.0f,  1.0f,  0.0f,   0.0f,0.0f
+			Vertex14(v[4],glm::vec3(0,1,0),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[6],glm::vec3(0,1,0),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[7],glm::vec3(0,1,0),glm::vec2(0,0),glm::vec3(0),glm::vec3(0)),
+
+			Vertex14(v[4],glm::vec3(0,1,0),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[5],glm::vec3(0,1,0),glm::vec2(1,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[6],glm::vec3(0,1,0),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
+			//down
+			Vertex14(v[1],glm::vec3(0,-1,0),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[3],glm::vec3(0,-1,0),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[2],glm::vec3(0,-1,0),glm::vec2(0,0),glm::vec3(0),glm::vec3(0)),
+
+			Vertex14(v[1],glm::vec3(0,-1,0),glm::vec2(1,0),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[0],glm::vec3(0,-1,0),glm::vec2(1,1),glm::vec3(0),glm::vec3(0)),
+			Vertex14(v[3],glm::vec3(0,-1,0),glm::vec2(0,1),glm::vec3(0),glm::vec3(0)),
 	};
-	loadVBOData(data, sizeof(data));
+	for(int i=0;i<12;++i){
+		glm::vec3 tangent,bitangent;
+		getTangentBitangent(vdata[3*i].position,vdata[3*i+1].position,vdata[3*i+2].position,
+				vdata[3*i].texCoord,vdata[3*i+1].texCoord,vdata[3*i+2].texCoord,tangent,bitangent);
+		vdata[3*i].tangent=vdata[3*i+1].tangent=vdata[3*i+2].tangent=tangent;
+		vdata[3*i].bitangent=vdata[3*i+1].bitangent=vdata[3*i+2].bitangent=bitangent;
+	}
+	loadVBOData(vdata, sizeof(vdata));
 }
 void HJGraphics::Box::writeObjectPropertyUniform(Shader *shader) {
 	//-----------------------------------
@@ -519,36 +528,12 @@ void HJGraphics::Box::writeObjectPropertyUniform(Shader *shader) {
 	//-----------------------------------
 	shader->use();
 	shader->set4fm("model",model);
-	shader->setInt("material.diffuseMapNum",material.diffuseMaps.size());
-	shader->setInt("material.diffuseMap",0);
-	shader->setInt("material.specularMapNum",material.specularMaps.size());
-	shader->setInt("material.specularMap",1);
-	shader->setInt("material.normalMapNum",material.normalMaps.size());
-	shader->setInt("material.normalMap",2);
-	shader->setInt("material.heightMapNum",material.heightMaps.size());
-	shader->setInt("material.heightMap",3);
-
-	shader->set3fv("material.ambientStrength",material.ambientStrength);
-	shader->set3fv("material.diffuseStrength",material.diffuseStrength);
-	shader->set3fv("material.specularStrength",material.specularStrength);
-
-	shader->setFloat("material.shininess",material.shininess);
-	shader->setFloat("material.alpha",material.alpha);
-	shader->setFloat("material.reflective",material.reflective);
-	shader->setFloat("material.reflective",material.refractive);
-
+	material.writeToShader(shader);
 	shader->bindBlock("sharedMatrices",sharedBindPoint);
 }
 void HJGraphics::Box::draw() {
 	writeObjectPropertyUniform(defaultShader);
-	if(material.diffuseMaps.size()){
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
-	}
-	if(material.specularMaps.size()){
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
-	}
+	material.bindTexture();
 	draw(*defaultShader);
 }
 void HJGraphics::Box::draw(Shader shader) {
@@ -569,14 +554,7 @@ void HJGraphics::Box::drawLight(HJGraphics::Light *light) {
 
 	writeObjectPropertyUniform(lightShader);
 	light->writeLightInfoUniform(lightShader);
-	if(material.diffuseMaps.size()){
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
-	}
-	if(material.specularMaps.size()){
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
-	}
+	material.bindTexture();
 	draw(*lightShader);
 }
 /*
@@ -596,13 +574,27 @@ HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _texPath,G
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER,VBO);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8* sizeof(GLfloat), nullptr);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), nullptr);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,8* sizeof(GLfloat),(void*)(3*sizeof(GLfloat)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, normal));
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,8* sizeof(GLfloat),(void*)(6*sizeof(GLfloat)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, texCoord));
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, tangent));
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, bitangent));
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
+}
+HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _diffuseTexPath,std::string _specularTexPath,std::string _normalTexPath, GLfloat _texStretchRatio):Plane(_width,_height,_diffuseTexPath,_texStretchRatio){
+	if(!_specularTexPath.empty()){
+		if(material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specularTexPath));
+		else material.specularMaps[0]=Texture2D(_specularTexPath);
+	}
+	if(!_normalTexPath.empty()){
+		if(material.normalMaps.empty())material.normalMaps.push_back(Texture2D(_normalTexPath));
+		else material.normalMaps[0]=Texture2D(_normalTexPath);
+	}
 }
 HJGraphics::Plane::Plane() :Plane(5,5){}
 void HJGraphics::Plane::writeVerticesData() {
@@ -610,53 +602,33 @@ void HJGraphics::Plane::writeVerticesData() {
 	//-----------------------------------
 	// Generate Vertices Data
 	//-----------------------------------
+	glm::vec3 t0,t1,b0,b1;
+	getTangentBitangent(glm::vec3(-width/2,0,-height/2),glm::vec3(-width/2,0,height/2),glm::vec3(width/2,0,height/2),
+			glm::vec2(0,texStretchRatio),glm::vec2(0,0),glm::vec2(texStretchRatio,0),t0,b0);
+	getTangentBitangent(glm::vec3(width/2,0,height/2),glm::vec3(width/2,0,-height/2),glm::vec3(-width/2,0,-height/2),
+	                    glm::vec2(texStretchRatio,0),glm::vec2(texStretchRatio,texStretchRatio),glm::vec2(0,texStretchRatio),t1,b1);
 	GLfloat vertex[]={
-			//vertex               normal  uv
-			-width/2,0,-height/2,  0,1,0,  0,texStretchRatio,
-			-width/2,0,height/2,  0,1,0,  0,0,
-			width/2,0,height/2,  0,1,0,  texStretchRatio,0,
+			//vertex               normal  uv                         tangent         bitangent
+			-width/2,0,-height/2,  0,1,0,  0,texStretchRatio,         t0.x,t0.y,t0.z,b0.x,b0.y,b0.z,
+			-width/2,0,height/2,  0,1,0,  0,0,                        t0.x,t0.y,t0.z,b0.x,b0.y,b0.z,
+			width/2,0,height/2,  0,1,0,  texStretchRatio,0,           t0.x,t0.y,t0.z,b0.x,b0.y,b0.z,
 
-			width/2,0,height/2,  0,1,0,  texStretchRatio,0,
-			width/2,0,-height/2,  0,1,0,  texStretchRatio,texStretchRatio,
-			-width/2,0,-height/2,  0,1,0,  0,texStretchRatio
+			width/2,0,height/2,  0,1,0,  texStretchRatio,0,           t1.x,t1.y,t1.z,b1.x,b1.y,b1.z,
+			width/2,0,-height/2,  0,1,0,  texStretchRatio,texStretchRatio,t1.x,t1.y,t1.z,b1.x,b1.y,b1.z,
+			-width/2,0,-height/2,  0,1,0,  0,texStretchRatio,         t1.x,t1.y,t1.z,b1.x,b1.y,b1.z
 	};
 	loadVBOData(vertex, sizeof(vertex));
 }
 void HJGraphics::Plane::writeObjectPropertyUniform(Shader *shader) {
 	shader->use();
-
 	shader->set4fm("model",model);
-	shader->setInt("material.diffuseMapNum",material.diffuseMaps.size());
-	shader->setInt("material.diffuseMap",0);
-	shader->setInt("material.specularMapNum",material.specularMaps.size());
-	shader->setInt("material.specularMap",1);
-	shader->setInt("material.normalMapNum",material.normalMaps.size());
-	shader->setInt("material.normalMap",2);
-	shader->setInt("material.heightMapNum",material.heightMaps.size());
-	shader->setInt("material.heightMap",3);
-
-	shader->set3fv("material.ambientStrength",material.ambientStrength);
-	shader->set3fv("material.diffuseStrength",material.diffuseStrength);
-	shader->set3fv("material.specularStrength",material.specularStrength);
-
-	shader->setFloat("material.shininess",material.shininess);
-	shader->setFloat("material.alpha",material.alpha);
-	shader->setFloat("material.reflective",material.reflective);
-	shader->setFloat("material.reflective",material.refractive);
-
+	material.writeToShader(shader);
 	shader->bindBlock("sharedMatrices",sharedBindPoint);
 }
 
 void HJGraphics::Plane::draw() {
 	writeObjectPropertyUniform(defaultShader);
-	if(material.diffuseMaps.size()){
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
-	}
-	if(material.specularMaps.size()){
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
-	}
+	material.bindTexture();
 	draw(*defaultShader);
 }
 void HJGraphics::Plane::draw(Shader shader) {
@@ -675,14 +647,7 @@ void HJGraphics::Plane::drawLight(HJGraphics::Light *light) {
 	else if(light->type==LightType::PointLightType)lightShader=pointLightShader;
 	else return;
 	writeObjectPropertyUniform(lightShader);
-	if(material.diffuseMaps.size()){
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,material.diffuseMaps[0].id);
-	}
-	if(material.specularMaps.size()){
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D,material.specularMaps[0].id);
-	}
+	material.bindTexture();
 	light->writeLightInfoUniform(lightShader);
 	draw(*lightShader);
 }
