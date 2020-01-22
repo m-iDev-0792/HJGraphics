@@ -14,16 +14,10 @@
     <list default="true" id="1abe225c-fa90-4461-a691-18ba3a0c3b70" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/HJGraphics" beforeDir="false" afterPath="$PROJECT_DIR$/bin/HJGraphics" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/ElementObjects.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/ElementObjects.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Material.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Material.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shader/geometryLightVertex.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/geometryLightVertex.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shader/geometryAmbientFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/geometryAmbientFragment.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shader/geometryParallelLightFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/geometryParallelLightFragment.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shader/geometryPointLightFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/geometryPointLightFragment.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shader/geometrySpotLightFragment.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/shader/geometrySpotLightFragment.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ElementObjects.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ElementObjects.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Material.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Material.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Window.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -153,7 +147,7 @@
       <workItem from="1559375544219" duration="132000" />
       <workItem from="1559378839809" duration="7000" />
       <workItem from="1560048392103" duration="1296000" />
-      <workItem from="1579404324811" duration="53623000" />
+      <workItem from="1579404324811" duration="56762000" />
     </task>
     <servers />
   </component>
@@ -170,29 +164,29 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1874" height="197" key="GridCell.Tab.0.bottom" timestamp="1579682018829">
+    <state width="1874" height="197" key="GridCell.Tab.0.bottom" timestamp="1579686560809">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state width="1874" height="197" key="GridCell.Tab.0.bottom/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579682018829" />
-    <state width="1775" height="339" key="GridCell.Tab.0.bottom/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579533542378" />
+    <state width="1874" height="197" key="GridCell.Tab.0.bottom/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579686560809" />
     <state width="1874" height="197" key="GridCell.Tab.0.bottom/266.1103.1280.777/0.23.1920.1057@0.23.1920.1057" timestamp="1579677918200" />
-    <state width="1874" height="197" key="GridCell.Tab.0.center" timestamp="1579682018827">
+    <state width="1874" height="197" key="GridCell.Tab.0.center" timestamp="1579686560808">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state width="1874" height="197" key="GridCell.Tab.0.center/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579682018827" />
-    <state width="1775" height="339" key="GridCell.Tab.0.center/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579533542377" />
+    <state width="1874" height="197" key="GridCell.Tab.0.center/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579686560808" />
     <state width="1874" height="197" key="GridCell.Tab.0.center/266.1103.1280.777/0.23.1920.1057@0.23.1920.1057" timestamp="1579677918198" />
-    <state width="1874" height="197" key="GridCell.Tab.0.left" timestamp="1579682018817">
+    <state width="1874" height="197" key="GridCell.Tab.0.left" timestamp="1579686560806">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state width="1874" height="197" key="GridCell.Tab.0.left/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579682018817" />
-    <state width="1775" height="339" key="GridCell.Tab.0.left/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579533542376" />
+    <state width="1874" height="197" key="GridCell.Tab.0.left/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579686560806" />
     <state width="1874" height="197" key="GridCell.Tab.0.left/266.1103.1280.777/0.23.1920.1057@0.23.1920.1057" timestamp="1579677918195" />
-    <state width="1874" height="197" key="GridCell.Tab.0.right" timestamp="1579682018828">
+    <state width="1874" height="197" key="GridCell.Tab.0.right" timestamp="1579686560808">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state width="1874" height="197" key="GridCell.Tab.0.right/266.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1579682018828" />
-    <state width="1775" height="339" key="GridCell.Tab.0.right/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579533542378" />
+    <state width="1874" height="197" key="GridCell.Tab.0.right/266.1103.1280.729/0.23.1920.1057@0.23.1920.1057" timestamp="1579686560808" />
     <state width="1874" height="197" key="GridCell.Tab.0.right/266.1103.1280.777/0.23.1920.1057@0.23.1920.1057" timestamp="1579677918199" />
     <state width="1874" height="307" key="GridCell.Tab.1.bottom" timestamp="1579613211705">
       <screen x="0" y="23" width="1920" height="1057" />

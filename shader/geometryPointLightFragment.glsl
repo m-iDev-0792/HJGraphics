@@ -1,6 +1,7 @@
 #version 330 core
 #define BLINN
 #define PCF_SHADOW
+const float gamma = 2.2;
 out vec4 FragColor;
 in vec3 tangentPos;
 in vec3 worldPos;
@@ -54,6 +55,7 @@ void main()
 {
     vec3 Color=pointLight();
     FragColor=vec4(Color,1.0f);
+    FragColor.rgb = pow(FragColor.rgb, vec3(1.0/gamma));
 }
 //////////////////////////////////////////////////////////////////
 float pointShadowCalculation(vec3 fragPosLightSpace)
@@ -87,6 +89,7 @@ vec3 pointLight(){
     vec3 specularSampler=vec3(1.0,1.0,1.0);
     if(material.diffuseMapNum>0){
         diffuseSampler=texture(material.diffuseMap,texCoord).rgb;
+        diffuseSampler = pow(diffuseSampler, vec3(gamma));
     }
     if(material.specularMapNum>0){
         specularSampler=texture(material.specularMap,texCoord).rgb;
