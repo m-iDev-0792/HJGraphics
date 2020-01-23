@@ -6,6 +6,7 @@
 /*
  * Implementation of Light class
  */
+HJGraphics::Shader* HJGraphics::Light::debugShader=nullptr;
 HJGraphics::Light::Light() :Light(LightType::ParallelLightType,glm::vec3(0.0f,0.0f,0.0f)){
 
 }
@@ -13,12 +14,29 @@ HJGraphics::Light::Light(int _type, glm::vec3 _pos, glm::vec3 _lightColor) {
 	type=_type;
 	position=_pos;
 	color=_lightColor;
-
+	if(debugShader== nullptr)debugShader=new Shader("../shader/lineVertex.glsl","../shader/lineFragment.glsl");
 	setShadowZValue(0.1f,50.0f);
 
 	glGenFramebuffers(1,&shadowFramebuffer);
 	glGenTextures(1,&shadowMap);
 
+	glGenVertexArrays(1,&debugVAO);
+	glGenBuffers(1,&debugVBO);
+	glBindVertexArray(debugVAO);
+	glBindBuffer(GL_ARRAY_BUFFER,debugVBO);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,6* sizeof(GLfloat),(void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,6* sizeof(GLfloat),(void*)(3*sizeof(GLfloat)));
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+	glBindVertexArray(0);
+
+}
+void HJGraphics::Light::debugDrawLight(GLuint sharedBindPoint) {
+	//do nothing
+}
+void HJGraphics::Light::writeDebugData() {
+	//do nothing
 }
 void HJGraphics::Light::setShadowMapSize(GLuint width, GLuint height) {
 	shadowMapWidth=width;
@@ -52,6 +70,7 @@ HJGraphics::ParallelLight::ParallelLight(glm::vec3 _dir, glm::vec3 _pos, glm::ve
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	updateLightMatrix();
+	writeDebugData();
 }
 /*
  * USED FOR LIGHT ILLUMINATION SHADING
@@ -78,6 +97,52 @@ void HJGraphics::ParallelLight::updateLightMatrix() {
 	lightProjection= glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, shadowZNear, shadowZFar);
 	lightMatrix=lightProjection*lightView;
 }
+void HJGraphics::ParallelLight::writeDebugData() {
+	glm::vec3 color(0,0,1);
+	glm::vec3 near=position+shadowZNear*direction;
+	glm::vec3 far=position+shadowZFar*direction;
+	glm::vec3 right=glm::normalize(glm::cross(direction,glm::vec3(0,1,0)));
+	glm::vec3 up=glm::normalize(glm::cross(right,direction));
+	float r=5;
+	glm::vec3 bound[4]={near+r*(right+up),near+r*(-right+up),near+r*(-right-up),near+r*(right-up)};
+	GLfloat data[]={
+			//position        color
+			position.x,position.y,position.z,1,0,0,
+			near.x,near.y,near.z,1,0,0,
+
+			near.x,near.y,near.z,0.976, 0.788, 0.000,
+			far.x,far.y,far.z,0.976, 0.788, 0.000,
+
+			bound[0].x,bound[0].y,bound[0].z,0.976, 0.788, 0.000,
+			bound[1].x,bound[1].y,bound[1].z,0.976, 0.788, 0.000,
+
+			bound[1].x,bound[1].y,bound[1].z,0.976, 0.788, 0.000,
+			bound[2].x,bound[2].y,bound[2].z,0.976, 0.788, 0.000,
+
+			bound[2].x,bound[2].y,bound[2].z,0.976, 0.788, 0.000,
+			bound[3].x,bound[3].y,bound[3].z,0.976, 0.788, 0.000,
+
+			bound[3].x,bound[3].y,bound[3].z,0.976, 0.788, 0.000,
+			bound[0].x,bound[0].y,bound[0].z,0.976, 0.788, 0.000,
+
+			bound[0].x,bound[0].y,bound[0].z,0.976, 0.788, 0.000,
+			bound[2].x,bound[2].y,bound[2].z,0.976, 0.788, 0.000,
+
+			bound[1].x,bound[1].y,bound[1].z,0.976, 0.788, 0.000,
+			bound[3].x,bound[3].y,bound[3].z,0.976, 0.788, 0.000,
+	};
+	glBindBuffer(GL_ARRAY_BUFFER,debugVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(data),data,GL_STREAM_DRAW);
+}
+void HJGraphics::ParallelLight::debugDrawLight(GLuint sharedBindPoint) {
+
+	debugShader->use();
+	debugShader->set4fm("model",glm::mat4(1));
+	debugShader->bindBlock("sharedMatrices",sharedBindPoint);
+	glBindVertexArray(debugVAO);
+	glDrawArrays(GL_LINES,0, 16);
+	glBindVertexArray(0);
+}
 HJGraphics::SpotLight::SpotLight(glm::vec3 _dir, glm::vec3 _pos, glm::vec3 _color) :Light(LightType::SpotLightType,_pos,_color){
 	linearAttenuation=0.0014f;
 	quadraticAttenuation=0.007f;
@@ -102,6 +167,59 @@ HJGraphics::SpotLight::SpotLight(glm::vec3 _dir, glm::vec3 _pos, glm::vec3 _colo
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	updateLightMatrix();
+	writeDebugData();
+}
+void HJGraphics::SpotLight::writeDebugData() {
+	glm::vec3 color(0,0,1);
+	glm::vec3 right=glm::length(glm::cross(direction,glm::vec3(0,1,0)))<0.05?
+	                glm::vec3(1,0,0):
+	                glm::normalize(glm::cross(direction,glm::vec3(0,1,0)));
+	glm::vec3 up=glm::normalize(glm::cross(right,direction));
+	glm::vec3 near=position+shadowZNear*direction;
+	glm::vec3 far=position+shadowZFar*direction;
+	float r=glm::tan(glm::radians(outerAngle))*shadowZFar;
+	glm::vec3 bound[4]={far+r*(right),far+r*(up),far+r*(-right),far+r*(-up)};
+	GLfloat data[]={
+			//position        color
+			position.x,position.y,position.z,1,0,0,
+			near.x,near.y,near.z,1,0,0,
+			near.x,near.y,near.z,0.976, 0.788, 0.000,
+			far.x,far.y,far.z,0.976, 0.788, 0.000,
+
+			position.x,position.y,position.z,0.976, 0.788, 0.000,
+			bound[0].x,bound[0].y,bound[0].z,0.976, 0.788, 0.000,
+
+			position.x,position.y,position.z,0.976, 0.788, 0.000,
+			bound[1].x,bound[1].y,bound[1].z,0.976, 0.788, 0.000,
+
+			position.x,position.y,position.z,0.976, 0.788, 0.000,
+			bound[2].x,bound[2].y,bound[2].z,0.976, 0.788, 0.000,
+
+			position.x,position.y,position.z,0.976, 0.788, 0.000,
+			bound[3].x,bound[3].y,bound[3].z,0.976, 0.788, 0.000,
+
+			bound[0].x,bound[0].y,bound[0].z,0.976, 0.788, 0.000,
+			bound[1].x,bound[1].y,bound[1].z,0.976, 0.788, 0.000,
+
+			bound[1].x,bound[1].y,bound[1].z,0.976, 0.788, 0.000,
+			bound[2].x,bound[2].y,bound[2].z,0.976, 0.788, 0.000,
+
+			bound[2].x,bound[2].y,bound[2].z,0.976, 0.788, 0.000,
+			bound[3].x,bound[3].y,bound[3].z,0.976, 0.788, 0.000,
+
+			bound[3].x,bound[3].y,bound[3].z,0.976, 0.788, 0.000,
+			bound[0].x,bound[0].y,bound[0].z,0.976, 0.788, 0.000
+	};
+	glBindBuffer(GL_ARRAY_BUFFER,debugVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(data),data,GL_STREAM_DRAW);
+}
+void HJGraphics::SpotLight::debugDrawLight(GLuint sharedBindPoint) {
+	debugShader->use();
+	debugShader->set4fm("model",glm::mat4(1));
+	debugShader->bindBlock("sharedMatrices",sharedBindPoint);
+	glBindVertexArray(debugVAO);
+	glDrawArrays(GL_LINES,0, 20);
+	glBindVertexArray(0);
 }
 /*
  * USED FOR LIGHT ILLUMINATION SHADING
@@ -111,7 +229,6 @@ void HJGraphics::SpotLight::writeLightInfoUniform(Shader *lightShader) {
 
 	glm::vec3 attenuationVec(linearAttenuation,quadraticAttenuation,constantAttenuation);
 	glm::vec2 innerOuterCos(glm::cos(glm::radians(innerAngle)),glm::cos(glm::radians(outerAngle)));
-
 	lightShader->use();
 	lightShader->set4fm("lightSpaceMatrix",lightMatrix);
 	lightShader->set3fv("lightDirection",direction);
@@ -157,7 +274,45 @@ HJGraphics::PointLight::PointLight(glm::vec3 _pos, glm::vec3 _color):Light(Light
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	updateLightMatrix();
+	writeDebugData();
+}
+void HJGraphics::PointLight::writeDebugData() {
+	glm::vec3 color(0,0,1);
+	float len=1;
+	float len2=len/std::sqrt(3);
+	GLfloat data[]={
+			//position        color
+			position.x+len,position.y,position.z,0.976, 0.788, 0.000,
+			position.x-len,position.y,position.z,0.976, 0.788, 0.000,
 
+			position.x,position.y+len,position.z,0.976, 0.788, 0.000,
+			position.x,position.y-len,position.z,0.976, 0.788, 0.000,
+
+			position.x,position.y,position.z+len,0.976, 0.788, 0.000,
+			position.x,position.y,position.z-len,0.976, 0.788, 0.000,
+
+			position.x+len2,position.y-len2,position.z-len2,0.976, 0.788, 0.000,
+			position.x-len2,position.y+len2,position.z+len2,0.976, 0.788, 0.000,
+
+			position.x-len2,position.y+len2,position.z-len2,0.976, 0.788, 0.000,
+			position.x+len2,position.y-len2,position.z+len2,0.976, 0.788, 0.000,
+
+			position.x-len2,position.y-len2,position.z+len2,0.976, 0.788, 0.000,
+			position.x+len2,position.y+len2,position.z-len2,0.976, 0.788, 0.000,
+
+			position.x+len2,position.y+len2,position.z+len2,0.976, 0.788, 0.000,
+			position.x-len2,position.y-len2,position.z-len2,0.976, 0.788, 0.000
+	};
+	glBindBuffer(GL_ARRAY_BUFFER,debugVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(data),data,GL_STREAM_DRAW);
+}
+void HJGraphics::PointLight::debugDrawLight(GLuint sharedBindPoint) {
+	debugShader->use();
+	debugShader->set4fm("model",glm::mat4(1));
+	debugShader->bindBlock("sharedMatrices",sharedBindPoint);
+	glBindVertexArray(debugVAO);
+	glDrawArrays(GL_LINES,0, 14);
+	glBindVertexArray(0);
 }
 /*
  * USED FOR LIGHT ILLUMINATION SHADING

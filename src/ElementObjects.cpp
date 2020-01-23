@@ -66,7 +66,7 @@ HJGraphics::Coordinate::Coordinate() :Coordinate(10.0f,10.0f,10.0f){}
 HJGraphics::Coordinate::Coordinate(GLfloat _xLen, GLfloat _yLen, GLfloat _zLen, glm::vec3 _xColor, glm::vec3 _yColor, glm::vec3 _zColor){
 	xLen=_xLen;yLen=_yLen;zLen=_zLen;
 	xColor=_xColor;yColor=_yColor;zColor=_zColor;
-	if(defaultShader== nullptr)defaultShader=new Shader("../shader/coordVertex.glsl","../shader/coordFragment.glsl");
+	if(defaultShader== nullptr)defaultShader=new Shader("../shader/lineVertex.glsl","../shader/lineFragment.glsl");
 	model=glm::mat4(1.0f);
 	refreshData();
 	glBindVertexArray(VAO);

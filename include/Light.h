@@ -21,6 +21,9 @@ namespace HJGraphics {
 	};
 
 	class Light {
+	protected:
+		GLuint debugVAO;
+		GLuint debugVBO;
 	public:
 		glm::vec3 position;// position parameter will be used in shadow map rendering
 		glm::vec3 color;
@@ -32,6 +35,7 @@ namespace HJGraphics {
 		GLfloat shadowZNear;
 		GLfloat shadowZFar;
 		int type;
+		static Shader* debugShader;
 
 		void setShadowMapSize(GLuint width, GLuint height);
 
@@ -40,6 +44,10 @@ namespace HJGraphics {
 		virtual void writeLightInfoUniform(Shader *lightShader);
 
 		virtual void updateLightMatrix();
+
+		virtual void debugDrawLight(GLuint sharedBindPoint);
+
+		virtual void writeDebugData();
 
 		Light();
 
@@ -55,6 +63,10 @@ namespace HJGraphics {
 		void writeLightInfoUniform(Shader *lightShader) override;
 
 		void updateLightMatrix()override;
+
+		void debugDrawLight(GLuint sharedBindPoint)override;
+
+		void writeDebugData() override ;
 	};
 
 	class SpotLight:public Light{
@@ -72,6 +84,10 @@ namespace HJGraphics {
 		void writeLightInfoUniform(Shader *lightShader) override;
 
 		void updateLightMatrix()override;
+
+		void debugDrawLight(GLuint sharedBindPoint)override;
+
+		void writeDebugData() override ;
 	};
 
 	class PointLight:public Light{
@@ -86,6 +102,10 @@ namespace HJGraphics {
 		void writeLightInfoUniform(Shader *lightShader) override;
 
 		void updateLightMatrix()override;
+
+		void debugDrawLight(GLuint sharedBindPoint)override;
+
+		void writeDebugData() override ;
 	};
 }
 #endif //TESTINGFIELD_LIGHT_H
