@@ -80,7 +80,7 @@ void HJGraphics::ParallelLight::writeLightInfoUniform(Shader *lightShader) {
 
 	lightShader->use();
 	lightShader->set4fm("lightSpaceMatrix",lightMatrix);
-	lightShader->set3fv("lightDirection",direction);
+	lightShader->set3fv("lightDirection",glm::normalize(direction));
 	lightShader->set3fv("lightColor",color);
 	lightShader->set3fv("lightPosition",position);
 	lightShader->setInt("shadowMap",10);//activated in Scene::drawLight()
@@ -231,7 +231,7 @@ void HJGraphics::SpotLight::writeLightInfoUniform(Shader *lightShader) {
 	glm::vec2 innerOuterCos(glm::cos(glm::radians(innerAngle)),glm::cos(glm::radians(outerAngle)));
 	lightShader->use();
 	lightShader->set4fm("lightSpaceMatrix",lightMatrix);
-	lightShader->set3fv("lightDirection",direction);
+	lightShader->set3fv("lightDirection",glm::normalize(direction));
 	lightShader->set3fv("lightColor",color);
 	lightShader->set3fv("lightPosition",position);
 	lightShader->set3fv("attenuationVec",attenuationVec);

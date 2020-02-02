@@ -285,91 +285,82 @@ void HJGraphics::Skybox::draw(Shader shader) {
  */
 std::string CylinderDefaultVertexCode;
 std::string CylinderDefaultFragmentCode;
-HJGraphics::Cylinder::Cylinder():Cylinder(1.0f,4.0f,50,glm::vec3(0.0f)){
+HJGraphics::Cylinder::Cylinder():Cylinder(1.0f,4.0f,50){
 
 };
-HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition,glm::vec3 _position){
+HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition){
 	radius=_radius;length=_length;partition=_partition;
 	hasShadow=true;
 	//change parameters before refreshData!!!
 	writeVerticesData();
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER,VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8* sizeof(GLfloat), nullptr);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,8* sizeof(GLfloat), (void*)(3* sizeof(GLfloat)));
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,8* sizeof(GLfloat), (void*)(6* sizeof(GLfloat)));
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER,0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+	Vertex14::setUpVAO_VBO(VAO,VBO);
+}
+HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath, std::string _normPath):Cylinder(_radius, _length, _partition) {
+	if(!_diffPath.empty()){
+		if(material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath));
+		else material.diffuseMaps[0]=Texture2D(_diffPath);
+	}
+	if(!_specPath.empty()){
+		if(material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specPath));
+		else material.specularMaps[0]=Texture2D(_specPath);
+	}
+	if(!_normPath.empty()){
+		if(material.normalMaps.empty())material.normalMaps.push_back(Texture2D(_normPath));
+		else material.normalMaps[0]=Texture2D(_normPath);
+	}
 }
 void HJGraphics::Cylinder::writeVerticesData() {
-	needUpdateVertices=false;
+	needUpdateVertices = false;
 	//-----------------------------------
 	// Generate Vertices Data
 	//-----------------------------------
-	float radio=2*3.1415926/partition;
-	//NOTE:There are 2*(partition+1) points
-	//No.partition and No.2*partition+1 are center points
-	constexpr int VERTEX_FLOAT_NUM=8;//how many float values a vertex has
-	Vertex8* vertices=new Vertex8[2*(partition+1)+4*partition];
-	Vertex8* frontFanPtr=vertices;
-	Vertex8* backFanPtr=vertices+(partition+1);
-	//generate data for left and right side triangle fans
-	for(int i=0;i<partition+1;++i){
-		frontFanPtr[i].position=glm::vec3(radius * cos(radio * i),radius * sin(radio * i),length / 2);
-		backFanPtr[i].position=glm::vec3(frontFanPtr[i].position.x,frontFanPtr[i].position.y,-frontFanPtr[i].position.z);
-		frontFanPtr[i].normal=glm::vec3(0,0,1);
-		backFanPtr[i].normal=glm::vec3(0,0,-1);
+	std::vector<Vertex8> vertices;
+	double gap = 2 * 3.1415926 / partition;
+	float fPart = partition;
+	for (int i = 0; i <= partition; ++i) {
+		vertices.emplace_back(glm::vec3(radius * cos(gap * i), radius * sin(gap * i), length / 2),
+		                      glm::vec3(glm::vec3(cos(gap * i), sin(gap * i), 0)),
+		                      glm::vec2(i / fPart, 1));
 	}
-
-	//modify center points
-	frontFanPtr[partition].position=glm::vec3(0,0,length/2);
-	backFanPtr[partition].position=glm::vec3(0,0,-length/2);
-
-	//generate data for profile triangles
-	Vertex8* profilePtr=vertices+2*(partition+1);
-	for(int i=0;i<partition;++i){//there are partition profile faces
-		glm::vec3 normal(cos(radio/2+radio*i),sin(radio/2+radio*i),0.0f);
-		int iNext=(i+1)%partition;
-		int pi=i*4;
-		//point 0 in profile i
-		profilePtr[pi].position=frontFanPtr[i].position;
-		profilePtr[pi].normal=normal;
-		//proint1 in profile i
-		profilePtr[pi+1].position=backFanPtr[i].position;
-		profilePtr[pi+1].normal=normal;
-		//point2 in profile i
-		profilePtr[pi+2].position=frontFanPtr[iNext].position;
-		profilePtr[pi+2].normal=normal;
-		//point3 in profile i
-		profilePtr[pi+3].position=backFanPtr[iNext].position;
-		profilePtr[pi+3].normal=normal;
+	for (int i = 0; i <= partition; ++i) {
+		vertices.emplace_back(glm::vec3(radius * cos(gap * i), radius * sin(gap * i), -length / 2),
+		                      glm::vec3(glm::vec3(cos(gap * i), sin(gap * i), 0)),
+		                      glm::vec2(i / fPart, 0));
 	}
-	loadVBOData(reinterpret_cast<GLfloat*>(vertices), sizeof(Vertex8)*(2*(partition+1)+4*partition));
-	delete[] vertices;
-	GLuint *indice=new GLuint[(partition+2)*2+partition*6];//6 in here means 6 vertices per face
-	//triangle fans index
-	indice[0]=partition;//center point
-	indice[partition+2]=partition+ partition+1;
-	for(int i=1;i<partition+2;++i){
-		indice[i]=(i-1)%partition;
-		indice[i+partition+2]=(partition+1-i)%partition+ partition+1;
-	}
-	//profile triangles index
-	int profileIndexBase=2*(partition+1);
-	GLuint *profileIndice=indice+(partition+2)*2;
+	const int stride=partition+1;
+	std::vector<Vertex14> faces;
+	//side faces
 	for(int i=0;i<partition;++i){
-		profileIndice[0]=profileIndexBase;profileIndice[1]=profileIndexBase+1;profileIndice[2]=profileIndexBase+2;
-		profileIndice[3]=profileIndexBase+2;profileIndice[4]=profileIndexBase+1;profileIndice[5]=profileIndexBase+3;
-		profileIndexBase+=4;
-		profileIndice+=6;
+		auto tb1=getTangentBitangent(vertices[i+stride],vertices[i+1],vertices[i]);
+		faces.emplace_back(vertices[i+stride],tb1.first,tb1.second);
+		faces.emplace_back(vertices[i+1],tb1.first,tb1.second);
+		faces.emplace_back(vertices[i],tb1.first,tb1.second);
+
+		auto tb2=getTangentBitangent(vertices[i+stride],vertices[i+stride+1],vertices[i+1]);
+		faces.emplace_back(vertices[i+stride],tb2.first,tb2.second);
+		faces.emplace_back(vertices[i+stride+1],tb2.first,tb2.second);
+		faces.emplace_back(vertices[i+1],tb2.first,tb2.second);
 	}
-	loadEBOData(indice, sizeof(GLuint)*((partition+2)*2+partition*6));//6 in here means 6 vertices per face
-	delete[] indice;
+	//triangle fans
+	Vertex8 center1(glm::vec3(0,0,length/2),glm::vec3(0,0,1),glm::vec2(0.5,0.5));
+	Vertex8 center2(glm::vec3(0,0,-length/2),glm::vec3(0,0,-1),glm::vec2(0.5,0.5));
+	for(int i=0;i<partition;++i){
+		glm::vec2 tex1(0.5+std::sin(i*gap),0.5+std::cos(i*gap));
+		glm::vec2 tex2(0.5+std::sin((i+1)*gap),0.5+std::cos((i+1)*gap));
+		auto tb1=getTangentBitangent(vertices[i].position,vertices[i+1].position,center1.position,
+				tex1,tex2,center1.texCoord);
+		faces.emplace_back(vertices[i].position,glm::vec3(0,0,1),tex1,tb1.first,tb1.second);
+		faces.emplace_back(vertices[i+1].position,glm::vec3(0,0,1),tex2,tb1.first,tb1.second);
+		faces.emplace_back(center1.position,glm::vec3(0,0,1),center1.texCoord,tb1.first,tb1.second);
+
+		auto tb2=getTangentBitangent(center2.position,vertices[i+stride+1].position,vertices[i+stride].position,
+		                             center2.texCoord,tex2,tex1);
+		faces.emplace_back(center2.position,glm::vec3(0,0,-1),center2.texCoord,tb2.first,tb2.second);
+		faces.emplace_back(vertices[i+stride+1].position,glm::vec3(0,0,-1),tex2,tb2.first,tb2.second);
+		faces.emplace_back(vertices[i+stride].position,glm::vec3(0,0,-1),tex1,tb2.first,tb2.second);
+	}
+	drawNum=faces.size();
+	loadVBOData(faces.data(), sizeof(Vertex14)*drawNum);
 }
 void HJGraphics::Cylinder::writeObjectPropertyUniform(Shader *shader) {
 	//-----------------------------------
@@ -392,9 +383,7 @@ void HJGraphics::Cylinder::draw(Shader shader) {
 	}
 	shader.use();
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLE_FAN,(partition+2),GL_UNSIGNED_INT, nullptr);
-	glDrawElements(GL_TRIANGLE_FAN,(partition+2),GL_UNSIGNED_INT, (void*)(sizeof(GLuint)*((partition+2))));
-	glDrawElements(GL_TRIANGLES,6*partition,GL_UNSIGNED_INT,(void*)(sizeof(GLuint)*((partition+2)*2)));
+	glDrawArrays(GL_TRIANGLES,0,drawNum);
 	glBindVertexArray(0);
 }
 void HJGraphics::Cylinder::drawLight(HJGraphics::Light *light) {
@@ -431,20 +420,7 @@ HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height){
 	width=_width;depth=_depth;height=_height;hasShadow=true;
 	//change parameters before refreshData!!!
 	writeVerticesData();
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER,VBO);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), nullptr);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, normal));
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, texCoord));
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, tangent));
-	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, bitangent));
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER,0);
+	Vertex14::setUpVAO_VBO(VAO,VBO);
 }
 void HJGraphics::Box::writeVerticesData() {
 	needUpdateVertices=false;
@@ -571,20 +547,7 @@ HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _texPath,G
 	}
 	//change parameters before refreshData!!!
 	writeVerticesData();
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER,VBO);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), nullptr);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, normal));
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, texCoord));
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, tangent));
-	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, bitangent));
-	glBindBuffer(GL_ARRAY_BUFFER,0);
-	glBindVertexArray(0);
+	Vertex14::setUpVAO_VBO(VAO,VBO);
 }
 HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _diffuseTexPath,std::string _specularTexPath,std::string _normalTexPath, GLfloat _texStretchRatio):Plane(_width,_height,_diffuseTexPath,_texStretchRatio){
 	if(!_specularTexPath.empty()){
@@ -650,4 +613,118 @@ void HJGraphics::Plane::drawLight(HJGraphics::Light *light) {
 	material.bindTexture();
 	light->writeLightInfoUniform(lightShader);
 	draw(*lightShader);
+}
+HJGraphics::Sphere::Sphere():Sphere(1) {
+
+}
+HJGraphics::Sphere::Sphere(float _R, int _partition, std::string _texPath) {
+	partition=_partition;
+	R=_R;
+	hasShadow=true;
+	if(!_texPath.empty()){
+		if(material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_texPath));
+		else material.diffuseMaps[0]=Texture2D(_texPath);
+	}
+	//change parameters before refreshData!!!
+	writeVerticesData();
+	Vertex14::setUpVAO_VBO(VAO,VBO);
+}
+HJGraphics::Sphere::Sphere(float _R, int _partition, std::string _diffuseTexPath, std::string _specularTexPath,
+                           std::string _normalTexPath):Sphere(_R,_partition,_diffuseTexPath) {
+	if(!_specularTexPath.empty()){
+		if(material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specularTexPath));
+		else material.specularMaps[0]=Texture2D(_specularTexPath);
+	}
+	if(!_normalTexPath.empty()){
+		if(material.normalMaps.empty())material.normalMaps.push_back(Texture2D(_normalTexPath));
+		else material.normalMaps[0]=Texture2D(_normalTexPath);
+	}
+}
+void HJGraphics::Sphere::writeVerticesData() {
+	needUpdateVertices=false;
+	std::vector<Vertex8> vertices;
+	int vertDiv=partition/2;
+	int horiDiv=partition;
+	double vertGap=3.1415926/vertDiv;
+	double horiGap=2*3.1415926/horiDiv;
+	for(int i=1;i<vertDiv;++i){//vertDiv-2 layer total
+		double phi=i*vertGap;
+		float y=R*std::cos(phi);
+		float nR=R*std::sin(phi);
+		float texY=1- static_cast<float>(i)/vertDiv;
+		for(int j=0;j<=horiDiv;++j){
+			double theta=j*horiGap;
+			float texX=static_cast<float>(j)/horiDiv;
+			vertices.emplace_back(glm::vec3(nR*std::cos(theta),y,-nR*std::sin(theta)),glm::normalize(glm::vec3(nR*std::cos(theta),y,-nR*std::sin(theta))),glm::vec2(texX,texY));
+		}
+	}
+	std::vector<Vertex14> faces;
+	const int stride=horiDiv+1;
+	for(int i=0;i<vertDiv-2;++i){
+		for(int j=0;j<horiDiv;++j){
+			//face1
+			auto tb1=getTangentBitangent(vertices[(i+1)*stride+j].position,vertices[i*stride+j+1].position,vertices[i*stride+j].position,
+			                             vertices[(i+1)*stride+j].texCoord,vertices[i*stride+j+1].texCoord,vertices[i*stride+j].texCoord);
+			faces.emplace_back(vertices[(i+1)*stride+j].position,vertices[(i+1)*stride+j].normal,vertices[(i+1)*stride+j].texCoord,tb1.first,tb1.second);
+			faces.emplace_back(vertices[i*stride+j+1].position,vertices[i*stride+j+1].normal,vertices[i*stride+j+1].texCoord,tb1.first,tb1.second);
+			faces.emplace_back(vertices[i*stride+j].position,vertices[i*stride+j].normal,vertices[i*stride+j].texCoord,tb1.first,tb1.second);
+			//face2
+			auto tb2=getTangentBitangent(vertices[(i+1)*stride+j].position,vertices[(i+1)*stride+j+1].position,vertices[i*stride+j+1].position,
+			                             vertices[(i+1)*stride+j].texCoord,vertices[(i+1)*stride+j+1].texCoord,vertices[i*stride+j+1].texCoord);
+			faces.emplace_back(vertices[(i+1)*stride+j].position,vertices[(i+1)*stride+j].normal,vertices[(i+1)*stride+j].texCoord,tb2.first,tb2.second);
+			faces.emplace_back(vertices[(i+1)*stride+j+1].position,vertices[(i+1)*stride+j+1].normal,vertices[(i+1)*stride+j+1].texCoord,tb2.first,tb2.second);
+			faces.emplace_back(vertices[i*stride+j+1].position,vertices[i*stride+j+1].normal,vertices[i*stride+j+1].texCoord,tb2.first,tb2.second);
+		}
+	}
+	const int stride2=stride*(vertDiv-3);
+	for(int j=0;j<horiDiv;++j){
+		auto tb1=getTangentBitangent(vertices[j].position,vertices[j+1].position,glm::vec3(0,R,0),
+		                             vertices[j].texCoord,vertices[j+1].texCoord,glm::vec2(vertices[j].texCoord.x,1));
+
+		faces.emplace_back(vertices[j].position,vertices[j].normal,vertices[j].texCoord,tb1.first,tb1.second);
+		faces.emplace_back(vertices[j+1].position,vertices[j+1].normal,vertices[j+1].texCoord,tb1.first,tb1.second);
+		faces.emplace_back(glm::vec3(0,R,0),glm::vec3(0,1,0),glm::vec2(vertices[j].texCoord.x,1),tb1.first,tb1.second);
+
+		auto tb2=getTangentBitangent(glm::vec3(0,-R,0),vertices[j+1+stride2].position,vertices[j+stride2].position,
+				glm::vec2(vertices[j+stride2].texCoord.x,0),vertices[j+1+stride2].texCoord,vertices[j+stride2].texCoord);
+
+		faces.emplace_back(glm::vec3(0,-R,0),glm::vec3(0,-1,0),glm::vec2(vertices[j+stride2].texCoord.x,0),tb2.first,tb2.second);
+		faces.emplace_back(vertices[j+1+stride2].position,vertices[j+1+stride2].normal,vertices[j+1+stride2].texCoord,tb2.first,tb2.second);
+		faces.emplace_back(vertices[j+stride2].position,vertices[j+stride2].normal,vertices[j+stride2].texCoord,tb2.first,tb2.second);
+	}
+	std::cout<<"face size: "<<faces.size()<<std::endl;
+	loadVBOData(faces.data(), sizeof(Vertex14)*faces.size());
+	drawNum=faces.size();
+}
+void HJGraphics::Sphere::writeObjectPropertyUniform(Shader *shader) {
+	shader->use();
+	shader->set4fm("model",model);
+	material.writeToShader(shader);
+	shader->bindBlock("sharedMatrices",sharedBindPoint);
+}
+void HJGraphics::Sphere::draw() {
+	writeObjectPropertyUniform(defaultShader);
+	material.bindTexture();
+	draw(*defaultShader);
+}
+void HJGraphics::Sphere::drawLight(Light *light) {
+	Shader *lightShader;
+	if(light->type==LightType::ParallelLightType)lightShader=parallelLightShader;
+	else if(light->type==LightType::SpotLightType)lightShader=spotLightShader;
+	else if(light->type==LightType::PointLightType)lightShader=pointLightShader;
+	else return;
+
+	writeObjectPropertyUniform(lightShader);
+	light->writeLightInfoUniform(lightShader);
+	material.bindTexture();
+	draw(*lightShader);
+}
+void HJGraphics::Sphere::draw(Shader shader) {
+	if(needUpdateVertices){
+		writeVerticesData();
+	}
+	shader.use();
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES,0,drawNum);
+	glBindVertexArray(0);
 }

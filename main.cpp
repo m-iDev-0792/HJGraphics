@@ -15,7 +15,7 @@ int main() {
 	              string("/Users/hezhenbang/Documents/Models/cubeMaps/envmap_miramar/miramar_bk.tga"),
 	              string("/Users/hezhenbang/Documents/Models/cubeMaps/envmap_miramar/miramar_ft.tga"));
 
-	Cylinder cylinder(0.25,3,100);
+	Cylinder cylinder(0.25,3,30,"../texture/brickwall.jpg","","../texture/brickwall_normal.jpg");
 	cylinder.model=translate(cylinder.model,vec3(0.0f,0.0f,1.0f));
 	cylinder.model=rotate(cylinder.model,radians(90.0f),vec3(1.0f,0.0f,0.0f));
 
@@ -23,8 +23,11 @@ int main() {
 	box.model=translate(box.model,vec3(0.0f,0.0f,-2.5f));
 //	box.material.diffuseMaps[0]=Texture2D("../texture/brickwall.jpg");
 
-//	Plane plane(8,8,"../texture/chessboard.jpg");
 	Plane plane(8,8,"../texture/brickwall.jpg","","../texture/brickwall_normal.jpg",8);
+
+	Sphere sphere(0.5,30,"../texture/brickwall.jpg","","../texture/brickwall_normal.jpg");
+	sphere.model=translate(sphere.model,vec3(0,2,0));
+
 	auto start=chrono::high_resolution_clock::now();
 	Model nanosuit("/Users/hezhenbang/Documents/Models/nanosuit/nanosuit.obj");
 	auto end=chrono::high_resolution_clock::now();
@@ -52,7 +55,8 @@ int main() {
 	scene.addObject(cylinder);
 	scene.addObject(plane);
 	scene.addObject(box);
-	scene.addObject(nanosuit);
+//	scene.addObject(nanosuit);
+	scene.addObject(sphere);
 
 	scene.addLight(pointLight);
 

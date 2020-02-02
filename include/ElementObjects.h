@@ -123,7 +123,9 @@ namespace HJGraphics {
 
 		Cylinder();
 
-		Cylinder(float _radius, float _length, GLuint _partition = 10, glm::vec3 _position = glm::vec3(0.0f, 0.0f, 0.0f));
+		Cylinder(float _radius, float _length, GLuint _partition = 10);
+
+		Cylinder(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath="", std::string _normPath="");
 
 		void draw() override;
 
@@ -135,6 +137,8 @@ namespace HJGraphics {
 
 		void writeObjectPropertyUniform(Shader *shader)override ;
 
+	private:
+		int drawNum;
 	};
 
 	class Box : public GeometryObject {
@@ -189,6 +193,36 @@ namespace HJGraphics {
 		void writeVerticesData();
 
 		void writeObjectPropertyUniform(Shader *shader)override ;
+	};
+
+	class Sphere : public GeometryObject {
+	public:
+		//properties that affect vertices data
+		int partition;
+		float R;
+
+		//properties that affect uniform data
+		Material material;
+
+		Sphere();
+
+		Sphere(float _R, int _partition=50, std::string texPath = "");
+
+		Sphere(float _R, int _partition, std::string diffuseTexPath,std::string specularTexPath,std::string normalTexPath);
+
+		void draw() override;
+
+		void draw(Shader shader) override;
+
+		void drawLight(Light *light) override;
+
+		void writeObjectPropertyUniform(Shader *shader)override ;
+
+		void writeVerticesData();
+
+	private:
+		int drawNum;
+
 	};
 }
 #endif //TESTINGFIELD_ELEMENTOBJECTS_H

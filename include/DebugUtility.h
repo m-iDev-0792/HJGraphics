@@ -10,9 +10,19 @@
 #include "OpenGLHeader.h"
 void getUniformBlockOffsets(GLuint shaderID,int length,const char* uniformNames[]);
 template <class T> void showValue(std::string name,T value);
+void getGLError();
 void getGLError(int line,std::string file);
 inline void showVec3(glm::vec3 value){
 	std::cout<<"vec3 x:"<<value.x<<" y:"<<value.y<<" z:"<<value.z<<std::endl;
+}
+template <class T> void showVec(T vec){
+	float* p= reinterpret_cast<float*>(&vec);
+	int s= sizeof(vec)/4;
+	std::cout<<"vec"<<s<<"= ";
+	for(int i=0;i<s;++i){
+		std::cout<<(*(p++))<<", ";
+	}
+	std::cout<<std::endl;
 }
 inline void showVec4(glm::vec4 value){
 	std::cout<<"vec4 x:"<<value.x<<" y:"<<value.y<<" z:"<<value.z<<" w:"<<value.w<<std::endl;

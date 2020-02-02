@@ -53,7 +53,15 @@ void HJGraphics::Window::inputCallback() {
 		//down
 		currentScene->getMainCamera()->position+=glm::vec3(0,-1,0)*moveSpeed;
 	}
-
+	if(glfwGetKey(windowPtr, GLFW_KEY_M) == GLFW_PRESS){
+		static bool wireMode=false;
+		wireMode=!wireMode;
+		if(wireMode){
+			glPolygonMode(GL_FRONT_AND_BACK ,GL_LINE);
+		}else{
+			glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL);
+		}
+	}
 }
 void HJGraphics::Window::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {

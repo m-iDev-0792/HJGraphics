@@ -25,3 +25,13 @@ void getGLError(int line,std::string file){
 	else if(e==GL_STACK_UNDERFLOW)std::cout<<"Stack underflow in line:"<<line<<" file :"<<file<<std::endl;
 	else if(e==GL_OUT_OF_MEMORY)std::cout<<"Out of memory error in line:"<<line<<" file :"<<file<<std::endl;
 }
+
+void getGLError(){
+	int e=glGetError();
+	if(e==0)std::cout<<"No error"<<std::endl;
+	else if(e==GL_INVALID_ENUM)std::cout<<"Invalid enum error"<<std::endl;
+	else if(e==GL_INVALID_VALUE)std::cout<<"Invalid value error"<<std::endl;
+	else if(e==GL_STACK_OVERFLOW)std::cout<<"Stack overflow error"<<std::endl;
+	else if(e==GL_STACK_UNDERFLOW)std::cout<<"Stack underflow"<<std::endl;
+	else if(e==GL_OUT_OF_MEMORY)std::cout<<"Out of memory error"<<std::endl;
+}
