@@ -12,6 +12,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Light.h"
+#include "FrameBuffer.h"
 #include "DebugUtility.h"
 namespace HJGraphics {
 	constexpr int BIND_POINT_MAX = 74;//different graphics card has different bind point
@@ -30,6 +31,7 @@ namespace HJGraphics {
 		GLuint sceneHeight;
 		GLfloat ambientFactor;
 		GLint defaultFramebuffer;
+		std::shared_ptr<FrameBuffer> framebuffer;
 	public:
 		GLint getDefaultFramebuffer() const;
 

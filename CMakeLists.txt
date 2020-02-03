@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(HJGraphics)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 include_directories(3rd-party)
 include_directories(include)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src HJGRAPHICS_SRC)

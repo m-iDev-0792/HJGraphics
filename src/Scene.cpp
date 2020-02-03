@@ -26,7 +26,7 @@ HJGraphics::Scene::Scene(GLuint _sceneWidth,GLuint _sceneHeight,GLfloat _ambient
 	glBufferData(GL_UNIFORM_BUFFER, 144, nullptr,GL_DYNAMIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER,sharedBindPoint,sharedUBO);
 	bindPointList[sharedBindPoint]=true;
-
+	framebuffer=std::make_shared<FrameBuffer>(800,600);
 }
 int HJGraphics::Scene::getBindPointSlot() {
 	for(int i=0;i<BIND_POINT_MAX;++i){
@@ -71,6 +71,8 @@ void HJGraphics::Scene::draw() {
 //	glPolygonMode(GL_FRONT_AND_BACK ,GL_LINE);
 	drawShadow();
 	glViewport(0,0,sceneWidth,sceneHeight);
+
+	framebuffer->enable();
 	for(auto& o:objects){
 		o->draw();
 	}
@@ -78,6 +80,7 @@ void HJGraphics::Scene::draw() {
 		l->debugDrawLight(sharedBindPoint);
 	}
 	drawLight();
+	framebuffer->drawBuffer();
 }
 void HJGraphics::Scene::drawShadow() {
 	if(lightNum<=0)return;
