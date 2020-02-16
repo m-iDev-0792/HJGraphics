@@ -4,7 +4,7 @@
 
 #ifndef TESTINGFIELD_MATERIAL_H
 #define TESTINGFIELD_MATERIAL_H
-
+#include <string>
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>

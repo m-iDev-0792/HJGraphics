@@ -5,6 +5,7 @@
 #ifndef TESTINGFIELD_GLFWWINDOWOBJECT_H
 #define TESTINGFIELD_GLFWWINDOWOBJECT_H
 
+#include <string>
 #include <iostream>
 #include "OpenGLHeader.h"
 #include "GLFW/glfw3.h"

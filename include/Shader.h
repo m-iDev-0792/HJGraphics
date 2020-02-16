@@ -8,7 +8,7 @@
 #ifndef MODEL_SHADER_H
 #define MODEL_SHADER_H
 
-
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <glm/glm.hpp>

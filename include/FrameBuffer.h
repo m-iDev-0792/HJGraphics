@@ -4,7 +4,7 @@
 
 #ifndef HJGRAPHICS_FRAMEBUFFER_H
 #define HJGRAPHICS_FRAMEBUFFER_H
-
+#include <string>
 #include <iostream>
 #include "Shader.h"
 namespace HJGraphics{

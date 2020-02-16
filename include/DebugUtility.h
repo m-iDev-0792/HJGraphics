@@ -4,7 +4,7 @@
 
 #ifndef TESTINGFIELD_DEBUGUTILITY_H
 #define TESTINGFIELD_DEBUGUTILITY_H
-
+#include <string>
 #include <iostream>
 #include <glm/glm.hpp>
 #include "OpenGLHeader.h"

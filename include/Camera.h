@@ -4,6 +4,7 @@
 
 #ifndef TESTINGFIELD_CAMERA_H
 #define TESTINGFIELD_CAMERA_H
+#include <string>
 #include <iostream>
 #include "OpenGLHeader.h"
 #include <glm/glm.hpp>

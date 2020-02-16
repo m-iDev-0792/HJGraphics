@@ -3,6 +3,8 @@
 //
 
 #include "Light.h"
+#undef near
+#undef far
 /*
  * Implementation of Light class
  */
@@ -99,8 +101,8 @@ void HJGraphics::ParallelLight::updateLightMatrix() {
 }
 void HJGraphics::ParallelLight::writeDebugData() {
 	glm::vec3 color(0,0,1);
-	glm::vec3 near=position+shadowZNear*direction;
-	glm::vec3 far=position+shadowZFar*direction;
+	glm::vec3 near= position + shadowZNear * direction;
+	glm::vec3 far= position + shadowZFar * direction;
 	glm::vec3 right=glm::normalize(glm::cross(direction,glm::vec3(0,1,0)));
 	glm::vec3 up=glm::normalize(glm::cross(right,direction));
 	float r=5;
