@@ -7,6 +7,7 @@
 
 #include <string>
 #include <iostream>
+#include <chrono>
 #include "OpenGLHeader.h"
 #include "GLFW/glfw3.h"
 #include "GLFW/glfw3native.h"
@@ -22,7 +23,7 @@ namespace HJGraphics {
 
 		virtual void framebufferSizeCallback(GLFWwindow *window, int width, int height);
 
-		virtual void inputCallback();
+		virtual void inputCallback(long long deltaTime);
 
 		virtual void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
 

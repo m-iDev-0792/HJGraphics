@@ -16,7 +16,7 @@ HJGraphics::Light::Light(int _type, glm::vec3 _pos, glm::vec3 _lightColor) {
 	type=_type;
 	position=_pos;
 	color=_lightColor;
-	if(debugShader== nullptr)debugShader=new Shader("../shader/lineVertex.glsl","../shader/lineFragment.glsl");
+	if(debugShader== nullptr)debugShader=makeShader("../shader/lineVertex.glsl","../shader/lineFragment.glsl");
 	setShadowZValue(0.1f,50.0f);
 
 	glGenFramebuffers(1,&shadowFramebuffer);

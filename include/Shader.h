@@ -17,10 +17,7 @@
 namespace HJGraphics {
 	class Shader {
 	public:
-
-		explicit Shader(const char *vertexPath, const char *fragmentPath);
-
-		explicit Shader(const char *vertexPath, const char *fragmentPath, const char *geometryPath);
+		Shader(const std::string& vsCode, const std::string& fsCode, const std::string& gsCode);
 
 		void use() { glUseProgram(id); };
 
@@ -61,8 +58,10 @@ namespace HJGraphics {
 
 		void checkCompileError(GLuint shader, std::string type);
 
-		static char *readShader(const char *filename);
 	};
+	Shader* makeShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
+	
+	std::shared_ptr<Shader> makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
 }
 
 #endif //MODEL_SHADER_H

@@ -8,12 +8,12 @@ int main() {
 	Window window(800,600,"HJGraphics");
 	Coordinate coord;
 	Grid grid(1,5,GRIDMODE::XZ);
-	Skybox skybox(15,string("/Users/hezhenbang/Documents/Models/cubeMaps/envmap_miramar/miramar_rt.tga"),
-	              string("/Users/hezhenbang/Documents/Models/cubeMaps/envmap_miramar/miramar_lf.tga"),
-	              string("/Users/hezhenbang/Documents/Models/cubeMaps/envmap_miramar/miramar_up.tga"),
-	              string("/Users/hezhenbang/Documents/Models/cubeMaps/envmap_miramar/miramar_dn.tga"),
-	              string("/Users/hezhenbang/Documents/Models/cubeMaps/envmap_miramar/miramar_bk.tga"),
-	              string("/Users/hezhenbang/Documents/Models/cubeMaps/envmap_miramar/miramar_ft.tga"));
+	Skybox skybox(15,string("../texture/envmap_miramar/miramar_rt.tga"),
+	              string("../texture/envmap_miramar/miramar_lf.tga"),
+	              string("../texture/envmap_miramar/miramar_up.tga"),
+	              string("../texture/envmap_miramar/miramar_dn.tga"),
+	              string("../texture/envmap_miramar/miramar_bk.tga"),
+	              string("../texture/envmap_miramar/miramar_ft.tga"));
 
 	Cylinder cylinder(0.25,3,30,"../texture/brickwall.jpg","","../texture/brickwall_normal.jpg");
 	cylinder.model=translate(cylinder.model,vec3(0.0f,0.0f,1.0f));
@@ -29,7 +29,7 @@ int main() {
 	sphere.model=translate(sphere.model,vec3(0,2,0));
 
 	auto start=chrono::high_resolution_clock::now();
-	Model nanosuit("/Users/hezhenbang/Documents/Models/nanosuit/nanosuit.obj");
+	Model nanosuit("../model/nanosuit/nanosuit.obj");
 	auto end=chrono::high_resolution_clock::now();
 	chrono::high_resolution_clock::duration dura=end-start;
 	auto milliDura=chrono::duration_cast<chrono::milliseconds>(dura);
@@ -55,7 +55,7 @@ int main() {
 	scene.addObject(cylinder);
 	scene.addObject(plane);
 	scene.addObject(box);
-//	scene.addObject(nanosuit);
+	//scene.addObject(nanosuit);
 	scene.addObject(sphere);
 
 	scene.addLight(pointLight);

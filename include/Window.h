@@ -47,7 +47,7 @@ namespace HJGraphics {
 
 		void framebufferSizeCallback(GLFWwindow *window, int width, int height) override;
 
-		void inputCallback() override;
+		void inputCallback(long long deltaTime) override;
 
 		void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) override;
 

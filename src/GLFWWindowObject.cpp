@@ -62,7 +62,7 @@ void HJGraphics::GLFWWindowObject::InitGLFWEnvironment(int versionMajor, int ver
 void HJGraphics::GLFWWindowObject::framebufferSizeCallback(GLFWwindow *window, int width, int height) {
 
 }
-void HJGraphics::GLFWWindowObject::inputCallback() {
+void HJGraphics::GLFWWindowObject::inputCallback(long long deltaTime) {
 
 }
 void HJGraphics::GLFWWindowObject::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
@@ -98,8 +98,12 @@ void HJGraphics::GLFWWindowObject::setCurrentContext() {
 void HJGraphics::GLFWWindowObject::run() {
 	glfwMakeContextCurrent(windowPtr);
 	customInit();
+	auto lastTime = std::chrono::high_resolution_clock::now();
 	while(!shouldClose()){
-		inputCallback();
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+		lastTime = currentTime;
+		inputCallback(deltaTime);
 		render();
 		swapBuffer();
 		static bool macMoved = false;
