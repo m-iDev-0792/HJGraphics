@@ -6,7 +6,7 @@
 #define HJGRAPHICS_VERTEX_H
 
 #include "OpenGLHeader.h"
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 namespace HJGraphics{
 	using Vertex3=glm::vec3;
 	struct Vertex5{

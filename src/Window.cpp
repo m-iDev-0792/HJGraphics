@@ -126,8 +126,6 @@ void HJGraphics::Window::run() {
 	while(!shouldClose()){
 		auto currentTime=std::chrono::high_resolution_clock::now();
 		auto frameDeltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
-		//std::cout << "delta time=" << frameDeltaTime << std::endl;
-		//inputCallback(realDeltaTime);
 		if(frameDeltaTime<1000.0/fps)continue;
 		inputCallback(frameDeltaTime);
 		lastTime = currentTime;
