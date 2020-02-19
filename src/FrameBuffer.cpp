@@ -44,7 +44,7 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,bool _enableHDR) {
 	//set up texColorBuffer
 	glGenTextures(1, &texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, HDR?GL_RGB16F:GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, HDR?GL_RGB16F:GL_RGB, width, height, 0, GL_RGB, HDR ? GL_FLOAT : GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
