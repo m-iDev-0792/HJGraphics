@@ -12,7 +12,7 @@ HJGraphics::Shader* HJGraphics::Light::debugShader=nullptr;
 HJGraphics::Light::Light() :Light(LightType::ParallelLightType,glm::vec3(0.0f,0.0f,0.0f)){
 
 }
-HJGraphics::Light::Light(int _type, glm::vec3 _pos, glm::vec3 _lightColor) {
+HJGraphics::Light::Light(LightType _type, glm::vec3 _pos, glm::vec3 _lightColor) {
 	type=_type;
 	position=_pos;
 	color=_lightColor;

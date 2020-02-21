@@ -56,13 +56,13 @@ HJGraphics::GBuffer::GBuffer(int _width, int _height) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void HJGraphics::GBuffer::enable() {
+void HJGraphics::GBuffer::bind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//WARNING! FrameBuffer will turn black if we don't clear DEPTH_BUFFER_BIT
 }
 
-void HJGraphics::GBuffer::disable() {
+void HJGraphics::GBuffer::unbind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

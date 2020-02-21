@@ -24,7 +24,14 @@ HJGraphics::Shader* HJGraphics::makeShader(const std::string& vsPath, const std:
 	auto fsCode = readText(fsPath);
 	std::string gsCode;
 	if (!gsPath.empty())gsCode = readText(gsPath);
-	return new Shader(vsCode, fsCode, gsCode);
+	Shader* shader;
+	try {
+		shader = new Shader(vsCode, fsCode, gsCode);
+	}
+	catch (...) {
+		std::cout << "Error at makeShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
+	}
+	return shader;
 }
 std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath)
 {
@@ -32,7 +39,14 @@ std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::stri
 	auto fsCode = readText(fsPath);
 	std::string gsCode;
 	if (!gsPath.empty())gsCode = readText(gsPath);
-	return std::make_shared<Shader>(vsCode, fsCode, gsCode);
+	std::shared_ptr<Shader> shader;
+	try {
+		shader = std::make_shared<Shader>(vsCode, fsCode, gsCode);
+	}
+	catch (...) {
+		std::cout << "Error at makeSharedShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
+	}
+	return shader;
 }
 
 HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode, const std::string& gsCode)
@@ -65,7 +79,12 @@ HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode,
 	glAttachShader(id, fragmentID);
 	if (!gsCode.empty())glAttachShader(id, geometryID);
 	glLinkProgram(id);
-	checkCompileError(id, "PROGRAM");
+	if(!checkCompileError(id, "PROGRAM")) {
+		std::cout << "----Compile shader program not successful----" << std::endl;
+		std::cout << "vsCode:" << std::endl << vsCode << std::endl;
+		std::cout << "fsCode:" << std::endl << fsCode << std::endl;
+		throw "loading shader failed";
+	}
 
 	glDeleteShader(vertexID);
 	glDeleteShader(fragmentID);
@@ -73,8 +92,8 @@ HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode,
 }
 
 
-void HJGraphics::Shader::checkCompileError(GLuint shader, std::string type){
-	int success;
+bool HJGraphics::Shader::checkCompileError(GLuint shader, std::string type){
+	int success=1;
 	char infoLog[1024];
 	if (type != "PROGRAM") {
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -91,4 +110,5 @@ void HJGraphics::Shader::checkCompileError(GLuint shader, std::string type){
 			          << "\n -- --------------------------------------------------- -- " << std::endl;
 		}
 	}
+	return success;
 }

@@ -101,6 +101,8 @@ namespace HJGraphics {
 		void bindTexture();
 
 		void writeToShader(Shader *shader);
+
+		void writeToShader(std::shared_ptr<Shader> shader);
 	};
 
 }

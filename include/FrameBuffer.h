@@ -21,9 +21,9 @@ namespace HJGraphics{
 		static unsigned int VAO,VBO;
 		FrameBuffer(int _width,int _height,bool _enableHDR=false);
 
-		void enable();
+		void bind();
 
-		void disable();
+		void unbind();
 
 		void drawBuffer();
 	};

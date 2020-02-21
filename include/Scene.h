@@ -14,6 +14,9 @@
 #include "Light.h"
 #include "FrameBuffer.h"
 #include "DebugUtility.h"
+
+#include "DeferredRenderer.h"
+
 namespace HJGraphics {
 	constexpr int BIND_POINT_MAX = 74;//different graphics card has different bind point
 
@@ -42,8 +45,14 @@ namespace HJGraphics {
 		std::vector<BasicGLObject *> objects;
 		std::vector<Camera *> cameras;
 		std::vector<Light *> lights;
+		std::vector<std::shared_ptr<ParallelLight>> parallesLights;
+		std::vector<std::shared_ptr<SpotLight>> spotLights;
+		std::vector<std::shared_ptr<PointLight>> pointLights;
+		
 		Camera *mainCamera;
 	public:
+		DeferredRenderer render;
+		
 		static bool bindPointList[BIND_POINT_MAX];
 
 		Scene();

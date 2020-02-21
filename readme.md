@@ -52,11 +52,16 @@ Fig.3 model loading support (only `obj` format fully supported now)
 ![](attachment/material.png)
 
 Fig.4 basic material
-
+# Dependencies
+- Assimp 5.0.1 64bit
+- GLFW 3.3 64bit
+- GLAD
+- glm
+- stb
 # Continue advancing
 - [ ] SSAO
 - [ ] Load scene via JSON file
-- [ ] HDR
+- [x] HDR
 - [ ] Deferred shading option
 
 # Acknowledge

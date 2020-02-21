@@ -34,7 +34,7 @@ namespace HJGraphics {
 		GLuint shadowMapHeight;
 		GLfloat shadowZNear;
 		GLfloat shadowZFar;
-		int type;
+		LightType type;
 		static Shader* debugShader;
 
 		void setShadowMapSize(GLuint width, GLuint height);
@@ -51,7 +51,7 @@ namespace HJGraphics {
 
 		Light();
 
-		Light(int _type, glm::vec3 _pos,glm::vec3 _lightColor = glm::vec3(1.0f, 1.0f, 1.0f));
+		Light(LightType _type, glm::vec3 _pos,glm::vec3 _lightColor = glm::vec3(1.0f, 1.0f, 1.0f));
 	};
 
 	class ParallelLight:public Light{
@@ -68,7 +68,7 @@ namespace HJGraphics {
 
 		void writeDebugData() override ;
 	};
-
+	class Mesh2;
 	class SpotLight:public Light{
 	public:
 		glm::vec3 direction;
@@ -78,6 +78,8 @@ namespace HJGraphics {
 		GLfloat linearAttenuation;
 		GLfloat quadraticAttenuation;
 		GLfloat constantAttenuation;
+
+		std::shared_ptr<Mesh2> boundingMesh;
 
 		SpotLight(glm::vec3 _dir,glm::vec3 _pos= glm::vec3(0.0f, 5.0f, 0.0f),glm::vec3 _color= glm::vec3(1.0f, 1.0f, 1.0f));
 
@@ -96,6 +98,8 @@ namespace HJGraphics {
 		GLfloat quadraticAttenuation;
 		GLfloat constantAttenuation;
 		glm::mat4 lightMatrices[6];
+
+		std::shared_ptr<Mesh2> boundingMesh;
 
 		PointLight(glm::vec3 _pos= glm::vec3(0.0f, 5.0f, 0.0f),glm::vec3 _color= glm::vec3(1.0f, 1.0f, 1.0f));
 

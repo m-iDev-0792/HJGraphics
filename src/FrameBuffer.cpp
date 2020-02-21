@@ -76,11 +76,11 @@ void HJGraphics::FrameBuffer::drawBuffer() {
 	glBindVertexArray(0);
 	glEnable(GL_DEPTH_TEST);
 }
-void HJGraphics::FrameBuffer::enable() {
+void HJGraphics::FrameBuffer::bind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//WARNING! FrameBuffer will turn black if we don't clear DEPTH_BUFFER_BIT
 }
-void HJGraphics::FrameBuffer::disable() {
+void HJGraphics::FrameBuffer::unbind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

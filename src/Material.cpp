@@ -234,3 +234,7 @@ void HJGraphics::Material::writeToShader(Shader *shader) {
 	shader->setFloat("material.reflective",reflective);
 	shader->setFloat("material.reflective",refractive);
 }
+
+void HJGraphics::Material::writeToShader(std::shared_ptr<Shader> shader) {
+	writeToShader(shader.get());
+}

@@ -54,6 +54,7 @@ void HJGraphics::Scene::addLight(Light &light) {
 void HJGraphics::Scene::setMainCamera(Camera &camera) {
 	if(mainCamera!= nullptr)mainCamera->sharedUBO=0;//take back the sharedVBO
 	mainCamera=&camera;
+	render.camera = &camera;
 	camera.sharedUBO=sharedUBO;
 }
 /*
@@ -72,7 +73,7 @@ void HJGraphics::Scene::draw() {
 	drawShadow();
 	glViewport(0,0,sceneWidth,sceneHeight);
 
-	framebuffer->enable();
+	framebuffer->bind();
 	for(auto& o:objects){
 		o->draw();
 	}
@@ -81,6 +82,9 @@ void HJGraphics::Scene::draw() {
 	}
 	drawLight();
 	framebuffer->drawBuffer();
+
+	
+	render.test();
 }
 void HJGraphics::Scene::drawShadow() {
 	if(lightNum<=0)return;

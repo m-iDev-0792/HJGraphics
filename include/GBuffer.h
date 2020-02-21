@@ -7,7 +7,10 @@
 #include "OpenGLHeader.h"
 
 namespace HJGraphics {
+	class DeferredRenderer;
+
 	class GBuffer {
+		friend DeferredRenderer;
 	protected:
 		GLuint fbo;
 		GLuint rbo;
@@ -19,9 +22,9 @@ namespace HJGraphics {
 	public:
 		GBuffer(int _width, int _height);
 
-		void enable();
+		void bind();
 
-		void disable();
+		void unbind();
 
 		void copyDepthBitToDefaultBuffer();
 	};

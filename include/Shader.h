@@ -56,7 +56,7 @@ namespace HJGraphics {
 	private:
 		GLuint id;
 
-		void checkCompileError(GLuint shader, std::string type);
+		bool checkCompileError(GLuint shader, std::string type);
 
 	};
 	Shader* makeShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
