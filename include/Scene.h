@@ -15,8 +15,6 @@
 #include "FrameBuffer.h"
 #include "DebugUtility.h"
 
-#include "DeferredRenderer.h"
-
 namespace HJGraphics {
 	constexpr int BIND_POINT_MAX = 74;//different graphics card has different bind point
 
@@ -51,7 +49,6 @@ namespace HJGraphics {
 		
 		Camera *mainCamera;
 	public:
-		DeferredRenderer render;
 		
 		static bool bindPointList[BIND_POINT_MAX];
 

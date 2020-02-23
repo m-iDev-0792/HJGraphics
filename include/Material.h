@@ -58,13 +58,6 @@ namespace HJGraphics {
 
 
 	};
-	class ShadowMap : public Texture{
-	public:
-		ShadowMap();
-		ShadowMap(int _width,int _height);
-		int texWidth;
-		int texHeight;
-	};
 
 	class CubeMapTexture : public Texture {
 	public:
@@ -93,6 +86,10 @@ namespace HJGraphics {
 		std::vector<Texture> specularMaps;
 		std::vector<Texture> normalMaps;
 		std::vector<Texture> heightMaps;
+
+		static std::shared_ptr<Shader> pointLightShader;
+		static std::shared_ptr<Shader> parallelLightShader;
+		static std::shared_ptr<Shader> spotLightShader;
 
 		Material();
 

@@ -18,13 +18,19 @@ namespace HJGraphics {
 		void test();
 		
 		void debugRenderGBuffer();
+
+		void render();
 	private:
+		//for debug usage
 		static std::shared_ptr<Shader> debugShader;
 		static unsigned int VAO, VBO;
 		
 		std::shared_ptr<Shader> gBufferShader;
+		
 		std::vector< std::shared_ptr<Mesh2>> meshes;
 		std::shared_ptr<GBuffer> gBuffer;
+
+		//shadow maps
 
 		void renderMesh(std::shared_ptr<Mesh2> m);
 

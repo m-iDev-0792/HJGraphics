@@ -95,35 +95,7 @@ void HJGraphics::SolidTexture::setColor(glm::vec3 _color) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texMinFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texMagFilter);
 }
-/*
- * Implementation of Shadow Map
- */
-HJGraphics::ShadowMap::ShadowMap():ShadowMap(1024,1024) {
-	texWrapS=GL_CLAMP_TO_EDGE;
-	texWrapT=GL_CLAMP_TO_EDGE;
-	texMinFilter=GL_LINEAR;
-	texMagFilter=GL_LINEAR;
-}
-HJGraphics::ShadowMap::ShadowMap(int _width, int _height):Texture(GL_TEXTURE_2D) {
-	texWidth=_width;
-	texHeight=_height;
 
-	texWrapS=GL_CLAMP_TO_BORDER;
-	texWrapT=GL_CLAMP_TO_BORDER;
-	texMinFilter=GL_LINEAR;
-	texMagFilter=GL_LINEAR;
-
-	glActiveTexture(GL_TEXTURE0+textureN);
-	glBindTexture(GL_TEXTURE_2D,id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, texWidth, texHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texMinFilter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texMagFilter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapT);
-	GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-}
 /*
  * Implementation of CubeMapTexture
  */
@@ -180,10 +152,14 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string rightTex, const 
 /*
  * Implementation of Material
  */
+std::shared_ptr<HJGraphics::Shader> HJGraphics::Material::pointLightShader = nullptr;
+std::shared_ptr<HJGraphics::Shader> HJGraphics::Material::parallelLightShader = nullptr;
+std::shared_ptr<HJGraphics::Shader> HJGraphics::Material::spotLightShader = nullptr;
 HJGraphics::Material::Material():Material(glm::vec3(0.9f,0.9f,0.9f),glm::vec3(1.0f,1.0f,1.0f)) {
 
 }
 HJGraphics::Material::Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor) {
+	//TODO. load defualt shader
 	diffuseMaps.push_back(SolidTexture(_diffuseColor));
 	specularMaps.push_back(SolidTexture(_specularColor));
 

@@ -111,6 +111,16 @@ void HJGraphics::DeferredRenderer::debugRenderGBuffer() {
 	glDrawArrays(GL_TRIANGLES, 0, 24);
 }
 
+void HJGraphics::DeferredRenderer::render() {
+	//1. rendering shadow map
+
+	//2. rendering G-buffer
+
+	//3. deferred shading
+
+	//4. custom forward rendering
+}
+
 void HJGraphics::DeferredRenderer::renderMesh(std::shared_ptr<Mesh2> m) {
 	m->material.bindTexture();
 	m->material.writeToShader(gBufferShader);
