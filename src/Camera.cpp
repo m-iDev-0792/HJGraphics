@@ -25,5 +25,4 @@ void HJGraphics::Camera::updateMatrices() {
 	view = glm::lookAt(position, position + direction, cameraUp);
 	projection=glm::mat4(1.0f);
 	projection=glm::perspective<float>(glm::radians(fov),aspect,zNear,zFar);
-
 }

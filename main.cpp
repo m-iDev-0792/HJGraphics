@@ -1,6 +1,5 @@
 #include <iostream>
 #include "HJGraphics.h"
-
 using namespace std;
 using namespace glm;
 using namespace HJGraphics;
@@ -46,7 +45,6 @@ int main() {
 	glm::vec3 cameraPos=glm::vec3(5.0f,5.0f,10.0f);
 	glm::vec3 cameraDirection=glm::vec3(0.0f, 0.0f, 0.0f)-cameraPos;
 	Camera camera(cameraPos,cameraDirection);
-
 	Scene scene;
 	scene.addCamera(camera);
 	scene.addObject(coord);

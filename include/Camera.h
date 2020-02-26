@@ -22,10 +22,12 @@ namespace HJGraphics {
 		glm::vec3 direction;
 		glm::vec3 front;
 		glm::vec3 up;
+		
 		float fov;
 		float aspect;
 		float zNear;
 		float zFar;
+		
 		glm::mat4 view;
 		glm::mat4 projection;
 		Camera();

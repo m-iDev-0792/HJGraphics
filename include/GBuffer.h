@@ -17,6 +17,9 @@ namespace HJGraphics {
 		GLuint gPosition;
 		GLuint gNormal;
 		GLuint gDiffSpec;
+		GLuint gShinAlphaReflectRefract;
+		GLuint gAmbiDiffSpecStrength;
+		
 		int width;
 		int height;
 	public:

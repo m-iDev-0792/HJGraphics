@@ -14,6 +14,7 @@ namespace HJGraphics {
 		int height;
 		ShadowMap();
 		ShadowMap(int _width, int _height);
+		void bindFBO();
 	};
 	class ShadowCubeMap {
 	public:
@@ -22,7 +23,8 @@ namespace HJGraphics {
 		int width;
 		int height;
 		ShadowCubeMap();
-		ShadowCubeMap(int _width, int _height);
+		ShadowCubeMap(int _width, int _height=0);
+		void bindFBO();
 	};
 }
 

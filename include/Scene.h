@@ -16,12 +16,14 @@
 #include "DebugUtility.h"
 
 namespace HJGraphics {
+	class DeferredRenderer;
 	constexpr int BIND_POINT_MAX = 74;//different graphics card has different bind point
 
 /*
  * Declare of Scene class ,which is used to manage objects lights and cameras in a scene
  */
 	class Scene {
+		friend DeferredRenderer;
 	private:
 		int getBindPointSlot();
 

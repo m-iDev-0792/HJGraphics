@@ -308,6 +308,7 @@ void HJGraphics::PointLight::writeDebugData() {
 	glBindBuffer(GL_ARRAY_BUFFER,debugVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(data),data,GL_STREAM_DRAW);
 }
+
 void HJGraphics::PointLight::debugDrawLight(GLuint sharedBindPoint) {
 	debugShader->use();
 	debugShader->set4fm("model",glm::mat4(1));
@@ -337,7 +338,6 @@ void HJGraphics::PointLight::writeLightInfoUniform(Shader *lightShader) {
 void HJGraphics::PointLight::updateLightMatrix() {
 
 	glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), static_cast<float>(shadowMapWidth)/shadowMapHeight, shadowZNear, shadowZFar);
-	std::vector<glm::mat4> shadowTransforms;
 
 	lightMatrices[0]=shadowProj * glm::lookAt(position, position + glm::vec3(1.0,0.0,0.0), glm::vec3(0.0,-1.0,0.0));
 	lightMatrices[1]=shadowProj * glm::lookAt(position, position + glm::vec3(-1.0,0.0,0.0), glm::vec3(0.0,-1.0,0.0));
@@ -346,4 +346,77 @@ void HJGraphics::PointLight::updateLightMatrix() {
 	lightMatrices[4]=shadowProj * glm::lookAt(position, position + glm::vec3(0.0,0.0,1.0), glm::vec3(0.0,-1.0,0.0));
 	lightMatrices[5]=shadowProj * glm::lookAt(position, position + glm::vec3(0.0,0.0,-1.0), glm::vec3(0.0,-1.0,0.0));
 
+}
+
+
+////////////////////////////////////////////////////////////
+///
+///           Deferred shading version
+///
+///////////////////////////////////////////////////////////
+std::shared_ptr<HJGraphics::Mesh2> HJGraphics::ParallelLight2::boundingMesh = nullptr;
+std::vector<glm::mat4> HJGraphics::ParallelLight2::getLightMatrix() {
+	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);//TODO. potential bug. when direction is close to worldUp
+	glm::vec3 lightRight = glm::normalize(glm::cross(worldUp, direction));
+	glm::vec3 lightUp = glm::cross(direction, lightRight);
+	glm::mat4 lightView = glm::lookAt(position, position + direction, lightUp);
+	glm::mat4 lightProjection;
+	lightProjection = glm::ortho(-range, range, -range, range, shadowZNear, shadowZFar);
+	std::vector<glm::mat4> mats;
+	mats.push_back(lightProjection * lightView);
+	return mats;
+}
+void HJGraphics::ParallelLight2::writeUniform(std::shared_ptr<Shader> lightShader) {
+	auto mat = getLightMatrix();
+	lightShader->set4fm("lightSpaceMatrix", mat[0]);
+	lightShader->set3fv("lightDirection", glm::normalize(direction));
+	lightShader->set3fv("lightColor", color);
+	lightShader->set3fv("lightPosition", position);
+}
+
+std::vector<glm::mat4> HJGraphics::SpotLight2::getLightMatrix() {
+	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 lightRight = glm::normalize(glm::cross(worldUp, direction));
+	glm::vec3 lightUp = glm::cross(direction, lightRight);
+	glm::mat4 lightView = glm::lookAt(position, position + direction, lightUp);
+	glm::mat4 lightProjection;
+	lightProjection = glm::perspective<float>(glm::radians(2 * outerAngle), 1.0f, shadowZNear, shadowZFar);
+	std::vector<glm::mat4> mats;
+	mats.push_back(lightProjection * lightView);
+	return mats;
+}
+
+void HJGraphics::SpotLight2::writeUniform(std::shared_ptr<Shader> lightShader) {
+	glm::vec3 attenuationVec(linearAttenuation, quadraticAttenuation, constantAttenuation);
+	glm::vec2 innerOuterCos(glm::cos(glm::radians(innerAngle)), glm::cos(glm::radians(outerAngle)));
+	
+	auto mat = getLightMatrix();
+	lightShader->set4fm("lightSpaceMatrix", mat[0]);
+	lightShader->set3fv("lightDirection", glm::normalize(direction));
+	lightShader->set3fv("lightColor", color);
+	lightShader->set3fv("lightPosition", position);
+	lightShader->set3fv("attenuationVec", attenuationVec);
+	lightShader->set2fv("innerOuterCos", innerOuterCos);
+}
+
+std::vector<glm::mat4> HJGraphics::PointLight2::getLightMatrix() {
+	std::vector<glm::mat4> lightMatrices;
+	glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, shadowZNear, shadowZFar);
+	lightMatrices[0] = shadowProj * glm::lookAt(position, position + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0));
+	lightMatrices[1] = shadowProj * glm::lookAt(position, position + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0));
+	lightMatrices[2] = shadowProj * glm::lookAt(position, position + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
+	lightMatrices[3] = shadowProj * glm::lookAt(position, position + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0));
+	lightMatrices[4] = shadowProj * glm::lookAt(position, position + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0));
+	lightMatrices[5] = shadowProj * glm::lookAt(position, position + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0));
+
+	return lightMatrices;
+}
+
+void HJGraphics::PointLight2::writeUniform(std::shared_ptr<Shader> lightShader) {
+	//no need to update lightMatrices here because point light shading doesn't need light matrices data
+	glm::vec3 attenuationVec(linearAttenuation, quadraticAttenuation, constantAttenuation);
+	lightShader->set3fv("lightColor", color);
+	lightShader->set3fv("lightPosition", position);
+	lightShader->set3fv("attenuationVec", attenuationVec);
+	lightShader->setFloat("shadowZFar", shadowZFar);
 }

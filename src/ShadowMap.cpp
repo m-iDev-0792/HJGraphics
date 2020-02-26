@@ -1,6 +1,6 @@
-﻿#include "ShadowMap.h"
+#include "ShadowMap.h"
 
-HJGraphics::ShadowMap::ShadowMap():ShadowMap(1024,1024) {}
+HJGraphics::ShadowMap::ShadowMap() :ShadowMap(1024, 1024) {}
 
 HJGraphics::ShadowMap::ShadowMap(int _width, int _height) {
 	width = _width;
@@ -27,11 +27,15 @@ HJGraphics::ShadowMap::ShadowMap(int _width, int _height) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-HJGraphics::ShadowCubeMap::ShadowCubeMap():ShadowCubeMap(1024,1024) {}
+void HJGraphics::ShadowMap::bindFBO() {
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+}
+
+HJGraphics::ShadowCubeMap::ShadowCubeMap() :ShadowCubeMap(1024, 1024) {}
 
 HJGraphics::ShadowCubeMap::ShadowCubeMap(int _width, int _height) {
 	width = _width;
-	height = _height;
+	height = _width;//CAUTION! we set height identical to width to make light space perspective camera ratio equal to 1.0f. see PointLight::getLightMatrix
 	//set up shadow map texture
 	glGenTextures(1, &tex);
 	glActiveTexture(GL_TEXTURE0);
@@ -51,4 +55,8 @@ HJGraphics::ShadowCubeMap::ShadowCubeMap(int _width, int _height) {
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void HJGraphics::ShadowCubeMap::bindFBO() {
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 }
