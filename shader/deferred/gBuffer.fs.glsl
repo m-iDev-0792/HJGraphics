@@ -2,8 +2,8 @@
 layout (location = 0) out vec3 gPosition;
 layout (location = 1) out vec3 gNormal;
 layout (location = 2) out vec4 gDiffSpec;
-layout (location = 2) out vec4 gShinAlphaReflectRefract;
-layout (location = 2) out vec3 gAmbiDiffSpecStrength;
+layout (location = 3) out vec4 gShinAlphaReflectRefract;
+layout (location = 4) out vec3 gAmbiDiffSpecStrength;
 
 
 in vec3 normal;
@@ -12,9 +12,9 @@ in vec3 position;
 in mat3 TBN;
 
 struct Material{
-    vec3 ambientStrength;
-    vec3 diffuseStrength;
-    vec3 specularStrength;
+    float ambientStrength;
+    float diffuseStrength;
+    float specularStrength;
 
     float shininess;
     float alpha;
@@ -58,5 +58,10 @@ void main(){
 		N = normalize(N * 2.0 - 1.0);
 		gNormal=normalize(TBN * N);
 	}
+    //gShinAlphaReflectRefract
+    gShinAlphaReflectRefract=vec4(material.shininess,material.alpha,material.reflective,material.refractive);
+
+    //gAmbiDiffSpecStrength
+    gAmbiDiffSpecStrength=vec3(material.ambientStrength,material.diffuseStrength,material.specularStrength);
 	
 }

@@ -24,35 +24,36 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 		return;
 	}
 	float move = moveSpeed * deltaTime;
+	auto pCamera=renderer->mainScene->getMainCamera();
 	if(glfwGetKey(windowPtr, GLFW_KEY_A) == GLFW_PRESS){
 		//left
-		glm::vec3 cameraRight=glm::normalize(glm::cross(currentScene->getMainCamera()->direction,glm::vec3(0.0f,1.0f,0.0f)));
-		currentScene->getMainCamera()->position-=cameraRight*move;
+		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
+		pCamera->position-=cameraRight*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_D) == GLFW_PRESS){
 		//right
-		glm::vec3 cameraRight=glm::normalize(glm::cross(currentScene->getMainCamera()->direction,glm::vec3(0.0f,1.0f,0.0f)));
-		currentScene->getMainCamera()->position+=cameraRight*move;
+		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
+		pCamera->position+=cameraRight*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_W) == GLFW_PRESS){
 		//front
-		glm::vec3 cameraRight=glm::normalize(glm::cross(currentScene->getMainCamera()->direction,glm::vec3(0.0f,1.0f,0.0f)));
+		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
 		glm::vec3 cameraFront=glm::normalize(glm::cross(glm::vec3(0.0f,1.0f,0.0f),cameraRight));
-		currentScene->getMainCamera()->position+=cameraFront*move;
+		pCamera->position+=cameraFront*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_S) == GLFW_PRESS){
 		//back
-		glm::vec3 cameraRight=glm::normalize(glm::cross(currentScene->getMainCamera()->direction,glm::vec3(0.0f,1.0f,0.0f)));
+		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
 		glm::vec3 cameraFront=glm::normalize(glm::cross(glm::vec3(0.0f,1.0f,0.0f),cameraRight));
-		currentScene->getMainCamera()->position-=cameraFront*move;
+		pCamera->position-=cameraFront*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_Q) == GLFW_PRESS){
 		//up
-		currentScene->getMainCamera()->position+=glm::vec3(0,1,0)*move;
+		pCamera->position+=glm::vec3(0,1,0)*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_E) == GLFW_PRESS){
 		//down
-		currentScene->getMainCamera()->position+=glm::vec3(0,-1,0)*move;
+		pCamera->position+=glm::vec3(0,-1,0)*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_M) == GLFW_PRESS){
 		static bool wireMode=false;
@@ -65,9 +66,10 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 	}
 }
 void HJGraphics::Window::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
+	auto pCamera=renderer->mainScene->getMainCamera();
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		mouseDown = true;
-		originalDirection=currentScene->getMainCamera()->direction;
+		originalDirection=pCamera->direction;
 	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
 		mouseDown = false;
@@ -101,14 +103,16 @@ void HJGraphics::Window::mouseCallback(GLFWwindow *window, double xpos, double y
 	pitchMat=glm::rotate(pitchMat,glm::radians(pitch),cameraRight);
 	glm::vec4 newDir=yawMat*glm::vec4(originalDirection,0.0f);
 	newDir=pitchMat*newDir;
-	currentScene->getMainCamera()->direction=newDir;
+	auto pCamera=renderer->mainScene->getMainCamera();
+	pCamera->direction=newDir;
 
 }
 void HJGraphics::Window::scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
 	if (fov >= 1 && fov <= 60)fov -= yoffset;
 	if (fov <= 1)fov = 1.0f;
 	else if (fov >= 60)fov = 60.0f;
-	currentScene->getMainCamera()->fov=fov;
+	auto pCamera=renderer->mainScene->getMainCamera();
+	pCamera->fov=fov;
 }
 void HJGraphics::Window::framebufferSizeCallback(GLFWwindow *window, int width, int height) {
 
@@ -118,6 +122,7 @@ void HJGraphics::Window::customInit() {
 	glEnable(GL_LINE_SMOOTH);
 //	glEnable(GL_CULL_FACE);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+	if(renderer)renderer->renderInit();
 }
 void HJGraphics::Window::run() {
 	glfwMakeContextCurrent(windowPtr);
@@ -137,8 +142,11 @@ void HJGraphics::Window::run() {
 void HJGraphics::Window::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0, 0, 0, 1);
-	currentScene->writeSharedUBOData();
-	currentScene->draw();
+	if(renderer)renderer->render();
+	else{
+		currentScene->writeSharedUBOData();
+		currentScene->draw();
+	}
 }
 
 //-------------------------- NEW FUNCTION ----------------------------------//

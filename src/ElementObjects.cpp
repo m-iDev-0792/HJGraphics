@@ -19,16 +19,16 @@ HJGraphics::Shader* HJGraphics::GeometryObject::pointLightShader= nullptr;
 
 HJGraphics::GeometryObject::GeometryObject(){
 	//Ambient Light Shader
-	if(defaultShader == nullptr)defaultShader=makeShader("../shader/geometryAmbientVertex.glsl","../shader/geometryAmbientFragment.glsl");
+	if(defaultShader == nullptr)defaultShader=makeShader("../shader/forward/geometryAmbientVertex.glsl","../shader/forward/geometryAmbientFragment.glsl");
 	//Shadow Shader
-	if(shadowShader == nullptr)shadowShader=makeShader("../shader/geometryShadowVertex.glsl","../shader/geometryShadowFragment.glsl");
-	if(pointShadowShader == nullptr)pointShadowShader=makeShader("../shader/geometryPointShadowVertex.glsl",
-			"../shader/geometryPointShadowFragment.glsl",
-			"../shader/geometryPointShadowGeometry.glsl");
+	if(shadowShader == nullptr)shadowShader=makeShader("../shader/forward/geometryShadowVertex.glsl","../shader/forward/geometryShadowFragment.glsl");
+	if(pointShadowShader == nullptr)pointShadowShader=makeShader("../shader/forward/geometryPointShadowVertex.glsl",
+			"../shader/forward/geometryPointShadowFragment.glsl",
+			"../shader/forward/geometryPointShadowGeometry.glsl");
 	//Light Illumination Shader
-	if(parallelLightShader == nullptr)parallelLightShader=makeShader("../shader/geometryLightVertex.glsl","../shader/geometryParallelLightFragment.glsl");
-	if(spotLightShader == nullptr)spotLightShader=makeShader("../shader/geometryLightVertex.glsl","../shader/geometrySpotLightFragment.glsl");
-	if(pointLightShader == nullptr)pointLightShader=makeShader("../shader/geometryLightVertex.glsl","../shader/geometryPointLightFragment.glsl");
+	if(parallelLightShader == nullptr)parallelLightShader=makeShader("../shader/forward/geometryLightVertex.glsl","../shader/forward/geometryParallelLightFragment.glsl");
+	if(spotLightShader == nullptr)spotLightShader=makeShader("../shader/forward/geometryLightVertex.glsl","../shader/forward/geometrySpotLightFragment.glsl");
+	if(pointLightShader == nullptr)pointLightShader=makeShader("../shader/forward/geometryLightVertex.glsl","../shader/forward/geometryPointLightFragment.glsl");
 
 	needUpdateVertices=false;
 }
@@ -66,7 +66,7 @@ HJGraphics::Coordinate::Coordinate() :Coordinate(10.0f,10.0f,10.0f){}
 HJGraphics::Coordinate::Coordinate(GLfloat _xLen, GLfloat _yLen, GLfloat _zLen, glm::vec3 _xColor, glm::vec3 _yColor, glm::vec3 _zColor){
 	xLen=_xLen;yLen=_yLen;zLen=_zLen;
 	xColor=_xColor;yColor=_yColor;zColor=_zColor;
-	if(defaultShader== nullptr)defaultShader=makeShader("../shader/lineVertex.glsl","../shader/lineFragment.glsl");
+	if(defaultShader== nullptr)defaultShader=makeShader("../shader/forward/lineVertex.glsl","../shader/forward/lineFragment.glsl");
 	model=glm::mat4(1.0f);
 	refreshData();
 	glBindVertexArray(VAO);
@@ -116,7 +116,7 @@ HJGraphics::Grid::Grid(GLfloat _unit, GLuint _cellNum, int _mode, glm::vec3 _col
 	cellNum=_cellNum;
 	mode=_mode;
 	lineColor=_color;
-	if(defaultShader== nullptr)defaultShader=makeShader("../shader/gridVertex.glsl","../shader/gridFragment.glsl");
+	if(defaultShader== nullptr)defaultShader=makeShader("../shader/forward/gridVertex.glsl","../shader/forward/gridFragment.glsl");
 
 	XYModel=glm::mat4(1.0f);
 	XYModel=glm::rotate(XYModel,glm::radians(90.0f),glm::vec3(1.0f,0.0f,0.0f));
@@ -201,7 +201,7 @@ HJGraphics::Skybox::Skybox(float _radius,std::string rightTex, std::string leftT
                std::string downTex,std::string frontTex, std::string backTex):cubeMapTexture(rightTex,leftTex,upTex,downTex,frontTex,backTex){
 	std::string tex[6]={rightTex,leftTex,upTex,downTex,frontTex,backTex};
 	radius=_radius;
-	if(defaultShader== nullptr)defaultShader=makeShader("../shader/skyboxVertex.glsl","../shader/skyboxFragment.glsl");
+	if(defaultShader== nullptr)defaultShader=makeShader("../shader/forward/skyboxVertex.glsl","../shader/forward/skyboxFragment.glsl");
 	defaultShader->use();
 	defaultShader->setInt("skybox",0);
 	GLfloat cubeVertices[]={

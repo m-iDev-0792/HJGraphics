@@ -25,7 +25,7 @@ namespace HJGraphics {
 		glm::vec3 clearColor;
 		
 		std::vector<std::shared_ptr<Mesh2>> meshes;
-		std::vector<Camera> cameras;
+		std::vector<Camera*> cameras;
 		
 		std::vector<std::shared_ptr<ParallelLight2>> parallelLights;
 		std::vector<std::shared_ptr<SpotLight2>> spotLights;
@@ -39,7 +39,7 @@ namespace HJGraphics {
 
 		void addObject(std::shared_ptr<Mesh2> mesh);
 
-		void addCamera(const Camera &camera);
+		void addCamera(Camera &camera);
 
 		void addLight(std::shared_ptr<Light2> light);
 

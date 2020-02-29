@@ -1,46 +1,29 @@
 #version 330 core
 #define BLINN
 #define PCF_SHADOW
-const float gamma = 2.2;
 out vec4 FragColor;
-in vec3 tangentPos;
-in vec3 worldPos;
-in vec3 normal;
-in vec2 texCoord;
-in vec3 tangentCameraPos;
-in vec3 tangentLightPos;
-in vec3 tangentLightDirection;
-struct Material{
-    vec3 ambientStrength;
-    vec3 diffuseStrength;
-    vec3 specularStrength;
 
-    float shininess;
-    float alpha;
-    float reflective;
-    float refractive;
+//********common uniform begin********
+uniform vec3 cameraPosition;
 
-    int diffuseMapNum;
-    int specularMapNum;
-    int normalMapNum;
-    int heightMapNum;
-
-    sampler2D diffuseMap;
-    sampler2D specularMap;
-    sampler2D normalMap;
-    sampler2D heightMap;
-};
-//rendered object info
-uniform mat4 model;
-uniform Material material;
+//gBuffer - texture binding point 0~4
+uniform sampler2D gPosition;
+uniform sampler2D gNormal;
+uniform sampler2D gDiffSpec;
+uniform sampler2D gShinAlphaReflectRefract;
+uniform sampler2D gAmbiDiffSpecStrength;
+uniform vec2 gBufferSize;
+//********common uniform end********
 
 //light Info
 uniform vec3 lightPosition;
-uniform vec3 lightDirection;
 uniform vec3 lightColor;
+uniform mat4 lightSpaceMatrix;
 uniform vec3 attenuationVec;//x=linear y=quadratic z=constant
+uniform bool hasShadow;
 uniform float shadowZFar;
 uniform samplerCube shadowMap;
+
 float pointShadowCalculation(vec3 fragPosLightSpace);
 vec3 pointLight();
 const vec3 sampleOffsetDirections[20] = vec3[]
@@ -55,7 +38,6 @@ void main()
 {
     vec3 Color=pointLight();
     FragColor=vec4(Color,1.0f);
-    FragColor.rgb = pow(FragColor.rgb, vec3(1.0/gamma));
 }
 //////////////////////////////////////////////////////////////////
 float pointShadowCalculation(vec3 fragPosLightSpace)
@@ -84,43 +66,52 @@ float pointShadowCalculation(vec3 fragPosLightSpace)
 }
 
 vec3 pointLight(){
+    vec2 texCoord=vec2(gl_FragCoord.x/gBufferSize.x,gl_FragCoord.y/gBufferSize.y);
     //default color
-    vec3 diffuseSampler=vec3(1.0,1.0,1.0);
-    vec3 specularSampler=vec3(1.0,1.0,1.0);
-    if(material.diffuseMapNum>0){
-        diffuseSampler=texture(material.diffuseMap,texCoord).rgb;
-        diffuseSampler = pow(diffuseSampler, vec3(gamma));
-    }
-    if(material.specularMapNum>0){
-        specularSampler=texture(material.specularMap,texCoord).rgb;
-    }
-    vec3 normalSampler=normal;
-    if(material.normalMapNum>0){
-        normalSampler=texture(material.normalMap,texCoord).rgb;
-        normalSampler=normalize(2*normalSampler-1);
-    }
-    //计算阴影
-    float shadowFactor=pointShadowCalculation(worldPos);
+    vec4 diffSpec=texture(gDiffSpec,texCoord);
+    vec3 diffColor=diffSpec.rgb;
+    vec3 specColor=vec3(diffSpec.a);
+    vec3 normal=texture(gNormal,texCoord).rgb;
+    vec3 position=texture(gPosition,texCoord).xyz;
 
-    //漫反射光
-    vec3 lightDir=normalize(tangentPos-tangentLightPos);
-    float diff=max(dot(-lightDir,normalSampler),0.0);
-    vec3 diffuse=diff * diffuseSampler * material.diffuseStrength * lightColor;
-    //反射高光
-    vec3 viewDir=normalize(tangentCameraPos-tangentPos);
+    //other parameters
+    vec4 saff=texture(gShinAlphaReflectRefract,texCoord);
+    float shininess=saff.x;
+    float alpha=saff.y;
+    float reflection=saff.z;
+    float refraction=saff.w;
+
+    //strength
+    vec3 strength=texture(gAmbiDiffSpecStrength,texCoord).xyz;
+    float ambiStrength=strength.x;
+    float diffStrength=strength.y;
+    float specStrength=strength.z;
+
+    //calculate shadow
+    float shadowFactor=hasShadow?pointShadowCalculation(position):1.0f;
+
+    //diffuse color
+    vec3 lightDir=normalize(position-lightPosition);
+    float diff=max(dot(-lightDir,normal),0.0);
+    vec3 diffuse=diff * diffColor * diffStrength * lightColor;
+
+    //specular color
+    vec3 viewDir=normalize(cameraPosition-position);
     #ifdef BLINN
     //blinn-phong
         vec3 halfwayDir=normalize(viewDir-lightDir);
-        float spec=pow(max(dot(normalSampler,halfwayDir),0.0),material.shininess);
-        vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+        float spec=pow(max(dot(normal,halfwayDir),0.0),shininess);
+        vec3 specular=spec * specColor * specStrength * lightColor;
     #else
     //phong
-        vec3 reflectDir=reflect(lightDir,normalSampler);
-        float spec=pow(max(dot(viewDir,reflectDir),0.0),material.shininess);
-        vec3 specular=spec * specularSampler * material.specularStrength * lightColor;
+        vec3 reflectDir=reflect(lightDir,normal);
+        float spec=pow(max(dot(viewDir,reflectDir),0.0),shininess);
+        vec3 specular=spec * specColor * specStrength * lightColor;
     #endif
-    //计算衰减
-    float distance=length(tangentPos-tangentLightPos);
+
+    //attenuation
+    float distance=length(position-lightPosition);
     float attenuation=1.0/(attenuationVec.z+attenuationVec.x * distance+attenuationVec.y * distance*distance);
+
     return (diffuse+specular)*attenuation*shadowFactor;
 }

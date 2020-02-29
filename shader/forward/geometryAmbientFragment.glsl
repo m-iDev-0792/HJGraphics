@@ -4,9 +4,9 @@ out vec4 FragColor;
 in vec2 texCoord;
 in float globalAmbientFactor;
 struct Material{
-    vec3 ambientStrength;
-    vec3 diffuseStrength;
-    vec3 specularStrength;
+    float ambientStrength;
+    float diffuseStrength;
+    float specularStrength;
 
     float shininess;
     float alpha;

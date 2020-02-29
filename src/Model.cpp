@@ -33,8 +33,8 @@ HJGraphics::Mesh::Mesh(std::vector<HJGraphics::Vertex14> _vertices, std::vector<
 	vertices=_vertices;
 	writeVerticesData();
 	material.shininess=48;
-	material.specularStrength=glm::vec3(0.3f);
-	material.diffuseStrength=glm::vec3(0.7f);
+	material.specularStrength=0.3f;
+	material.diffuseStrength=0.7f;
 }
 void HJGraphics::Mesh::draw() {
 	writeObjectPropertyUniform(defaultShader);

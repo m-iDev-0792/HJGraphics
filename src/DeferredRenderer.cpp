@@ -3,43 +3,42 @@
 std::shared_ptr<HJGraphics::Shader> HJGraphics::DeferredRenderer::debugShader = nullptr;
 unsigned int HJGraphics::DeferredRenderer::VAO;
 unsigned int HJGraphics::DeferredRenderer::VBO;
-
-HJGraphics::DeferredRenderer::DeferredRenderer() {
+HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	if (debugShader == nullptr) {
 		debugShader = makeSharedShader("../shader/deferred/debug.vs.glsl", "../shader/deferred/debug.fs.glsl");
 		float quadVertices[] = {
-			// positions   // texCoords  //tag
-			-1.0f,  0.0f,  0.0f, 1.0f,   0.5,
-			-1.0f, -1.0f,  0.0f, 0.0f,   0.5,
-			0.0f, -1.0f,  1.0f, 0.0f,   0.5,
+				// positions   // texCoords  //tag
+				-1.0f,  0.0f,  0.0f, 1.0f,   0.5,
+				-1.0f, -1.0f,  0.0f, 0.0f,   0.5,
+				0.0f, -1.0f,  1.0f, 0.0f,   0.5,
 
-			-1.0f,  0.0f,  0.0f, 1.0f,   0.5,
-			0.0f, -1.0f,  1.0f, 0.0f,   0.5,
-			0.0f,  0.0f,  1.0f, 1.0f,   0.5,
+				-1.0f,  0.0f,  0.0f, 1.0f,   0.5,
+				0.0f, -1.0f,  1.0f, 0.0f,   0.5,
+				0.0f,  0.0f,  1.0f, 1.0f,   0.5,
 
-			0.0f,  0.0f,  0.0f, 1.0f,   1.5,
-			0.0f, -1.0f,  0.0f, 0.0f,   1.5,
-			1.0f, -1.0f,  1.0f, 0.0f,   1.5,
+				0.0f,  0.0f,  0.0f, 1.0f,   1.5,
+				0.0f, -1.0f,  0.0f, 0.0f,   1.5,
+				1.0f, -1.0f,  1.0f, 0.0f,   1.5,
 
-			0.0f,  0.0f,  0.0f, 1.0f,   1.5,
-			1.0f, -1.0f,  1.0f, 0.0f,   1.5,
-			1.0f,  0.0f,  1.0f, 1.0f,   1.5,
+				0.0f,  0.0f,  0.0f, 1.0f,   1.5,
+				1.0f, -1.0f,  1.0f, 0.0f,   1.5,
+				1.0f,  0.0f,  1.0f, 1.0f,   1.5,
 
-			0.0f,  1.0f,  0.0f, 1.0f,   2.5,
-			0.0f, 0.0f,  0.0f, 0.0f,   2.5,
-			1.0f, 0.0f,  1.0f, 0.0f,   2.5,
+				0.0f,  1.0f,  0.0f, 1.0f,   2.5,
+				0.0f, 0.0f,  0.0f, 0.0f,   2.5,
+				1.0f, 0.0f,  1.0f, 0.0f,   2.5,
 
-			0.0f,  1.0f,  0.0f, 1.0f,   2.5,
-			1.0f, 0.0f,  1.0f, 0.0f,   2.5,
-			1.0f,  1.0f,  1.0f, 1.0f,   2.5,
+				0.0f,  1.0f,  0.0f, 1.0f,   2.5,
+				1.0f, 0.0f,  1.0f, 0.0f,   2.5,
+				1.0f,  1.0f,  1.0f, 1.0f,   2.5,
 
-			-1.0f,  1.0f,  0.0f, 1.0f,   3.5,
-			-1.0f, 0.0f,  0.0f, 0.0f,   3.5,
-			0.0f, 0.0f,  1.0f, 0.0f,   3.5,
+				-1.0f,  1.0f,  0.0f, 1.0f,   3.5,
+				-1.0f, 0.0f,  0.0f, 0.0f,   3.5,
+				0.0f, 0.0f,  1.0f, 0.0f,   3.5,
 
-			-1.0f,  1.0f,  0.0f, 1.0f,   3.5,
-			0.0f, 0.0f,  1.0f, 0.0f,   3.5,
-			0.0f,  1.0f,  1.0f, 1.0f,   3.5,
+				-1.0f,  1.0f,  0.0f, 1.0f,   3.5,
+				0.0f, 0.0f,  1.0f, 0.0f,   3.5,
+				0.0f,  1.0f,  1.0f, 1.0f,   3.5,
 		};
 		//genrate buffer
 		glGenVertexArrays(1, &VAO);
@@ -59,30 +58,27 @@ HJGraphics::DeferredRenderer::DeferredRenderer() {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 	}
+
+	{
+		screenQuad=std::make_shared<Mesh2>();
+		std::vector<glm::vec3> v{glm::vec3(-1,1,0),glm::vec3(-1,-1,0),glm::vec3(1,1,0),
+		                         glm::vec3(-1,-1,0),glm::vec3(1,-1,0),glm::vec3(1,1,0)};
+		screenQuad->setVertices(v);
+		screenQuad->commitData();
+	}
+	width=_width;height=_height;
 	gBufferShader = makeSharedShader("../shader/deferred/gBuffer.vs.glsl", "../shader/deferred/gBuffer.fs.glsl");
-	gBuffer = std::make_shared<GBuffer>(800, 600);
+	gBuffer = std::make_shared<GBuffer>(_width, _height);
 
 	pointLightShadowShader = makeSharedShader("../shader/deferred/shadow.vs.glsl", "../shader/deferred/shadow.point.fs.glsl", "../shader/deferred/shadow.point.gs.glsl");
 	parallelSpotLightShadowShader = makeSharedShader("../shader/deferred/shadow.vs.glsl", "../shader/deferred/shadow.fs.glsl");
-}
 
-void HJGraphics::DeferredRenderer::test() {
-	gBuffer->bind();
-	gBufferShader->use();
-	camera->updateMatrices();
-	gBufferShader->set4fm("view", camera->view);
-	gBufferShader->set4fm("projection", camera->projection);
-	for (auto& m : meshes) {
-		gBufferShader->set4fm("model", m->model);
-		m->material.bindTexture();
-		m->material.writeToShader(gBufferShader);
-		renderMesh(m);
-	}
-	gBuffer->unbind();
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0, 0, 0, 1);
-	debugRenderGBuffer();
+	pointLightShader = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.point.fs.glsl");
+	parallelLightShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.parallel.fs.glsl");
+	spotLightShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.spot.fs.glsl");
+	ambientShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.ambient.fs.glsl");
 }
+HJGraphics::DeferredRenderer::DeferredRenderer():DeferredRenderer(800,600) {}
 
 void HJGraphics::DeferredRenderer::debugRenderGBuffer() {
 	debugShader->use();
@@ -106,94 +102,177 @@ void HJGraphics::DeferredRenderer::render() {
 	//-----------------------------
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0, 0, 0, 1);
-	parallelSpotLightShadowShader->use();
-	for(int i=0;i<mainScene->parallelLights.size();++i) {
-		auto light = mainScene->parallelLights[i];
-		if (!light->castShadow)continue;
-		auto lightMatrix = light->getLightMatrix();
-		auto sm = shadowMaps[light];
-		sm->bindFBO();
-		parallelSpotLightShadowShader->set4fm("lightMatrix", lightMatrix[0]);
-		for (auto& m : meshes) {
-			parallelSpotLightShadowShader->set4fm("model", m->model);
-			if(m->castShadow) renderMesh(m);
+	if(mainScene->parallelLights.size()>0) {
+		parallelSpotLightShadowShader->use();
+		for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
+			auto light = mainScene->parallelLights[i];
+			if (!light->castShadow)continue;
+			auto lightMatrix = light->getLightMatrix();
+			auto sm = shadowMaps[light];
+			glViewport(0,0,sm->width,sm->height);
+			sm->bindFBO();
+			glClear(GL_DEPTH_BUFFER_BIT);
+			parallelSpotLightShadowShader->set4fm("lightMatrix", lightMatrix[0]);
+			for (auto &m : mainScene->meshes) {
+				if (m->castShadow) {
+					parallelSpotLightShadowShader->set4fm("model", m->model);
+					renderMesh(m);
+				}
+			}
 		}
 	}
-	
-	for (int i = 0; i < mainScene->spotLights.size(); ++i) {
-		auto light = mainScene->spotLights[i];
-		if (!light->castShadow)continue;
-		auto lightMatrix = light->getLightMatrix();
-		auto sm = shadowMaps[light];
-		sm->bindFBO();
-		parallelSpotLightShadowShader->set4fm("lightMatrix", lightMatrix[0]);
-		for (auto& m : meshes) {
-			parallelSpotLightShadowShader->set4fm("model", m->model);
-			if (m->castShadow) renderMesh(m);
+	if(mainScene->spotLights.size()>0) {
+		if(mainScene->parallelLights.empty())parallelSpotLightShadowShader->use();
+		for (int i = 0; i < mainScene->spotLights.size(); ++i) {
+			auto light = mainScene->spotLights[i];
+			if (!light->castShadow)continue;
+			auto lightMatrix = light->getLightMatrix();
+			auto sm = shadowMaps[light];
+			glViewport(0,0,sm->width,sm->height);
+			sm->bindFBO();
+			glClear(GL_DEPTH_BUFFER_BIT);
+			parallelSpotLightShadowShader->set4fm("lightMatrix", lightMatrix[0]);
+			for (auto &m : mainScene->meshes) {
+				if (m->castShadow) {
+					parallelSpotLightShadowShader->set4fm("model", m->model);
+					renderMesh(m);
+				}
+			}
 		}
 	}
-	pointLightShadowShader->use();
-	for (int i = 0; i < mainScene->pointLights.size(); ++i) {
-		auto light = mainScene->pointLights[i];
-		if (!light->castShadow)continue;
-		auto lightMatrices = light->getLightMatrix();
-		auto sm = shadowCubeMaps[light];
-		sm->bindFBO();
-		pointLightShadowShader->set4fm("lightMatrix", glm::mat4(1.0f));
-		for (int j = 0; j < 6; ++j)pointLightShadowShader->set4fm(std::string("lightMatrices[")+std::to_string(j)+std::string("]"), lightMatrices[j]);
-		pointLightShadowShader->set3fv("lightPos", light->position);
-		pointLightShadowShader->setFloat("shadowZFar", light->shadowZFar);
-		for (auto& m : meshes) {
-			pointLightShadowShader->set4fm("model", m->model);
-			if (m->castShadow) renderMesh(m);
+	if(mainScene->pointLights.size()>0) {
+		pointLightShadowShader->use();
+		for (int i = 0; i < mainScene->pointLights.size(); ++i) {
+			auto light = mainScene->pointLights[i];
+			if (!light->castShadow)continue;
+			auto lightMatrices = light->getLightMatrix();
+			auto sm = shadowCubeMaps[light];
+			glViewport(0,0,sm->width,sm->height);
+			sm->bindFBO();
+			glClear(GL_DEPTH_BUFFER_BIT);
+			pointLightShadowShader->set4fm("lightMatrix", glm::mat4(1.0f));
+			for (int j = 0; j < 6; ++j)
+				pointLightShadowShader->set4fm(std::string("shadowMatrices[") + std::to_string(j) + std::string("]"),
+				                               lightMatrices[j]);
+			pointLightShadowShader->set3fv("lightPos", light->position);
+			pointLightShadowShader->setFloat("shadowZFar", light->shadowZFar);
+			for (auto &m : mainScene->meshes) {
+				if (m->castShadow) {
+					pointLightShadowShader->set4fm("model", m->model);
+					renderMesh(m);
+				}
+			}
 		}
 	}
 	//-----------------------------
 	//2. rendering G-buffer
 	//-----------------------------
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0, 0, 0, 1);
+	glViewport(0,0,width,height);
 	gBuffer->bind();
 	gBufferShader->use();
-	camera->updateMatrices();
-	gBufferShader->set4fm("view", camera->view);
-	gBufferShader->set4fm("projection", camera->projection);
-	for (auto& m : meshes) {
+	mainScene->mainCamera->updateMatrices();
+	gBufferShader->set4fm("view", mainScene->mainCamera->view);
+	gBufferShader->set4fm("projection", mainScene->mainCamera->projection);
+	for (auto& m : mainScene->meshes) {
 		gBufferShader->set4fm("model", m->model);
 		m->material.bindTexture();
 		m->material.writeToShader(gBufferShader);
 		renderMesh(m);
 	}
 	gBuffer->unbind();
-	
+//	debugRenderGBuffer();
+//	return;
 	//-----------------------------
 	//3. deferred shading
 	//-----------------------------
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0, 0, 0, 1);
-	glm::mat4 transform = camera->projection*camera->view;
-	parallelLightShader->use();
-	parallelLightShader->set4fm("transform", transform);
-	for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
-		auto light = mainScene->parallelLights[i];
-		renderMesh(light->boundingMesh);
+	glClearColor(1, 1, 1, 1);
+	//bind gBuffer texture
+	gBuffer->bindTextures();
+	glm::mat4 transform = mainScene->mainCamera->projection*mainScene->mainCamera->view;
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE,GL_ONE);
+	glDisable(GL_DEPTH_TEST);
+	//[3.1]-------ambient shading----------
+	ambientShader->use();
+	ambientShader->set4fm("transform", glm::mat4(1.0f));
+	ambientShader->set4fm("model", glm::mat4(1.0f));
+	ambientShader->setFloat("globalAmbiendStrength",0.5);
+	gBuffer->writeUniform(ambientShader);
+	renderMesh(screenQuad);
+
+	//[3.2]-------parallel light shading----------
+	if(mainScene->parallelLights.size()>0) {
+		parallelLightShader->use();
+		//write uniforms
+		//for vertex shader
+		parallelLightShader->set4fm("transform", glm::mat4(1.0f));
+		parallelLightShader->set4fm("model", glm::mat4(1.0f));
+		//for fragment shader
+		parallelLightShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+		parallelLightShader->setInt("shadowMap", 10);
+		gBuffer->writeUniform(parallelLightShader);
+		for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
+			auto light = mainScene->parallelLights[i];
+			light->writeUniform(parallelLightShader);
+			if (light->castShadow) {
+				glActiveTexture(GL_TEXTURE10);
+				glBindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+			}
+			renderMesh(light->boundingMesh);
+		}
 	}
-	spotLightShader->use();
-	spotLightShader->set4fm("transform", transform);
-	for (int i = 0; i < mainScene->spotLights.size(); ++i) {
-		auto light = mainScene->spotLights[i];
-		renderMesh(light->boundingMesh);
+
+	//[3.3]-------spotlight shading----------
+	if(mainScene->spotLights.size()>0) {
+		spotLightShader->use();
+		//write uniforms
+		//for vertex shader
+		spotLightShader->set4fm("transform", glm::mat4(1.0f));//TODO. for now transform=mat4(1.0)
+		spotLightShader->set4fm("model", glm::mat4(1.0f));//TODO. for now model=mat4(1.0)
+		//for fragment shader
+		spotLightShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+		spotLightShader->setInt("shadowMap", 10);
+		gBuffer->writeUniform(spotLightShader);
+		for (int i = 0; i < mainScene->spotLights.size(); ++i) {
+			auto light = mainScene->spotLights[i];
+			light->writeUniform(spotLightShader);
+			if (light->castShadow) {
+				glActiveTexture(GL_TEXTURE10);
+				glBindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+			}
+			renderMesh(light->boundingMesh);
+		}
 	}
-	pointLightShader->use();
-	pointLightShader->set4fm("transform", transform);
-	for (int i = 0; i < mainScene->pointLights.size(); ++i) {
-		auto light = mainScene->pointLights[i];
-		renderMesh(light->boundingMesh);
+
+	//[3.4]-------point light shading----------
+	if(mainScene->pointLights.size()>0) {
+		pointLightShader->use();
+		//write uniforms
+		//for vertex shader
+		pointLightShader->set4fm("transform", glm::mat4(1.0f));//TODO. for now transform=mat4(1.0)
+		pointLightShader->set4fm("model", glm::mat4(1.0));//TODO. for now model=mat4(1.0)
+		//for fragment shader
+		pointLightShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+		pointLightShader->setInt("shadowMap", 10);
+		gBuffer->writeUniform(pointLightShader);
+		for (int i = 0; i < mainScene->pointLights.size(); ++i) {
+			auto light = mainScene->pointLights[i];
+			light->writeUniform(pointLightShader);
+			if (light->castShadow) {
+				glActiveTexture(GL_TEXTURE10);
+				glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->tex);
+			}
+			renderMesh(light->boundingMesh);
+		}
 	}
-	
+	glEnable(GL_DEPTH_TEST);
 	//-----------------------------
 	//4. custom forward rendering
 	//-----------------------------
+	//copy depth
+	glDisable(GL_BLEND);
 }
 
 void HJGraphics::DeferredRenderer::renderInit() {

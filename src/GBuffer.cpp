@@ -89,3 +89,24 @@ void HJGraphics::GBuffer::copyDepthBitToDefaultBuffer() {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 写入到默认帧缓冲
 	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST );
 }
+
+void HJGraphics::GBuffer::bindTextures() {
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D,gPosition);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D,gNormal);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D,gDiffSpec);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D,gShinAlphaReflectRefract);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D,gAmbiDiffSpecStrength);
+}
+void HJGraphics::GBuffer::writeUniform(std::shared_ptr<Shader> shader) {
+	shader->setInt("gPosition",0);
+	shader->setInt("gNormal",1);
+	shader->setInt("gDiffSpec",2);
+	shader->setInt("gShinAlphaReflectRefract",3);
+	shader->setInt("gAmbiDiffSpecStrength",4);
+	shader->set2fv("gBufferSize",glm::vec2(width,height));
+}

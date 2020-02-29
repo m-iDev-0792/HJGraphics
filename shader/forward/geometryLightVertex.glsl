@@ -12,9 +12,9 @@ out vec3 tangentCameraPos;
 out vec3 tangentLightPos;
 out vec3 tangentLightDirection;
 struct Material{
-    vec3 ambientStrength;
-    vec3 diffuseStrength;
-    vec3 specularStrength;
+    float ambientStrength;
+    float diffuseStrength;
+    float specularStrength;
 
     float shininess;
     float alpha;

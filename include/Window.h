@@ -8,6 +8,7 @@
 #include <chrono>
 #include "Scene.h"
 #include "GLFWWindowObject.h"
+#include "DeferredRenderer.h"
 namespace HJGraphics {
 
 	class Window : public GLFWWindowObject {
@@ -26,7 +27,7 @@ namespace HJGraphics {
 
 		int getFPS(){return fps;}
 
-
+		std::shared_ptr<DeferredRenderer> renderer;
 	protected:
 		std::vector<Scene *> scenes;
 		Scene *currentScene;

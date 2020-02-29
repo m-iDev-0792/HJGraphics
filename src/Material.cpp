@@ -17,15 +17,15 @@ HJGraphics::Texture::~Texture() {
 /*
  * Implementation of Texture2D
  */
-HJGraphics::Texture2D::Texture2D(const std::string _path) :Texture(GL_TEXTURE_2D){
+HJGraphics::Texture2D::Texture2D(const std::string &path) : Texture(GL_TEXTURE_2D){
 	glGenTextures(1,&id);
 	texWrapS=GL_REPEAT;
 	texWrapT=GL_REPEAT;
 	texMinFilter=GL_LINEAR_MIPMAP_LINEAR;
 	texMagFilter=GL_LINEAR;
-	loadFromPath(_path);
+	loadFromPath(path);
 }
-HJGraphics::Texture2D::Texture2D(const std::string _path,GLint _texWrap):Texture(GL_TEXTURE_2D){
+HJGraphics::Texture2D::Texture2D(const std::string &_path, const GLint& _texWrap): Texture(GL_TEXTURE_2D){
 	glGenTextures(1,&id);
 	texWrapS=texWrapT=_texWrap;
 	texMinFilter=GL_LINEAR_MIPMAP_LINEAR;
@@ -39,11 +39,11 @@ HJGraphics::Texture2D::Texture2D() :Texture(GL_TEXTURE_2D){
 	texMinFilter=GL_LINEAR_MIPMAP_LINEAR;
 	texMagFilter=GL_LINEAR;
 }
-void HJGraphics::Texture2D::loadFromPath(const std::string _path) {
+void HJGraphics::Texture2D::loadFromPath(const std::string &_path) {
 	glActiveTexture(GL_TEXTURE0+textureN); // 在绑定纹理之前先激活纹理单元
 	glBindTexture(GL_TEXTURE_2D, id);
 	int imgWidth,imgHeight,imgChannel;
-	auto data=stbi_load(_path.c_str(),&imgWidth,&imgHeight,&imgChannel,0);
+	auto data=stbi_load(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
 
 	if(data!= nullptr) {
 		GLuint format;
@@ -67,7 +67,7 @@ void HJGraphics::Texture2D::loadFromPath(const std::string _path) {
 		stbi_image_free(data);
 		path=_path;
 	}else{
-		std::cout<<"ERROR @ Texture2D::loadFromPath : can't load image: "<<_path<<std::endl;
+		std::cout << "ERROR @ Texture2D::loadFromPath : can't load image: " << _path << std::endl;
 	}
 
 }
@@ -107,8 +107,9 @@ HJGraphics::CubeMapTexture::CubeMapTexture() :Texture(GL_TEXTURE_CUBE_MAP){
 	texMinFilter=GL_LINEAR;
 	texMagFilter=GL_LINEAR;
 }
-HJGraphics::CubeMapTexture::CubeMapTexture(const std::string rightTex, const std::string leftTex, const std::string upTex, const std::string downTex,
-                               const std::string frontTex, const std::string backTex,const GLuint texN):Texture(GL_TEXTURE_CUBE_MAP,texN) {
+HJGraphics::CubeMapTexture::CubeMapTexture(const std::string &rightTex, const std::string &leftTex, const std::string &upTex, const std::string &downTex,
+                                           const std::string &frontTex, const std::string &backTex,
+                                           GLuint texN): Texture(GL_TEXTURE_CUBE_MAP, texN) {
 	textureN=texN;
 	texWrapS=GL_CLAMP_TO_EDGE;
 	texWrapT=GL_CLAMP_TO_EDGE;
@@ -118,8 +119,8 @@ HJGraphics::CubeMapTexture::CubeMapTexture(const std::string rightTex, const std
 	glGenTextures(1,&id);
 	loadFromPath(rightTex,leftTex,upTex,downTex,frontTex,backTex);
 }
-void HJGraphics::CubeMapTexture::loadFromPath(const std::string rightTex, const std::string leftTex, const std::string upTex, const std::string downTex,
-                                  const std::string frontTex, const std::string backTex) {
+void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex, const std::string &downTex,
+                                              const std::string &frontTex, const std::string &backTex) {
 	std::string tex[6]={rightTex,leftTex,upTex,downTex,frontTex,backTex};
 	glActiveTexture(GL_TEXTURE0+textureN);
 	glBindTexture(GL_TEXTURE_CUBE_MAP,id);
@@ -163,9 +164,9 @@ HJGraphics::Material::Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor
 	diffuseMaps.push_back(SolidTexture(_diffuseColor));
 	specularMaps.push_back(SolidTexture(_specularColor));
 
-	ambientStrength=glm::vec3(1.0f);
-	diffuseStrength=glm::vec3(1.0f);
-	specularStrength=glm::vec3(0.3f);
+	ambientStrength=1.0f;
+	diffuseStrength=1.0f;
+	specularStrength=0.3f;
 
 	shininess=32;
 	alpha=1;
@@ -201,9 +202,9 @@ void HJGraphics::Material::writeToShader(Shader *shader) {
 	shader->setInt("material.heightMapNum",heightMaps.size());
 	shader->setInt("material.heightMap",3);
 
-	shader->set3fv("material.ambientStrength",ambientStrength);
-	shader->set3fv("material.diffuseStrength",diffuseStrength);
-	shader->set3fv("material.specularStrength",specularStrength);
+	shader->setFloat("material.ambientStrength",ambientStrength);
+	shader->setFloat("material.diffuseStrength",diffuseStrength);
+	shader->setFloat("material.specularStrength",specularStrength);
 
 	shader->setFloat("material.shininess",shininess);
 	shader->setFloat("material.alpha",alpha);

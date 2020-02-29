@@ -79,8 +79,6 @@ namespace HJGraphics {
 		GLfloat quadraticAttenuation;
 		GLfloat constantAttenuation;
 
-		std::shared_ptr<Mesh2> boundingMesh;
-
 		SpotLight(glm::vec3 _dir,glm::vec3 _pos= glm::vec3(0.0f, 5.0f, 0.0f),glm::vec3 _color= glm::vec3(1.0f, 1.0f, 1.0f));
 
 		void writeLightInfoUniform(Shader *lightShader) override;
@@ -98,8 +96,6 @@ namespace HJGraphics {
 		GLfloat quadraticAttenuation;
 		GLfloat constantAttenuation;
 		glm::mat4 lightMatrices[6];
-
-		std::shared_ptr<Mesh2> boundingMesh;
 
 		PointLight(glm::vec3 _pos= glm::vec3(0.0f, 5.0f, 0.0f),glm::vec3 _color= glm::vec3(1.0f, 1.0f, 1.0f));
 
@@ -139,14 +135,9 @@ namespace HJGraphics {
 		float range;
 	public:
 		ParallelLight2(glm::vec3 _dir, glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f),
-		               glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f), float _range=10) {
-			direction = _dir;
-			position = _pos;
-			color = _color;
-			range = _range > 0 ? _range : -_range;
-			type = LightType::ParallelLightType;
-		}
-		static std::shared_ptr<Mesh2> boundingMesh;//TODO. generate boudningMesh
+		               glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f), float _range=10);
+
+		static std::shared_ptr<Mesh2> boundingMesh;
 		
 		std::vector<glm::mat4> getLightMatrix() override;
 		
@@ -162,20 +153,10 @@ namespace HJGraphics {
 		float constantAttenuation;
 
 	public:
-		std::shared_ptr<Mesh2> boundingMesh;//TODO. generate boudningMesh
+		std::shared_ptr<Mesh2> boundingMesh;
 		
-		SpotLight2(glm::vec3 _dir, glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f)){
-			direction = _dir;
-			position = _pos;
-			color = _color;
-			type = LightType::SpotLightType;
+		SpotLight2(glm::vec3 _dir, glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f));
 
-			linearAttenuation = 0.0014f;
-			quadraticAttenuation = 0.007f;
-			constantAttenuation = 1.0f;
-			innerAngle = 10.0f;
-			outerAngle = 20.0f;
-		}
 		void setAngle(float _inner,float _outer) {
 			innerAngle = _inner;
 			outerAngle = _outer;
@@ -189,23 +170,17 @@ namespace HJGraphics {
 		std::vector<glm::mat4> getLightMatrix() override;
 
 		void writeUniform(std::shared_ptr<Shader> lightShader) override;
+
+		void generateBoundingMesh();
 	};
 	class PointLight2:public Light2 {
 		float linearAttenuation;
 		float quadraticAttenuation;
 		float constantAttenuation;
 	public:
-		std::shared_ptr<Mesh2> boundingMesh;//TODO. generate boudningMesh
+		std::shared_ptr<Mesh2> boundingMesh;
 		
-		PointLight2(glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f)) {
-			position = _pos;
-			color = _color;
-			type = LightType::PointLightType;
-
-			linearAttenuation = 0.0014f;
-			quadraticAttenuation = 0.007f;
-			constantAttenuation = 1.0f;
-		}
+		PointLight2(glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f));
 		
 		void setAttenuation(float _linear, float _quadratic, float _constant) {
 			linearAttenuation = _linear;
@@ -216,6 +191,8 @@ namespace HJGraphics {
 		std::vector<glm::mat4> getLightMatrix() override;
 
 		void writeUniform(std::shared_ptr<Shader> lightShader) override;
+
+		void generateBoundingMesh();
 	};
 	
 }

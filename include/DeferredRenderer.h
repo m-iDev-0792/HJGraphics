@@ -8,16 +8,18 @@
 #include "ShadowMap.h"
 #include "GBuffer.h"
 #include "Scene2.h"
-#include "map"
+#include "FrameBuffer.h"
+#include <map>
+
 namespace HJGraphics {
+	class Window;
 	class DeferredRenderer {
+		friend Window;
 	public:
-		Camera *camera;
-		
 		DeferredRenderer();
 
-		void test();
-		
+		DeferredRenderer(int _width,int _height);
+
 		void debugRenderGBuffer();
 
 		void setMainScene(std::shared_ptr<Scene2> _mainScene) { mainScene = _mainScene; }
@@ -28,10 +30,11 @@ namespace HJGraphics {
 
 		void renderMesh(std::shared_ptr<Mesh2> m);
 	private:
+		int width,height;
 		std::shared_ptr<Scene2> mainScene;
-		std::vector< std::shared_ptr<Mesh2>> meshes;
 		std::shared_ptr<GBuffer> gBuffer;
-		
+		std::shared_ptr<Mesh2> screenQuad;
+		std::shared_ptr<FrameBuffer> framebuffer;
 		//some shaders
 		std::shared_ptr<Shader> gBufferShader;
 		
@@ -41,6 +44,7 @@ namespace HJGraphics {
 		std::shared_ptr<Shader> pointLightShader;
 		std::shared_ptr<Shader> parallelLightShader;
 		std::shared_ptr<Shader> spotLightShader;
+		std::shared_ptr<Shader> ambientShader;
 		
 		
 		//shadow maps

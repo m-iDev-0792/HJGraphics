@@ -8,7 +8,7 @@ unsigned int HJGraphics::FrameBuffer::VAO;
 unsigned int HJGraphics::FrameBuffer::VBO;
 HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,bool _enableHDR) {
 	if(defaultShader== nullptr){
-		defaultShader=makeSharedShader("../shader/framebufferVertex.glsl","../shader/framebufferFragment.glsl");
+		defaultShader=makeSharedShader("../shader/forward/framebufferVertex.glsl","../shader/forward/framebufferFragment.glsl");
 		float quadVertices[] = {
 				// positions   // texCoords
 				-1.0f,  1.0f,  0.0f, 1.0f,

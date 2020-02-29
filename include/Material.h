@@ -39,13 +39,13 @@ namespace HJGraphics {
 		int texHeight;
 		int texChannel;
 
-		Texture2D(const std::string path);
+		Texture2D(const std::string &_path);
 
-		Texture2D(const std::string path, const GLint texWrap);
+		Texture2D(const std::string &_path, const GLint& _texWrap);
 
 		Texture2D();
 
-		void loadFromPath(const std::string path);
+		void loadFromPath(const std::string &_path);
 	};
 	class SolidTexture : public Texture{
 	public:
@@ -61,21 +61,21 @@ namespace HJGraphics {
 
 	class CubeMapTexture : public Texture {
 	public:
-		CubeMapTexture(const std::string rightTex, const std::string leftTex, const std::string upTex,
-		               const std::string downTex, const std::string frontTex, const std::string backTex,
-		               const GLuint texN = 0);
+		CubeMapTexture(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
+		               const std::string &downTex, const std::string &frontTex, const std::string &backTex,
+		               GLuint texN = 0);
 
 		CubeMapTexture();
 
-		void loadFromPath(const std::string rightTex, const std::string leftTex, const std::string upTex,
-		                  const std::string downTex, const std::string frontTex, const std::string backTex);
+		void loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
+		                  const std::string &downTex, const std::string &frontTex, const std::string &backTex);
 	};
 
 	class Material {
 	public:
-		glm::vec3 ambientStrength;
-		glm::vec3 diffuseStrength;
-		glm::vec3 specularStrength;
+		float ambientStrength;
+		float diffuseStrength;
+		float specularStrength;
 
 		float shininess;
 		float alpha;

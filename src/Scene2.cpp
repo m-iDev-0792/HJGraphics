@@ -14,8 +14,11 @@ void HJGraphics::Scene2::addObject(std::shared_ptr<Mesh2> mesh) {
 	if (mesh != nullptr)meshes.push_back(mesh);
 }
 
-void HJGraphics::Scene2::addCamera(const Camera& camera) {
-	cameras.push_back(camera);
+void HJGraphics::Scene2::addCamera(Camera& camera) {
+	cameras.push_back(&camera);
+	if(cameras.size()==1){
+		setMainCamera(0);
+	}
 }
 
 void HJGraphics::Scene2::addLight(std::shared_ptr<Light2> light) {
@@ -32,5 +35,5 @@ void HJGraphics::Scene2::addLight(std::shared_ptr<Light2> light) {
 
 void HJGraphics::Scene2::setMainCamera(int index) {
 	if (index < 0 || index >= cameras.size())return;
-	mainCamera = &cameras[index];
+	mainCamera = cameras[index];
 }

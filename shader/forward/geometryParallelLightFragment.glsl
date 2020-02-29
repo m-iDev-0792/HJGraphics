@@ -12,9 +12,9 @@ in vec3 tangentLightPos;
 in vec3 tangentLightDirection;
 
 struct Material{
-    vec3 ambientStrength;
-    vec3 diffuseStrength;
-    vec3 specularStrength;
+    float ambientStrength;
+    float diffuseStrength;
+    float specularStrength;
 
     float shininess;
     float alpha;
@@ -54,9 +54,9 @@ void main()
 //////////////////////////////////////////////////////////////////
 float parallelShadowCalculation(vec4 fragPosLightSpace)
 {
-    // 执行透视除法
+    // projection division
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-    // 变换到[0,1]的范围
+    // transform to [0,1]
     projCoords = projCoords * 0.5 + 0.5;
     float currentDepth = projCoords.z;
     float bias=0.0005f/ fragPosLightSpace.w;// if we don't do divide to bias, then spotlight bias=0.0005f parallels bias = 0.005f
@@ -95,14 +95,14 @@ vec3 parallelLight(){
         normalSampler=texture(material.normalMap,texCoord).rgb;
         normalSampler=normalize(2*normalSampler-1);
     }
-    //计算阴影
+    //calculate shadow
     vec4 lightSpacePos=lightSpaceMatrix*vec4(worldPos,1.0f);//replaced original code
     float shadowFactor=parallelShadowCalculation(lightSpacePos);
-    //漫反射光
+    //Diffuse
     vec3 lightDir=normalize(tangentLightDirection);
     float diff=max(dot(-lightDir,normalSampler),0.0);
     vec3 diffuse=diff * diffuseSampler * material.diffuseStrength * lightColor;
-    //反射高光
+    //Specular
     vec3 viewDir=normalize(tangentCameraPos-tangentPos);
     #ifdef BLINN
     //blinn-phong

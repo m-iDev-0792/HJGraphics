@@ -4,8 +4,10 @@
 
 #ifndef HJGRAPHICS_GBUFFER_H
 #define HJGRAPHICS_GBUFFER_H
-#include "OpenGLHeader.h"
 
+#include <memory>
+#include "OpenGLHeader.h"
+#include "Shader.h"
 namespace HJGraphics {
 	class DeferredRenderer;
 
@@ -30,6 +32,10 @@ namespace HJGraphics {
 		void unbind();
 
 		void copyDepthBitToDefaultBuffer();
+
+		void bindTextures();
+
+		void writeUniform(std::shared_ptr<Shader> shader);
 	};
 }
 #endif
