@@ -10,7 +10,7 @@
 #include "Scene2.h"
 #include "FrameBuffer.h"
 #include <map>
-
+//TODO. 1. boundingMesh for light 2.rewrite Model for Mesh2 class
 namespace HJGraphics {
 	class Window;
 	class DeferredRenderer {
@@ -28,6 +28,8 @@ namespace HJGraphics {
 
 		void renderInit();
 
+		void postprocess();
+
 		void renderMesh(std::shared_ptr<Mesh2> m);
 	private:
 		int width,height;
@@ -37,6 +39,8 @@ namespace HJGraphics {
 		std::shared_ptr<FrameBuffer> framebuffer;
 		//some shaders
 		std::shared_ptr<Shader> gBufferShader;
+
+		std::shared_ptr<Shader> postprocessShader;
 		
 		std::shared_ptr<Shader> pointLightShadowShader;
 		std::shared_ptr<Shader> parallelSpotLightShadowShader;

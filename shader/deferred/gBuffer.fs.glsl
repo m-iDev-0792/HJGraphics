@@ -43,7 +43,7 @@ void main(){
 	vec3 diff=vec3(1.0);
     if(material.diffuseMapNum>0){
         diff=texture(material.diffuseMap,uv).rgb;
-        diff = pow(diff, vec3(gamma));
+//        diff = pow(diff, vec3(gamma));
     }
 	float spec=1.0f;
 	if(material.specularMapNum>0){

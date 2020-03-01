@@ -6,8 +6,8 @@
 #include "Utility.h"
 HJGraphics::Cylinder2::Cylinder2(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath, std::string _normPath) :Cylinder2(_radius, _length, _partition) {
 	if (!_diffPath.empty()) {
-		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath));
-		else material.diffuseMaps[0] = Texture2D(_diffPath);
+		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath,true));
+		else material.diffuseMaps[0] = Texture2D(_diffPath,true);
 	}
 	if (!_specPath.empty()) {
 		if (material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specPath));
@@ -86,8 +86,8 @@ HJGraphics::Box2::Box2() :Box2(5, 5, 5) {
 }
 HJGraphics::Box2::Box2(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath) : Box2(_width, _depth, _height) {
 	if (!_diffPath.empty()) {
-		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath));
-		else material.diffuseMaps[0] = Texture2D(_diffPath);
+		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath,true));
+		else material.diffuseMaps[0] = Texture2D(_diffPath,true);
 	}
 	if (!_specPath.empty()) {
 		if (material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specPath));
@@ -175,8 +175,8 @@ void HJGraphics::Box2::generateData() {
 HJGraphics::Plane2::Plane2(GLfloat _width, GLfloat _height, std::string _texPath, GLfloat _texStretchRatio) {
 	width = _width; height = _height; texStretchRatio = _texStretchRatio;
 	if (!_texPath.empty()) {
-		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_texPath));
-		else material.diffuseMaps[0] = Texture2D(_texPath);
+		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_texPath,true));
+		else material.diffuseMaps[0] = Texture2D(_texPath,true);
 	}
 	generateData();
 	commitData();
@@ -218,8 +218,8 @@ HJGraphics::Sphere2::Sphere2(float _R, int _partition, std::string _texPath) {
 	partition = _partition;
 	R = _R;
 	if (!_texPath.empty()) {
-		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_texPath));
-		else material.diffuseMaps[0] = Texture2D(_texPath);
+		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_texPath,true));
+		else material.diffuseMaps[0] = Texture2D(_texPath,true);
 	}
 	generateData();
 	commitData();

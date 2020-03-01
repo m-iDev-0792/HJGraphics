@@ -42,8 +42,8 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,bool _enableHDR) {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 	//set up texColorBuffer
-	glGenTextures(1, &texColorBuffer);
-	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexImage2D(GL_TEXTURE_2D, 0, HDR?GL_RGB16F:GL_RGB, width, height, 0, GL_RGB, HDR ? GL_FLOAT : GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -55,7 +55,7 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,bool _enableHDR) {
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	//bind texColorBuffer to Framebuffer
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
 	//bind rbo to Framebuffer
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
@@ -70,7 +70,7 @@ void HJGraphics::FrameBuffer::drawBuffer() {
 	defaultShader->setInt("screenTexture",0);
 	glBindVertexArray(VAO);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,texColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, tex);
 	glDisable(GL_DEPTH_TEST);
 	glDrawArrays(GL_TRIANGLES,0,6);
 	glBindVertexArray(0);
@@ -78,7 +78,7 @@ void HJGraphics::FrameBuffer::drawBuffer() {
 }
 void HJGraphics::FrameBuffer::bind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//WARNING! FrameBuffer will turn black if we don't clear DEPTH_BUFFER_BIT
 }
 void HJGraphics::FrameBuffer::unbind() {

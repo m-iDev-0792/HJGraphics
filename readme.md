@@ -62,7 +62,7 @@ Fig.4 basic material
 - [ ] SSAO
 - [ ] Load scene via JSON file
 - [x] HDR
-- [ ] Deferred shading option
+- [x] Deferred shading
 
 # Acknowledge
 Amazing tutorials : [learnopengl.com](https://www.learnopengl.com)

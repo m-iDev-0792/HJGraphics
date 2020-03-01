@@ -69,10 +69,14 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	width=_width;height=_height;
 	gBufferShader = makeSharedShader("../shader/deferred/gBuffer.vs.glsl", "../shader/deferred/gBuffer.fs.glsl");
 	gBuffer = std::make_shared<GBuffer>(_width, _height);
-
+	framebuffer=std::make_shared<FrameBuffer>(_width, _height,true);
+//	framebuffer=nullptr;
+	//post-processing shader
+	postprocessShader = makeSharedShader("../shader/deferred/post.vs.glsl","../shader/deferred/post.fs.glsl");
+	//shadow map shaders
 	pointLightShadowShader = makeSharedShader("../shader/deferred/shadow.vs.glsl", "../shader/deferred/shadow.point.fs.glsl", "../shader/deferred/shadow.point.gs.glsl");
 	parallelSpotLightShadowShader = makeSharedShader("../shader/deferred/shadow.vs.glsl", "../shader/deferred/shadow.fs.glsl");
-
+	//shading shaders
 	pointLightShader = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.point.fs.glsl");
 	parallelLightShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.parallel.fs.glsl");
 	spotLightShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.spot.fs.glsl");
@@ -180,13 +184,12 @@ void HJGraphics::DeferredRenderer::render() {
 		renderMesh(m);
 	}
 	gBuffer->unbind();
-//	debugRenderGBuffer();
-//	return;
 	//-----------------------------
 	//3. deferred shading
 	//-----------------------------
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(1, 1, 1, 1);
+	//if there is a framebuffer, then bind it, draw it after post-processing
+	if(framebuffer)framebuffer->bind();
+
 	//bind gBuffer texture
 	gBuffer->bindTextures();
 	glm::mat4 transform = mainScene->mainCamera->projection*mainScene->mainCamera->view;
@@ -198,7 +201,7 @@ void HJGraphics::DeferredRenderer::render() {
 	ambientShader->use();
 	ambientShader->set4fm("transform", glm::mat4(1.0f));
 	ambientShader->set4fm("model", glm::mat4(1.0f));
-	ambientShader->setFloat("globalAmbiendStrength",0.5);
+	ambientShader->setFloat("globalAmbiendStrength",mainScene->ambientFactor);
 	gBuffer->writeUniform(ambientShader);
 	renderMesh(screenQuad);
 
@@ -273,8 +276,26 @@ void HJGraphics::DeferredRenderer::render() {
 	//-----------------------------
 	//copy depth
 	glDisable(GL_BLEND);
-}
 
+	//-----------------------------
+	//5. post process
+	//-----------------------------
+	if(framebuffer){
+		framebuffer->unbind();
+		postprocess();
+	}
+
+}
+void HJGraphics::DeferredRenderer::postprocess() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0, 0, 0, 1);
+	postprocessShader->use();
+	postprocessShader->setInt("screenTexture",0);
+	postprocessShader->set2fv("size",glm::vec2(width,height));
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D,framebuffer->tex);
+	renderMesh(screenQuad);
+}
 void HJGraphics::DeferredRenderer::renderInit() {
 	//Allocate shadow maps for lights that casts shadow
 	for (int i = 0; i < mainScene->parallelLights.size(); ++i) {

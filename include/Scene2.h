@@ -45,6 +45,8 @@ namespace HJGraphics {
 
 		void setMainCamera(int index);
 
+		void setAmbient(float ambient){ambientFactor=ambient;}
+
 		Camera* getMainCamera() { return mainCamera; }
 	};
 }

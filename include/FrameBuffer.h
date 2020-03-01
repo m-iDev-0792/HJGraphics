@@ -9,14 +9,14 @@
 #include "Shader.h"
 namespace HJGraphics{
 	class FrameBuffer{
-	private:
+	public:
 		unsigned int fbo;
 		unsigned int rbo;
-		unsigned int texColorBuffer;
+		unsigned int tex;
 		int width;
 		int height;
 		bool HDR;
-	public:
+
 		static std::shared_ptr<Shader> defaultShader;
 		static unsigned int VAO,VBO;
 		FrameBuffer(int _width,int _height,bool _enableHDR=false);

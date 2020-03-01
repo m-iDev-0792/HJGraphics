@@ -39,13 +39,13 @@ namespace HJGraphics {
 		int texHeight;
 		int texChannel;
 
-		Texture2D(const std::string &_path);
+		Texture2D(const std::string &_path, bool gammaCorrection=false);
 
-		Texture2D(const std::string &_path, const GLint& _texWrap);
+		Texture2D(const std::string &_path, const GLint& _texWrap, bool gammaCorrection=false);
 
 		Texture2D();
 
-		void loadFromPath(const std::string &_path);
+		void loadFromPath(const std::string &_path, bool gammaCorrection=false);
 	};
 	class SolidTexture : public Texture{
 	public:

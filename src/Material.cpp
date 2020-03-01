@@ -17,20 +17,20 @@ HJGraphics::Texture::~Texture() {
 /*
  * Implementation of Texture2D
  */
-HJGraphics::Texture2D::Texture2D(const std::string &path) : Texture(GL_TEXTURE_2D){
+HJGraphics::Texture2D::Texture2D(const std::string &path, bool gammaCorrection) : Texture(GL_TEXTURE_2D){
 	glGenTextures(1,&id);
 	texWrapS=GL_REPEAT;
 	texWrapT=GL_REPEAT;
 	texMinFilter=GL_LINEAR_MIPMAP_LINEAR;
 	texMagFilter=GL_LINEAR;
-	loadFromPath(path);
+	loadFromPath(path, gammaCorrection);
 }
-HJGraphics::Texture2D::Texture2D(const std::string &_path, const GLint& _texWrap): Texture(GL_TEXTURE_2D){
+HJGraphics::Texture2D::Texture2D(const std::string &_path, const GLint& _texWrap, bool gammaCorrection): Texture(GL_TEXTURE_2D){
 	glGenTextures(1,&id);
 	texWrapS=texWrapT=_texWrap;
 	texMinFilter=GL_LINEAR_MIPMAP_LINEAR;
 	texMagFilter=GL_LINEAR;
-	loadFromPath(_path);
+	loadFromPath(_path, gammaCorrection);
 }
 HJGraphics::Texture2D::Texture2D() :Texture(GL_TEXTURE_2D){
 	glGenTextures(1,&id);
@@ -39,26 +39,34 @@ HJGraphics::Texture2D::Texture2D() :Texture(GL_TEXTURE_2D){
 	texMinFilter=GL_LINEAR_MIPMAP_LINEAR;
 	texMagFilter=GL_LINEAR;
 }
-void HJGraphics::Texture2D::loadFromPath(const std::string &_path) {
+void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCorrection) {
 	glActiveTexture(GL_TEXTURE0+textureN); // 在绑定纹理之前先激活纹理单元
 	glBindTexture(GL_TEXTURE_2D, id);
 	int imgWidth,imgHeight,imgChannel;
 	auto data=stbi_load(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
 
 	if(data!= nullptr) {
-		GLuint format;
-		if(imgChannel==1)format=GL_RED;
-		else if(imgChannel==3)format=GL_RGB;
-		else if(imgChannel==4)format=GL_RGBA;
+		GLuint format,internalFormat;
+		if(imgChannel==1){
+			format=GL_RED;
+			internalFormat=format;
+		}
+		else if(imgChannel==3){
+			format=GL_RGB;
+			internalFormat=gammaCorrection?GL_SRGB:format;
+		}
+		else if(imgChannel==4){
+			format=GL_RGBA;
+			internalFormat=gammaCorrection?GL_SRGB_ALPHA:format;
+		}
 		else{
 			std::cout<<"ERROR @ Texture2D::loadFromPath : can't solve image channel (channel = "<<imgChannel<<")"<<std::endl;
 			return;
 		}
 		texWidth=imgWidth;texHeight=imgHeight;texChannel=imgChannel;
-		glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format,
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, imgWidth, imgHeight, 0, format,
 		             GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
-
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texMinFilter);
