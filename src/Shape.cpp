@@ -4,7 +4,7 @@
 #include "Shape.h"
 #include "Vertex.h"
 #include "Utility.h"
-HJGraphics::Cylinder2::Cylinder2(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath, std::string _normPath) :Cylinder2(_radius, _length, _partition) {
+HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath, std::string _normPath) : Cylinder(_radius, _length, _partition) {
 	if (!_diffPath.empty()) {
 		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath,true));
 		else material.diffuseMaps[0] = Texture2D(_diffPath,true);
@@ -19,7 +19,7 @@ HJGraphics::Cylinder2::Cylinder2(float _radius, float _length, GLuint _partition
 	}
 }
 
-void HJGraphics::Cylinder2::generateData() {
+void HJGraphics::Cylinder::generateData() {
 	clear();
 	std::vector<Vertex8> vertices;
 	double gap = 2 * 3.1415926 / partition;
@@ -68,23 +68,23 @@ void HJGraphics::Cylinder2::generateData() {
 	}
 }
 
-HJGraphics::Cylinder2::Cylinder2(float _radius, float _length, GLuint _partition) {
+HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition) {
 	radius = _radius; length = _length; partition = _partition;
 	generateData();
 	commitData();
 }
-HJGraphics::Cylinder2::Cylinder2() :Cylinder2(1.0f, 4.0f, 50) {
+HJGraphics::Cylinder::Cylinder() : Cylinder(1.0f, 4.0f, 50) {
 }
 
 
-HJGraphics::Box2::Box2(GLfloat _width, GLfloat _depth, GLfloat _height) {
+HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height) {
 	width = _width; depth = _depth; height = _height;
 	generateData();
 	commitData();
 }
-HJGraphics::Box2::Box2() :Box2(5, 5, 5) {
+HJGraphics::Box::Box() : Box(5, 5, 5) {
 }
-HJGraphics::Box2::Box2(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath) : Box2(_width, _depth, _height) {
+HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath) : Box(_width, _depth, _height) {
 	if (!_diffPath.empty()) {
 		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath,true));
 		else material.diffuseMaps[0] = Texture2D(_diffPath,true);
@@ -98,7 +98,7 @@ HJGraphics::Box2::Box2(GLfloat _width, GLfloat _depth, GLfloat _height, std::str
 		else material.normalMaps[0] = Texture2D(_normPath);
 	}
 }
-void HJGraphics::Box2::generateData() {
+void HJGraphics::Box::generateData() {
 	clear();
 	const GLfloat halfWidth = width / 2;
 	const GLfloat halfHeight = height / 2;
@@ -172,7 +172,7 @@ void HJGraphics::Box2::generateData() {
  }
 
 
-HJGraphics::Plane2::Plane2(GLfloat _width, GLfloat _height, std::string _texPath, GLfloat _texStretchRatio) {
+HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _texPath, GLfloat _texStretchRatio) {
 	width = _width; height = _height; texStretchRatio = _texStretchRatio;
 	if (!_texPath.empty()) {
 		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_texPath,true));
@@ -181,7 +181,7 @@ HJGraphics::Plane2::Plane2(GLfloat _width, GLfloat _height, std::string _texPath
 	generateData();
 	commitData();
 }
-HJGraphics::Plane2::Plane2(GLfloat _width, GLfloat _height, std::string _diffuseTexPath, std::string _specularTexPath, std::string _normalTexPath, GLfloat _texStretchRatio) :Plane2(_width, _height, _diffuseTexPath, _texStretchRatio) {
+HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _diffuseTexPath, std::string _specularTexPath, std::string _normalTexPath, GLfloat _texStretchRatio) : Plane(_width, _height, _diffuseTexPath, _texStretchRatio) {
 	if (!_specularTexPath.empty()) {
 		if (material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specularTexPath));
 		else material.specularMaps[0] = Texture2D(_specularTexPath);
@@ -191,9 +191,9 @@ HJGraphics::Plane2::Plane2(GLfloat _width, GLfloat _height, std::string _diffuse
 		else material.normalMaps[0] = Texture2D(_normalTexPath);
 	}
 }
-HJGraphics::Plane2::Plane2() :Plane2(5, 5) {}
+HJGraphics::Plane::Plane() : Plane(5, 5) {}
 
-void HJGraphics::Plane2::generateData() {
+void HJGraphics::Plane::generateData() {
 	clear();
 	glm::vec3 t0, t1, b0, b1;
 	getTangentBitangent(glm::vec3(-width / 2, 0, -height / 2), glm::vec3(-width / 2, 0, height / 2), glm::vec3(width / 2, 0, height / 2),
@@ -211,10 +211,10 @@ void HJGraphics::Plane2::generateData() {
 }
 
 
-HJGraphics::Sphere2::Sphere2() :Sphere2(1) {
+HJGraphics::Sphere::Sphere() : Sphere(1) {
 
 }
-HJGraphics::Sphere2::Sphere2(float _R, int _partition, std::string _texPath) {
+HJGraphics::Sphere::Sphere(float _R, int _partition, std::string _texPath) {
 	partition = _partition;
 	R = _R;
 	if (!_texPath.empty()) {
@@ -224,8 +224,8 @@ HJGraphics::Sphere2::Sphere2(float _R, int _partition, std::string _texPath) {
 	generateData();
 	commitData();
 }
-HJGraphics::Sphere2::Sphere2(float _R, int _partition, std::string _diffuseTexPath, std::string _specularTexPath,
-	std::string _normalTexPath) :Sphere2(_R, _partition, _diffuseTexPath) {
+HJGraphics::Sphere::Sphere(float _R, int _partition, std::string _diffuseTexPath, std::string _specularTexPath,
+                           std::string _normalTexPath) : Sphere(_R, _partition, _diffuseTexPath) {
 	if (!_specularTexPath.empty()) {
 		if (material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specularTexPath));
 		else material.specularMaps[0] = Texture2D(_specularTexPath);
@@ -235,7 +235,7 @@ HJGraphics::Sphere2::Sphere2(float _R, int _partition, std::string _diffuseTexPa
 		else material.normalMaps[0] = Texture2D(_normalTexPath);
 	}
 }
-void HJGraphics::Sphere2::generateData() {
+void HJGraphics::Sphere::generateData() {
 	clear();
 	std::vector<Vertex8> vertices;
 	int vertDiv = partition / 2;
@@ -271,7 +271,8 @@ void HJGraphics::Sphere2::generateData() {
 			addVertex(vertices[i*stride + j + 1].position, vertices[i*stride + j + 1].normal, vertices[i*stride + j + 1].texCoord, tb2.first, tb2.second);
 		}
 	}
-	const int stride2 = stride * (vertDiv - 3);
+	const int stride2 = stride * (vertDiv - 2);
+	//generate lid cover of top and bottom
 	for (int j = 0; j < horiDiv; ++j) {
 		auto tb1 = getTangentBitangent(vertices[j].position, vertices[j + 1].position, glm::vec3(0, R, 0),
 			vertices[j].texCoord, vertices[j + 1].texCoord, glm::vec2(vertices[j].texCoord.x, 1));

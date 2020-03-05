@@ -7,21 +7,23 @@ By using HJGraphics, you can create OpenGL environment and draw some funny 3D ob
 eg.
 ```
 Window window(windowWidth,windowHeight,windowTitle);
-Box box(boxWidth,boxDepth,boxHeight);
 Camera camera(cameraPosition,cameraDirection);
-PointLight pointLight(lightPosition);
-Scene scene;
-scene.addCamera(camera);
-scene.addObject(box);
-scene.addLight(pointLight);
-window.addScene(scene);
+auto box=make_shared<Box>(boxWidth,boxDepth,boxHeight);
+auto pointLight=make_shared<PointLight>(lightPosition);
+auto scene=make_shared<Scene>();
+scene->addCamera(camera);
+scene->addObject(box);
+scene->addLight(pointLight);
+auto renderer=make_shared<DeferredRenderer>();
+renderer->setMainScene(scene);
+window.renderer=renderer;
 window.run();
 ```
 
 # Features
 HJGraphics has...
 
-* Window : a GLFW wrapped window system(now HJGraphics supports Qt, see HJGraphics-Qt).
+* Window : a GLFW wrapped window system(~~now HJGraphics supports Qt, see HJGraphics-Qt~~).
 * Camera 
 * Scene : an easy way to manage and draw objects.
 * Object : a few build-in 3D objects support include

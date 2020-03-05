@@ -2,8 +2,8 @@
 // Created by 何振邦(m_iDev_0792) on 2018/12/14.
 //
 
-#ifndef TESTINGFIELD_GLFWWINDOWOBJECT_H
-#define TESTINGFIELD_GLFWWINDOWOBJECT_H
+#ifndef HJGRAPHICS_GLFWWRAP_H
+#define HJGRAPHICS_GLFWWRAP_H
 
 #include <string>
 #include <iostream>
@@ -12,7 +12,7 @@
 #include "GLFW/glfw3.h"
 #include "GLFW/glfw3native.h"
 namespace HJGraphics {
-	class GLFWWindowObject {
+	class GLFWWrap {
 	protected:
 		GLFWwindow *windowPtr;
 		std::string windowTitle;
@@ -35,15 +35,15 @@ namespace HJGraphics {
 
 		virtual void customInit();
 
-		static GLFWWindowObject *currentWindow;
+		static GLFWWrap *currentWindow;
 		static bool isFirstInit;
 
 	public:
-		GLFWWindowObject();
+		GLFWWrap();
 
-		~GLFWWindowObject();
+		~GLFWWrap();
 
-		GLFWWindowObject(int _width, int _height, std::string _title);
+		GLFWWrap(int _width, int _height, std::string _title);
 
 		//enquiring functions
 		int getWidth() const { return width; }
@@ -80,4 +80,4 @@ namespace HJGraphics {
 	};
 }
 
-#endif //TESTINGFIELD_GLFWWINDOWOBJECT_H
+#endif //HJGRAPHICS_GLFWWRAP_H

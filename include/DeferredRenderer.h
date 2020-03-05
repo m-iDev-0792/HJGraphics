@@ -7,10 +7,9 @@
 #include "Shape.h"
 #include "ShadowMap.h"
 #include "GBuffer.h"
-#include "Scene2.h"
+#include "Scene.h"
 #include "FrameBuffer.h"
 #include <map>
-//TODO. 1. boundingMesh for light 2.rewrite Model for Mesh2 class
 namespace HJGraphics {
 	class Window;
 	class DeferredRenderer {
@@ -22,7 +21,7 @@ namespace HJGraphics {
 
 		void debugRenderGBuffer();
 
-		void setMainScene(std::shared_ptr<Scene2> _mainScene) { mainScene = _mainScene; }
+		void setMainScene(std::shared_ptr<Scene> _mainScene) { mainScene = _mainScene; }
 		
 		void render();
 
@@ -30,12 +29,12 @@ namespace HJGraphics {
 
 		void postprocess();
 
-		void renderMesh(std::shared_ptr<Mesh2> m);
+		void renderMesh(std::shared_ptr<Mesh> m);
 	private:
 		int width,height;
-		std::shared_ptr<Scene2> mainScene;
+		std::shared_ptr<Scene> mainScene;
 		std::shared_ptr<GBuffer> gBuffer;
-		std::shared_ptr<Mesh2> screenQuad;
+		std::shared_ptr<Mesh> screenQuad;
 		std::shared_ptr<FrameBuffer> framebuffer;
 		//some shaders
 		std::shared_ptr<Shader> gBufferShader;
@@ -52,8 +51,8 @@ namespace HJGraphics {
 		
 		
 		//shadow maps
-		std::map<std::shared_ptr<Light2>, std::shared_ptr<ShadowMap>> shadowMaps;
-		std::map<std::shared_ptr<Light2>, std::shared_ptr<ShadowCubeMap>> shadowCubeMaps;
+		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMap>> shadowMaps;
+		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowCubeMap>> shadowCubeMaps;
 
 		//for debug usage
 		static std::shared_ptr<Shader> debugShader;

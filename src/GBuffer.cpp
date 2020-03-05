@@ -84,9 +84,9 @@ void HJGraphics::GBuffer::unbind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void HJGraphics::GBuffer::copyDepthBitToDefaultBuffer() {
+void HJGraphics::GBuffer::copyDepthBitToDefaultBuffer(GLuint target) {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 写入到默认帧缓冲
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, target);
 	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST );
 }
 

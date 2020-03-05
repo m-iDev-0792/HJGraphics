@@ -6,62 +6,62 @@
 #include "Mesh.h"
 namespace HJGraphics {
 
-	class Cylinder2 : public Mesh2 {
+	class Cylinder : public Mesh {
 	public:
 		float radius;
 		float length;
 		GLuint partition;
 
-		Cylinder2();
+		Cylinder();
 
-		Cylinder2(float _radius, float _length, GLuint _partition = 10);
+		Cylinder(float _radius, float _length, GLuint _partition = 10);
 
-		Cylinder2(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath = "", std::string _normPath = "");
+		Cylinder(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath = "", std::string _normPath = "");
 
 		void generateData();
 	};
 
-	class Box2 : public Mesh2 {
+	class Box : public Mesh {
 	public:
 		//properties that affect vertices data
 		GLfloat width;
 		GLfloat depth;
 		GLfloat height;
 
-		Box2();
+		Box();
 
-		Box2(GLfloat _width, GLfloat _depth, GLfloat _height);
+		Box(GLfloat _width, GLfloat _depth, GLfloat _height);
 
-		Box2(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath);
+		Box(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath);
 
 		void generateData();
 	};
 
-	class Plane2 : public Mesh2 {
+	class Plane : public Mesh {
 	public:
 		GLfloat width;
 		GLfloat height;
 		GLfloat texStretchRatio;
 
-		Plane2();
+		Plane();
 
-		Plane2(GLfloat _width, GLfloat _height, std::string texPath = "", GLfloat _texStretchRatio = 1.0f);
+		Plane(GLfloat _width, GLfloat _height, std::string texPath = "", GLfloat _texStretchRatio = 1.0f);
 
-		Plane2(GLfloat _width, GLfloat _height, std::string diffuseTexPath, std::string specularTexPath, std::string normalTexPath, GLfloat _texStretchRatio);
+		Plane(GLfloat _width, GLfloat _height, std::string diffuseTexPath, std::string specularTexPath, std::string normalTexPath, GLfloat _texStretchRatio);
 
 		void generateData();
 	};
 
-	class Sphere2 : public Mesh2 {
+	class Sphere : public Mesh {
 	public:
 		int partition;
 		float R;
 
-		Sphere2();
+		Sphere();
 
-		Sphere2(float _R, int _partition = 50, std::string texPath = "");
+		Sphere(float _R, int _partition = 50, std::string texPath = "");
 
-		Sphere2(float _R, int _partition, std::string diffuseTexPath, std::string specularTexPath, std::string normalTexPath);
+		Sphere(float _R, int _partition, std::string diffuseTexPath, std::string specularTexPath, std::string normalTexPath);
 
 		void generateData();
 	};

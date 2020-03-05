@@ -2,8 +2,8 @@
 // Created by 何振邦(m_iDev_0792) on 2018/12/27.
 //
 
-#ifndef TESTINGFIELD_DEBUGUTILITY_H
-#define TESTINGFIELD_DEBUGUTILITY_H
+#ifndef HJGRAPHICS_DEBUGUTILITY_H
+#define HJGRAPHICS_DEBUGUTILITY_H
 #include <string>
 #include <iostream>
 #include <glm/glm.hpp>
@@ -32,4 +32,4 @@ inline void showMat4(glm::mat4 value){
 	for(int i=0;i<4;++i)showVec4(value[i]);
 	std::cout<<"mat4 value end;"<<std::endl;
 }
-#endif //TESTINGFIELD_DEBUGUTILITY_H
+#endif //HJGRAPHICS_DEBUGUTILITY_H

@@ -30,7 +30,6 @@ float spotShadowCalculation(vec4 fragPosLightSpace);
 vec3 spotLight();
 void main()
 {
-
     vec3 Color=spotLight();
     FragColor=vec4(Color,1.0f);
 }

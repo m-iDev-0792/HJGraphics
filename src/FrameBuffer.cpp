@@ -76,7 +76,7 @@ void HJGraphics::FrameBuffer::drawBuffer() {
 	glBindVertexArray(0);
 	glEnable(GL_DEPTH_TEST);
 }
-void HJGraphics::FrameBuffer::bind() {
+void HJGraphics::FrameBuffer::clearBind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//WARNING! FrameBuffer will turn black if we don't clear DEPTH_BUFFER_BIT

@@ -1,9 +1,8 @@
 //
 // Created by 何振邦(m_iDev_0792) on 2018/12/24.
 //
-
-#include "Material.h"
 #define STB_IMAGE_IMPLEMENTATION
+#include "Material.h"
 /*
  * Implementation of Texture
  */
@@ -168,7 +167,6 @@ HJGraphics::Material::Material():Material(glm::vec3(0.9f,0.9f,0.9f),glm::vec3(1.
 
 }
 HJGraphics::Material::Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor) {
-	//TODO. load defualt shader
 	diffuseMaps.push_back(SolidTexture(_diffuseColor));
 	specularMaps.push_back(SolidTexture(_specularColor));
 
@@ -222,4 +220,24 @@ void HJGraphics::Material::writeToShader(Shader *shader) {
 
 void HJGraphics::Material::writeToShader(std::shared_ptr<Shader> shader) {
 	writeToShader(shader.get());
+}
+void HJGraphics::Material::clearTextures() {
+	diffuseMaps.clear();
+	specularMaps.clear();
+	normalMaps.clear();
+	heightMaps.clear();
+}
+const std::string usageList[4]={"diffuse","specular","normal","height"};
+void HJGraphics::Material::loadTextures(const std::vector<Texture2D> &_textures) {
+	for(auto& t:_textures){
+		if(usageList[0] == t.usage){
+			diffuseMaps.push_back(t);
+		}else if(usageList[1] == t.usage){
+			specularMaps.push_back(t);
+		}else if(usageList[2] == t.usage){
+			normalMaps.push_back(t);
+		}else if(usageList[3] == t.usage){
+			heightMaps.push_back(t);
+		}
+	}
 }

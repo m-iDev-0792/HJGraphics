@@ -2,8 +2,8 @@
 // Created by 何振邦(m_iDev_0792) on 2018/12/20.
 //
 
-#ifndef TESTINGFIELD_CAMERA_H
-#define TESTINGFIELD_CAMERA_H
+#ifndef HJGRAPHICS_CAMERA_H
+#define HJGRAPHICS_CAMERA_H
 #include <string>
 #include <iostream>
 #include "OpenGLHeader.h"
@@ -11,10 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 namespace HJGraphics {
-	class Scene;
-
 	class Camera {
-		friend Scene;
 	protected:
 		GLuint sharedUBO;
 	public:
@@ -39,4 +36,4 @@ namespace HJGraphics {
 	};
 }
 
-#endif //TESTINGFIELD_CAMERA_H
+#endif //HJGRAPHICS_CAMERA_H

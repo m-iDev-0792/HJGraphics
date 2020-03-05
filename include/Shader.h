@@ -5,8 +5,8 @@
 
 #define GL_SILENCE_DEPRECATION
 
-#ifndef MODEL_SHADER_H
-#define MODEL_SHADER_H
+#ifndef HJGRAPICS_SHADER_H
+#define HJGRAPICS_SHADER_H
 
 #include <string>
 #include <iostream>
@@ -64,4 +64,4 @@ namespace HJGraphics {
 	std::shared_ptr<Shader> makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
 }
 
-#endif //MODEL_SHADER_H
+#endif //HJGRAPICS_SHADER_H

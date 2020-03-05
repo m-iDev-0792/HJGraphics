@@ -6,7 +6,7 @@
 HJGraphics::Window::Window(){
 
 }
-HJGraphics::Window::Window(int _width,int _height,std::string _title):GLFWWindowObject(_width,_height,_title){
+HJGraphics::Window::Window(int _width,int _height,std::string _title): GLFWWrap(_width, _height, _title){
 	fov = 45.0f;
 	firstMouse = true;
 	mouseDown = false;
@@ -140,29 +140,5 @@ void HJGraphics::Window::run() {
 	}
 }
 void HJGraphics::Window::render() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0, 0, 0, 1);
 	if(renderer)renderer->render();
-	else{
-		currentScene->writeSharedUBOData();
-		currentScene->draw();
-	}
-}
-
-//-------------------------- NEW FUNCTION ----------------------------------//
-
-void HJGraphics::Window::switchScene(int index) {
-	if(index<0){
-		std::cout<<"WARNING @ Window::switchScene(int) : index is less than 0"<<std::endl;
-		return;
-	}
-	if(index>=scenes.size()){
-		std::cout<<"WARNING @ Window::switchScene(int) : index is more than scenes size"<<std::endl;
-		return;
-	}
-	currentScene=scenes.at(index);
-}
-void HJGraphics::Window::addScene(HJGraphics::Scene &_scene) {
-	scenes.push_back(&_scene);
-	if(scenes.size() == 1)currentScene=&_scene;
 }

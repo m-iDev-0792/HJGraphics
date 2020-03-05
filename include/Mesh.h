@@ -8,7 +8,6 @@
 
 namespace HJGraphics {
 	class DeferredRenderer;
-	class Scene;
 
 	enum PrimitiveType {
 		Point=GL_POINTS,
@@ -18,8 +17,7 @@ namespace HJGraphics {
 		TriangleFan=GL_TRIANGLE_FAN,
 		TriangleStrip=GL_TRIANGLE_STRIP
 	};
-	class Mesh2 {
-		friend  Scene;
+	class Mesh {
 		friend DeferredRenderer;
 	protected:
 		GLuint VAO;
@@ -39,7 +37,9 @@ namespace HJGraphics {
 		glm::mat4 model;
 		Material material;
 
-		Mesh2();
+		Mesh();
+
+		Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<Texture2D>& _textures);
 
 		virtual void commitData();
 

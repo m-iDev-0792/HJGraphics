@@ -31,7 +31,7 @@ namespace HJGraphics {
 
 		void unbind();
 
-		void copyDepthBitToDefaultBuffer();
+		void copyDepthBitToDefaultBuffer(GLuint target=0);
 
 		void bindTextures();
 

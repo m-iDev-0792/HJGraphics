@@ -3,7 +3,7 @@
 // Created by 何振邦(m_iDev_0792) on 2020/2/17.
 //
 
-HJGraphics::Mesh2::Mesh2() {
+HJGraphics::Mesh::Mesh() {
 	model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -11,8 +11,26 @@ HJGraphics::Mesh2::Mesh2() {
 	castShadow = true;
 	primitiveType = Triangle;
 }
+HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<Texture2D>& _textures){
+	model = glm::mat4(1.0f);
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+	castShadow = true;
+	primitiveType = Triangle;
 
-void HJGraphics::Mesh2::commitData(){
+	material.clearTextures();
+	material.loadTextures(_textures);
+
+	material.shininess=48;
+	material.ambientStrength=0.3f;
+	material.specularStrength=1.0f;
+	material.diffuseStrength=0.7f;
+	indices=_indices;
+	for(auto &v:_vertices)addVertex(v);
+	commitData();
+}
+void HJGraphics::Mesh::commitData(){
 	std::vector<float> data;
 	for (int i = 0; i < position.size(); ++i) {
 		data.push_back(position[i].x);
@@ -80,7 +98,7 @@ void HJGraphics::Mesh2::commitData(){
 	drawNum = indices.empty() ? position.size() : indices.size();
 }
 
-void HJGraphics::Mesh2::clear() {
+void HJGraphics::Mesh::clear() {
 	position.clear();
 	uv.clear();
 	normal.clear();
@@ -88,7 +106,7 @@ void HJGraphics::Mesh2::clear() {
 	bitangent.clear();
 }
 
-void HJGraphics::Mesh2::addVertex(const Vertex14& v) {
+void HJGraphics::Mesh::addVertex(const Vertex14& v) {
 	position.push_back(v.position);
 	uv.push_back(v.texCoord);
 	normal.push_back(v.normal);
@@ -96,13 +114,13 @@ void HJGraphics::Mesh2::addVertex(const Vertex14& v) {
 	bitangent.push_back(v.bitangent);
 }
 
-void HJGraphics::Mesh2::addVertex(const glm::vec3& _position, const glm::vec2& _uv, const glm::vec3& _normal) {
+void HJGraphics::Mesh::addVertex(const glm::vec3& _position, const glm::vec2& _uv, const glm::vec3& _normal) {
 	position.push_back(_position);
 	uv.push_back(_uv);
 	normal.push_back(_normal);
 }
 
-void HJGraphics::Mesh2::addVertex(const Vertex8& v, const glm::vec3& _tangent, const glm::vec3& _bitangent) {
+void HJGraphics::Mesh::addVertex(const Vertex8& v, const glm::vec3& _tangent, const glm::vec3& _bitangent) {
 	position.push_back(v.position);
 	uv.push_back(v.texCoord);
 	normal.push_back(v.normal);
@@ -110,16 +128,16 @@ void HJGraphics::Mesh2::addVertex(const Vertex8& v, const glm::vec3& _tangent, c
 	bitangent.push_back(_bitangent);
 }
 
-void HJGraphics::Mesh2::addVertex(const glm::vec3& _position, const glm::vec2& _uv, const glm::vec3& _normal,
-	const glm::vec3& _tangent, const glm::vec3& _bitangent) {
+void HJGraphics::Mesh::addVertex(const glm::vec3& _position, const glm::vec2& _uv, const glm::vec3& _normal,
+                                 const glm::vec3& _tangent, const glm::vec3& _bitangent) {
 	position.push_back(_position);
 	uv.push_back(_uv);
 	normal.push_back(_normal);
 	tangent.push_back(_tangent);
 	bitangent.push_back(_bitangent);
 }
-void HJGraphics::Mesh2::addVertex(const glm::vec3& _position, const glm::vec3& _normal, const glm::vec2& _uv,
-	const glm::vec3& _tangent, const glm::vec3& _bitangent) {
+void HJGraphics::Mesh::addVertex(const glm::vec3& _position, const glm::vec3& _normal, const glm::vec2& _uv,
+                                 const glm::vec3& _tangent, const glm::vec3& _bitangent) {
 	position.push_back(_position);
 	uv.push_back(_uv);
 	normal.push_back(_normal);
@@ -127,6 +145,7 @@ void HJGraphics::Mesh2::addVertex(const glm::vec3& _position, const glm::vec3& _
 	bitangent.push_back(_bitangent);
 }
 
-void HJGraphics::Mesh2::setVertices(const std::vector<glm::vec3> &_position) {
+void HJGraphics::Mesh::setVertices(const std::vector<glm::vec3> &_position) {
 	position=_position;
 }
+

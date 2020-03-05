@@ -2,8 +2,8 @@
 // Created by 何振邦(m_iDev_0792) on 2018/12/24.
 //
 
-#ifndef TESTINGFIELD_MATERIAL_H
-#define TESTINGFIELD_MATERIAL_H
+#ifndef HJGRAPHICS_MATERIAL_H
+#define HJGRAPHICS_MATERIAL_H
 #include <string>
 #include <iostream>
 #include <vector>
@@ -100,7 +100,11 @@ namespace HJGraphics {
 		void writeToShader(Shader *shader);
 
 		void writeToShader(std::shared_ptr<Shader> shader);
+
+		void clearTextures();
+
+		void loadTextures(const std::vector<Texture2D>& _textures);
 	};
 
 }
-#endif //TESTINGFIELD_MATERIAL_H
+#endif //HJGRAPHICS_MATERIAL_H
