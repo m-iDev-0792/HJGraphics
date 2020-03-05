@@ -3,29 +3,59 @@
 //
 
 #include "Shader.h"
-char *HJGraphics::Shader::readShader(const char *filename) {
+std::string readText(const std::string& filename)
+{
 	using namespace std;
 	ifstream file(filename, ios::in);
 	if (!file.is_open()) {
-		cout << "ERROR @ Shader::readShader(const char*) : can't load shader file:" << filename << endl;
+		cout << "ERROR @ readText(const string&) : can't load text file:" << filename << endl;
 		return nullptr;
-	} else {
-		string text;
-		file.seekg(0, ios::end);
-		text.resize(file.tellg());
-		file.seekg(0, ios::beg);
-		file.read(&text[0], text.size());
-		file.close();
-		char *p = new char[text.size() + 1];
-		strcpy(p, text.c_str());
-		return p;
 	}
+	string text;
+	file.seekg(0, ios::end);
+	text.resize(file.tellg());
+	file.seekg(0, ios::beg);
+	file.read(&text[0], text.size());
+	file.close();
+	return text;
+}
+HJGraphics::Shader* HJGraphics::makeShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath){
+	auto vsCode = readText(vsPath);
+	auto fsCode = readText(fsPath);
+	std::string gsCode;
+	if (!gsPath.empty())gsCode = readText(gsPath);
+	Shader* shader;
+	try {
+		shader = new Shader(vsCode, fsCode, gsCode);
+	}
+	catch (...) {
+		std::cout << "Error at makeShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
+	}
+	return shader;
+}
+std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath)
+{
+	auto vsCode = readText(vsPath);
+	auto fsCode = readText(fsPath);
+	std::string gsCode;
+	if (!gsPath.empty())gsCode = readText(gsPath);
+	std::shared_ptr<Shader> shader;
+	try {
+		shader = std::make_shared<Shader>(vsCode, fsCode, gsCode);
+	}
+	catch (...) {
+		std::cout << "Error at makeSharedShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
+	}
+	return shader;
 }
 
-HJGraphics::Shader::Shader(const char *vertexPath, const char *fragmentPath) {
-	char *vertexCode = readShader(vertexPath);
-	char *fragmentCode = readShader(fragmentPath);
-	GLuint vertexID, fragmentID;
+HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode, const std::string& gsCode)
+{
+	const char *vertexCode = vsCode.c_str();
+	const char *fragmentCode = fsCode.c_str();
+	const char *geometryCode = gsCode.c_str();
+
+	GLuint vertexID, fragmentID, geometryID;
 
 	vertexID = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexID, 1, &vertexCode, nullptr);
@@ -37,57 +67,33 @@ HJGraphics::Shader::Shader(const char *vertexPath, const char *fragmentPath) {
 	glCompileShader(fragmentID);
 	checkCompileError(fragmentID, "FRAGMENT");
 
+	if(!gsCode.empty())
+	{
+		geometryID = glCreateShader(GL_GEOMETRY_SHADER);
+		glShaderSource(geometryID, 1, &geometryCode, nullptr);
+		glCompileShader(geometryID);
+		checkCompileError(geometryID, "GEOMETRY");
+	}
 	id = glCreateProgram();
 	glAttachShader(id, vertexID);
 	glAttachShader(id, fragmentID);
+	if (!gsCode.empty())glAttachShader(id, geometryID);
 	glLinkProgram(id);
-	checkCompileError(id, "PROGRAM");
+	if(!checkCompileError(id, "PROGRAM")) {
+		std::cout << "----Compile shader program not successful----" << std::endl;
+		std::cout << "vsCode:" << std::endl << vsCode << std::endl;
+		std::cout << "fsCode:" << std::endl << fsCode << std::endl;
+		throw "loading shader failed";
+	}
 
-	//clean
-	delete vertexCode;
-	delete fragmentCode;
 	glDeleteShader(vertexID);
 	glDeleteShader(fragmentID);
-}
-HJGraphics::Shader::Shader(const char * vertexPath,const char *fragmentPath,const char *geometryPath){
-	char *vertexCode = readShader(vertexPath);
-	char *fragmentCode = readShader(fragmentPath);
-	char *geometryCode = readShader(geometryPath);
-	GLuint vertexID, fragmentID,geometryID;
-
-	vertexID = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexID, 1, &vertexCode, nullptr);
-	glCompileShader(vertexID);
-	checkCompileError(vertexID, "VERTEX");
-
-	fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentID, 1, &fragmentCode, nullptr);
-	glCompileShader(fragmentID);
-	checkCompileError(fragmentID, "FRAGMENT");
-
-	geometryID = glCreateShader(GL_GEOMETRY_SHADER);
-	glShaderSource(geometryID, 1, &geometryCode, nullptr);
-	glCompileShader(geometryID);
-	checkCompileError(geometryID, "GEOMETRY");
-
-	id = glCreateProgram();
-	glAttachShader(id, vertexID);
-	glAttachShader(id, fragmentID);
-	glAttachShader(id,geometryID);
-	glLinkProgram(id);
-	checkCompileError(id, "PROGRAM");
-
-	//clean
-	delete vertexCode;
-	delete fragmentCode;
-	delete geometryCode;
-	glDeleteShader(vertexID);
-	glDeleteShader(fragmentID);
-	glDeleteShader(geometryID);
+	if (!gsCode.empty())glDeleteShader(geometryID);
 }
 
-void HJGraphics::Shader::checkCompileError(GLuint shader, std::string type){
-	int success;
+
+bool HJGraphics::Shader::checkCompileError(GLuint shader, std::string type){
+	int success=1;
 	char infoLog[1024];
 	if (type != "PROGRAM") {
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -104,4 +110,5 @@ void HJGraphics::Shader::checkCompileError(GLuint shader, std::string type){
 			          << "\n -- --------------------------------------------------- -- " << std::endl;
 		}
 	}
+	return success;
 }

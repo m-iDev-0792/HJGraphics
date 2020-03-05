@@ -5,10 +5,10 @@
 
 #define GL_SILENCE_DEPRECATION
 
-#ifndef MODEL_SHADER_H
-#define MODEL_SHADER_H
+#ifndef HJGRAPICS_SHADER_H
+#define HJGRAPICS_SHADER_H
 
-
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <glm/glm.hpp>
@@ -17,10 +17,7 @@
 namespace HJGraphics {
 	class Shader {
 	public:
-
-		explicit Shader(const char *vertexPath, const char *fragmentPath);
-
-		explicit Shader(const char *vertexPath, const char *fragmentPath, const char *geometryPath);
+		Shader(const std::string& vsCode, const std::string& fsCode, const std::string& gsCode);
 
 		void use() { glUseProgram(id); };
 
@@ -59,10 +56,12 @@ namespace HJGraphics {
 	private:
 		GLuint id;
 
-		void checkCompileError(GLuint shader, std::string type);
+		bool checkCompileError(GLuint shader, std::string type);
 
-		static char *readShader(const char *filename);
 	};
+	Shader* makeShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
+	
+	std::shared_ptr<Shader> makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
 }
 
-#endif //MODEL_SHADER_H
+#endif //HJGRAPICS_SHADER_H

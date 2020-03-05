@@ -7,21 +7,23 @@ By using HJGraphics, you can create OpenGL environment and draw some funny 3D ob
 eg.
 ```
 Window window(windowWidth,windowHeight,windowTitle);
-Box box(boxWidth,boxDepth,boxHeight);
 Camera camera(cameraPosition,cameraDirection);
-PointLight pointLight(lightPosition);
-Scene scene;
-scene.addCamera(camera);
-scene.addObject(box);
-scene.addLight(pointLight);
-window.addScene(scene);
+auto box=make_shared<Box>(boxWidth,boxDepth,boxHeight);
+auto pointLight=make_shared<PointLight>(lightPosition);
+auto scene=make_shared<Scene>();
+scene->addCamera(camera);
+scene->addObject(box);
+scene->addLight(pointLight);
+auto renderer=make_shared<DeferredRenderer>();
+renderer->setMainScene(scene);
+window.renderer=renderer;
 window.run();
 ```
 
 # Features
 HJGraphics has...
 
-* Window : a GLFW wrapped window system(now HJGraphics supports Qt, see HJGraphics-Qt).
+* Window : a GLFW wrapped window system(~~now HJGraphics supports Qt, see HJGraphics-Qt~~).
 * Camera 
 * Scene : an easy way to manage and draw objects.
 * Object : a few build-in 3D objects support include
@@ -52,12 +54,17 @@ Fig.3 model loading support (only `obj` format fully supported now)
 ![](attachment/material.png)
 
 Fig.4 basic material
-
+# Dependencies
+- Assimp 5.0.1 64bit
+- GLFW 3.3 64bit
+- GLAD
+- glm
+- stb
 # Continue advancing
 - [ ] SSAO
 - [ ] Load scene via JSON file
-- [ ] HDR
-- [ ] Deferred shading option
+- [x] HDR
+- [x] Deferred shading
 
 # Acknowledge
 Amazing tutorials : [learnopengl.com](https://www.learnopengl.com)

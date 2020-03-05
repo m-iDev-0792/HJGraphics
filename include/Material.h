@@ -2,9 +2,9 @@
 // Created by 何振邦(m_iDev_0792) on 2018/12/24.
 //
 
-#ifndef TESTINGFIELD_MATERIAL_H
-#define TESTINGFIELD_MATERIAL_H
-
+#ifndef HJGRAPHICS_MATERIAL_H
+#define HJGRAPHICS_MATERIAL_H
+#include <string>
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
@@ -39,13 +39,13 @@ namespace HJGraphics {
 		int texHeight;
 		int texChannel;
 
-		Texture2D(const std::string path);
+		Texture2D(const std::string &_path, bool gammaCorrection=false);
 
-		Texture2D(const std::string path, const GLint texWrap);
+		Texture2D(const std::string &_path, const GLint& _texWrap, bool gammaCorrection=false);
 
 		Texture2D();
 
-		void loadFromPath(const std::string path);
+		void loadFromPath(const std::string &_path, bool gammaCorrection=false);
 	};
 	class SolidTexture : public Texture{
 	public:
@@ -58,31 +58,24 @@ namespace HJGraphics {
 
 
 	};
-	class ShadowMap : public Texture{
-	public:
-		ShadowMap();
-		ShadowMap(int _width,int _height);
-		int texWidth;
-		int texHeight;
-	};
 
 	class CubeMapTexture : public Texture {
 	public:
-		CubeMapTexture(const std::string rightTex, const std::string leftTex, const std::string upTex,
-		               const std::string downTex, const std::string frontTex, const std::string backTex,
-		               const GLuint texN = 0);
+		CubeMapTexture(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
+		               const std::string &downTex, const std::string &frontTex, const std::string &backTex,
+		               GLuint texN = 0);
 
 		CubeMapTexture();
 
-		void loadFromPath(const std::string rightTex, const std::string leftTex, const std::string upTex,
-		                  const std::string downTex, const std::string frontTex, const std::string backTex);
+		void loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
+		                  const std::string &downTex, const std::string &frontTex, const std::string &backTex);
 	};
 
 	class Material {
 	public:
-		glm::vec3 ambientStrength;
-		glm::vec3 diffuseStrength;
-		glm::vec3 specularStrength;
+		float ambientStrength;
+		float diffuseStrength;
+		float specularStrength;
 
 		float shininess;
 		float alpha;
@@ -94,6 +87,10 @@ namespace HJGraphics {
 		std::vector<Texture> normalMaps;
 		std::vector<Texture> heightMaps;
 
+		static std::shared_ptr<Shader> pointLightShader;
+		static std::shared_ptr<Shader> parallelLightShader;
+		static std::shared_ptr<Shader> spotLightShader;
+
 		Material();
 
 		Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor);
@@ -101,7 +98,13 @@ namespace HJGraphics {
 		void bindTexture();
 
 		void writeToShader(Shader *shader);
+
+		void writeToShader(std::shared_ptr<Shader> shader);
+
+		void clearTextures();
+
+		void loadTextures(const std::vector<Texture2D>& _textures);
 	};
 
 }
-#endif //TESTINGFIELD_MATERIAL_H
+#endif //HJGRAPHICS_MATERIAL_H

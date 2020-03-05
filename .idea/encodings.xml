@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" addBOMForNewFiles="with NO BOM" />
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/include/Mesh.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/include/Shape.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/shader/deferred/debug.fs.glsl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/shader/deferred/shade.parallel.fs.glsl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/shader/deferred/shade.point.fs.glsl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/shader/deferred/shade.spot.fs.glsl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Mesh.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Shape.cpp" charset="UTF-8" />
+  </component>
 </project>

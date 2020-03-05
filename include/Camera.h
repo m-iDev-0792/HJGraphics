@@ -2,18 +2,16 @@
 // Created by 何振邦(m_iDev_0792) on 2018/12/20.
 //
 
-#ifndef TESTINGFIELD_CAMERA_H
-#define TESTINGFIELD_CAMERA_H
+#ifndef HJGRAPHICS_CAMERA_H
+#define HJGRAPHICS_CAMERA_H
+#include <string>
 #include <iostream>
 #include "OpenGLHeader.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 namespace HJGraphics {
-	class Scene;
-
 	class Camera {
-		friend Scene;
 	protected:
 		GLuint sharedUBO;
 	public:
@@ -21,10 +19,12 @@ namespace HJGraphics {
 		glm::vec3 direction;
 		glm::vec3 front;
 		glm::vec3 up;
+		
 		float fov;
 		float aspect;
 		float zNear;
 		float zFar;
+		
 		glm::mat4 view;
 		glm::mat4 projection;
 		Camera();
@@ -36,4 +36,4 @@ namespace HJGraphics {
 	};
 }
 
-#endif //TESTINGFIELD_CAMERA_H
+#endif //HJGRAPHICS_CAMERA_H

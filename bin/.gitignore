@@ -1,0 +1,4 @@
+#ignore following files&folders
+*.ilk
+*.pdb
+*.trace

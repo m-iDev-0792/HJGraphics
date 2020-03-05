@@ -6,7 +6,7 @@
 HJGraphics::Window::Window(){
 
 }
-HJGraphics::Window::Window(int _width,int _height,std::string _title):GLFWWindowObject(_width,_height,_title){
+HJGraphics::Window::Window(int _width,int _height,std::string _title): GLFWWrap(_width, _height, _title){
 	fov = 45.0f;
 	firstMouse = true;
 	mouseDown = false;
@@ -15,43 +15,45 @@ HJGraphics::Window::Window(int _width,int _height,std::string _title):GLFWWindow
 	lastY = static_cast<float>(height) / 2;
 	yaw = 0.0f;
 	pitch = 0.0f;
-	moveSpeed=0.02;
+	moveSpeed=0.01;
 	fps=60;
 }
-void HJGraphics::Window::inputCallback() {
+void HJGraphics::Window::inputCallback(long long deltaTime) {
 	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(windowPtr, true);
 		return;
 	}
+	float move = moveSpeed * deltaTime;
+	auto pCamera=renderer->mainScene->getMainCamera();
 	if(glfwGetKey(windowPtr, GLFW_KEY_A) == GLFW_PRESS){
 		//left
-		glm::vec3 cameraRight=glm::normalize(glm::cross(currentScene->getMainCamera()->direction,glm::vec3(0.0f,1.0f,0.0f)));
-		currentScene->getMainCamera()->position-=cameraRight*moveSpeed;
+		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
+		pCamera->position-=cameraRight*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_D) == GLFW_PRESS){
 		//right
-		glm::vec3 cameraRight=glm::normalize(glm::cross(currentScene->getMainCamera()->direction,glm::vec3(0.0f,1.0f,0.0f)));
-		currentScene->getMainCamera()->position+=cameraRight*moveSpeed;
+		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
+		pCamera->position+=cameraRight*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_W) == GLFW_PRESS){
 		//front
-		glm::vec3 cameraRight=glm::normalize(glm::cross(currentScene->getMainCamera()->direction,glm::vec3(0.0f,1.0f,0.0f)));
+		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
 		glm::vec3 cameraFront=glm::normalize(glm::cross(glm::vec3(0.0f,1.0f,0.0f),cameraRight));
-		currentScene->getMainCamera()->position+=cameraFront*moveSpeed;
+		pCamera->position+=cameraFront*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_S) == GLFW_PRESS){
 		//back
-		glm::vec3 cameraRight=glm::normalize(glm::cross(currentScene->getMainCamera()->direction,glm::vec3(0.0f,1.0f,0.0f)));
+		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
 		glm::vec3 cameraFront=glm::normalize(glm::cross(glm::vec3(0.0f,1.0f,0.0f),cameraRight));
-		currentScene->getMainCamera()->position-=cameraFront*moveSpeed;
+		pCamera->position-=cameraFront*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_Q) == GLFW_PRESS){
 		//up
-		currentScene->getMainCamera()->position+=glm::vec3(0,1,0)*moveSpeed;
+		pCamera->position+=glm::vec3(0,1,0)*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_E) == GLFW_PRESS){
 		//down
-		currentScene->getMainCamera()->position+=glm::vec3(0,-1,0)*moveSpeed;
+		pCamera->position+=glm::vec3(0,-1,0)*move;
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_M) == GLFW_PRESS){
 		static bool wireMode=false;
@@ -64,9 +66,10 @@ void HJGraphics::Window::inputCallback() {
 	}
 }
 void HJGraphics::Window::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
+	auto pCamera=renderer->mainScene->getMainCamera();
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		mouseDown = true;
-		originalDirection=currentScene->getMainCamera()->direction;
+		originalDirection=pCamera->direction;
 	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
 		mouseDown = false;
@@ -100,14 +103,16 @@ void HJGraphics::Window::mouseCallback(GLFWwindow *window, double xpos, double y
 	pitchMat=glm::rotate(pitchMat,glm::radians(pitch),cameraRight);
 	glm::vec4 newDir=yawMat*glm::vec4(originalDirection,0.0f);
 	newDir=pitchMat*newDir;
-	currentScene->getMainCamera()->direction=newDir;
+	auto pCamera=renderer->mainScene->getMainCamera();
+	pCamera->direction=newDir;
 
 }
 void HJGraphics::Window::scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
 	if (fov >= 1 && fov <= 60)fov -= yoffset;
 	if (fov <= 1)fov = 1.0f;
 	else if (fov >= 60)fov = 60.0f;
-	currentScene->getMainCamera()->fov=fov;
+	auto pCamera=renderer->mainScene->getMainCamera();
+	pCamera->fov=fov;
 }
 void HJGraphics::Window::framebufferSizeCallback(GLFWwindow *window, int width, int height) {
 
@@ -117,41 +122,23 @@ void HJGraphics::Window::customInit() {
 	glEnable(GL_LINE_SMOOTH);
 //	glEnable(GL_CULL_FACE);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+	if(renderer)renderer->renderInit();
 }
 void HJGraphics::Window::run() {
 	glfwMakeContextCurrent(windowPtr);
 	customInit();
 	auto lastTime=std::chrono::high_resolution_clock::now();
 	while(!shouldClose()){
-		inputCallback();
 		auto currentTime=std::chrono::high_resolution_clock::now();
-		if(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime-lastTime).count()<1000.0/fps)continue;
+		auto frameDeltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+		if(frameDeltaTime<1000.0/fps)continue;
+		inputCallback(frameDeltaTime);
+		lastTime = currentTime;
 		render();
 		swapBuffer();
 		glfwPollEvents();
 	}
 }
 void HJGraphics::Window::render() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0, 0, 0, 1);
-	currentScene->writeSharedUBOData();
-	currentScene->draw();
-}
-
-//-------------------------- NEW FUNCTION ----------------------------------//
-
-void HJGraphics::Window::switchScene(int index) {
-	if(index<0){
-		std::cout<<"WARNING @ Window::switchScene(int) : index is less than 0"<<std::endl;
-		return;
-	}
-	if(index>=scenes.size()){
-		std::cout<<"WARNING @ Window::switchScene(int) : index is more than scenes size"<<std::endl;
-		return;
-	}
-	currentScene=scenes.at(index);
-}
-void HJGraphics::Window::addScene(HJGraphics::Scene &_scene) {
-	scenes.push_back(&_scene);
-	if(scenes.size() == 1)currentScene=&_scene;
+	if(renderer)renderer->render();
 }

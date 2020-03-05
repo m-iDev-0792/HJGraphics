@@ -1,76 +1,61 @@
-//
+﻿//
 // Created by 何振邦(m_iDev_0792) on 2018/12/20.
 //
 
-#ifndef TESTINGFIELD_SCENE_H
-#define TESTINGFIELD_SCENE_H
+#ifndef HJGRAPHICS_SCENE_H
+#define HJGRAPHICS_SCENE_H
 #define GL_SILENCE_DEPRECATION
 #include <vector>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include "Model.h"
 #include "Camera.h"
 #include "Light.h"
-#include "FrameBuffer.h"
+#include "Model.h"
+#include "CustomMesh.h"
 #include "DebugUtility.h"
-namespace HJGraphics {
-	constexpr int BIND_POINT_MAX = 74;//different graphics card has different bind point
 
+namespace HJGraphics {
+	class DeferredRenderer;
 /*
  * Declare of Scene class ,which is used to manage objects lights and cameras in a scene
  */
 	class Scene {
-	private:
-		int getBindPointSlot();
-
-		GLuint sharedUBO;//This UBO includes View mat Projection mat and ambient light factor
-		GLuint lightNum;
-		int sharedBindPoint;
+		friend DeferredRenderer;
 		GLuint sceneWidth;
 		GLuint sceneHeight;
 		GLfloat ambientFactor;
-		GLint defaultFramebuffer;
-		std::shared_ptr<FrameBuffer> framebuffer;
-	public:
-		GLint getDefaultFramebuffer() const;
-
-		void setDefaultFramebuffer(GLint _defaultFramebuffer);
-
-	private:
 		glm::vec3 clearColor;
-		std::vector<BasicGLObject *> objects;
-		std::vector<Camera *> cameras;
-		std::vector<Light *> lights;
+		
+		std::vector<std::shared_ptr<Mesh>> meshes;
+		std::vector<std::shared_ptr<Model>> models;
+		std::vector<std::shared_ptr<CustomMesh>> forwardMeshes;
+		std::vector<Camera*> cameras;
+		
+		std::vector<std::shared_ptr<ParallelLight>> parallelLights;
+		std::vector<std::shared_ptr<SpotLight>> spotLights;
+		std::vector<std::shared_ptr<PointLight>> pointLights;
+
 		Camera *mainCamera;
 	public:
-		static bool bindPointList[BIND_POINT_MAX];
-
 		Scene();
 
 		Scene(GLuint _sceneWidth, GLuint _sceneHeight, GLfloat _ambient, glm::vec3 _clearColor);
 
-		//TODO. removeObject removeCamera addLight removeLight
-		void addObject(BasicGLObject &object);
+		void addObject(std::shared_ptr<Mesh> mesh);
 
-		void addObject(Model &model);
+		void addObject(std::shared_ptr<Model> model);
+
+		void addObject(std::shared_ptr<CustomMesh> mesh);
 
 		void addCamera(Camera &camera);
 
-		void addLight(Light &light);
+		void addLight(std::shared_ptr<Light> light);
 
-		void setMainCamera(Camera &camera);
+		void setMainCamera(int index);
 
-		Camera* getMainCamera(){return mainCamera;}
+		void setAmbient(float ambient){ambientFactor=ambient;}
 
-		void draw();
-
-		void drawShadow();
-
-		void drawLight();
-
-		void writeSharedUBOData();
+		Camera* getMainCamera() { return mainCamera; }
 	};
 }
 
-#endif //TESTINGFIELD_SCENE_H
+#endif //HJGRAPHICS_SCENE_H

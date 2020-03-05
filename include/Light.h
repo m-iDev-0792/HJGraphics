@@ -2,8 +2,8 @@
 // Created by 何振邦(m_iDev_0792) on 2018/12/23.
 //
 
-#ifndef TESTINGFIELD_LIGHT_H
-#define TESTINGFIELD_LIGHT_H
+#ifndef HJGRAPHICS_LIGHT_H
+#define HJGRAPHICS_LIGHT_H
 
 #include <iostream>
 #include <vector>
@@ -20,92 +20,94 @@ namespace HJGraphics {
 		SpotLightType
 	};
 
+	class Mesh;
 	class Light {
-	protected:
-		GLuint debugVAO;
-		GLuint debugVBO;
 	public:
 		glm::vec3 position;// position parameter will be used in shadow map rendering
 		glm::vec3 color;
-		glm::mat4 lightMatrix;
-		GLuint shadowMap;
-		GLuint shadowFramebuffer;
-		GLuint shadowMapWidth;
-		GLuint shadowMapHeight;
+		
 		GLfloat shadowZNear;
 		GLfloat shadowZFar;
-		int type;
-		static Shader* debugShader;
+		LightType type;
 
-		void setShadowMapSize(GLuint width, GLuint height);
+		bool castShadow=true;
 
-		void setShadowZValue(GLfloat _zNear,GLfloat _zFar);
+		void setShadowZValue(GLfloat _zNear, GLfloat _zFar) {
+			shadowZNear = _zNear;
+			shadowZFar = _zFar;
+		}
+		virtual std::vector<glm::mat4> getLightMatrix() = 0;
+		
+		virtual void writeUniform(std::shared_ptr<Shader> lightShader){}
 
-		virtual void writeLightInfoUniform(Shader *lightShader);
+		Light()=default;
 
-		virtual void updateLightMatrix();
-
-		virtual void debugDrawLight(GLuint sharedBindPoint);
-
-		virtual void writeDebugData();
-
-		Light();
-
-		Light(int _type, glm::vec3 _pos,glm::vec3 _lightColor = glm::vec3(1.0f, 1.0f, 1.0f));
 	};
-
-	class ParallelLight:public Light{
-	public:
+	class ParallelLight: public Light {
 		glm::vec3 direction;
-
-		ParallelLight(glm::vec3 _dir,glm::vec3 _pos= glm::vec3(0.0f, 5.0f, 0.0f),glm::vec3 _color= glm::vec3(1.0f, 1.0f, 1.0f));
-
-		void writeLightInfoUniform(Shader *lightShader) override;
-
-		void updateLightMatrix()override;
-
-		void debugDrawLight(GLuint sharedBindPoint)override;
-
-		void writeDebugData() override ;
-	};
-
-	class SpotLight:public Light{
+		float range;
 	public:
+		ParallelLight(glm::vec3 _dir, glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f),
+		              glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f), float _range=10);
+
+		static std::shared_ptr<Mesh> lightVolume;
+		
+		std::vector<glm::mat4> getLightMatrix() override;
+		
+		void writeUniform(std::shared_ptr<Shader> lightShader) override;
+	};
+	class SpotLight: public Light {
 		glm::vec3 direction;
-		GLfloat innerAngle;
-		GLfloat outerAngle;
+		float innerAngle;
+		float outerAngle;
 
-		GLfloat linearAttenuation;
-		GLfloat quadraticAttenuation;
-		GLfloat constantAttenuation;
-
-		SpotLight(glm::vec3 _dir,glm::vec3 _pos= glm::vec3(0.0f, 5.0f, 0.0f),glm::vec3 _color= glm::vec3(1.0f, 1.0f, 1.0f));
-
-		void writeLightInfoUniform(Shader *lightShader) override;
-
-		void updateLightMatrix()override;
-
-		void debugDrawLight(GLuint sharedBindPoint)override;
-
-		void writeDebugData() override ;
-	};
-
-	class PointLight:public Light{
+		float linearAttenuation;
+		float quadraticAttenuation;
+		float constantAttenuation;
+		float range;
 	public:
-		GLfloat linearAttenuation;
-		GLfloat quadraticAttenuation;
-		GLfloat constantAttenuation;
-		glm::mat4 lightMatrices[6];
+		std::shared_ptr<Mesh> lightVolume;
+		
+		SpotLight(glm::vec3 _dir, glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f));
 
-		PointLight(glm::vec3 _pos= glm::vec3(0.0f, 5.0f, 0.0f),glm::vec3 _color= glm::vec3(1.0f, 1.0f, 1.0f));
+		void setAngle(float _inner,float _outer) {
+			innerAngle = _inner;
+			outerAngle = _outer;
+		}
+		void setAttenuation(float _linear,float _quadratic,float _constant) {
+			linearAttenuation = _linear;
+			quadraticAttenuation = _quadratic;
+			constantAttenuation = _constant;
+		}
+		
+		std::vector<glm::mat4> getLightMatrix() override;
 
-		void writeLightInfoUniform(Shader *lightShader) override;
+		void writeUniform(std::shared_ptr<Shader> lightShader) override;
 
-		void updateLightMatrix()override;
-
-		void debugDrawLight(GLuint sharedBindPoint)override;
-
-		void writeDebugData() override ;
+		void generateBoundingMesh();
 	};
+	class PointLight: public Light {
+	public:
+		float linearAttenuation;
+		float quadraticAttenuation;
+		float constantAttenuation;
+		float rangeR;
+		std::shared_ptr<Mesh> lightVolume;
+		
+		PointLight(glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f),float _rangeR=10);
+		
+		void setAttenuation(float _linear, float _quadratic, float _constant) {
+			linearAttenuation = _linear;
+			quadraticAttenuation = _quadratic;
+			constantAttenuation = _constant;
+		}
+		
+		std::vector<glm::mat4> getLightMatrix() override;
+
+		void writeUniform(std::shared_ptr<Shader> lightShader) override;
+
+		void generateBoundingMesh();
+	};
+	
 }
-#endif //TESTINGFIELD_LIGHT_H
+#endif //HJGRAPHICS_LIGHT_H

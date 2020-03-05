@@ -3,6 +3,7 @@
 //
 
 #include "Model.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include <random>
 float random0_1f() {
 	static std::random_device seed;
@@ -10,84 +11,7 @@ float random0_1f() {
 	static std::uniform_real_distribution<float> dist(0, 1);
 	return dist(engine);
 }
-HJGraphics::Mesh::Mesh(std::vector<HJGraphics::Vertex14> _vertices, std::vector<unsigned int> _indices,
-                       std::vector<HJGraphics::Texture2D> _textures) {
-	hasShadow=true;
-	const std::string usageList[4]={"diffuse","specular","normal","height"};
-	material.diffuseMaps.clear();
-	material.specularMaps.clear();
-	material.normalMaps.clear();
-	material.heightMaps.clear();
-	for(auto& t:_textures){
-		if(usageList[0] == t.usage){
-			material.diffuseMaps.push_back(t);
-		}else if(usageList[1] == t.usage){
-			material.specularMaps.push_back(t);
-		}else if(usageList[2] == t.usage){
-			material.normalMaps.push_back(t);
-		}else if(usageList[3] == t.usage){
-			material.heightMaps.push_back(t);
-		}
-	}
-	indices=_indices;
-	vertices=_vertices;
-	writeVerticesData();
-	material.shininess=48;
-	material.specularStrength=glm::vec3(0.3f);
-	material.diffuseStrength=glm::vec3(0.7f);
-}
-void HJGraphics::Mesh::draw() {
-	writeObjectPropertyUniform(defaultShader);
-	material.bindTexture();
-	draw(*defaultShader);
-}
-void HJGraphics::Mesh::draw(Shader shader){
-	shader.use();
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-}
-void HJGraphics::Mesh::drawLight(HJGraphics::Light *light) {
-	Shader *lightShader;
-	if(light->type==LightType::ParallelLightType)lightShader=parallelLightShader;
-	else if(light->type==LightType::SpotLightType)lightShader=spotLightShader;
-	else if(light->type==LightType::PointLightType)lightShader=pointLightShader;
-	else return;
-	writeObjectPropertyUniform(lightShader);
-	light->writeLightInfoUniform(lightShader);
-	material.bindTexture();
-	draw(*lightShader);
-}
-void HJGraphics::Mesh::writeVerticesData() {
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex14), &vertices[0], GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), nullptr);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, normal));
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, texCoord));
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, tangent));
-	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, bitangent));
-
-	glBindVertexArray(0);
-}
-void HJGraphics::Mesh::writeObjectPropertyUniform(Shader *shader) {
-	shader->use();
-	shader->set4fm("model",model);
-	material.writeToShader(shader);
-	shader->bindBlock("sharedMatrices",sharedBindPoint);
-}
-
-
-HJGraphics::Model::Model(const std::string _path, bool _gamma):gammaCorrection(_gamma) {
+HJGraphics::Model::Model(const std::string _path){
 	loadModel(_path);
 }
 void HJGraphics::Model::scale(float _ratio) {
@@ -121,13 +45,12 @@ void HJGraphics::Model::processNode(aiNode *node, const aiScene *scene) {
 		processNode(node->mChildren[i], scene);
 	}
 }
-HJGraphics::Mesh* HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
+std::shared_ptr<HJGraphics::Mesh> HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
 	std::vector<Vertex14> vertices;
 	std::vector<GLuint> indices;
 	std::vector<Texture2D> textures;
 
-	for(unsigned int i = 0; i < mesh->mNumVertices; i++)
-	{
+	for(unsigned int i = 0; i < mesh->mNumVertices; i++){
 		Vertex14 vertex;
 		glm::vec3 vector;
 		// positions
@@ -141,8 +64,7 @@ HJGraphics::Mesh* HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *sc
 		vector.z = mesh->mNormals[i].z;
 		vertex.normal = vector;
 		// texture coordinates
-		if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
-		{
+		if(mesh->mTextureCoords[0]){
 			glm::vec2 vec;
 			vec.x = mesh->mTextureCoords[0][i].x;
 			vec.y = mesh->mTextureCoords[0][i].y;
@@ -170,8 +92,7 @@ HJGraphics::Mesh* HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *sc
 		vertices.push_back(vertex);
 	}
 
-	for(unsigned int i = 0; i < mesh->mNumFaces; i++)
-	{
+	for(unsigned int i = 0; i < mesh->mNumFaces; i++){
 		aiFace face = mesh->mFaces[i];
 		for(unsigned int j = 0; j < face.mNumIndices; j++)
 			indices.push_back(face.mIndices[j]);
@@ -192,13 +113,12 @@ HJGraphics::Mesh* HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *sc
 	std::vector<Texture2D> heightMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_AMBIENT:aiTextureType_HEIGHT, "height");
 	if(!heightMaps.empty())textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-	return new Mesh(vertices, indices, textures);
+	return std::make_shared<Mesh>(vertices, indices, textures);
 }
 std::vector<HJGraphics::Texture2D> HJGraphics::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
                                                                            std::string texUsage) {
 	std::vector<Texture2D> materialTextures;
-	for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-	{
+	for(unsigned int i = 0; i < mat->GetTextureCount(type); i++){
 		aiString texAiStrPath;
 		mat->GetTexture(type, i, &texAiStrPath);
 		std::string texStdStrPath(texAiStrPath.C_Str());

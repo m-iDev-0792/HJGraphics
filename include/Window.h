@@ -6,11 +6,11 @@
 #define HJGRAPHICS_WINDOW_H
 
 #include <chrono>
-#include "Scene.h"
-#include "GLFWWindowObject.h"
+#include "GLFWWrap.h"
+#include "DeferredRenderer.h"
 namespace HJGraphics {
 
-	class Window : public GLFWWindowObject {
+	class Window : public GLFWWrap {
 	public:
 		Window();
 
@@ -20,17 +20,12 @@ namespace HJGraphics {
 
 		void switchScene(int index);
 
-		void addScene(Scene& scene);
-
 		void setFPS(int f){fps=f;}
 
 		int getFPS(){return fps;}
 
-
+		std::shared_ptr<DeferredRenderer> renderer;
 	protected:
-		std::vector<Scene *> scenes;
-		Scene *currentScene;
-
 		float fov;
 		bool firstMouse;
 		bool mouseDown;
@@ -47,7 +42,7 @@ namespace HJGraphics {
 
 		void framebufferSizeCallback(GLFWwindow *window, int width, int height) override;
 
-		void inputCallback() override;
+		void inputCallback(long long deltaTime) override;
 
 		void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) override;
 
