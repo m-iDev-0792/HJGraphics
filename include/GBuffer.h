@@ -16,7 +16,7 @@ namespace HJGraphics {
 	protected:
 		GLuint fbo;
 		GLuint rbo;
-		GLuint gPosition;
+		GLuint gPositionDepth;
 		GLuint gNormal;
 		GLuint gDiffSpec;
 		GLuint gShinAlphaReflectRefract;

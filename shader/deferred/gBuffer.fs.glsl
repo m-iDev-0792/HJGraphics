@@ -1,5 +1,5 @@
 #version 330 core
-layout (location = 0) out vec3 gPosition;
+layout (location = 0) out vec4 gPositionDepth;
 layout (location = 1) out vec3 gNormal;
 layout (location = 2) out vec4 gDiffSpec;
 layout (location = 3) out vec4 gShinAlphaReflectRefract;
@@ -32,18 +32,22 @@ struct Material{
     sampler2D heightMap;
 };
 uniform Material material;
-
+uniform vec2 zNearAndzFar;
 const float gamma=2.2;
+float linearizeDepth(float depth,float zNear,float zFar){
+    float z = depth * 2.0 - 1.0; // back to NDC
+    return (2.0 * zNear * zFar) / (zFar + zNear - z * (zFar - zNear));
+}
 void main(){
 	//----------GBuffer output--------------
 	//gPosition
-	gPosition=position;
-
+	gPositionDepth.xyz=position;
+    gPositionDepth.w=linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
 	//gDiffSpec
 	vec3 diff=vec3(1.0);
     if(material.diffuseMapNum>0){
         diff=texture(material.diffuseMap,uv).rgb;
-//        diff = pow(diff, vec3(gamma));
+//        diff = pow(diff, vec3(gamma));//inverse gamma correction for diff map
     }
 	float spec=1.0f;
 	if(material.specularMapNum>0){

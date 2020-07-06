@@ -4,9 +4,9 @@
 
 #ifndef HJGRAPHICS_FRAMEBUFFER_H
 #define HJGRAPHICS_FRAMEBUFFER_H
+#include "Shader.h"
 #include <string>
 #include <iostream>
-#include "Shader.h"
 namespace HJGraphics{
 	class FrameBuffer{
 	public:
@@ -15,17 +15,25 @@ namespace HJGraphics{
 		unsigned int tex;
 		int width;
 		int height;
-		bool HDR;
+		int internalFormat;
+		int format;
+		int dataType;
+		bool hasDepthRBO;
 
 		static std::shared_ptr<Shader> defaultShader;
-		static unsigned int VAO,VBO;
-		FrameBuffer(int _width,int _height,bool _enableHDR=false);
+
+		FrameBuffer(int _width,int _height,int _internalFormat=GL_RGB,int _format=GL_RGB,int _dataType=GL_UNSIGNED_BYTE,bool _hasDepthRBO=true);
 
 		void clearBind();
 
 		void unbind();
 
 		void drawBuffer();
+	};
+	class HDRFrameBuffer: public FrameBuffer{
+		HDRFrameBuffer(int _width,int _height):FrameBuffer(_width,_height,GL_RGB16F,GL_RGB,GL_FLOAT) {
+
+		}
 	};
 }
 

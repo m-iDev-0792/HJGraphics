@@ -19,5 +19,7 @@ inline glm::vec3 getNormal(const glm::vec3& v0, const glm::vec3& v1, const glm::
 	return glm::normalize(glm::cross(v1-v0,v2-v0));
 }
 
+// random
+float random0_1f();
 }
 #endif //HJGRAPHICS_UTILITY_H

@@ -7,7 +7,7 @@ out vec4 FragColor;
 uniform vec3 cameraPosition;
 
 //gBuffer - texture binding point 0~4
-uniform sampler2D gPosition;
+uniform sampler2D gPositionDepth;
 uniform sampler2D gNormal;
 uniform sampler2D gDiffSpec;
 uniform sampler2D gShinAlphaReflectRefract;
@@ -65,7 +65,7 @@ vec3 parallelLight(){
     vec3 diffColor=diffSpec.rgb;
     vec3 specColor=vec3(diffSpec.a);
     vec3 normal=texture(gNormal,texCoord).rgb;
-	vec3 position=texture(gPosition,texCoord).xyz;
+	vec3 position=texture(gPositionDepth,texCoord).xyz;
 
     //other parameters
 	vec4 saff=texture(gShinAlphaReflectRefract,texCoord);

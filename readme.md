@@ -2,7 +2,7 @@
 # HJGraphics
 HJGraphics is a very simple 3D graphic framework based on OpenGL API, and also my attempt to build a relatively complete tiny 3D graphic framework from the ground up. It is a part of my graduation project as well.
 
-By using HJGraphics, you can create OpenGL environment and draw some funny 3D objects with  a few lines of codes.
+By using HJGraphics, you can create OpenGL environment easily and draw some funny 3D objects with only a few lines of codes.
 
 eg.
 ```
@@ -36,24 +36,21 @@ HJGraphics has...
     * Parallel light
     * Spot light
     * Shadow for 3 kinds of lights above 
-* Material : basic material support like diffuse map, specular map, normal map and height map.
-
+* Material : basic material, diffuse map, specular map, normal map and height map.
+* Renderer : deferred and forward shading support, HDR rendering, SSAO, post-processing.
 # Gallery
 ![](attachment/multiLight.png)
 
-Fig.1 unlimited number of lights support
+Fig.1 unlimited number of lights and shadow support
 
-![](attachment/pointLightShadow.png)
 
-Fig.2 shadow support
+![](attachment/model.png)
 
-![](attachment/modelLoading.png)
-
-Fig.3 model loading support (only `obj` format fully supported now)
+Fig.2 model loading support (only `obj` format fully supported now)
 
 ![](attachment/material.png)
 
-Fig.4 basic material
+Fig.3 basic material
 # Dependencies
 - Assimp 5.0.1 64bit
 - GLFW 3.3 64bit
@@ -61,10 +58,11 @@ Fig.4 basic material
 - glm
 - stb
 # Continue advancing
-- [ ] SSAO
+- [x] SSAO
 - [ ] Load scene via JSON file
 - [x] HDR
 - [x] Deferred shading
+- [ ] PBR Shading
 
 # Acknowledge
 Amazing tutorials : [learnopengl.com](https://www.learnopengl.com)

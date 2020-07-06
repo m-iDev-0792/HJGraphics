@@ -9,6 +9,7 @@
 #include "GBuffer.h"
 #include "Scene.h"
 #include "FrameBuffer.h"
+#include "SSAO.h"
 #include <map>
 namespace HJGraphics {
 	class Window;
@@ -18,8 +19,6 @@ namespace HJGraphics {
 		DeferredRenderer();
 
 		DeferredRenderer(int _width,int _height);
-
-		void debugRenderGBuffer();
 
 		void setMainScene(std::shared_ptr<Scene> _mainScene) { mainScene = _mainScene; }
 		
@@ -31,14 +30,16 @@ namespace HJGraphics {
 
 		void renderMesh(std::shared_ptr<Mesh> m);
 	private:
+		//important members!
 		int width,height;
 		std::shared_ptr<Scene> mainScene;
 		std::shared_ptr<GBuffer> gBuffer;
-		std::shared_ptr<Mesh> screenQuad;
-		std::shared_ptr<FrameBuffer> framebuffer;
+		std::shared_ptr<FrameBuffer> deferredTarget;
+
+		std::shared_ptr<SSAO> ssaoPass;
+		std::shared_ptr<SolidTexture> defaultAOTex;
 		//some shaders
 		std::shared_ptr<Shader> gBufferShader;
-
 		std::shared_ptr<Shader> postprocessShader;
 		
 		std::shared_ptr<Shader> pointLightShadowShader;
@@ -48,15 +49,14 @@ namespace HJGraphics {
 		std::shared_ptr<Shader> parallelLightShader;
 		std::shared_ptr<Shader> spotLightShader;
 		std::shared_ptr<Shader> ambientShader;
-		
+
+		//settings
+		bool enableAO;
 		
 		//shadow maps
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMap>> shadowMaps;
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowCubeMap>> shadowCubeMaps;
 
-		//for debug usage
-		static std::shared_ptr<Shader> debugShader;
-		static unsigned int VAO, VBO;
 	};
 }
 #endif

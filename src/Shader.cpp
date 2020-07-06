@@ -29,7 +29,7 @@ HJGraphics::Shader* HJGraphics::makeShader(const std::string& vsPath, const std:
 		shader = new Shader(vsCode, fsCode, gsCode);
 	}
 	catch (...) {
-		std::cout << "Error at makeShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
+		std::cout << "Error @ makeShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
 	}
 	return shader;
 }
@@ -44,7 +44,7 @@ std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::stri
 		shader = std::make_shared<Shader>(vsCode, fsCode, gsCode);
 	}
 	catch (...) {
-		std::cout << "Error at makeSharedShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
+		std::cout << "Error @ makeSharedShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
 	}
 	return shader;
 }
