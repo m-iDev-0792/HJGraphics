@@ -14,6 +14,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1abe225c-fa90-4461-a691-18ba3a0c3b70" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/attachment/material copy.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/attachment/modelLoading copy.png" beforeDir="false" />
@@ -38,6 +39,8 @@
       <change beforePath="$PROJECT_DIR$/src/Shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Shader.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Utility.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utility.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Window.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window.cpp" afterDir="false" />
+=======
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,11 +101,14 @@
       </method>
     </configuration>
     <configuration name="HJGraphics" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="HJGraphics" TARGET_NAME="HJGraphics" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="HJGraphics" RUN_TARGET_NAME="HJGraphics">
+<<<<<<< Updated upstream
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="NanoSuitDemo" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="HJGraphics" TARGET_NAME="NanoSuitDemo" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="HJGraphics" RUN_TARGET_NAME="NanoSuitDemo">
+=======
+>>>>>>> Stashed changes
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -188,6 +194,7 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
+<<<<<<< Updated upstream
     <state x="328" y="130" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1593844829706">
       <screen x="0" y="23" width="1280" height="728" />
     </state>
@@ -257,6 +264,40 @@
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="726" y="188" width="670" height="676" key="search.everywhere.popup/298.1103.1280.728/0.23.1920.1057@0.23.1920.1057" timestamp="1593836874103" />
+=======
+    <state width="1584" height="286" key="GridCell.Tab.0.bottom" timestamp="1594027843596">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1584" height="286" key="GridCell.Tab.0.bottom/298.1103.1280.726/0.23.1920.1057@0.23.1920.1057" timestamp="1594027843596" />
+    <state width="1584" height="286" key="GridCell.Tab.0.center" timestamp="1594027843595">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1584" height="286" key="GridCell.Tab.0.center/298.1103.1280.726/0.23.1920.1057@0.23.1920.1057" timestamp="1594027843595" />
+    <state width="1584" height="286" key="GridCell.Tab.0.left" timestamp="1594027843594">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1584" height="286" key="GridCell.Tab.0.left/298.1103.1280.726/0.23.1920.1057@0.23.1920.1057" timestamp="1594027843594" />
+    <state width="1584" height="286" key="GridCell.Tab.0.right" timestamp="1594027843595">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1584" height="286" key="GridCell.Tab.0.right/298.1103.1280.726/0.23.1920.1057@0.23.1920.1057" timestamp="1594027843595" />
+    <state width="1584" height="286" key="GridCell.Tab.1.bottom" timestamp="1594027843598">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1584" height="286" key="GridCell.Tab.1.bottom/298.1103.1280.726/0.23.1920.1057@0.23.1920.1057" timestamp="1594027843598" />
+    <state width="1584" height="286" key="GridCell.Tab.1.center" timestamp="1594027843597">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1584" height="286" key="GridCell.Tab.1.center/298.1103.1280.726/0.23.1920.1057@0.23.1920.1057" timestamp="1594027843597" />
+    <state width="1584" height="286" key="GridCell.Tab.1.left" timestamp="1594027843596">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1584" height="286" key="GridCell.Tab.1.left/298.1103.1280.726/0.23.1920.1057@0.23.1920.1057" timestamp="1594027843596" />
+    <state width="1584" height="286" key="GridCell.Tab.1.right" timestamp="1594027843597">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="1584" height="286" key="GridCell.Tab.1.right/298.1103.1280.726/0.23.1920.1057@0.23.1920.1057" timestamp="1594027843597" />
+>>>>>>> Stashed changes
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

@@ -7,7 +7,7 @@
 
 std::shared_ptr<HJGraphics::Shader> HJGraphics::FrameBuffer::defaultShader= nullptr;
 
-HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,int _internalFormat,int _format,int _dataType,bool _hasDepthRBO) {
+HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,int _internalFormat,int _format,int _dataType,int _filter,bool _hasDepthRBO) {
 	if(defaultShader== nullptr){
 		defaultShader=makeSharedShader("../shader/forward/framebufferVertex.glsl","../shader/forward/framebufferFragment.glsl");
 	}
@@ -17,6 +17,7 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,int _internalFormat
 	format=_format;
 	dataType=_dataType;
 	hasDepthRBO=_hasDepthRBO;
+	filter=_filter;
 
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -26,8 +27,8 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,int _internalFormat
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, dataType, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	//set up rbo
 	if(hasDepthRBO){

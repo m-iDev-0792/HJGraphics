@@ -18,11 +18,12 @@ namespace HJGraphics{
 		int internalFormat;
 		int format;
 		int dataType;
+		int filter;
 		bool hasDepthRBO;
 
 		static std::shared_ptr<Shader> defaultShader;
 
-		FrameBuffer(int _width,int _height,int _internalFormat=GL_RGB,int _format=GL_RGB,int _dataType=GL_UNSIGNED_BYTE,bool _hasDepthRBO=true);
+		FrameBuffer(int _width,int _height,int _internalFormat=GL_RGB,int _format=GL_RGB,int _dataType=GL_UNSIGNED_BYTE,int _filter=GL_LINEAR,bool _hasDepthRBO=true);
 
 		void clearBind();
 
