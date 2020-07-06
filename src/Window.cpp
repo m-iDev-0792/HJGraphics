@@ -64,6 +64,9 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 			glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL);
 		}
 	}
+	if(glfwGetKey(windowPtr, GLFW_KEY_O) == GLFW_PRESS){
+		renderer->enableAO=!renderer->enableAO;
+	}
 }
 void HJGraphics::Window::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
 	auto pCamera=renderer->mainScene->getMainCamera();

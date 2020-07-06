@@ -3,7 +3,7 @@
 //
 
 #include "Utility.h"
-
+#include <random>
 void HJGraphics::getTangentBitangent(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, glm::vec2 uv0, glm::vec2 uv1, glm::vec2 uv2,glm::vec3& tangent,glm::vec3& bitangent) {
 	glm::vec3 deltaPos1 = v1-v0;
 	glm::vec3 deltaPos2 = v2-v0;
@@ -31,4 +31,11 @@ std::pair<glm::vec3,glm::vec3> HJGraphics::getTangentBitangent(const glm::vec3& 
 
 std::pair<glm::vec3,glm::vec3> HJGraphics::getTangentBitangent(const Vertex8& v0,const Vertex8& v1, const Vertex8& v2){
 	return getTangentBitangent(v0.position,v1.position,v2.position,v0.texCoord,v1.texCoord,v2.texCoord);
+}
+
+float HJGraphics::random0_1f() {
+	static std::random_device seed;
+	static std::mt19937 engine(seed());
+	static std::uniform_real_distribution<float> dist(0, 1);
+	return dist(engine);
 }

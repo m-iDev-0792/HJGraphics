@@ -27,5 +27,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 SET(CMAKE_INSTALL_RPATH "@loader_path/../lib")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 add_executable(HJGraphics main.cpp ${HJGRAPHICS_SRC} ${GLAD_SRC})
+add_executable(NanoSuitDemo nanoSuitDemo.cpp ${HJGRAPHICS_SRC} ${GLAD_SRC})
 target_link_libraries(HJGraphics ${GLFW3_LIB}  ${ASSIMP_LIB})

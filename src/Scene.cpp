@@ -1,5 +1,5 @@
 #include "Scene.h"
-HJGraphics::Scene::Scene() : Scene(800, 600, 0.1f, glm::vec3(0.0f, 0.0f, 1.0f)) {
+HJGraphics::Scene::Scene() : Scene(800, 600, 0.3f, glm::vec3(0.0f, 0.0f, 1.0f)) {
 
 }
 HJGraphics::Scene::Scene(GLuint _sceneWidth, GLuint _sceneHeight, GLfloat _ambient, glm::vec3 _clearColor) {

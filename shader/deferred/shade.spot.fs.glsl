@@ -8,7 +8,7 @@ out vec4 FragColor;
 uniform vec3 cameraPosition;
 
 //gBuffer - texture binding point 0~4
-uniform sampler2D gPosition;
+uniform sampler2D gPositionDepth;
 uniform sampler2D gNormal;
 uniform sampler2D gDiffSpec;
 uniform sampler2D gShinAlphaReflectRefract;
@@ -37,7 +37,7 @@ void main()
 float spotShadowCalculation(vec4 fragPosLightSpace)
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-    projCoords = projCoords * 0.5 + 0.5;
+    projCoords = projCoords * 0.5 + 0.5;//map to [0,1]
     float bias=0.0005f/ fragPosLightSpace.w;// if we don't do divide to bias, then spotlight bias=0.0005f parallels bias = 0.005f
     float currentDepth = projCoords.z;
     #ifndef PCF_SHADOW
@@ -67,7 +67,7 @@ vec3 spotLight(){
     vec3 diffColor=diffSpec.rgb;
     vec3 specColor=vec3(diffSpec.a);
     vec3 normal=texture(gNormal,texCoord).rgb;
-    vec3 position=texture(gPosition,texCoord).xyz;
+    vec3 position=texture(gPositionDepth,texCoord).xyz;
 
     //other parameters
     vec4 saff=texture(gShinAlphaReflectRefract,texCoord);

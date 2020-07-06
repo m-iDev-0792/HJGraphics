@@ -1,10 +1,14 @@
+//
+// Created by 何振邦 on 2020/7/6.
+//
+
 #include <iostream>
 #include "HJGraphics.h"
 using namespace std;
 using namespace glm;
 using namespace HJGraphics;
 int main() {
-	Window window(800,600,"HJGraphics");
+	Window window(800,600,"Nano Suit Demo");
 
 	glm::vec3 cameraPos=glm::vec3(5.0f,5.0f,10.0f);
 	glm::vec3 cameraDirection=glm::vec3(0.0f, 0.0f, 0.0f)-cameraPos;
@@ -13,11 +17,11 @@ int main() {
 	auto coord=make_shared<Coordinate>();
 	auto grid=make_shared<Grid>(1,5,GRIDMODE::XZ);
 	auto skybox=make_shared<Skybox>(15,string("../texture/envmap_miramar/miramar_rt.tga"),
-	              string("../texture/envmap_miramar/miramar_lf.tga"),
-	              string("../texture/envmap_miramar/miramar_up.tga"),
-	              string("../texture/envmap_miramar/miramar_dn.tga"),
-	              string("../texture/envmap_miramar/miramar_bk.tga"),
-	              string("../texture/envmap_miramar/miramar_ft.tga"));
+	                                string("../texture/envmap_miramar/miramar_lf.tga"),
+	                                string("../texture/envmap_miramar/miramar_up.tga"),
+	                                string("../texture/envmap_miramar/miramar_dn.tga"),
+	                                string("../texture/envmap_miramar/miramar_bk.tga"),
+	                                string("../texture/envmap_miramar/miramar_ft.tga"));
 
 	auto cylinder=make_shared<Cylinder>(0.25, 3, 30, "../texture/brickwall.jpg", "", "../texture/brickwall_normal.jpg");
 	cylinder->model=translate(cylinder->model,vec3(0.0f,0.0f,1.0f));
@@ -29,7 +33,7 @@ int main() {
 	auto plane=make_shared<Plane>(8, 8, "../texture/brickwall.jpg", "", "../texture/brickwall_normal.jpg", 8);
 
 	auto sphere=make_shared<Sphere>(0.5, 30, "../texture/brickwall.jpg", "", "../texture/brickwall_normal.jpg");
-	sphere->model=translate(sphere->model,vec3(2,2,-1));
+	sphere->model=translate(sphere->model,vec3(0,2,0));
 
 
 

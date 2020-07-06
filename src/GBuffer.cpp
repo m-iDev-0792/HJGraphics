@@ -11,14 +11,17 @@ HJGraphics::GBuffer::GBuffer(int _width, int _height) {
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-	//set up position
-	glGenTextures(1, &gPosition);
-	glBindTexture(GL_TEXTURE_2D, gPosition);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
+	//set up position and depth(in linear space)
+	glGenTextures(1, &gPositionDepth);
+	glBindTexture(GL_TEXTURE_2D, gPositionDepth);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPosition, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPositionDepth, 0);
 
 	//set up normal
 	glGenTextures(1, &gNormal);
@@ -92,7 +95,7 @@ void HJGraphics::GBuffer::copyDepthBitToDefaultBuffer(GLuint target) {
 
 void HJGraphics::GBuffer::bindTextures() {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,gPosition);
+	glBindTexture(GL_TEXTURE_2D, gPositionDepth);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D,gNormal);
 	glActiveTexture(GL_TEXTURE2);
@@ -103,7 +106,7 @@ void HJGraphics::GBuffer::bindTextures() {
 	glBindTexture(GL_TEXTURE_2D,gAmbiDiffSpecStrength);
 }
 void HJGraphics::GBuffer::writeUniform(std::shared_ptr<Shader> shader) {
-	shader->setInt("gPosition",0);
+	shader->setInt("gPositionDepth",0);
 	shader->setInt("gNormal",1);
 	shader->setInt("gDiffSpec",2);
 	shader->setInt("gShinAlphaReflectRefract",3);

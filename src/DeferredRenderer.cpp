@@ -1,76 +1,24 @@
 #include "DeferredRenderer.h"
 
-std::shared_ptr<HJGraphics::Shader> HJGraphics::DeferredRenderer::debugShader = nullptr;
-unsigned int HJGraphics::DeferredRenderer::VAO;
-unsigned int HJGraphics::DeferredRenderer::VBO;
 HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
-	if (debugShader == nullptr) {
-		debugShader = makeSharedShader("../shader/deferred/debug.vs.glsl", "../shader/deferred/debug.fs.glsl");
-		float quadVertices[] = {
-				// positions   // texCoords  //tag
-				-1.0f,  0.0f,  0.0f, 1.0f,   0.5,
-				-1.0f, -1.0f,  0.0f, 0.0f,   0.5,
-				0.0f, -1.0f,  1.0f, 0.0f,   0.5,
-
-				-1.0f,  0.0f,  0.0f, 1.0f,   0.5,
-				0.0f, -1.0f,  1.0f, 0.0f,   0.5,
-				0.0f,  0.0f,  1.0f, 1.0f,   0.5,
-
-				0.0f,  0.0f,  0.0f, 1.0f,   1.5,
-				0.0f, -1.0f,  0.0f, 0.0f,   1.5,
-				1.0f, -1.0f,  1.0f, 0.0f,   1.5,
-
-				0.0f,  0.0f,  0.0f, 1.0f,   1.5,
-				1.0f, -1.0f,  1.0f, 0.0f,   1.5,
-				1.0f,  0.0f,  1.0f, 1.0f,   1.5,
-
-				0.0f,  1.0f,  0.0f, 1.0f,   2.5,
-				0.0f, 0.0f,  0.0f, 0.0f,   2.5,
-				1.0f, 0.0f,  1.0f, 0.0f,   2.5,
-
-				0.0f,  1.0f,  0.0f, 1.0f,   2.5,
-				1.0f, 0.0f,  1.0f, 0.0f,   2.5,
-				1.0f,  1.0f,  1.0f, 1.0f,   2.5,
-
-				-1.0f,  1.0f,  0.0f, 1.0f,   3.5,
-				-1.0f, 0.0f,  0.0f, 0.0f,   3.5,
-				0.0f, 0.0f,  1.0f, 0.0f,   3.5,
-
-				-1.0f,  1.0f,  0.0f, 1.0f,   3.5,
-				0.0f, 0.0f,  1.0f, 0.0f,   3.5,
-				0.0f,  1.0f,  1.0f, 1.0f,   3.5,
-		};
-		//genrate buffer
-		glGenVertexArrays(1, &VAO);
-		glGenBuffers(1, &VBO);
-		//set up buffer
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		//write buffer data
-		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
-
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(4 * sizeof(float)));
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-	}
-
-	{
-		screenQuad=std::make_shared<Mesh>();
-		std::vector<glm::vec3> v{glm::vec3(-1,1,0),glm::vec3(-1,-1,0),glm::vec3(1,1,0),
-		                         glm::vec3(-1,-1,0),glm::vec3(1,-1,0),glm::vec3(1,1,0)};
-		screenQuad->setVertices(v);
-		screenQuad->commitData();
-	}
+	//-------------------------------
+	//    Init Important Members
+	//-------------------------------
 	width=_width;height=_height;
 	gBufferShader = makeSharedShader("../shader/deferred/gBuffer.vs.glsl", "../shader/deferred/gBuffer.fs.glsl");
 	gBuffer = std::make_shared<GBuffer>(_width, _height);
-	framebuffer=std::make_shared<FrameBuffer>(_width, _height,true);
-//	framebuffer=nullptr;//bug when framebuffer=nullptr
+	deferredTarget=std::make_shared<FrameBuffer>(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT);
+//	deferredTarget=nullptr;//bug when deferredTarget=nullptr?No, too dark to recognize graphics
+	ssaoPass=std::make_shared<SSAO>(glm::vec2(width,height),glm::vec2(16),32);
+	defaultAOTex=std::make_shared<SolidTexture>(glm::vec3(1.0f));
+	//-------------------------------
+	//        Init Settings
+	//-------------------------------
+	enableAO=true;
+
+	//-------------------------------
+	//        Shaders
+	//-------------------------------
 	//post-processing shader
 	postprocessShader = makeSharedShader("../shader/deferred/post.vs.glsl","../shader/deferred/post.fs.glsl");
 	//shadow map shaders
@@ -83,22 +31,6 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	ambientShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.ambient.fs.glsl");
 }
 HJGraphics::DeferredRenderer::DeferredRenderer():DeferredRenderer(800,600) {}
-
-void HJGraphics::DeferredRenderer::debugRenderGBuffer() {
-	debugShader->use();
-	glBindVertexArray(VAO);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, gBuffer->gPosition);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, gBuffer->gNormal);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, gBuffer->gDiffSpec);
-
-	debugShader->setInt("gPosition", 0);
-	debugShader->setInt("gNormal", 1);
-	debugShader->setInt("gDiffSpec", 2);
-	glDrawArrays(GL_TRIANGLES, 0, 24);
-}
 
 void HJGraphics::DeferredRenderer::render() {
 	//-----------------------------
@@ -177,6 +109,7 @@ void HJGraphics::DeferredRenderer::render() {
 	mainScene->mainCamera->updateMatrices();
 	gBufferShader->set4fm("view", mainScene->mainCamera->view);
 	gBufferShader->set4fm("projection", mainScene->mainCamera->projection);
+	gBufferShader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
 	for (auto& m : mainScene->meshes) {
 		gBufferShader->set4fm("model", m->model);
 		m->material.bindTexture();
@@ -184,15 +117,25 @@ void HJGraphics::DeferredRenderer::render() {
 		renderMesh(m);
 	}
 	gBuffer->unbind();
+
+	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
+	//-----------------------------
+	//2.1 SSAO (Optional)
+	//-----------------------------
+	if(ssaoPass&&enableAO){
+		ssaoPass->render(gBuffer->gPositionDepth,gBuffer->gNormal,projectionView,
+				glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar),mainScene->mainCamera->position);
+	}
+
+
 	//-----------------------------
 	//3. deferred shading
 	//-----------------------------
-	//if there is a framebuffer, then bind it, draw it after post-processing
-	if(framebuffer)framebuffer->clearBind();
+	//if there is a framebuffer, then bind it, and draw it after post-processing
+	if(deferredTarget)deferredTarget->clearBind();
 
 	//bind gBuffer texture
 	gBuffer->bindTextures();
-	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE,GL_ONE);
@@ -202,8 +145,15 @@ void HJGraphics::DeferredRenderer::render() {
 	ambientShader->set4fm("projectionView", glm::mat4(1.0f));
 	ambientShader->set4fm("model", glm::mat4(1.0f));
 	ambientShader->setFloat("globalAmbiendStrength",mainScene->ambientFactor);
+	//bind AO texture
+	{
+		ambientShader->setInt("ao",5);
+		glActiveTexture(GL_TEXTURE5);
+		if(enableAO)glBindTexture(GL_TEXTURE_2D,ssaoPass->ssao->tex);
+		else glBindTexture(GL_TEXTURE_2D,defaultAOTex->id);
+	}
 	gBuffer->writeUniform(ambientShader);
-	renderMesh(screenQuad);
+	Quad3D::draw();
 
 	//[3.2]-------parallel light shading----------
 	if(mainScene->parallelLights.size()>0) {
@@ -281,13 +231,13 @@ void HJGraphics::DeferredRenderer::render() {
 	//-----------------------------
 	if(!mainScene->forwardMeshes.empty()) {
 		//copy depth
-		if (framebuffer) {
-			gBuffer->copyDepthBitToDefaultBuffer(framebuffer->fbo);
-//		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->fbo);//unnecessary? maybe!
+		if (deferredTarget) {
+			gBuffer->copyDepthBitToDefaultBuffer(deferredTarget->fbo);
+			//glBindFramebuffer(GL_FRAMEBUFFER, deferredTarget->fbo);//unnecessary? maybe!
 		} else {
-			//WARNING.BUG. when framebuffer is nullptr, forward rendering will cover all deferred shading image!
+			//WARNING.when deferredTarget is nullptr, the output graphics in the screen could be too dark to recognize
 			gBuffer->copyDepthBitToDefaultBuffer(0);
-//			glBindFramebuffer(GL_FRAMEBUFFER, 0);//unnecessary? maybe!
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);//unnecessary? maybe!
 		}
 		for (auto &fm:mainScene->forwardMeshes) {
 			fm->projectionView = projectionView;
@@ -298,8 +248,8 @@ void HJGraphics::DeferredRenderer::render() {
 	//-----------------------------
 	//5. post process
 	//-----------------------------
-	if(framebuffer){
-		framebuffer->unbind();
+	if(deferredTarget){
+		deferredTarget->unbind();
 		postprocess();
 	}
 
@@ -311,8 +261,8 @@ void HJGraphics::DeferredRenderer::postprocess() {
 	postprocessShader->setInt("screenTexture",0);
 	postprocessShader->set2fv("size",glm::vec2(width,height));
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,framebuffer->tex);
-	renderMesh(screenQuad);
+	glBindTexture(GL_TEXTURE_2D, deferredTarget->tex);
+	Quad3D::draw();
 }
 void HJGraphics::DeferredRenderer::renderInit() {
 	//Allocate shadow maps for lights that casts shadow

@@ -1,8 +1,8 @@
 #version 330 core
 out vec4 FragColor;
 
-//gBuffer
-uniform sampler2D gPosition;
+//gBuffer bind point 0-4
+uniform sampler2D gPositionDepth;
 uniform sampler2D gNormal;
 uniform sampler2D gDiffSpec;
 uniform sampler2D gShinAlphaReflectRefract;
@@ -10,6 +10,7 @@ uniform sampler2D gAmbiDiffSpecStrength;
 uniform vec2 gBufferSize;
 
 uniform float globalAmbiendStrength;
+uniform sampler2D ao;//bind point 5
 
 void main()
 {
@@ -21,6 +22,6 @@ void main()
     //strength
     vec3 strength=texture(gAmbiDiffSpecStrength,texCoord).xyz;
     float ambiStrength=strength.x;
-
-    FragColor=vec4(diffColor*ambiStrength*globalAmbiendStrength,1.0f);
+    float aoFactor=texture(ao,texCoord).r;
+    FragColor=vec4(diffColor*ambiStrength*globalAmbiendStrength*aoFactor,1.0f);
 }
