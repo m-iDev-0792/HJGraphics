@@ -16,8 +16,8 @@ HJGraphics::SSAO::SSAO(glm::vec2 _ssaoSize, glm::vec2 _ssaoNoiseSize, float _sam
 	ssaoBias=_ssaoBias;
 	ssaoBlurRaidus=_ssaoBlurRadius;
 	//create ssao and ssaoBlured framebuffers
-	ssao=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,false);
-	ssaoBlured=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,false);
+	ssao=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
+	ssaoBlured=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
 	if(ssaoShader==nullptr)ssaoShader=makeSharedShader("../shader/deferred/ssao.vs.glsl","../shader/deferred/ssao.fs.glsl");
 	if(ssaoBlurShader==nullptr)ssaoBlurShader=makeSharedShader("../shader/deferred/ssao.vs.glsl","../shader/deferred/ssaoBlur.fs.glsl");
 	generateSamplesAndNoise();
