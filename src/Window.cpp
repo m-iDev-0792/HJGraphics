@@ -17,6 +17,7 @@ HJGraphics::Window::Window(int _width,int _height,std::string _title): GLFWWrap(
 	pitch = 0.0f;
 	moveSpeed=0.01;
 	fps=60;
+	textRenderer=std::make_shared<TextRenderer>("../font/Courier-BOLDITALIC.ttf",glm::vec2(width,height),20);
 }
 void HJGraphics::Window::inputCallback(long long deltaTime) {
 	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -25,6 +26,12 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 	}
 	float move = moveSpeed * deltaTime;
 	auto pCamera=renderer->mainScene->getMainCamera();
+
+	//-------------------------------
+	//        Key Event Handling
+	//-------------------------------
+	static long long accmuDeltaTime=0;
+
 	if(glfwGetKey(windowPtr, GLFW_KEY_A) == GLFW_PRESS){
 		//left
 		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
@@ -55,6 +62,12 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 		//down
 		pCamera->position+=glm::vec3(0,-1,0)*move;
 	}
+
+	//if key press time is too short just ignore it
+	if(accmuDeltaTime<10000/fps){
+		accmuDeltaTime+=deltaTime;
+		return;
+	}else accmuDeltaTime=0;
 	if(glfwGetKey(windowPtr, GLFW_KEY_M) == GLFW_PRESS){
 		static bool wireMode=false;
 		wireMode=!wireMode;
@@ -134,14 +147,26 @@ void HJGraphics::Window::run() {
 	while(!shouldClose()){
 		auto currentTime=std::chrono::high_resolution_clock::now();
 		auto frameDeltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
-		if(frameDeltaTime<1000.0/fps)continue;
+		if(frameDeltaTime<1000.0/fps)continue;//too short, ignore input
 		inputCallback(frameDeltaTime);
 		lastTime = currentTime;
 		render();
+		renderUI();
 		swapBuffer();
 		glfwPollEvents();
 	}
 }
 void HJGraphics::Window::render() {
 	if(renderer)renderer->render();
+}
+void HJGraphics::Window::renderUI() {
+	if(textRenderer==nullptr)return;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+	textRenderer->renderTextDynamic("Key A S D W: move camera",glm::vec2(10,580),glm::vec3(1,0,0),1);
+	textRenderer->renderTextDynamic("Key Q E: up and down",glm::vec2(10,555),glm::vec3(1,0,0),1);
+	textRenderer->renderTextDynamic("Key O: SSAO off/on",glm::vec2(10,530),glm::vec3(1,0,0),1);
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
 }

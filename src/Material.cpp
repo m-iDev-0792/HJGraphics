@@ -135,10 +135,15 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
 		int imgWidth,imgHeight,imgChannel;
 		auto data=stbi_load(tex[i].c_str(),&imgWidth,&imgHeight,&imgChannel,0);
 		GLuint format;
-		if(imgChannel==1)format=GL_RED;
-		else if(imgChannel==3)format=GL_RGB;
-		else if(imgChannel==4)format=GL_RGBA;
-		else{
+		if(imgChannel==1){
+			format=GL_RED;
+		}
+		else if(imgChannel==3){
+			format=GL_RGB;
+		}
+		else if(imgChannel==4){
+			format=GL_RGBA;
+		}else{
 			std::cout<<"ERROR @ CubeMapTexture::loadFromPath : can't solve image channel"<<std::endl;
 			return;
 		}

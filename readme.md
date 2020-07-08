@@ -37,7 +37,7 @@ HJGraphics has...
     * Spot light
     * Shadow for 3 kinds of lights above 
 * Material : basic material, diffuse map, specular map, normal map and height map.
-* Renderer : deferred and forward shading support, HDR rendering, SSAO, post-processing.
+* Renderer : deferred and forward shading support, HDR rendering, SSAO, post-processing, text rendering.
 # Gallery
 ![](attachment/multiLight.png)
 

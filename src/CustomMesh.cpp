@@ -158,9 +158,10 @@ void HJGraphics::Grid::draw() {
  * Implement of Skybox
  */
 HJGraphics::Skybox::Skybox(float _radius,std::string rightTex, std::string leftTex,std::string upTex,
-                           std::string downTex,std::string frontTex, std::string backTex):cubeMapTexture(rightTex,leftTex,upTex,downTex,frontTex,backTex){
+                           std::string downTex,std::string frontTex, std::string backTex,bool _gammaCorrection):cubeMapTexture(rightTex,leftTex,upTex,downTex,frontTex,backTex){
 	std::string tex[6]={rightTex,leftTex,upTex,downTex,frontTex,backTex};
 	radius=_radius;
+	gammaCorrection=_gammaCorrection;
 	if(defaultShader== nullptr)defaultShader=makeSharedShader("../shader/forward/skybox.vs.glsl","../shader/forward/skybox.fs.glsl");
 	GLfloat cubeVertices[]={
 			// positions           normals
@@ -230,6 +231,7 @@ void HJGraphics::Skybox::draw() {
 	defaultShader->use();
 	defaultShader->set4fm("projectionView",projectionView);
 	defaultShader->setInt("skybox",0);
+	defaultShader->setInt("gammaCorrection",gammaCorrection);
 	glBindVertexArray(VAO);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture.id);

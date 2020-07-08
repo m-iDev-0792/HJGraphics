@@ -56,7 +56,7 @@ int main() {
 	scene->addObject(nanosuit);
 	scene->addObject(coord);
 //	scene->addObject(grid);
-//	scene->addObject(skybox);
+	scene->addObject(skybox);
 
 	auto renderer=make_shared<DeferredRenderer>();
 	renderer->setMainScene(scene);
