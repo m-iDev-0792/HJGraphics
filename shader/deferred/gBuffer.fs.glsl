@@ -32,7 +32,7 @@ struct Material{
     sampler2D heightMap;
 };
 uniform Material material;
-uniform vec2 zNearAndzFar;
+uniform vec2 zNearAndzFar;//to get linear depth
 const float gamma=2.2;
 float linearizeDepth(float depth,float zNear,float zFar){
     float z = depth * 2.0 - 1.0; // back to NDC

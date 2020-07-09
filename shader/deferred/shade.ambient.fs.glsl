@@ -1,13 +1,7 @@
 #version 330 core
 out vec4 FragColor;
 
-//gBuffer bind point 0-4
-uniform sampler2D gPositionDepth;
-uniform sampler2D gNormal;
-uniform sampler2D gDiffSpec;
-uniform sampler2D gShinAlphaReflectRefract;
-uniform sampler2D gAmbiDiffSpecStrength;
-uniform vec2 gBufferSize;
+#include"common/shadeCommon.glsl"
 
 uniform float globalAmbiendStrength;
 uniform sampler2D ao;//bind point 5

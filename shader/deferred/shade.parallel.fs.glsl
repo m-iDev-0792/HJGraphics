@@ -3,17 +3,8 @@
 #define PCF_SHADOW
 out vec4 FragColor;
 
-//********common uniform begin********
-uniform vec3 cameraPosition;
+#include"common/shadeCommon.glsl"
 
-//gBuffer - texture binding point 0~4
-uniform sampler2D gPositionDepth;
-uniform sampler2D gNormal;
-uniform sampler2D gDiffSpec;
-uniform sampler2D gShinAlphaReflectRefract;
-uniform sampler2D gAmbiDiffSpecStrength;
-uniform vec2 gBufferSize;
-//********common uniform end********
 
 //light Info
 uniform vec3 lightPosition;

@@ -13,7 +13,8 @@ set(GLAD_SRC 3rd-party/glad/glad.c)
 #GLFW3.3
 IF(WIN32)
     set(GLFW3_LIB glfw3dll.lib)
-    set(CMAKE_MSVCIDE_RUN_PATH "../lib")
+    set(CMAKE_MSVCIDE_RUN_PATH "${PROJECT_SOURCE_DIR}/lib")#set dll path for win platform
+    #from https://stackoverflow.com/questions/28533012/how-to-set-runtime-path-for-cmake-custom-command-on-windows
 ELSEIF(APPLE)
     set(GLFW3_LIB libglfw.3.3.dylib)
 ENDIF()

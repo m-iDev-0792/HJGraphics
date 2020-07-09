@@ -4,7 +4,7 @@
 //
 
 HJGraphics::Mesh::Mesh() {
-	model = glm::mat4(1.0f);
+	lastModel= model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
@@ -12,7 +12,7 @@ HJGraphics::Mesh::Mesh() {
 	primitiveType = Triangle;
 }
 HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<Texture2D>& _textures){
-	model = glm::mat4(1.0f);
+	lastModel= model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);

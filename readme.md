@@ -63,6 +63,7 @@ Fig.3 basic material
 - [x] HDR
 - [x] Deferred shading
 - [ ] PBR Shading
+- [ ] Motion Blur
 
 # Acknowledge
 Amazing tutorials : [learnopengl.com](https://www.learnopengl.com)

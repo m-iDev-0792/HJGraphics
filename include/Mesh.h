@@ -35,6 +35,7 @@ namespace HJGraphics {
 		std::vector<GLuint> indices;
 	public:
 		glm::mat4 model;
+		glm::mat4 lastModel;//for motion blur
 		Material material;
 
 		Mesh();

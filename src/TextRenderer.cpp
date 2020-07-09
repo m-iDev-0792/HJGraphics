@@ -75,6 +75,7 @@ void HJGraphics::TextRenderer::renderTextDynamic(std::string text, glm::vec2 pos
 
 	float x=position.x;
 	float y=position.y;
+	//see https://learnopengl-cn.github.io/img/06/02/glyph_offset.png to figure out how to calculate position
 	for (auto c = text.begin(); c != text.end(); c++){
 		Character ch = characters[*c];
 

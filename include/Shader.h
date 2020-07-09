@@ -59,6 +59,8 @@ namespace HJGraphics {
 		bool checkCompileError(GLuint shader, std::string type);
 
 	};
+	void preprocessShaderCode(std::string &source, const std::string &basePath);
+
 	Shader* makeShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
 	
 	std::shared_ptr<Shader> makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
