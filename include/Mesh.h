@@ -37,6 +37,7 @@ namespace HJGraphics {
 		glm::mat4 model;
 		glm::mat4 lastModel;//for motion blur
 		Material material;
+//		std::shared_ptr<BaseMaterial> baseMaterial;
 
 		Mesh();
 

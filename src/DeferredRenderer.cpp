@@ -5,11 +5,12 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	//    Init Important Members
 	//-------------------------------
 	width=_width;height=_height;
-	gBufferShader = makeSharedShader("../shader/deferred/gBuffer.vs.glsl", "../shader/deferred/gBuffer.fs.glsl");
-	gBuffer = std::make_shared<GBuffer>(_width, _height);
+
+	gBuffer = std::make_shared<BlinnPhongGBuffer>(_width, _height);
+	gBuffer->shader = makeSharedShader("../shader/deferred/gBuffer.vs.glsl", "../shader/deferred/gBuffer.fs.glsl");
 	deferredTarget=std::make_shared<FrameBuffer>(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT);
 //	deferredTarget=nullptr;//bug when deferredTarget=nullptr?No, too dark to recognize graphics
-	ssaoPass=std::make_shared<SSAO>(glm::vec2(width,height),glm::vec2(16),32);
+	ssaoPass=std::make_shared<SSAO>(glm::vec2(width,height),glm::vec2(16),32,1,0.5);
 	defaultAOTex=std::make_shared<SolidTexture>(glm::vec3(1.0f));
 	//-------------------------------
 	//        Init Settings
@@ -29,6 +30,7 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	parallelLightShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.parallel.fs.glsl");
 	spotLightShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.spot.fs.glsl");
 	ambientShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.ambient.fs.glsl");
+	lightingShader  = makeSharedShader("../shader/deferred/shade.vs.glsl", "../shader/deferred/shade.fs.glsl");
 }
 HJGraphics::DeferredRenderer::DeferredRenderer():DeferredRenderer(800,600) {}
 
@@ -105,15 +107,15 @@ void HJGraphics::DeferredRenderer::render() {
 	//-----------------------------
 	glViewport(0,0,width,height);
 	gBuffer->bind();
-	gBufferShader->use();
+	gBuffer->shader->use();
 	mainScene->mainCamera->updateMatrices();
-	gBufferShader->set4fm("view", mainScene->mainCamera->view);
-	gBufferShader->set4fm("projection", mainScene->mainCamera->projection);
-	gBufferShader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
+	gBuffer->shader->set4fm("view", mainScene->mainCamera->view);
+	gBuffer->shader->set4fm("projection", mainScene->mainCamera->projection);
+	gBuffer->shader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
 	for (auto& m : mainScene->meshes) {
-		gBufferShader->set4fm("model", m->model);
+		gBuffer->shader->set4fm("model", m->model);
 		m->material.bindTexture();
-		m->material.writeToShader(gBufferShader);
+		m->material.writeToShader(gBuffer->shader);
 		renderMesh(m);
 	}
 	gBuffer->unbind();
@@ -155,20 +157,22 @@ void HJGraphics::DeferredRenderer::render() {
 	gBuffer->writeUniform(ambientShader);
 	Quad3D::draw();
 
+	lightingShader->use();
 	//[3.2]-------parallel light shading----------
 	if(mainScene->parallelLights.size()>0) {
-		parallelLightShader->use();
 		//write uniforms
 		//for vertex shader
-		parallelLightShader->set4fm("projectionView", glm::mat4(1.0f));
-		parallelLightShader->set4fm("model", glm::mat4(1.0f));
+		lightingShader->set4fm("projectionView", glm::mat4(1.0f));
+		lightingShader->set4fm("model", glm::mat4(1.0f));
 		//for fragment shader
-		parallelLightShader->set3fv("cameraPosition", mainScene->mainCamera->position);
-		parallelLightShader->setInt("shadowMap", 10);
-		gBuffer->writeUniform(parallelLightShader);
+		lightingShader->setInt("lightType", 0);
+		lightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+		lightingShader->setInt("shadowMap", 10);
+		lightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
+		gBuffer->writeUniform(lightingShader);
 		for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
 			auto light = mainScene->parallelLights[i];
-			light->writeUniform(parallelLightShader);
+			light->writeUniform(lightingShader);
 			if (light->castShadow) {
 				glActiveTexture(GL_TEXTURE10);
 				glBindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
@@ -180,18 +184,19 @@ void HJGraphics::DeferredRenderer::render() {
 	glCullFace(GL_FRONT);
 	//[3.3]-------spotlight shading----------
 	if(mainScene->spotLights.size()>0) {
-		spotLightShader->use();
 		//write uniforms
 		//for vertex shader
-		spotLightShader->set4fm("projectionView", projectionView);
-		spotLightShader->set4fm("model", glm::mat4(1.0f));
+		lightingShader->set4fm("projectionView", projectionView);
+		lightingShader->set4fm("model", glm::mat4(1.0f));
 		//for fragment shader
-		spotLightShader->set3fv("cameraPosition", mainScene->mainCamera->position);
-		spotLightShader->setInt("shadowMap", 10);
-		gBuffer->writeUniform(spotLightShader);
+		lightingShader->setInt("lightType", 1);
+		lightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+		lightingShader->setInt("shadowMap", 10);
+		lightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
+		gBuffer->writeUniform(lightingShader);
 		for (int i = 0; i < mainScene->spotLights.size(); ++i) {
 			auto light = mainScene->spotLights[i];
-			light->writeUniform(spotLightShader);
+			light->writeUniform(lightingShader);
 			if (light->castShadow) {
 				glActiveTexture(GL_TEXTURE10);
 				glBindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
@@ -202,18 +207,19 @@ void HJGraphics::DeferredRenderer::render() {
 
 	//[3.4]-------point light shading----------
 	if(mainScene->pointLights.size()>0) {
-		pointLightShader->use();
 		//write uniforms
 		//for vertex shader
-		pointLightShader->set4fm("projectionView", projectionView);//NOTE. we also need to set 'model' matrix for every light
+		lightingShader->set4fm("projectionView", projectionView);//NOTE. we also need to set 'model' matrix for every light
 		//for fragment shader
-		pointLightShader->set3fv("cameraPosition", mainScene->mainCamera->position);
-		pointLightShader->setInt("shadowMap", 10);
-		gBuffer->writeUniform(pointLightShader);
+		lightingShader->setInt("lightType", 2);
+		lightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+		lightingShader->setInt("shadowCubeMap", 10);
+		lightingShader->setInt("shadowMap", 11);//useless actually,otherwise cause gl_invalid_operation!
+		gBuffer->writeUniform(lightingShader);
 		for (int i = 0; i < mainScene->pointLights.size(); ++i) {
 			auto light = mainScene->pointLights[i];
-			pointLightShader->set4fm("model", glm::translate(glm::mat4(1.0f),light->position));//set 'model' matrix
-			light->writeUniform(pointLightShader);
+			lightingShader->set4fm("model", glm::translate(glm::mat4(1.0f), light->position));//set 'model' matrix
+			light->writeUniform(lightingShader);
 			if (light->castShadow) {
 				glActiveTexture(GL_TEXTURE10);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->tex);
@@ -232,11 +238,11 @@ void HJGraphics::DeferredRenderer::render() {
 	if(!mainScene->forwardMeshes.empty()) {
 		//copy depth
 		if (deferredTarget) {
-			gBuffer->copyDepthBitToDefaultBuffer(deferredTarget->fbo);
+			gBuffer->copyDepthBit(deferredTarget->fbo);
 			//glBindFramebuffer(GL_FRAMEBUFFER, deferredTarget->fbo);//unnecessary? maybe!
 		} else {
 			//WARNING.when deferredTarget is nullptr, the output graphics in the screen could be too dark to recognize
-			gBuffer->copyDepthBitToDefaultBuffer(0);
+			gBuffer->copyDepthBit(0);
 			//glBindFramebuffer(GL_FRAMEBUFFER, 0);//unnecessary? maybe!
 		}
 		for (auto &fm:mainScene->forwardMeshes) {

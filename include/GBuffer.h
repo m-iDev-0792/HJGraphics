@@ -10,32 +10,68 @@
 #include "Shader.h"
 namespace HJGraphics {
 	class DeferredRenderer;
-
-	class GBuffer {
+	class GBuffer{
 		friend DeferredRenderer;
 	protected:
 		GLuint fbo;
 		GLuint rbo;
 		GLuint gPositionDepth;
 		GLuint gNormal;
-		GLuint gDiffSpec;
-		GLuint gShinAlphaReflectRefract;
-		GLuint gAmbiDiffSpecStrength;
-		
+
 		int width;
 		int height;
+
+		std::shared_ptr<Shader> shader;
 	public:
-		GBuffer(int _width, int _height);
+
+		GBuffer(int _width, int _height): width(_width), height(_height){}
 
 		void bind();
 
 		void unbind();
 
-		void copyDepthBitToDefaultBuffer(GLuint target=0);
+		void copyDepthBit(GLuint target = 0);
 
-		void bindTextures();
+		virtual void bindTextures(){
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, gPositionDepth);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D,gNormal);
+		}
 
-		void writeUniform(std::shared_ptr<Shader> shader);
+		virtual void writeUniform(std::shared_ptr<Shader> shader){
+			shader->setInt("gPositionDepth",0);
+			shader->setInt("gNormal",1);
+			shader->set2fv("gBufferSize",glm::vec2(width,height));
+		}
+	};
+	class BlinnPhongGBuffer: public GBuffer {
+		friend DeferredRenderer;
+	protected:
+		GLuint gDiffSpec;
+		GLuint gShinAlphaReflectRefract;
+		GLuint gAmbiDiffSpecStrength;
+	public:
+		BlinnPhongGBuffer(int _width, int _height);
+
+		void bindTextures() override ;
+
+		void writeUniform(std::shared_ptr<Shader> shader) override ;
+	};
+	class PBRGBuffer: public GBuffer{
+		friend DeferredRenderer;
+	protected:
+		GLuint fbo;
+		GLuint rbo;
+
+		GLuint gAlbedoMetallic;
+		GLuint gF0Roughness;
+	public:
+		PBRGBuffer(int _width, int _height);
+
+		void bindTextures() override ;
+
+		void writeUniform(std::shared_ptr<Shader> shader) override ;
 	};
 }
 #endif

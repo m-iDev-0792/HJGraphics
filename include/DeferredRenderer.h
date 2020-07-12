@@ -39,7 +39,6 @@ namespace HJGraphics {
 		std::shared_ptr<SSAO> ssaoPass;
 		std::shared_ptr<SolidTexture> defaultAOTex;
 		//some shaders
-		std::shared_ptr<Shader> gBufferShader;
 		std::shared_ptr<Shader> postprocessShader;
 		
 		std::shared_ptr<Shader> pointLightShadowShader;
@@ -49,6 +48,8 @@ namespace HJGraphics {
 		std::shared_ptr<Shader> parallelLightShader;
 		std::shared_ptr<Shader> spotLightShader;
 		std::shared_ptr<Shader> ambientShader;
+		std::shared_ptr<Shader> lightingShader;
+
 
 		//settings
 		bool enableAO;

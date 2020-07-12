@@ -39,7 +39,7 @@ HJGraphics::Texture2D::Texture2D() :Texture(GL_TEXTURE_2D){
 	texMagFilter=GL_LINEAR;
 }
 void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCorrection) {
-	glActiveTexture(GL_TEXTURE0+textureN); // 在绑定纹理之前先激活纹理单元
+	glActiveTexture(GL_TEXTURE0+textureN);
 	glBindTexture(GL_TEXTURE_2D, id);
 	int imgWidth,imgHeight,imgChannel;
 	auto data=stbi_load(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
@@ -74,7 +74,7 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
 		stbi_image_free(data);
 		path=_path;
 	}else{
-		std::cout << "ERROR @ Texture2D::loadFromPath : can't load image: " << _path << std::endl;
+		std::cerr << "ERROR @ Texture2D::loadFromPath : can't load image: " << _path << std::endl;
 	}
 
 }
@@ -89,6 +89,24 @@ HJGraphics::SolidTexture::SolidTexture(glm::vec3 _color):Texture(GL_TEXTURE_2D){
 	texMinFilter=GL_NEAREST;
 	texMagFilter=GL_NEAREST;
 	setColor(_color);
+}
+HJGraphics::SolidTexture::SolidTexture(float _color):Texture(GL_TEXTURE_2D){
+	glGenTextures(1,&id);
+	texWrapS=GL_REPEAT;
+	texWrapT=GL_REPEAT;
+	texMinFilter=GL_NEAREST;
+	texMagFilter=GL_NEAREST;
+	setColor(_color);
+}
+void HJGraphics::SolidTexture::setColor(float _color) {
+	color=glm::vec3(_color);
+	glActiveTexture(GL_TEXTURE0+textureN);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 1, 1, 0, GL_RED,GL_FLOAT, &_color);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texMinFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texMagFilter);
 }
 void HJGraphics::SolidTexture::setColor(glm::vec3 _color) {
 	color=_color;
@@ -165,9 +183,8 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
 /*
  * Implementation of Material
  */
-std::shared_ptr<HJGraphics::Shader> HJGraphics::Material::pointLightShader = nullptr;
-std::shared_ptr<HJGraphics::Shader> HJGraphics::Material::parallelLightShader = nullptr;
-std::shared_ptr<HJGraphics::Shader> HJGraphics::Material::spotLightShader = nullptr;
+std::shared_ptr<HJGraphics::Shader> HJGraphics::Material::lightingShader = nullptr;
+
 HJGraphics::Material::Material():Material(glm::vec3(0.9f,0.9f,0.9f),glm::vec3(1.0f,1.0f,1.0f)) {
 
 }
@@ -202,7 +219,8 @@ void HJGraphics::Material::bindTexture() {
 		glBindTexture(GL_TEXTURE_2D,heightMaps[0].id);
 	}
 }
-void HJGraphics::Material::writeToShader(Shader *shader) {
+
+void HJGraphics::Material::writeToShader(std::shared_ptr<Shader> shader) {
 	//Caution! call shader->use() before calling this function
 	shader->setInt("material.diffuseMapNum",diffuseMaps.size());
 	shader->setInt("material.diffuseMap",0);
@@ -222,27 +240,71 @@ void HJGraphics::Material::writeToShader(Shader *shader) {
 	shader->setFloat("material.reflective",reflective);
 	shader->setFloat("material.reflective",refractive);
 }
-
-void HJGraphics::Material::writeToShader(std::shared_ptr<Shader> shader) {
-	writeToShader(shader.get());
-}
 void HJGraphics::Material::clearTextures() {
 	diffuseMaps.clear();
 	specularMaps.clear();
 	normalMaps.clear();
 	heightMaps.clear();
 }
-const std::string usageList[4]={"diffuse","specular","normal","height"};
 void HJGraphics::Material::loadTextures(const std::vector<Texture2D> &_textures) {
 	for(auto& t:_textures){
-		if(usageList[0] == t.usage){
+		if("diffuse" == t.usage){
 			diffuseMaps.push_back(t);
-		}else if(usageList[1] == t.usage){
+		}else if("specular" == t.usage){
 			specularMaps.push_back(t);
-		}else if(usageList[2] == t.usage){
+		}else if("normal" == t.usage){
 			normalMaps.push_back(t);
-		}else if(usageList[3] == t.usage){
+		}else if("height" == t.usage){
 			heightMaps.push_back(t);
+		}
+	}
+}
+/////////////////////////////////////////////////////////////////////////////
+std::shared_ptr<HJGraphics::Shader> HJGraphics::PBRMaterial::lightingShader=nullptr;
+HJGraphics::PBRMaterial::PBRMaterial(glm::vec3 _albedo, float _metallic, float _roughness, glm::vec3 _f0) {
+	albedoMap=std::make_shared<SolidTexture>(_albedo);
+	metallicMap=std::make_shared<SolidTexture>(_metallic);
+	roughnessMap=std::make_shared<SolidTexture>(_roughness);
+	F0Map=std::make_shared<SolidTexture>(_f0);
+}
+void HJGraphics::PBRMaterial::bindTexture() {
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D,albedoMap->id);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D,normalMap->id);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D,metallicMap->id);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D,roughnessMap->id);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D,F0Map->id);
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D,heightMap->id);
+}
+
+void HJGraphics::PBRMaterial::writeToShader(std::shared_ptr<Shader> shader) {
+	//Caution! call shader->use() before calling this function
+	shader->setInt("material.albedoMap",0);
+	shader->setInt("material.normalMap",1);
+	shader->setInt("material.metallicMap",2);
+	shader->setInt("material.roughnessMap",3);
+	shader->setInt("material.F0Map",4);
+//	shader->setInt("material.heightMap",5);
+}
+void HJGraphics::PBRMaterial::loadTextures(const std::vector<std::shared_ptr<Texture2D>> &_textures) {
+	for(auto& t:_textures){
+		if("albedo" == t->usage){
+			albedoMap=t;
+		}else if("normal" == t->usage){
+			normalMap=t;
+		}else if("metalllic" == t->usage){
+			metallicMap=t;
+		}else if("roughness" == t->usage){
+			roughnessMap=t;
+		}else if("F0" == t->usage){
+			F0Map=t;
+		}else if("height" == t->usage){
+			heightMap=t;
 		}
 	}
 }

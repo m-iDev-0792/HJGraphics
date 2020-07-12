@@ -1,4 +1,4 @@
-#version 330 core
+#version 410 core
 out float Occlusion;
 uniform sampler2D ssao;
 uniform int radius;

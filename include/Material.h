@@ -14,6 +14,8 @@ namespace HJGraphics {
 	class Texture {
 	public:
 		GLuint id;
+		std::string usage;//usage of the texutre: diffuse? specular? normal?
+
 		GLuint textureN;
 		GLuint type;
 
@@ -31,8 +33,6 @@ namespace HJGraphics {
 
 	class Texture2D : public Texture {
 	public:
-
-		std::string usage;//usage of the texutre: diffuse? specular? normal?
 		std::string path;
 
 		int texWidth;
@@ -51,7 +51,9 @@ namespace HJGraphics {
 	public:
 		SolidTexture();
 		SolidTexture(glm::vec3 _color);
+		SolidTexture(float _color);
 		void setColor(glm::vec3 _color);
+		void setColor(float _color);
 
 	private:
 		glm::vec3 color;
@@ -70,6 +72,18 @@ namespace HJGraphics {
 		void loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
 		                  const std::string &downTex, const std::string &frontTex, const std::string &backTex);
 	};
+	class BaseMaterial {
+	public:
+		std::string type;
+
+		virtual std::shared_ptr<Shader> getShader()=0;
+
+		virtual void bindTexture()=0;
+
+		virtual void writeToShader(std::shared_ptr<Shader> shader)=0;
+
+		virtual void loadTextures(const std::vector<std::shared_ptr<Texture2D>>& _textures)=0;
+	};
 
 	class Material {
 	public:
@@ -87,9 +101,7 @@ namespace HJGraphics {
 		std::vector<Texture> normalMaps;
 		std::vector<Texture> heightMaps;
 
-		static std::shared_ptr<Shader> pointLightShader;
-		static std::shared_ptr<Shader> parallelLightShader;
-		static std::shared_ptr<Shader> spotLightShader;
+		static std::shared_ptr<Shader> lightingShader;
 
 		Material();
 
@@ -97,13 +109,37 @@ namespace HJGraphics {
 
 		void bindTexture();
 
-		void writeToShader(Shader *shader);
-
 		void writeToShader(std::shared_ptr<Shader> shader);
 
 		void clearTextures();
 
 		void loadTextures(const std::vector<Texture2D>& _textures);
+	};
+
+	class PBRMaterial:public BaseMaterial {
+	public:
+		std::shared_ptr<Texture> albedoMap;//vec3 bind - 0
+		std::shared_ptr<Texture> normalMap;//vec3 bind - 1,solidTexture should be vec3(0.5,0.5,1)when there is no normal map
+		std::shared_ptr<Texture> metallicMap;//float bind - 2
+		std::shared_ptr<Texture> roughnessMap;//float bind - 3
+		std::shared_ptr<Texture> F0Map; //vec3 bind - 4
+		std::shared_ptr<Texture> heightMap;//
+
+
+		PBRMaterial(glm::vec3 _albedo=glm::vec3(0.8),float _metallic=0.1,float _roughness=0.5,glm::vec3 _f0=glm::vec3(0.4));
+
+		static std::shared_ptr<Shader> lightingShader;
+
+		std::shared_ptr<Shader> getShader() override{
+			return lightingShader;
+		}
+
+		void bindTexture()override ;
+
+		void writeToShader(std::shared_ptr<Shader> shader)override ;
+
+		void loadTextures(const std::vector<std::shared_ptr<Texture2D>>& _textures)override ;
+
 	};
 
 }

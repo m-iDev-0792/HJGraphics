@@ -9,7 +9,7 @@ bool HJGraphics::GLFWWrap::isFirstInit=true;
 HJGraphics::GLFWWrap::GLFWWrap(int _width, int _height, std::string _title): width(_width), height(_height), windowTitle(_title) {
 	if(isFirstInit){
 		isFirstInit=false;
-		InitGLFWEnvironment();
+		InitGLFWEnvironment(4,1);
 	}
 
 	windowPtr=glfwCreateWindow(_width,_height,_title.c_str(), nullptr, nullptr);

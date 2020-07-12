@@ -1,4 +1,4 @@
-#version 330 core
+#version 410 core
 #define BLINN
 #define PCF_SHADOW
 out vec4 FragColor;

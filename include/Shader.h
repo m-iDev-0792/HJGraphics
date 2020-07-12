@@ -13,7 +13,9 @@
 #include <fstream>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 #include "OpenGLHeader.h"
+//#define SHADER_UNIFORM_DEBUG
 namespace HJGraphics {
 	class Shader {
 	public:
@@ -22,30 +24,77 @@ namespace HJGraphics {
 		void use() { glUseProgram(id); };
 
 		void setFloat(const std::string &name, float value) {
-			glUniform1f(glGetUniformLocation(id, name.c_str()), value);
+			auto loc=glGetUniformLocation(id, name.c_str());
+			if(loc>=0)glUniform1f(loc, value);
+#ifdef SHADER_UNIFORM_DEBUG
+			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+#endif
 		};
 
 		void setBool(const std::string &name, bool value) {
-			glUniform1i(glGetUniformLocation(id, name.c_str()), (int) value);
+			auto loc=glGetUniformLocation(id, name.c_str());
+			if(loc>=0)glUniform1i(loc, (int)value);
+#ifdef SHADER_UNIFORM_DEBUG
+			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+#endif
 		};
 
-		void setInt(const std::string &name, int value) { glUniform1i(glGetUniformLocation(id, name.c_str()), value); };
+		void setInt(const std::string &name, int value) {
+			auto loc=glGetUniformLocation(id, name.c_str());
+			if(loc>=0)glUniform1i(loc, value);
+#ifdef SHADER_UNIFORM_DEBUG
+			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+#endif
+		};
 
 		void setIntArray(const std::string &name, int *value, int count) {
-			glUniform1iv(glGetUniformLocation(id, name.c_str()), count, value);
+			auto loc=glGetUniformLocation(id, name.c_str());
+			if(loc>=0)glUniform1iv(loc, count, value);
+#ifdef SHADER_UNIFORM_DEBUG
+			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+#endif
 		}
 
 		void set3fv(const std::string &name, glm::vec3 value) {
-			glUniform3f(glGetUniformLocation(id, name.c_str()), value.x, value.y, value.z);
+			auto loc=glGetUniformLocation(id, name.c_str());
+			if(loc>=0)glUniform3f(loc, value.x, value.y, value.z);
+#ifdef SHADER_UNIFORM_DEBUG
+			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+#endif
 		};
 
 		void set2fv(const std::string &name, glm::vec2 value) {
-			glUniform2f(glGetUniformLocation(id, name.c_str()), value.x, value.y);
+			auto loc=glGetUniformLocation(id, name.c_str());
+			if(loc>=0)glUniform2f(loc, value.x, value.y);
+#ifdef SHADER_UNIFORM_DEBUG
+			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+#endif
 		};
 
 		void set4fm(const std::string &name, glm::mat4 value) {
-			glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+			auto loc=glGetUniformLocation(id, name.c_str());
+			if(loc>=0)glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
+#ifdef SHADER_UNIFORM_DEBUG
+			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+#endif
 		};
+
+		void setSubroutine(const std::string &uniformName,const std::string &routineName,int shaderType=GL_FRAGMENT_SHADER){
+			auto uniformLoc=glGetSubroutineUniformLocation(id,shaderType,uniformName.c_str());
+			auto routineIndex=glGetSubroutineIndex(id,shaderType,routineName.c_str());
+			if(uniformLoc < fragSubroutine.size())fragSubroutine[uniformLoc]=routineIndex;
+			else{
+#ifdef SHADER_UNIFORM_DEBUG
+				else std::cerr<<"routineUniform "<<uniformName<<" exceeded the routine value size"<<std::endl;
+#endif
+			}
+		}
+		void commitSubroutine(int shaderType=GL_FRAGMENT_SHADER){
+			glUniformSubroutinesuiv(shaderType, fragSubroutine.size(), &fragSubroutine[0]);
+		}
+		void setSubroutineSize(int size){
+			fragSubroutine.resize(size);
+		}
 
 		void bindBlock(const std::string &name, GLuint bindPoint) {
 			glUniformBlockBinding(id, glGetUniformBlockIndex(id, name.c_str()), bindPoint);
@@ -55,6 +104,8 @@ namespace HJGraphics {
 
 	private:
 		GLuint id;
+
+		std::vector<GLuint> fragSubroutine;
 
 		bool checkCompileError(GLuint shader, std::string type);
 
