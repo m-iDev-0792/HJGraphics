@@ -15,6 +15,8 @@ namespace HJGraphics {
 	public:
 		GLuint id;
 		std::string usage;//usage of the texutre: diffuse? specular? normal?
+		std::string path;
+
 
 		GLuint textureN;
 		GLuint type;
@@ -33,7 +35,6 @@ namespace HJGraphics {
 
 	class Texture2D : public Texture {
 	public:
-		std::string path;
 
 		int texWidth;
 		int texHeight;
@@ -72,7 +73,7 @@ namespace HJGraphics {
 		void loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
 		                  const std::string &downTex, const std::string &frontTex, const std::string &backTex);
 	};
-	class BaseMaterial {
+	class Material {
 	public:
 		std::string type;
 
@@ -82,10 +83,16 @@ namespace HJGraphics {
 
 		virtual void writeToShader(std::shared_ptr<Shader> shader)=0;
 
-		virtual void loadTextures(const std::vector<std::shared_ptr<Texture2D>>& _textures)=0;
+		virtual void loadTextures(const std::vector<std::shared_ptr<Texture>> &_textures)=0;
+
+		virtual void loadTexture(const std::shared_ptr<Texture> &_texture)=0;
+
+		virtual bool setValue(const std::string& name,float value){return false;}
+
+		virtual bool setValue(const std::string& name,glm::vec3 value){return false;}
 	};
 
-	class Material {
+	class BlinnPhongMaterial: public Material {
 	public:
 		float ambientStrength;
 		float diffuseStrength;
@@ -96,27 +103,35 @@ namespace HJGraphics {
 		float reflective;
 		float refractive;
 
-		std::vector<Texture> diffuseMaps;
-		std::vector<Texture> specularMaps;
-		std::vector<Texture> normalMaps;
-		std::vector<Texture> heightMaps;
+		std::shared_ptr<Texture> diffuseMap;
+		std::shared_ptr<Texture> specularMap;
+		std::shared_ptr<Texture> normalMap;
+		std::shared_ptr<Texture> heightMap;
 
 		static std::shared_ptr<Shader> lightingShader;
 
-		Material();
+		BlinnPhongMaterial();
 
-		Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor);
+		BlinnPhongMaterial(glm::vec3 _diffuseColor, glm::vec3 _specularColor);
 
-		void bindTexture();
+		BlinnPhongMaterial(const std::vector<std::shared_ptr<Texture>>& _textures);
 
-		void writeToShader(std::shared_ptr<Shader> shader);
+		std::shared_ptr<Shader> getShader() override{
+			return lightingShader;
+		}
 
-		void clearTextures();
+		void bindTexture() override;
 
-		void loadTextures(const std::vector<Texture2D>& _textures);
+		void writeToShader(std::shared_ptr<Shader> shader) override;
+
+		void loadTextures(const std::vector<std::shared_ptr<Texture>> &_textures) override;
+
+		void loadTexture(const std::shared_ptr<Texture> &_texture) override;
+
+		bool setValue(const std::string& name,float value) override;
 	};
 
-	class PBRMaterial:public BaseMaterial {
+	class PBRMaterial:public Material {
 	public:
 		std::shared_ptr<Texture> albedoMap;//vec3 bind - 0
 		std::shared_ptr<Texture> normalMap;//vec3 bind - 1,solidTexture should be vec3(0.5,0.5,1)when there is no normal map
@@ -138,7 +153,9 @@ namespace HJGraphics {
 
 		void writeToShader(std::shared_ptr<Shader> shader)override ;
 
-		void loadTextures(const std::vector<std::shared_ptr<Texture2D>>& _textures)override ;
+		void loadTextures(const std::vector<std::shared_ptr<Texture>> &_textures)override ;
+
+		void loadTexture(const std::shared_ptr<Texture> &_texture) override;
 
 	};
 

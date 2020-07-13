@@ -21,15 +21,10 @@ struct Material{
     float reflective;
     float refractive;
 
-    int diffuseMapNum;
-    int specularMapNum;
-    int normalMapNum;
-    int heightMapNum;
-
     sampler2D diffuseMap;
     sampler2D specularMap;
     sampler2D normalMap;
-    sampler2D heightMap;
+//    sampler2D heightMap;
 };
 uniform Material material;
 uniform vec2 zNearAndzFar;//to get linear depth
@@ -45,23 +40,19 @@ void main(){
     gPositionDepth.w=linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
 	//gDiffSpec
 	vec3 diff=vec3(1.0);
-    if(material.diffuseMapNum>0){
-        diff=texture(material.diffuseMap,uv).rgb;
+    diff=texture(material.diffuseMap,uv).rgb;
 //        diff = pow(diff, vec3(gamma));//inverse gamma correction for diff map
-    }
+
 	float spec=1.0f;
-	if(material.specularMapNum>0){
-		spec=texture(material.specularMap,uv).r;
-	}
+    spec=texture(material.specularMap,uv).r;
 	gDiffSpec=vec4(diff,spec);
 
 	//gNormal
 	gNormal=normal;
-	if(material.normalMapNum>0){
-		vec3 N=texture(material.normalMap,uv).rgb;
-		N = normalize(N * 2.0 - 1.0);
-		gNormal=normalize(TBN * N);
-	}
+    vec3 N=texture(material.normalMap,uv).rgb;
+    N = normalize(N * 2.0 - 1.0);
+    gNormal=normalize(TBN * N);
+
     //gShinAlphaReflectRefract
     gShinAlphaReflectRefract=vec4(material.shininess,material.alpha,material.reflective,material.refractive);
 

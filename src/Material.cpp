@@ -183,14 +183,13 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
 /*
  * Implementation of Material
  */
-std::shared_ptr<HJGraphics::Shader> HJGraphics::Material::lightingShader = nullptr;
+std::shared_ptr<HJGraphics::Shader> HJGraphics::BlinnPhongMaterial::lightingShader = nullptr;
 
-HJGraphics::Material::Material():Material(glm::vec3(0.9f,0.9f,0.9f),glm::vec3(1.0f,1.0f,1.0f)) {
-
-}
-HJGraphics::Material::Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor) {
-	diffuseMaps.push_back(SolidTexture(_diffuseColor));
-	specularMaps.push_back(SolidTexture(_specularColor));
+HJGraphics::BlinnPhongMaterial::BlinnPhongMaterial(const std::vector<std::shared_ptr<Texture>>& _textures){
+	loadTextures(_textures);
+	if(!diffuseMap)diffuseMap=std::make_shared<SolidTexture>(glm::vec3(0.9f, 0.9f, 0.9f));
+	if(!specularMap)specularMap=std::make_shared<SolidTexture>(glm::vec3(1.0f, 1.0f, 1.0f));
+	if(!normalMap)normalMap=std::make_shared<SolidTexture>(glm::vec3(0.5, 0.5, 1.0));
 
 	ambientStrength=1.0f;
 	diffuseStrength=1.0f;
@@ -201,35 +200,61 @@ HJGraphics::Material::Material(glm::vec3 _diffuseColor, glm::vec3 _specularColor
 	reflective=0;
 	refractive=0;
 }
-void HJGraphics::Material::bindTexture() {
-	if(!diffuseMaps.empty()){
+HJGraphics::BlinnPhongMaterial::BlinnPhongMaterial(): BlinnPhongMaterial(glm::vec3(0.9f, 0.9f, 0.9f), glm::vec3(1.0f, 1.0f, 1.0f)) {
+
+}
+HJGraphics::BlinnPhongMaterial::BlinnPhongMaterial(glm::vec3 _diffuseColor, glm::vec3 _specularColor) {
+	diffuseMap=std::make_shared<SolidTexture>(_diffuseColor);
+	specularMap=std::make_shared<SolidTexture>(_specularColor);
+	normalMap=std::make_shared<SolidTexture>(glm::vec3(0.5, 0.5, 1.0));
+
+	ambientStrength=0.5f;
+	diffuseStrength=1.0f;
+	specularStrength=0.5f;
+
+	shininess=48;
+	alpha=1;
+	reflective=0;
+	refractive=0;
+
+
+}
+bool HJGraphics::BlinnPhongMaterial::setValue(const std::string& name, float value){
+	if("ambientStrength"==name){
+		ambientStrength=value;
+		return true;
+	}else if("diffuseStrength"==name){
+		diffuseStrength=value;
+		return true;
+	}else if("specularStrength"==name){
+		specularStrength=value;
+		return true;
+	}else if("shininess"==name){
+		shininess=value;
+		return true;
+	}
+	return false;
+}
+void HJGraphics::BlinnPhongMaterial::bindTexture() {
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,diffuseMaps[0].id);
-	}
-	if(!specularMaps.empty()){
+		glBindTexture(GL_TEXTURE_2D, diffuseMap->id);
+
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D,specularMaps[0].id);
-	}
-	if(!normalMaps.empty()){
+		glBindTexture(GL_TEXTURE_2D, specularMap->id);
+
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D,normalMaps[0].id);
-	}
-	if(!heightMaps.empty()){
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D,heightMaps[0].id);
-	}
+		glBindTexture(GL_TEXTURE_2D, normalMap->id);
+
+//		glActiveTexture(GL_TEXTURE3);
+//		glBindTexture(GL_TEXTURE_2D,heightMap->id);
 }
 
-void HJGraphics::Material::writeToShader(std::shared_ptr<Shader> shader) {
+void HJGraphics::BlinnPhongMaterial::writeToShader(std::shared_ptr<Shader> shader) {
 	//Caution! call shader->use() before calling this function
-	shader->setInt("material.diffuseMapNum",diffuseMaps.size());
 	shader->setInt("material.diffuseMap",0);
-	shader->setInt("material.specularMapNum",specularMaps.size());
 	shader->setInt("material.specularMap",1);
-	shader->setInt("material.normalMapNum",normalMaps.size());
 	shader->setInt("material.normalMap",2);
-	shader->setInt("material.heightMapNum",heightMaps.size());
-	shader->setInt("material.heightMap",3);
+//	shader->setInt("material.heightMap",3);
 
 	shader->setFloat("material.ambientStrength",ambientStrength);
 	shader->setFloat("material.diffuseStrength",diffuseStrength);
@@ -240,25 +265,25 @@ void HJGraphics::Material::writeToShader(std::shared_ptr<Shader> shader) {
 	shader->setFloat("material.reflective",reflective);
 	shader->setFloat("material.reflective",refractive);
 }
-void HJGraphics::Material::clearTextures() {
-	diffuseMaps.clear();
-	specularMaps.clear();
-	normalMaps.clear();
-	heightMaps.clear();
-}
-void HJGraphics::Material::loadTextures(const std::vector<Texture2D> &_textures) {
+
+void HJGraphics::BlinnPhongMaterial::loadTextures(const std::vector<std::shared_ptr<Texture>> &_textures) {
 	for(auto& t:_textures){
-		if("diffuse" == t.usage){
-			diffuseMaps.push_back(t);
-		}else if("specular" == t.usage){
-			specularMaps.push_back(t);
-		}else if("normal" == t.usage){
-			normalMaps.push_back(t);
-		}else if("height" == t.usage){
-			heightMaps.push_back(t);
-		}
+		loadTexture(t);
 	}
 }
+
+void HJGraphics::BlinnPhongMaterial::loadTexture(const std::shared_ptr<Texture> &t) {
+	if("diffuse" == t->usage){
+		diffuseMap=t;
+	}else if("specular" == t->usage){
+		specularMap=t;
+	}else if("normal" == t->usage){
+		normalMap=t;
+	}else if("height" == t->usage){
+		heightMap=t;
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////
 std::shared_ptr<HJGraphics::Shader> HJGraphics::PBRMaterial::lightingShader=nullptr;
 HJGraphics::PBRMaterial::PBRMaterial(glm::vec3 _albedo, float _metallic, float _roughness, glm::vec3 _f0) {
@@ -291,20 +316,25 @@ void HJGraphics::PBRMaterial::writeToShader(std::shared_ptr<Shader> shader) {
 	shader->setInt("material.F0Map",4);
 //	shader->setInt("material.heightMap",5);
 }
-void HJGraphics::PBRMaterial::loadTextures(const std::vector<std::shared_ptr<Texture2D>> &_textures) {
+void HJGraphics::PBRMaterial::loadTextures(const std::vector<std::shared_ptr<Texture>> &_textures) {
 	for(auto& t:_textures){
-		if("albedo" == t->usage){
-			albedoMap=t;
-		}else if("normal" == t->usage){
-			normalMap=t;
-		}else if("metalllic" == t->usage){
-			metallicMap=t;
-		}else if("roughness" == t->usage){
-			roughnessMap=t;
-		}else if("F0" == t->usage){
-			F0Map=t;
-		}else if("height" == t->usage){
-			heightMap=t;
-		}
+		loadTexture(t);
 	}
 }
+
+void HJGraphics::PBRMaterial::loadTexture(const std::shared_ptr<Texture> &t) {
+	if("albedo" == t->usage){
+		albedoMap=t;
+	}else if("normal" == t->usage){
+		normalMap=t;
+	}else if("metalllic" == t->usage){
+		metallicMap=t;
+	}else if("roughness" == t->usage){
+		roughnessMap=t;
+	}else if("F0" == t->usage){
+		F0Map=t;
+	}else if("height" == t->usage){
+		heightMap=t;
+	}
+}
+

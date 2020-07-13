@@ -16,7 +16,7 @@ namespace HJGraphics {
 	class Model {
 	public:
 
-		std::vector<Texture2D> textures_loaded;
+		std::vector<std::shared_ptr<Texture>> textures_loaded;
 		std::vector<std::shared_ptr<Mesh>> meshes;
 		std::string directory;//used for reading images from same directory of model
 		std::string format;
@@ -29,7 +29,7 @@ namespace HJGraphics {
 		void loadModel(std::string path);
 		void processNode(aiNode *node, const aiScene *scene);
 		std::shared_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene);
-		std::vector<Texture2D> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
+		std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 		                                            std::string texUsage);
 	};
 }

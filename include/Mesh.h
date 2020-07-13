@@ -36,12 +36,11 @@ namespace HJGraphics {
 	public:
 		glm::mat4 model;
 		glm::mat4 lastModel;//for motion blur
-		Material material;
-//		std::shared_ptr<BaseMaterial> baseMaterial;
+		std::shared_ptr<Material> material;
 
 		Mesh();
 
-		Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<Texture2D>& _textures);
+		Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<std::shared_ptr<Texture>>& _textures);
 
 		virtual void commitData();
 

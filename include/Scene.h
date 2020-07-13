@@ -55,6 +55,10 @@ namespace HJGraphics {
 		void setAmbient(float ambient){ambientFactor=ambient;}
 
 		Camera* getMainCamera() { return mainCamera; }
+
+		int getWidth(){return sceneWidth;}
+
+		int getHeight(){return sceneHeight;}
 	};
 }
 

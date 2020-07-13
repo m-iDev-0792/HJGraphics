@@ -114,8 +114,8 @@ void HJGraphics::DeferredRenderer::render() {
 	gBuffer->shader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
 	for (auto& m : mainScene->meshes) {
 		gBuffer->shader->set4fm("model", m->model);
-		m->material.bindTexture();
-		m->material.writeToShader(gBuffer->shader);
+		m->material->bindTexture();
+		m->material->writeToShader(gBuffer->shader);
 		renderMesh(m);
 	}
 	gBuffer->unbind();

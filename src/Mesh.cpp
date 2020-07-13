@@ -10,8 +10,9 @@ HJGraphics::Mesh::Mesh() {
 	glGenBuffers(1, &EBO);
 	castShadow = true;
 	primitiveType = Triangle;
+	material=std::make_shared<BlinnPhongMaterial>();
 }
-HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<Texture2D>& _textures){
+HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<std::shared_ptr<Texture>>& _textures){
 	lastModel= model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -19,13 +20,10 @@ HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector
 	castShadow = true;
 	primitiveType = Triangle;
 
-	material.clearTextures();
-	material.loadTextures(_textures);
+	material=std::make_shared<BlinnPhongMaterial>(_textures);
 
-	material.shininess=48;
-	material.ambientStrength=0.3f;
-	material.specularStrength=1.0f;
-	material.diffuseStrength=0.7f;
+//	material->setValue("ambientStrength",0.3f);
+	material->setValue("specularStrength",2.0f);
 	indices=_indices;
 	for(auto &v:_vertices)addVertex(v);
 	commitData();

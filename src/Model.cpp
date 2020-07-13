@@ -48,7 +48,7 @@ void HJGraphics::Model::processNode(aiNode *node, const aiScene *scene) {
 std::shared_ptr<HJGraphics::Mesh> HJGraphics::Model::processMesh(aiMesh *mesh, const aiScene *scene) {
 	std::vector<Vertex14> vertices;
 	std::vector<GLuint> indices;
-	std::vector<Texture2D> textures;
+	std::vector<std::shared_ptr<Texture>> textures;
 
 	for(unsigned int i = 0; i < mesh->mNumVertices; i++){
 		Vertex14 vertex;
@@ -101,23 +101,23 @@ std::shared_ptr<HJGraphics::Mesh> HJGraphics::Model::processMesh(aiMesh *mesh, c
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
 	// 1. diffuse maps
-	std::vector<Texture2D> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
+	std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
 	if(!diffuseMaps.empty())textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	// 2. specular maps
-	std::vector<Texture2D> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "specular");
+	std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "specular");
 	if(!specularMaps.empty())textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	// 3. normal maps
-	std::vector<Texture2D> normalMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_HEIGHT:aiTextureType_NORMALS, "normal");
+	std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_HEIGHT:aiTextureType_NORMALS, "normal");
 	if(!normalMaps.empty())textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 	// 4. height maps
-	std::vector<Texture2D> heightMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_AMBIENT:aiTextureType_HEIGHT, "height");
+	std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_AMBIENT:aiTextureType_HEIGHT, "height");
 	if(!heightMaps.empty())textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 	return std::make_shared<Mesh>(vertices, indices, textures);
 }
-std::vector<HJGraphics::Texture2D> HJGraphics::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
+std::vector<std::shared_ptr<HJGraphics::Texture>> HJGraphics::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
                                                                            std::string texUsage) {
-	std::vector<Texture2D> materialTextures;
+	std::vector<std::shared_ptr<Texture>> materialTextures;
 	for(unsigned int i = 0; i < mat->GetTextureCount(type); i++){
 		aiString texAiStrPath;
 		mat->GetTexture(type, i, &texAiStrPath);
@@ -126,19 +126,18 @@ std::vector<HJGraphics::Texture2D> HJGraphics::Model::loadMaterialTextures(aiMat
 
 		bool skip = false;
 		for(unsigned int j = 0; j < textures_loaded.size(); j++){
-			if(textures_loaded[j].path == texStdStrPath){
+			if(textures_loaded[j]->path == texStdStrPath){
 				materialTextures.push_back(textures_loaded[j]);
 				skip = true;
 				break;
 			}
 		}
 		if(!skip){
-			Texture2D texture(directory+std::string("/")+texStdStrPath);
+			auto texture=std::make_shared<Texture2D>(directory+std::string("/")+texStdStrPath,texUsage=="diffuse"?true:false);
 			//Windows Version:
-			//Texture2D texture(directory+std::string("\")+texStdStrPath);
-
-			texture.usage = texUsage;
-			texture.path = texStdStrPath;
+			//auto texture=std::make_shared<Texture2D>(directory+std::string("\\")+texStdStrPath,texUsage=="diffuse"?true:false);
+			texture->usage = texUsage;
+			texture->path = texStdStrPath;
 			materialTextures.push_back(texture);
 			textures_loaded.push_back(texture);
 		}

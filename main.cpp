@@ -46,7 +46,7 @@ int main() {
 	cout<<"model loading time = "<<milliDura.count()<<"ms"<<endl;
 	nanosuit->scale(0.2);
 
-	auto scene=make_shared<Scene>();
+	auto scene=make_shared<Scene>(800,600,0.3,glm::vec3(0));
 	scene->addLight(spotLight);
 	scene->addCamera(camera);
 
@@ -58,7 +58,8 @@ int main() {
 //	scene->addObject(grid);
 	scene->addObject(skybox);
 
-	auto renderer=make_shared<DeferredRenderer>();
+
+	auto renderer=make_shared<DeferredRenderer>(scene->getWidth(),scene->getHeight());
 	renderer->setMainScene(scene);
 	window.renderer=renderer;
 

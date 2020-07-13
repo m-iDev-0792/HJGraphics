@@ -45,9 +45,9 @@ namespace HJGraphics {
 
 		Plane();
 
-		Plane(GLfloat _width, GLfloat _height, std::string texPath = "", GLfloat _texStretchRatio = 1.0f);
+		Plane(GLfloat _width, GLfloat _height, std::string _diffPath = "", GLfloat _texStretchRatio = 1.0f);
 
-		Plane(GLfloat _width, GLfloat _height, std::string diffuseTexPath, std::string specularTexPath, std::string normalTexPath, GLfloat _texStretchRatio);
+		Plane(GLfloat _width, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath, GLfloat _texStretchRatio);
 
 		void generateData();
 	};
@@ -61,7 +61,7 @@ namespace HJGraphics {
 
 		Sphere(float _R, int _partition = 50, std::string texPath = "");
 
-		Sphere(float _R, int _partition, std::string diffuseTexPath, std::string specularTexPath, std::string normalTexPath);
+		Sphere(float _R, int _partition, std::string _diffPath, std::string _specPath, std::string _normPath);
 
 		void generateData();
 	};
