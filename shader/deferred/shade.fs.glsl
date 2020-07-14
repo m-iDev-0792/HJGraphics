@@ -17,8 +17,8 @@ uniform vec2 innerOuterCos;
 
 uniform float shadowZFar;
 uniform bool hasShadow;
-uniform sampler2D shadowMap;
-uniform samplerCube shadowCubeMap;
+uniform sampler2D shadowMap;//10
+uniform samplerCube shadowCubeMap;//11
 
 vec3 parallelLight();
 vec3 pointLight();

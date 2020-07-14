@@ -213,15 +213,15 @@ void HJGraphics::DeferredRenderer::render() {
 		//for fragment shader
 		lightingShader->setInt("lightType", 2);
 		lightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
-		lightingShader->setInt("shadowCubeMap", 10);
-		lightingShader->setInt("shadowMap", 11);//useless actually,otherwise cause gl_invalid_operation!
+		lightingShader->setInt("shadowMap", 10);//useless actually,otherwise cause gl_invalid_operation!
+		lightingShader->setInt("shadowCubeMap", 11);
 		gBuffer->writeUniform(lightingShader);
 		for (int i = 0; i < mainScene->pointLights.size(); ++i) {
 			auto light = mainScene->pointLights[i];
 			lightingShader->set4fm("model", glm::translate(glm::mat4(1.0f), light->position));//set 'model' matrix
 			light->writeUniform(lightingShader);
 			if (light->castShadow) {
-				glActiveTexture(GL_TEXTURE10);
+				glActiveTexture(GL_TEXTURE11);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->tex);
 			}
 			renderMesh(light->lightVolume);

@@ -210,7 +210,7 @@ HJGraphics::BlinnPhongMaterial::BlinnPhongMaterial(glm::vec3 _diffuseColor, glm:
 
 	ambientStrength=0.5f;
 	diffuseStrength=1.0f;
-	specularStrength=0.5f;
+	specularStrength=0.3f;
 
 	shininess=48;
 	alpha=1;

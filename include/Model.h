@@ -25,6 +25,22 @@ namespace HJGraphics {
 
 		void scale(float _ratio);
 
+		bool setMaterialValue(const std::string& name,float value){
+			bool flag=true;
+			for(auto &m:meshes){
+				if(!m->material->setValue(name,value))flag=false;
+			}
+			return flag;
+		}
+
+		bool setMaterialValue(const std::string& name,glm::vec3 value){
+			bool flag=true;
+			for(auto &m:meshes){
+				if(!m->material->setValue(name,value))flag=false;
+			}
+			return flag;
+		}
+
 	private:
 		void loadModel(std::string path);
 		void processNode(aiNode *node, const aiScene *scene);

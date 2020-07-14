@@ -24,6 +24,7 @@ HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector
 
 //	material->setValue("ambientStrength",0.3f);
 	material->setValue("specularStrength",2.0f);
+//	material->setValue("diffuseStrength",1.2f);
 	indices=_indices;
 	for(auto &v:_vertices)addVertex(v);
 	commitData();
