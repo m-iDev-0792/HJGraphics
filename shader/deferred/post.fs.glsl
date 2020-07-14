@@ -1,4 +1,4 @@
-#version 410 core
+#version 330 core
 out vec4 fragColor;
 
 uniform sampler2D screenTexture;

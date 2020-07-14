@@ -1,4 +1,4 @@
-#version 410 core
+#version 330 core
 out float Occlusion;
 
 //gBuffer - texture binding point 0~1

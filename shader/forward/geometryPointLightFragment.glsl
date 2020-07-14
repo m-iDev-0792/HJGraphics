@@ -1,4 +1,4 @@
-#version 410 core
+#version 330 core
 #define BLINN
 #define PCF_SHADOW
 const float gamma = 2.2;

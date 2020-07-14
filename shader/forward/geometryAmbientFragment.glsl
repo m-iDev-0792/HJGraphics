@@ -1,4 +1,4 @@
-#version 410 core
+#version 330 core
 const float gamma = 2.2;
 out vec4 FragColor;
 in vec2 texCoord;
