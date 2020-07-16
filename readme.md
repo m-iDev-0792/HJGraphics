@@ -1,6 +1,6 @@
 ![HJGraphics](attachment/HJGraphics.png)
 # HJGraphics
-HJGraphics is a very simple 3D graphic framework based on OpenGL API, and also my attempt to build a relatively complete tiny 3D graphic framework from the ground up. It is a part of my graduation project as well.
+HJGraphics is a very simple 3D graphic framework based on OpenGL API, and also my attempt to build a relatively complete tiny 3D graphic framework from the ground up. It is a part of my bachelor graduation project as well.
 
 By using HJGraphics, you can create OpenGL environment easily and draw some funny 3D objects with only a few lines of codes.
 
@@ -36,14 +36,14 @@ HJGraphics has...
     * Parallel light
     * Spot light
     * Shadow for 3 kinds of lights above 
-* Material : basic material, diffuse map, specular map, normal map and height map.
+* Material : BlinnPhong material and UE4 workflow PBR material.
 * Renderer : deferred and forward shading support, HDR rendering, SSAO, post-processing, text rendering.
 # Gallery
 ![](attachment/multiLight.png)
 
 Fig.1 unlimited number of lights and shadow support
 
-![](attachment/PBRmodel.png)
+![](attachment/PBRModel.png)
 
 Fig.2 PBR model and shading
 
