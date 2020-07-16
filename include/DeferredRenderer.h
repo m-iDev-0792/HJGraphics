@@ -24,6 +24,8 @@ namespace HJGraphics {
 		
 		void render();
 
+		void renderPBR();
+
 		void renderInit();
 
 		void postprocess();
@@ -49,6 +51,9 @@ namespace HJGraphics {
 		std::shared_ptr<Shader> spotLightShader;
 		std::shared_ptr<Shader> ambientShader;
 		std::shared_ptr<Shader> lightingShader;
+		//pbr
+		std::shared_ptr<GBuffer> PBRgBuffer;
+		std::shared_ptr<Shader> PBRlightingShader;
 
 
 		//settings
@@ -57,6 +62,10 @@ namespace HJGraphics {
 		//shadow maps
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMap>> shadowMaps;
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowCubeMap>> shadowCubeMaps;
+
+
+		//render pass
+		void shadowPass();
 
 	};
 }

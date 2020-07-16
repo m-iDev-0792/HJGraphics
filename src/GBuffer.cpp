@@ -177,11 +177,11 @@ void HJGraphics::PBRGBuffer::bindTextures() {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, gPositionDepth);
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D,gNormal);
+	glBindTexture(GL_TEXTURE_2D, gNormal);
 	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D,gAlbedoMetallic);
+	glBindTexture(GL_TEXTURE_2D, gAlbedoMetallic);
 	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D,gF0Roughness);
+	glBindTexture(GL_TEXTURE_2D, gF0Roughness);
 
 }
 void HJGraphics::PBRGBuffer::writeUniform(std::shared_ptr<Shader> shader) {

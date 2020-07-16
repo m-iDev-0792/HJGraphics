@@ -43,12 +43,3 @@ float D_GGX_TR(vec3 N, vec3 H, float roughness){
     denom        = PI * denom * denom;
     return nom / denom;
 }
-//-------------- BRDF ---------------
-vec3 BRDF_kS(vec3 N,vec3 H, vec3 Wo, vec3 Wi, vec3 F0, float alpha,float roughness){
-    float NdotWo  = max(dot(N, Wo), 0.0);
-    float NdotWi  = max(dot(N, Wi), 0.0);
-    float HdotWo  = max(dot(H, Wo), 0.0);
-    float denom   = 4.0*NdotWo*NdotWi+0.0001;
-    return D_GGX_TR(N,H,roughness)*GeometrySmith(NdotWo,NdotWi, roughness)
-    *fresnelSchlickFast(HdotWo,F0)/denom;
-}

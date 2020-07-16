@@ -83,11 +83,9 @@ namespace HJGraphics {
 			auto uniformLoc=glGetSubroutineUniformLocation(id,shaderType,uniformName.c_str());
 			auto routineIndex=glGetSubroutineIndex(id,shaderType,routineName.c_str());
 			if(uniformLoc < fragSubroutine.size())fragSubroutine[uniformLoc]=routineIndex;
-			else{
 #ifdef SHADER_UNIFORM_DEBUG
 				else std::cerr<<"routineUniform "<<uniformName<<" exceeded the routine value size"<<std::endl;
 #endif
-			}
 		}
 		void commitSubroutine(int shaderType=GL_FRAGMENT_SHADER){
 			glUniformSubroutinesuiv(shaderType, fragSubroutine.size(), &fragSubroutine[0]);

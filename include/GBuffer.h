@@ -61,9 +61,6 @@ namespace HJGraphics {
 	class PBRGBuffer: public GBuffer{
 		friend DeferredRenderer;
 	protected:
-		GLuint fbo;
-		GLuint rbo;
-
 		GLuint gAlbedoMetallic;
 		GLuint gF0Roughness;
 	public:

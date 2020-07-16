@@ -1,0 +1,5 @@
+newmtl FireExtMaterial
+map_Kd FireExt_albedo.jpg
+map_bump FireExt_normal.jpg
+map_Ks FireExt_roughness.jpg
+map_Ns FireExt_metallic.jpg

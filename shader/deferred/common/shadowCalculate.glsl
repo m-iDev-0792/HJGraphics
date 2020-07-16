@@ -19,7 +19,7 @@ float parallelShadowCalculation(vec4 fragPosLightSpace){
     // transform to [0,1]
     projCoords = projCoords * 0.5 + 0.5;
     float currentDepth = projCoords.z;
-    float bias=0.0005f/ fragPosLightSpace.w;// if we don't do divide to bias, then spotlight bias=0.0005f parallels bias = 0.005f
+    float bias=0.005f/ fragPosLightSpace.w;// if we don't do divide to bias, then spotlight bias=0.0005f parallels bias = 0.005f
     #ifndef PCF_SHADOW
     //Original Version without PCF shadow
     float closestDepth = texture(shadowMap,projCoords.xy).r;
@@ -27,15 +27,17 @@ float parallelShadowCalculation(vec4 fragPosLightSpace){
     return shadow;
     #else
     //PCF shadow
+    //PCF shadow NOTE some artifact in parallel PCF shadow[Solved!] paraLight bias should be greater than that of other light source
     float shadow = 0.0f;
     vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-    for(int x = -2; x <= 2; ++x){
-        for(int y = -2; y <= 2; ++y){
+    int radius=2;
+    for(int x = -radius; x <= radius; ++x){
+        for(int y = -radius; y <= radius; ++y){
             float closestDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
             shadow += currentDepth - bias > closestDepth ? 0.0 : 1.0;
         }
     }
-    shadow/= 25.0f;
+    shadow/= (2*radius+1.0f)*(2*radius+1.0f);
     return shadow;
     #endif
 }

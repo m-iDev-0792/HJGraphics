@@ -38,9 +38,10 @@ namespace HJGraphics {
 		glm::mat4 lastModel;//for motion blur
 		std::shared_ptr<Material> material;
 
-		Mesh();
+		MaterialType materialType;
+		Mesh(MaterialType _materialType);
 
-		Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<std::shared_ptr<Texture>>& _textures);
+		Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<std::shared_ptr<Texture>>& _textures,MaterialType _materialType=MaterialType::BlinnPhong);
 
 		virtual void commitData();
 

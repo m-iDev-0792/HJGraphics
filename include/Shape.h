@@ -12,11 +12,13 @@ namespace HJGraphics {
 		float length;
 		GLuint partition;
 
-		Cylinder();
+		Cylinder(MaterialType _materialType=MaterialType::BlinnPhong);
 
-		Cylinder(float _radius, float _length, GLuint _partition = 10);
+		Cylinder(float _radius, float _length, GLuint _partition = 10,MaterialType _materialType=MaterialType::BlinnPhong);
 
-		Cylinder(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath = "", std::string _normPath = "");
+		Cylinder(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath = "", std::string _normPath = "",MaterialType _materialType=MaterialType::BlinnPhong);
+
+		Cylinder(float _radius, float _length, GLuint _partition, const std::vector<std::shared_ptr<Texture>>& _textures,MaterialType _materialType=MaterialType::BlinnPhong);
 
 		void generateData();
 	};
@@ -28,11 +30,13 @@ namespace HJGraphics {
 		GLfloat depth;
 		GLfloat height;
 
-		Box();
+		Box(MaterialType _materialType=MaterialType::BlinnPhong);
 
-		Box(GLfloat _width, GLfloat _depth, GLfloat _height);
+		Box(GLfloat _width, GLfloat _depth, GLfloat _height,MaterialType _materialType=MaterialType::BlinnPhong);
 
-		Box(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath);
+		Box(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath,MaterialType _materialType=MaterialType::BlinnPhong);
+
+		Box(GLfloat _width, GLfloat _depth, GLfloat _height, const std::vector<std::shared_ptr<Texture>>& _textures,MaterialType _materialType=MaterialType::BlinnPhong);
 
 		void generateData();
 	};
@@ -43,11 +47,13 @@ namespace HJGraphics {
 		GLfloat height;
 		GLfloat texStretchRatio;
 
-		Plane();
+		Plane(MaterialType _materialType=MaterialType::BlinnPhong);
 
-		Plane(GLfloat _width, GLfloat _height, std::string _diffPath = "", GLfloat _texStretchRatio = 1.0f);
+		Plane(GLfloat _width, GLfloat _height, std::string _diffPath = "", GLfloat _texStretchRatio = 1.0f,MaterialType _materialType=MaterialType::BlinnPhong);
 
-		Plane(GLfloat _width, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath, GLfloat _texStretchRatio);
+		Plane(GLfloat _width, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath, GLfloat _texStretchRatio,MaterialType _materialType=MaterialType::BlinnPhong);
+
+		Plane(GLfloat _width, GLfloat _height, GLfloat _texStretchRatio, const std::vector<std::shared_ptr<Texture>>& _textures,MaterialType _materialType=MaterialType::BlinnPhong);
 
 		void generateData();
 	};
@@ -57,11 +63,13 @@ namespace HJGraphics {
 		int partition;
 		float R;
 
-		Sphere();
+		Sphere(MaterialType _materialType=MaterialType::BlinnPhong);
 
-		Sphere(float _R, int _partition = 50, std::string texPath = "");
+		Sphere(float _R, int _partition = 50, std::string texPath = "",MaterialType _materialType=MaterialType::BlinnPhong);
 
-		Sphere(float _R, int _partition, std::string _diffPath, std::string _specPath, std::string _normPath);
+		Sphere(float _R, int _partition, std::string _diffPath, std::string _specPath, std::string _normPath,MaterialType _materialType=MaterialType::BlinnPhong);
+
+		Sphere(float _R, int _partition, const std::vector<std::shared_ptr<Texture>>& _textures,MaterialType _materialType=MaterialType::BlinnPhong);
 
 		void generateData();
 	};

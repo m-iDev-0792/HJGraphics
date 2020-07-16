@@ -9,7 +9,7 @@ uniform sampler2D gPositionDepth;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoMetallic;
 uniform sampler2D gF0Roughness;
-uniform sampler2D gAO;
+uniform sampler2D gAO;//5
 uniform vec2 gBufferSize;
 
 //light Info
@@ -39,7 +39,7 @@ void main() {
 
     //material property
     vec3 albedo=texture(gAlbedoMetallic,uv).rgb;
-    float metallic=texture(gAlbedoMetallic.uv).a;
+    float metallic=texture(gAlbedoMetallic,uv).a;
     vec3 F0=texture(gF0Roughness,uv).rgb;
     float roughness=texture(gF0Roughness,uv).a;
 
@@ -53,6 +53,7 @@ void main() {
     float attenuation=1.0;
     if(lightType==0){//parallel light
         float shadowFactor=hasShadow?parallelShadowCalculation(lightSpaceMatrix*vec4(position,1.0f)):1.0f;
+        attenuation*=shadowFactor;
     }else if(lightType==1){//spotlight
         float shadowFactor=hasShadow?spotShadowCalculation(lightSpaceMatrix*vec4(position,1.0f)):1.0f;
         //calculate attenuation
@@ -60,18 +61,18 @@ void main() {
         attenuation=1.0/(attenuationVec.z+attenuationVec.x * distance+attenuationVec.y * distance*distance);
         float innerCos=innerOuterCos.x;
         float outerCos=innerOuterCos.y;
-        float cutOffCos=dot(spotDirection,lightDir);
+        float cutOffCos=dot(lightDirection,-Wi);
         float intensity=clamp((cutOffCos-outerCos)/(innerCos-outerCos),0.0,1.0);
         attenuation*=intensity;
-
+        attenuation*=shadowFactor;
     }else if(lightType==2){//pointlight
         float shadowFactor=hasShadow?pointShadowCalculation(vec4(position,1.0)):1.0f;
         //calculate attenuation
         float distance=length(position-lightPosition);
         attenuation=1.0/(attenuationVec.z+attenuationVec.x * distance+attenuationVec.y * distance*distance);
-
+        attenuation*=shadowFactor;
     }else if(lightType==3){//ambient
-        float ao=texture(AO,uv).r;
+        float ao=texture(gAO,uv).r;
         FragColor=vec4(ao*albedo*globalAmbiendStrength,1.0);
         return;
     }
@@ -79,6 +80,7 @@ void main() {
     //actual lighting
     //review: Lo=  (kD * albedo / pi + kD * D * G * F/(4 * WiDotN * WoDotN)) * Li * WiDotN
     vec3 Li=lightColor*attenuation;
+//    F0=vec3(0.04);
     F0 = mix(F0, albedo, metallic);
 
     //some dot values
@@ -90,7 +92,7 @@ void main() {
     //BRDF terms
     vec3  F = fresnelSchlickFast(HdotWo,F0);
     float D = D_GGX_TR(N,H,roughness);
-    vec3  G = GeometrySmith(NdotWo,NdotWi, roughness);
+    float G = GeometrySmith(NdotWo,NdotWi, roughness);
 
     vec3 kS = F;
     vec3 kD = vec3(1.0) - kS;

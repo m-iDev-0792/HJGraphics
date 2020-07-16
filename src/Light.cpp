@@ -20,7 +20,7 @@ HJGraphics::ParallelLight::ParallelLight(glm::vec3 _dir, glm::vec3 _pos, glm::ve
 	setShadowZValue(0.1f,50.0f);
 
 	if(lightVolume == nullptr){
-		lightVolume=std::make_shared<Mesh>();
+		lightVolume=std::make_shared<Mesh>(MaterialType::EMPTY);
 		std::vector<glm::vec3> v{glm::vec3(-1,1,0),glm::vec3(-1,-1,0),glm::vec3(1,1,0),
 						   glm::vec3(-1,-1,0),glm::vec3(1,-1,0),glm::vec3(1,1,0)};
 		lightVolume->setVertices(v);
@@ -80,7 +80,7 @@ void HJGraphics::SpotLight::generateBoundingMesh() {
 	auto pDown=center-r*up;
 	auto pRight=center+r*right;
 	auto pLeft=center-r*right;
-	lightVolume=std::make_shared<Mesh>();
+	lightVolume=std::make_shared<Mesh>(MaterialType::EMPTY);
 	std::vector<glm::vec3> v{position,pRight,pUp,
 						  position,pUp,pLeft,
 						  position,pLeft,pDown,
@@ -135,7 +135,7 @@ void HJGraphics::PointLight::generateBoundingMesh() {
 //	                         glm::vec3(-1,-1,0),glm::vec3(1,-1,0),glm::vec3(1,1,0)};
 //	lightVolume->setVertices(v);
 //	lightVolume->commitData();
-	lightVolume=std::make_shared<Sphere>(rangeR, 20);
+	lightVolume=std::make_shared<Sphere>(rangeR, 20,"",MaterialType::EMPTY);
 }
 std::vector<glm::mat4> HJGraphics::PointLight::getLightMatrix() {
 	std::vector<glm::mat4> lightMatrices(6,glm::mat4(1.0f));

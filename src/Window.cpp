@@ -157,7 +157,7 @@ void HJGraphics::Window::run() {
 	}
 }
 void HJGraphics::Window::render() {
-	if(renderer)renderer->render();
+	if(renderer)renderer->renderPBR();
 }
 void HJGraphics::Window::renderUI() {
 	if(textRenderer==nullptr)return;

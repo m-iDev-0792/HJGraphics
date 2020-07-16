@@ -73,9 +73,14 @@ namespace HJGraphics {
 		void loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
 		                  const std::string &downTex, const std::string &frontTex, const std::string &backTex);
 	};
+	enum class MaterialType{
+		EMPTY,
+		BlinnPhong,
+		PBR
+	};
 	class Material {
 	public:
-		std::string type;
+		MaterialType materialType;
 
 		virtual std::shared_ptr<Shader> getShader()=0;
 
@@ -141,7 +146,9 @@ namespace HJGraphics {
 		std::shared_ptr<Texture> heightMap;//
 
 
-		PBRMaterial(glm::vec3 _albedo=glm::vec3(0.8),float _metallic=0.1,float _roughness=0.5,glm::vec3 _f0=glm::vec3(0.4));
+		PBRMaterial(glm::vec3 _albedo=glm::vec3(0.8),float _metallic=0.1,float _roughness=0.5,glm::vec3 _f0=glm::vec3(0.04));
+
+		PBRMaterial(const std::vector<std::shared_ptr<Texture>>& _textures);
 
 		static std::shared_ptr<Shader> lightingShader;
 

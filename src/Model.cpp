@@ -11,7 +11,8 @@ float random0_1f() {
 	static std::uniform_real_distribution<float> dist(0, 1);
 	return dist(engine);
 }
-HJGraphics::Model::Model(const std::string _path){
+HJGraphics::Model::Model(const std::string _path,MaterialType _materialType){
+	materialType=_materialType;
 	loadModel(_path);
 }
 void HJGraphics::Model::scale(float _ratio) {
@@ -100,24 +101,45 @@ std::shared_ptr<HJGraphics::Mesh> HJGraphics::Model::processMesh(aiMesh *mesh, c
 	// process materials
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-	// 1. diffuse maps
-	std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
-	if(!diffuseMaps.empty())textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-	// 2. specular maps
-	std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "specular");
-	if(!specularMaps.empty())textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-	// 3. normal maps
-	std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_HEIGHT:aiTextureType_NORMALS, "normal");
-	if(!normalMaps.empty())textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-	// 4. height maps
-	std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_AMBIENT:aiTextureType_HEIGHT, "height");
-	if(!heightMaps.empty())textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+	if(materialType==MaterialType::PBR){
+		//-------------------------------------PBR Material------------------------------------
+		// 1. albedo maps
+		std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
+		if(!diffuseMaps.empty())textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		// 2. normal maps
+		std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_HEIGHT:aiTextureType_NORMALS, "normal");
+		if(!normalMaps.empty())textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+		// 3. metallic (map_Ns in mtl)
+		std::vector<std::shared_ptr<Texture>> metallicMaps = loadMaterialTextures(material, aiTextureType_SHININESS, "metallic");
+		if(!metallicMaps.empty())textures.insert(textures.end(), metallicMaps.begin(), metallicMaps.end());
+		// 4. roughness (map_Ks in mtl)
+		std::vector<std::shared_ptr<Texture>> roughnessMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "roughness");
+		if(!roughnessMaps.empty())textures.insert(textures.end(), roughnessMaps.begin(), roughnessMaps.end());
+		// 5. height maps
+		std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_AMBIENT:aiTextureType_HEIGHT, "height");
+		if(!heightMaps.empty())textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+	}else if(materialType==MaterialType::BlinnPhong){
+		//-------------------------------------BlinnPhong Material------------------------------------
+		// 1. diffuse maps
+		std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
+		if(!diffuseMaps.empty())textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		// 2. specular maps
+		std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "specular");
+		if(!specularMaps.empty())textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+		// 3. normal maps
+		std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_HEIGHT:aiTextureType_NORMALS, "normal");
+		if(!normalMaps.empty())textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+		// 4. height maps
+		std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(material, format==std::string("obj")?aiTextureType_AMBIENT:aiTextureType_HEIGHT, "height");
+		if(!heightMaps.empty())textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+	}
 
-	return std::make_shared<Mesh>(vertices, indices, textures);
+	return std::make_shared<Mesh>(vertices, indices, textures, materialType);
 }
 std::vector<std::shared_ptr<HJGraphics::Texture>> HJGraphics::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
                                                                            std::string texUsage) {
 	std::vector<std::shared_ptr<Texture>> materialTextures;
+
 	for(unsigned int i = 0; i < mat->GetTextureCount(type); i++){
 		aiString texAiStrPath;
 		mat->GetTexture(type, i, &texAiStrPath);

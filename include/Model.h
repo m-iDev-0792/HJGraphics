@@ -20,8 +20,8 @@ namespace HJGraphics {
 		std::vector<std::shared_ptr<Mesh>> meshes;
 		std::string directory;//used for reading images from same directory of model
 		std::string format;
-
-		Model(const std::string _path);
+		MaterialType materialType;
+		Model(const std::string _path,MaterialType _materialType=MaterialType::BlinnPhong);
 
 		void scale(float _ratio);
 

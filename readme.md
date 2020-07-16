@@ -43,27 +43,33 @@ HJGraphics has...
 
 Fig.1 unlimited number of lights and shadow support
 
+![](attachment/PBRmodel.png)
+
+Fig.2 PBR model and shading
+
 
 ![](attachment/model.png)
 
-Fig.2 model loading support (only `obj` format fully supported now)
+Fig.3 model loading support (only `obj` format fully supported now)
 
 ![](attachment/material.png)
 
-Fig.3 basic material
+Fig.4 basic material
 # Dependencies
 - Assimp 5.0.1 64bit
 - GLFW 3.3 64bit
 - GLAD
-- glm
+- glm 0.9.9.8
 - stb
+- freetype 2.10.2
 # Continue advancing
 - [x] SSAO
 - [ ] Load scene via JSON file
 - [x] HDR
 - [x] Deferred shading
-- [ ] PBR Shading
+- [x] PBR Shading
 - [ ] Motion Blur
+- [ ] Depth of field
 
 # Acknowledge
 Amazing tutorials : [learnopengl.com](https://www.learnopengl.com)

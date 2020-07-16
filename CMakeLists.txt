@@ -40,4 +40,8 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_executable(HJGraphics main.cpp ${HJGRAPHICS_SRC} ${GLAD_SRC})
 add_executable(NanoSuitDemo nanoSuitDemo.cpp ${HJGRAPHICS_SRC} ${GLAD_SRC})
+add_executable(PBRDemo PBRDemo.cpp ${HJGRAPHICS_SRC} ${GLAD_SRC})
+
 target_link_libraries(HJGraphics ${GLFW3_LIB}  ${ASSIMP_LIB} ${FREETYPE_LIB})
+target_link_libraries(NanoSuitDemo ${GLFW3_LIB}  ${ASSIMP_LIB} ${FREETYPE_LIB})
+target_link_libraries(PBRDemo ${GLFW3_LIB}  ${ASSIMP_LIB} ${FREETYPE_LIB})
