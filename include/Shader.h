@@ -13,13 +13,41 @@
 #include <fstream>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <utility>
 #include <vector>
+#include <initializer_list>
 #include "OpenGLHeader.h"
 //#define SHADER_UNIFORM_DEBUG
 namespace HJGraphics {
+	enum class ShaderCodeType{
+		Vertex,
+		Fragment,
+		Geometry,
+		Compute,
+		TessControl,
+		TessEvaluation
+	};
+	static GLuint SHADER_TYPE_LIST[]={GL_VERTEX_SHADER,GL_FRAGMENT_SHADER,GL_GEOMETRY_SHADER,GL_COMPUTE_SHADER,GL_TESS_CONTROL_SHADER,GL_TESS_EVALUATION_SHADER};
+	static std::string SHADER_NAME_LIST[]={"VERTEX","FRAGMENT","GEOMETRY","COMPUTE","TESS_CONTROL","TESS_EVALUATION"};
+	struct ShaderCode{
+		ShaderCodeType type;
+		std::string code;
+		ShaderCode(ShaderCodeType _type,std::string _code):type(_type),code(std::move(_code)){}
+	};
+	ShaderCode operator ""_vs(const char* str,size_t n);
+	ShaderCode operator ""_fs(const char* str,size_t n);
+	ShaderCode operator ""_gs(const char* str,size_t n);
+	ShaderCode operator ""_tcs(const char* str,size_t n);
+	ShaderCode operator ""_tes(const char* str,size_t n);
+	ShaderCode operator ""_cs(const char* str,size_t n);
+
+	typedef std::initializer_list<ShaderCode> ShaderCodes;
+
 	class Shader {
 	public:
 		Shader(const std::string& vsCode, const std::string& fsCode, const std::string& gsCode);
+
+		Shader(ShaderCodes codes);
 
 		void use() { glUseProgram(id); };
 
@@ -110,8 +138,7 @@ namespace HJGraphics {
 	};
 	void preprocessShaderCode(std::string &source, const std::string &basePath);
 
-	Shader* makeShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
-	
+	//will be deleted soon
 	std::shared_ptr<Shader> makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath = "");
 }
 

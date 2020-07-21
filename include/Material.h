@@ -27,7 +27,7 @@ namespace HJGraphics {
 		GLint texMinFilter;
 		GLint texMagFilter;
 
-		Texture(GLuint _type, GLuint _texN = 0);
+		explicit Texture(GLuint _type, GLuint _texN = 0);
 
 		~Texture();//析构函数里最好不要deleteTexture,太危险了,再按值传递的时候临时Texture会释放掉纹理!!!
 		void texParameteri(GLenum pname, GLint value) { glTexParameteri(type, pname, value); }
@@ -40,7 +40,7 @@ namespace HJGraphics {
 		int texHeight;
 		int texChannel;
 
-		Texture2D(const std::string &_path, bool gammaCorrection=false);
+		explicit Texture2D(const std::string &_path, bool gammaCorrection=false);
 
 		Texture2D(const std::string &_path, const GLint& _texWrap, bool gammaCorrection=false);
 
@@ -51,8 +51,8 @@ namespace HJGraphics {
 	class SolidTexture : public Texture{
 	public:
 		SolidTexture();
-		SolidTexture(glm::vec3 _color);
-		SolidTexture(float _color);
+		explicit SolidTexture(glm::vec3 _color);
+		explicit SolidTexture(float _color);
 		void setColor(glm::vec3 _color);
 		void setColor(float _color);
 
@@ -119,7 +119,7 @@ namespace HJGraphics {
 
 		BlinnPhongMaterial(glm::vec3 _diffuseColor, glm::vec3 _specularColor);
 
-		BlinnPhongMaterial(const std::vector<std::shared_ptr<Texture>>& _textures);
+		explicit BlinnPhongMaterial(const std::vector<std::shared_ptr<Texture>>& _textures);
 
 		std::shared_ptr<Shader> getShader() override{
 			return lightingShader;
@@ -146,9 +146,9 @@ namespace HJGraphics {
 		std::shared_ptr<Texture> heightMap;//
 
 
-		PBRMaterial(glm::vec3 _albedo=glm::vec3(0.8),float _metallic=0.1,float _roughness=0.5,glm::vec3 _f0=glm::vec3(0.04));
+		explicit PBRMaterial(glm::vec3 _albedo=glm::vec3(0.8),float _metallic=0.1,float _roughness=0.5,glm::vec3 _f0=glm::vec3(0.04));
 
-		PBRMaterial(const std::vector<std::shared_ptr<Texture>>& _textures);
+		explicit PBRMaterial(const std::vector<std::shared_ptr<Texture>>& _textures);
 
 		static std::shared_ptr<Shader> lightingShader;
 

@@ -7,7 +7,7 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	width=_width;height=_height;
 
 	gBuffer = std::make_shared<BlinnPhongGBuffer>(_width, _height);
-	gBuffer->shader = makeSharedShader("../shader/deferred/gBuffer.vs.glsl", "../shader/deferred/gBuffer.fs.glsl");
+	gBuffer->shader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/gBuffer.fs.glsl"_fs});
 	deferredTarget=std::make_shared<FrameBuffer>(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT);
 //	deferredTarget=nullptr;//bug when deferredTarget=nullptr?No, too dark to recognize graphics
 	ssaoPass=std::make_shared<SSAO>(glm::vec2(width,height),glm::vec2(16),32,1,0.5);
@@ -21,20 +21,16 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	//        Shaders
 	//-------------------------------
 	//post-processing shader
-	postprocessShader = makeSharedShader("../shader/deferred/post.vs.glsl","../shader/deferred/post.fs.glsl");
+	postprocessShader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/post.vs.glsl"_vs,"../shader/deferred/post.fs.glsl"_fs});
 	//shadow map shaders
-	pointLightShadowShader = makeSharedShader("../shader/deferred/shadow.vs.glsl", "../shader/deferred/shadow.point.fs.glsl", "../shader/deferred/shadow.point.gs.glsl");
-	parallelSpotLightShadowShader = makeSharedShader("../shader/deferred/shadow.vs.glsl", "../shader/deferred/shadow.fs.glsl");
+	pointLightShadowShader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/shadow.vs.glsl"_vs, "../shader/deferred/shadow.point.fs.glsl"_fs, "../shader/deferred/shadow.point.gs.glsl"_gs});
+	parallelSpotLightShadowShader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/shadow.vs.glsl"_vs, "../shader/deferred/shadow.fs.glsl"_fs});
 	//shading shaders
-	pointLightShader = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.point.fs.glsl");
-	parallelLightShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.parallel.fs.glsl");
-	spotLightShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.spot.fs.glsl");
-	ambientShader  = makeSharedShader("../shader/deferred/shade.vs.glsl","../shader/deferred/shade.ambient.fs.glsl");
-	lightingShader  = makeSharedShader("../shader/deferred/shade.vs.glsl", "../shader/deferred/shade.fs.glsl");
+	lightingShader  = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/shade.vs.glsl"_vs, "../shader/deferred/shade.fs.glsl"_fs});
 
 	PBRgBuffer = std::make_shared<PBRGBuffer>(_width, _height);
-	PBRgBuffer->shader = makeSharedShader("../shader/deferred/gBuffer.vs.glsl", "../shader/deferred/PBR/PBR_gBuffer.fs.glsl");
-	PBRlightingShader = makeSharedShader("../shader/deferred/shade.vs.glsl", "../shader/deferred/PBR/PBR_lighting.fs.glsl");
+	PBRgBuffer->shader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
+	PBRlightingShader=std::make_shared<Shader>(ShaderCodes{"../shader/deferred/shade.vs.glsl"_vs, "../shader/deferred/PBR/PBR_lighting.fs.glsl"_fs});
 }
 HJGraphics::DeferredRenderer::DeferredRenderer():DeferredRenderer(800,600) {}
 

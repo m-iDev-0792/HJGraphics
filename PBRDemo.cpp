@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include "Shader.h"
 #include "HJGraphics.h"
 using namespace std;
 using namespace glm;
@@ -61,7 +62,6 @@ int main() {
 	scene->addObject(coord);
 //	scene->addObject(grid);
 	scene->addObject(skybox);
-
 
 	auto renderer=make_shared<DeferredRenderer>(scene->getWidth(),scene->getHeight());
 	renderer->setMainScene(scene);
