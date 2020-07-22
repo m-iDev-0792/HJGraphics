@@ -35,20 +35,17 @@ namespace HJGraphics {
 		//important members!
 		int width,height;
 		std::shared_ptr<Scene> mainScene;
-		std::shared_ptr<GBuffer> gBuffer;
 		std::shared_ptr<FrameBuffer> deferredTarget;
 
 		std::shared_ptr<SSAO> ssaoPass;
 		std::shared_ptr<SolidTexture> defaultAOTex;
 		//some shaders
 		std::shared_ptr<Shader> postprocessShader;
-		
+
 		std::shared_ptr<Shader> pointLightShadowShader;
 		std::shared_ptr<Shader> parallelSpotLightShadowShader;
-
-		std::shared_ptr<Shader> pointLightShader;
-		std::shared_ptr<Shader> parallelLightShader;
-		std::shared_ptr<Shader> spotLightShader;
+		//BlinnPhong
+		std::shared_ptr<GBuffer> gBuffer;
 		std::shared_ptr<Shader> ambientShader;
 		std::shared_ptr<Shader> lightingShader;
 		//pbr
@@ -66,6 +63,7 @@ namespace HJGraphics {
 
 		//render pass
 		void shadowPass();
+		void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
 
 	};
 }

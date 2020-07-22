@@ -38,7 +38,7 @@ HJGraphics::Coordinate::Coordinate() :Coordinate(10.0f,10.0f,10.0f){}
 HJGraphics::Coordinate::Coordinate(GLfloat _xLen, GLfloat _yLen, GLfloat _zLen, glm::vec3 _xColor, glm::vec3 _yColor, glm::vec3 _zColor){
 	xLen=_xLen;yLen=_yLen;zLen=_zLen;
 	xColor=_xColor;yColor=_yColor;zColor=_zColor;
-	if(defaultShader== nullptr)defaultShader=std::make_shared<Shader>(ShaderCodes{"../shader/forward/line.vs.glsl"_vs,"../shader/forward/line.fs.glsl"_fs});
+	if(defaultShader== nullptr)defaultShader=std::make_shared<Shader>(ShaderCodeList{"../shader/forward/line.vs.glsl"_vs, "../shader/forward/line.fs.glsl"_fs});
 	model=glm::mat4(1.0f);
 	commitData();
 	glBindVertexArray(VAO);
@@ -82,7 +82,7 @@ HJGraphics::Grid::Grid(GLfloat _unit, GLuint _cellNum, int _mode, glm::vec3 _col
 	cellNum=_cellNum;
 	mode=_mode;
 	lineColor=_color;
-	if(defaultShader== nullptr)defaultShader=std::make_shared<Shader>(ShaderCodes{"../shader/forward/grid.vs.glsl"_vs,"../shader/forward/grid.fs.glsl"_fs});
+	if(defaultShader== nullptr)defaultShader=std::make_shared<Shader>(ShaderCodeList{"../shader/forward/grid.vs.glsl"_vs, "../shader/forward/grid.fs.glsl"_fs});
 
 	XYModel=glm::mat4(1.0f);
 	XYModel=glm::rotate(XYModel,glm::radians(90.0f),glm::vec3(1.0f,0.0f,0.0f));
@@ -162,7 +162,7 @@ HJGraphics::Skybox::Skybox(float _radius,std::string rightTex, std::string leftT
 	std::string tex[6]={rightTex,leftTex,upTex,downTex,frontTex,backTex};
 	radius=_radius;
 	gammaCorrection=_gammaCorrection;
-	if(defaultShader== nullptr)defaultShader=std::make_shared<Shader>(ShaderCodes{"../shader/forward/skybox.vs.glsl"_vs,"../shader/forward/skybox.fs.glsl"_fs});
+	if(defaultShader== nullptr)defaultShader=std::make_shared<Shader>(ShaderCodeList{"../shader/forward/skybox.vs.glsl"_vs, "../shader/forward/skybox.fs.glsl"_fs});
 	GLfloat cubeVertices[]={
 			// positions           normals
 			-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f,

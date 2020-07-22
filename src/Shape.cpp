@@ -5,30 +5,10 @@
 #include "Vertex.h"
 #include "Utility.h"
 
-HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition,MaterialType _materialType):Mesh(_materialType) {
+HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition, const std::shared_ptr<Material>& _material):Mesh(_material) {
 	radius = _radius; length = _length; partition = _partition;
 	generateData();
 	Mesh::commitData();
-}
-HJGraphics::Cylinder::Cylinder(MaterialType _materialType) : Cylinder(1.0f, 4.0f, 50,_materialType) {
-
-}
-HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath, std::string _normPath,MaterialType _materialType) : Cylinder(_radius, _length, _partition,_materialType) {
-	if (!_diffPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_diffPath,true);
-		m->usage="diffuse";
-		material->loadTexture(m);
-	}
-	if (!_specPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_specPath);
-		m->usage="specular";
-		material->loadTexture(m);
-	}
-	if (!_normPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_normPath);
-		m->usage="normal";
-		material->loadTexture(m);
-	}
 }
 
 void HJGraphics::Cylinder::generateData() {
@@ -81,31 +61,12 @@ void HJGraphics::Cylinder::generateData() {
 }
 
 
-
-HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height,MaterialType _materialType):Mesh(_materialType) {
+HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height, const std::shared_ptr<Material>& _material):Mesh(_material) {
 	width = _width; depth = _depth; height = _height;
 	generateData();
 	Mesh::commitData();
 }
-HJGraphics::Box::Box(MaterialType _materialType) : Box(5, 5, 5,_materialType) {
-}
-HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath, MaterialType _materialType) : Box(_width, _depth, _height,_materialType) {
-	if (!_diffPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_diffPath,true);
-		m->usage="diffuse";
-		material->loadTexture(m);
-	}
-	if (!_specPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_specPath);
-		m->usage="specular";
-		material->loadTexture(m);
-	}
-	if (!_normPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_normPath);
-		m->usage="normal";
-		material->loadTexture(m);
-	}
-}
+
 void HJGraphics::Box::generateData() {
 	clear();
 	const GLfloat halfWidth = width / 2;
@@ -180,29 +141,11 @@ void HJGraphics::Box::generateData() {
  }
 
 //real constructor
-HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _diffPath, GLfloat _texStretchRatio, MaterialType _materialType):Mesh(_materialType) {
+HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height,GLfloat _texStretchRatio, const std::shared_ptr<Material>& _material):Mesh(_material) {
 	width = _width; height = _height; texStretchRatio = _texStretchRatio;
-	if (!_diffPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_diffPath, true);
-		m->usage="diffuse";
-		material->loadTexture(m);
-	}
 	generateData();
 	Mesh::commitData();
 }
-HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath, GLfloat _texStretchRatio, MaterialType _materialType) : Plane(_width, _height, _diffPath, _texStretchRatio,_materialType) {
-	if (!_specPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_specPath);
-		m->usage="specular";
-		material->loadTexture(m);
-	}
-	if (!_normPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_normPath);
-		m->usage="normal";
-		material->loadTexture(m);
-	}
-}
-HJGraphics::Plane::Plane(MaterialType _materialType) : Plane(5, 5,"",1.0,_materialType) {}
 
 void HJGraphics::Plane::generateData() {
 	clear();
@@ -221,35 +164,14 @@ void HJGraphics::Plane::generateData() {
 	addVertex(glm::vec3(-width / 2, 0, -height / 2), glm::vec2(0, texStretchRatio), glm::vec3(0, 1, 0), glm::vec3(t1.x, t1.y, t1.z), glm::vec3(b1.x, b1.y, b1.z));
 }
 
-
-HJGraphics::Sphere::Sphere(MaterialType _materialType) : Sphere(1,50,"",_materialType) {
-
-}
 //real constructor
-HJGraphics::Sphere::Sphere(float _R, int _partition, std::string _texPath,MaterialType _materialType):Mesh(_materialType) {
+HJGraphics::Sphere::Sphere(float _R, int _partition, const std::shared_ptr<Material>& _material):Mesh(_material) {
 	partition = _partition;
 	R = _R;
-	if (!_texPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_texPath,true);
-		m->usage="diffuse";
-		material->loadTexture(m);
-	}
 	generateData();
 	Mesh::commitData();
 }
-HJGraphics::Sphere::Sphere(float _R, int _partition, std::string _diffPath, std::string _specPath,
-                           std::string _normPath,MaterialType _materialType) : Sphere(_R, _partition, _diffPath,_materialType) {
-	if (!_specPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_specPath);
-		m->usage="specular";
-		material->loadTexture(m);
-	}
-	if (!_normPath.empty()) {
-		auto m=std::make_shared<Texture2D>(_normPath);
-		m->usage="normal";
-		material->loadTexture(m);
-	}
-}
+
 void HJGraphics::Sphere::generateData() {
 	clear();
 	std::vector<Vertex8> vertices;

@@ -184,6 +184,46 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
 /*
  * Implementation of Material
  */
+std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_diffuse(const char* str,size_t n){
+	auto m=std::make_shared<Texture2D>(str,true);
+	m->usage="diffuse";
+	return m;
+}
+std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_specular(const char* str,size_t n){
+	auto m=std::make_shared<Texture2D>(str);
+	m->usage="specular";
+	return m;
+}
+std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_normal(const char* str,size_t n){
+	auto m=std::make_shared<Texture2D>(str);
+	m->usage="normal";
+	return m;
+}
+std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_metallic(const char* str,size_t n){
+	auto m=std::make_shared<Texture2D>(str);
+	m->usage="metallic";
+	return m;
+}
+std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_roughness(const char* str,size_t n){
+	auto m=std::make_shared<Texture2D>(str,true);
+	m->usage="roughness";
+	return m;
+}
+std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_albedo(const char* str,size_t n){
+	auto m=std::make_shared<Texture2D>(str,true);
+	m->usage="albedo";
+	return m;
+}
+std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_height(const char* str,size_t n){
+	auto m=std::make_shared<Texture2D>(str);
+	m->usage="height";
+	return m;
+}
+std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_F0(const char* str,size_t n){
+	auto m=std::make_shared<Texture2D>(str);
+	m->usage="F0";
+	return m;
+}
 std::shared_ptr<HJGraphics::Shader> HJGraphics::BlinnPhongMaterial::lightingShader = nullptr;
 
 HJGraphics::BlinnPhongMaterial::BlinnPhongMaterial(const std::vector<std::shared_ptr<Texture>>& _textures){

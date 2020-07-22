@@ -23,16 +23,15 @@ int main() {
 	                                string("../texture/envmap_miramar/miramar_bk.tga"),
 	                                string("../texture/envmap_miramar/miramar_ft.tga"));
 
-	auto cylinder=make_shared<Cylinder>(0.25, 3, 30, "../texture/brickwall.jpg", "", "../texture/brickwall_normal.jpg");
-	cylinder->model=translate(cylinder->model,vec3(0.0f,0.0f,1.0f));
-	cylinder->model=rotate(cylinder->model,radians(90.0f),vec3(1.0f,0.0f,0.0f));
+	TextureList brickwallTexture{"../texture/brickwall.jpg"_diffuse, "../texture/brickwall_normal.jpg"_normal};
+	auto brickMaterial=make_shared<PBRMaterial>(brickwallTexture);
 
-	auto box=make_shared<Box>(2, 2, 2, "../texture/brickwall.jpg", "", "../texture/brickwall_normal.jpg");
+	auto box=make_shared<Box>(2, 2, 2,brickMaterial);
 	box->model=translate(box->model,vec3(0.0f,0.0f,-2.5f));
 
-	auto plane=make_shared<Plane>(8, 8, "../texture/brickwall.jpg", "", "../texture/brickwall_normal.jpg", 8);
+	auto plane=make_shared<Plane>(8, 8,8, brickMaterial);
 
-	auto sphere=make_shared<Sphere>(0.5, 30, "../texture/brickwall.jpg", "", "../texture/brickwall_normal.jpg");
+	auto sphere=make_shared<Sphere>(0.5, 30,brickMaterial);
 	sphere->model=translate(sphere->model,vec3(0,2,0));
 
 

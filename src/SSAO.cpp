@@ -18,8 +18,8 @@ HJGraphics::SSAO::SSAO(glm::vec2 _ssaoSize, glm::vec2 _ssaoNoiseSize, float _sam
 	//create ssao and ssaoBlured framebuffers
 	ssao=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
 	ssaoBlured=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
-	if(ssaoShader==nullptr)ssaoShader=std::make_shared<Shader>(ShaderCodes{"../shader/deferred/ssao.vs.glsl"_vs,"../shader/deferred/ssao.fs.glsl"_fs});
-	if(ssaoBlurShader==nullptr)ssaoBlurShader=std::make_shared<Shader>(ShaderCodes{"../shader/deferred/ssao.vs.glsl"_vs,"../shader/deferred/ssaoBlur.fs.glsl"_fs});
+	if(ssaoShader==nullptr)ssaoShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/ssao.vs.glsl"_vs, "../shader/deferred/ssao.fs.glsl"_fs});
+	if(ssaoBlurShader==nullptr)ssaoBlurShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/ssao.vs.glsl"_vs, "../shader/deferred/ssaoBlur.fs.glsl"_fs});
 	generateSamplesAndNoise();
 }
 void HJGraphics::SSAO::generateSamplesAndNoise() {

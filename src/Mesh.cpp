@@ -3,11 +3,15 @@
 // Created by 何振邦(m_iDev_0792) on 2020/2/17.
 //
 
-HJGraphics::Mesh::Mesh(MaterialType _materialType) {
-	materialType=_materialType;
-	if(materialType==MaterialType::PBR)material=std::make_shared<PBRMaterial>();
-	else if(materialType==MaterialType::BlinnPhong)material=std::make_shared<BlinnPhongMaterial>();
-	else material=nullptr;
+HJGraphics::Mesh::Mesh(const std::shared_ptr<Material>& _material) {
+	if(_material== nullptr){
+		materialType=MaterialType::EMPTY;
+		std::cerr<<"Warning @ Mesh::Mesh(std::shared_ptr<Material> _material): _material is nullptr!"<<std::endl;
+	}else{
+		materialType=_material->materialType;
+	}
+	material=_material;
+
 	lastModel= model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -15,23 +19,22 @@ HJGraphics::Mesh::Mesh(MaterialType _materialType) {
 	castShadow = true;
 	primitiveType = Triangle;
 }
-HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<std::shared_ptr<Texture>>& _textures,MaterialType _materialType){
+HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::shared_ptr<Material>& _material){
 	lastModel= model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
+
+	if(_material == nullptr){
+		materialType=MaterialType::EMPTY;
+		std::cerr<<"Warning @ Mesh::Mesh(const std::vector<Vertex14>&  const std::vector<GLuint>& , const std::shared_ptr<Material>& _material): _material is nullptr!"<<std::endl;
+	}else{
+		materialType=_material->materialType;
+	}
+	material=_material;
+
 	castShadow = true;
 	primitiveType = Triangle;
-	materialType=_materialType;
-	if(materialType==MaterialType::PBR){
-		material=std::make_shared<PBRMaterial>(_textures);
-	}else if(materialType==MaterialType::BlinnPhong){
-		material=std::make_shared<BlinnPhongMaterial>(_textures);
-		//	material->setValue("ambientStrength",0.3f);
-		//	material->setValue("diffuseStrength",1.2f);
-		material->setValue("specularStrength",2.0f);
-	}else material=nullptr;
-
 	indices=_indices;
 	for(auto &v:_vertices)addVertex(v);
 	Mesh::commitData();

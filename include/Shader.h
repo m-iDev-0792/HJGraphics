@@ -41,13 +41,13 @@ namespace HJGraphics {
 	ShaderCode operator ""_tes(const char* str,size_t n);
 	ShaderCode operator ""_cs(const char* str,size_t n);
 
-	typedef std::initializer_list<ShaderCode> ShaderCodes;
+	typedef std::initializer_list<ShaderCode> ShaderCodeList;
 
 	class Shader {
 	public:
 		Shader(const std::string& vsCode, const std::string& fsCode, const std::string& gsCode);
 
-		Shader(ShaderCodes codes);
+		Shader(ShaderCodeList codes);
 
 		void use() { glUseProgram(id); };
 

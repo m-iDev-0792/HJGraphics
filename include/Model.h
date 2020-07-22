@@ -6,6 +6,7 @@
 #define HJGRAPHICS_MODEL_H
 
 #include <algorithm>
+#include <map>
 #include "Mesh.h"
 #include "stb/stb_image.h"
 #include "assimp/Importer.hpp"
@@ -15,13 +16,14 @@
 namespace HJGraphics {
 	class Model {
 	public:
+		std::map<std::string,std::shared_ptr<Texture>> textures_loaded;
+		std::map<aiMaterial*,std::shared_ptr<Material>> materialLib;
 
-		std::vector<std::shared_ptr<Texture>> textures_loaded;
 		std::vector<std::shared_ptr<Mesh>> meshes;
 		std::string directory;//used for reading images from same directory of model
 		std::string format;
 		MaterialType materialType;
-		Model(const std::string _path,MaterialType _materialType=MaterialType::BlinnPhong);
+		Model(const std::string& _path,MaterialType _materialType=MaterialType::BlinnPhong);
 
 		void scale(float _ratio);
 
@@ -42,7 +44,7 @@ namespace HJGraphics {
 		}
 
 	private:
-		void loadModel(std::string path);
+		void loadModel(const std::string& path);
 		void processNode(aiNode *node, const aiScene *scene);
 		std::shared_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene);
 		std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *mat, aiTextureType type,

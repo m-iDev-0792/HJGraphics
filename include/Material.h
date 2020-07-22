@@ -78,6 +78,17 @@ namespace HJGraphics {
 		BlinnPhong,
 		PBR
 	};
+	typedef std::vector<std::shared_ptr<Texture>> TextureList;
+
+	std::shared_ptr<Texture2D> operator ""_diffuse(const char* str,size_t n);
+	std::shared_ptr<Texture2D> operator ""_specular(const char* str,size_t n);
+	std::shared_ptr<Texture2D> operator ""_normal(const char* str,size_t n);
+	std::shared_ptr<Texture2D> operator ""_metallic(const char* str,size_t n);
+	std::shared_ptr<Texture2D> operator ""_roughness(const char* str,size_t n);
+	std::shared_ptr<Texture2D> operator ""_albedo(const char* str,size_t n);
+	std::shared_ptr<Texture2D> operator ""_height(const char* str,size_t n);
+	std::shared_ptr<Texture2D> operator ""_F0(const char* str,size_t n);
+
 	class Material {
 	public:
 		MaterialType materialType;

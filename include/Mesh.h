@@ -39,9 +39,10 @@ namespace HJGraphics {
 		std::shared_ptr<Material> material;
 
 		MaterialType materialType;
-		Mesh(MaterialType _materialType);
 
-		Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<std::shared_ptr<Texture>>& _textures,MaterialType _materialType=MaterialType::BlinnPhong);
+		Mesh(const std::shared_ptr<Material>& _material);
+
+		Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::shared_ptr<Material>& _material);
 
 		virtual void commitData();
 

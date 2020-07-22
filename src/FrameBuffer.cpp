@@ -9,7 +9,7 @@ std::shared_ptr<HJGraphics::Shader> HJGraphics::FrameBuffer::defaultShader= null
 
 HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,int _internalFormat,int _format,int _dataType,int _filter,bool _hasDepthRBO) {
 	if(defaultShader== nullptr){
-		defaultShader=std::make_shared<Shader>(ShaderCodes{"../shader/forward/framebufferVertex.glsl"_vs,"../shader/forward/framebufferFragment.glsl"_fs});
+		defaultShader=std::make_shared<Shader>(ShaderCodeList{"../shader/forward/framebufferVertex.glsl"_vs, "../shader/forward/framebufferFragment.glsl"_fs});
 	}
 	width=_width;
 	height=_height;

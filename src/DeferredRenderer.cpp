@@ -7,9 +7,9 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	width=_width;height=_height;
 
 	gBuffer = std::make_shared<BlinnPhongGBuffer>(_width, _height);
-	gBuffer->shader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/gBuffer.fs.glsl"_fs});
+	gBuffer->shader = std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/gBuffer.fs.glsl"_fs});
 	deferredTarget=std::make_shared<FrameBuffer>(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT);
-//	deferredTarget=nullptr;//bug when deferredTarget=nullptr?No, too dark to recognize graphics
+//	deferredTarget=nullptr;//bug when deferredTarget=nullptr?No, just too dark to recognize graphics
 	ssaoPass=std::make_shared<SSAO>(glm::vec2(width,height),glm::vec2(16),32,1,0.5);
 	defaultAOTex=std::make_shared<SolidTexture>(glm::vec3(1.0f));
 	//-------------------------------
@@ -21,16 +21,16 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	//        Shaders
 	//-------------------------------
 	//post-processing shader
-	postprocessShader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/post.vs.glsl"_vs,"../shader/deferred/post.fs.glsl"_fs});
+	postprocessShader = std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/post.vs.glsl"_vs, "../shader/deferred/post.fs.glsl"_fs});
 	//shadow map shaders
-	pointLightShadowShader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/shadow.vs.glsl"_vs, "../shader/deferred/shadow.point.fs.glsl"_fs, "../shader/deferred/shadow.point.gs.glsl"_gs});
-	parallelSpotLightShadowShader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/shadow.vs.glsl"_vs, "../shader/deferred/shadow.fs.glsl"_fs});
+	pointLightShadowShader = std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/shadow.vs.glsl"_vs, "../shader/deferred/shadow.point.fs.glsl"_fs, "../shader/deferred/shadow.point.gs.glsl"_gs});
+	parallelSpotLightShadowShader = std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/shadow.vs.glsl"_vs, "../shader/deferred/shadow.fs.glsl"_fs});
 	//shading shaders
-	lightingShader  = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/shade.vs.glsl"_vs, "../shader/deferred/shade.fs.glsl"_fs});
+	lightingShader  = std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/shade.vs.glsl"_vs, "../shader/deferred/shade.fs.glsl"_fs});
 
 	PBRgBuffer = std::make_shared<PBRGBuffer>(_width, _height);
-	PBRgBuffer->shader = std::make_shared<Shader>(ShaderCodes{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
-	PBRlightingShader=std::make_shared<Shader>(ShaderCodes{"../shader/deferred/shade.vs.glsl"_vs, "../shader/deferred/PBR/PBR_lighting.fs.glsl"_fs});
+	PBRgBuffer->shader = std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
+	PBRlightingShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/shade.vs.glsl"_vs, "../shader/deferred/PBR/PBR_lighting.fs.glsl"_fs});
 }
 HJGraphics::DeferredRenderer::DeferredRenderer():DeferredRenderer(800,600) {}
 
@@ -45,19 +45,7 @@ void HJGraphics::DeferredRenderer::render() {
 	//2. rendering G-buffer
 	//-----------------------------
 	glViewport(0,0,width,height);
-	gBuffer->bind();
-	gBuffer->shader->use();
-	mainScene->mainCamera->updateMatrices();
-	gBuffer->shader->set4fm("view", mainScene->mainCamera->view);
-	gBuffer->shader->set4fm("projection", mainScene->mainCamera->projection);
-	gBuffer->shader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
-	for (auto& m : mainScene->meshes) {
-		gBuffer->shader->set4fm("model", m->model);
-		m->material->bindTexture();
-		m->material->writeToShader(gBuffer->shader);
-		renderMesh(m);
-	}
-	gBuffer->unbind();
+	gBufferPass(gBuffer);
 
 	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
 	//-----------------------------
@@ -305,6 +293,21 @@ void HJGraphics::DeferredRenderer::shadowPass() {
 		}
 	}
 }
+void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBuffer>& buffer) {
+	buffer->bind();
+	buffer->shader->use();
+	mainScene->mainCamera->updateMatrices();
+	buffer->shader->set4fm("view", mainScene->mainCamera->view);
+	buffer->shader->set4fm("projection", mainScene->mainCamera->projection);
+	buffer->shader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
+	for (auto& m : mainScene->meshes) {
+		buffer->shader->set4fm("model", m->model);
+		m->material->bindTexture();
+		m->material->writeToShader(buffer->shader);
+		renderMesh(m);
+	}
+	buffer->unbind();
+}
 void HJGraphics::DeferredRenderer::renderPBR() {
 	//-----------------------------
 	//1. rendering shadow map
@@ -317,20 +320,7 @@ void HJGraphics::DeferredRenderer::renderPBR() {
 	//2. rendering G-buffer
 	//-----------------------------
 	glViewport(0,0,width,height);
-	PBRgBuffer->bind();
-	PBRgBuffer->shader->use();
-
-	mainScene->mainCamera->updateMatrices();
-	PBRgBuffer->shader->set4fm("view", mainScene->mainCamera->view);
-	PBRgBuffer->shader->set4fm("projection", mainScene->mainCamera->projection);
-	PBRgBuffer->shader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
-	for (auto& m : mainScene->meshes) {
-		PBRgBuffer->shader->set4fm("model", m->model);
-		m->material->bindTexture();
-		m->material->writeToShader(PBRgBuffer->shader);
-		renderMesh(m);
-	}
-	PBRgBuffer->unbind();
+	gBufferPass(PBRgBuffer);
 
 	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
 	//-----------------------------

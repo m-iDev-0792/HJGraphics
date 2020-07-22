@@ -5,7 +5,7 @@
 #include "TextRenderer.h"
 std::shared_ptr<HJGraphics::Shader> HJGraphics::TextRenderer::textShader=nullptr;
 HJGraphics::TextRenderer::TextRenderer(std::string _font,glm::vec2 _size,int _textHeight) {
-	if(textShader==nullptr)textShader=std::make_shared<Shader>(ShaderCodes{"../shader/text/text.vs.glsl"_vs,"../shader/text/text.fs.glsl"_fs});
+	if(textShader==nullptr)textShader=std::make_shared<Shader>(ShaderCodeList{"../shader/text/text.vs.glsl"_vs, "../shader/text/text.fs.glsl"_fs});
 	size=_size;
 	fontPath=_font;
 	textHeight=_textHeight;

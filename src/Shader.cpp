@@ -109,7 +109,7 @@ std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::stri
 	return shader;
 }
 
-HJGraphics::Shader::Shader(ShaderCodes codes){
+HJGraphics::Shader::Shader(ShaderCodeList codes){
 	std::vector<GLuint> shaderID(codes.size(),-1);
 	int i=0;
 	for(auto &code:codes){
