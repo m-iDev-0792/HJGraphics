@@ -43,6 +43,8 @@ HJGraphics has...
 
 Fig.1 unlimited number of lights and shadow support
 
+![](attachment/PBRMaterial.png)
+
 ![](attachment/PBRModel.png)
 
 Fig.2 PBR model and shading

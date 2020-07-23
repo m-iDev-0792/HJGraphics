@@ -42,30 +42,30 @@ int main() {
 	//|
 	//0-----------------roughness------------------>1
 	vector<shared_ptr<Sphere>> spheres;
-//	for(int i=0;i<5;++i){
-//		auto sphereMat=make_shared<PBRMaterial>(brickwallTexture2);
-//		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i/5.0f+0.1);
-//		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.9);
-//		auto sphere=make_shared<Sphere>(0.3, 30,sphereMat);
-//		sphere->model=translate(sphere->model,vec3(-2+i,2.5,0));
-//		spheres.push_back(sphere);
-//	}
-//	for(int i=0;i<5;++i){
-//		auto sphereMat=make_shared<PBRMaterial>(brickwallTexture2);
-//		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i/5.0f+0.1);
-//		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.6);
-//		auto sphere=make_shared<Sphere>(0.3, 30,sphereMat);
-//		sphere->model=translate(sphere->model,vec3(-2+i,1.8,0));
-//		spheres.push_back(sphere);
-//	}
-//	for(int i=0;i<5;++i){
-//		auto sphereMat=make_shared<PBRMaterial>(brickwallTexture2);
-//		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i/5.0f+0.1);
-//		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.35);
-//		auto sphere=make_shared<Sphere>(0.3, 30,sphereMat);
-//		sphere->model=translate(sphere->model,vec3(-2+i,1.1,0));
-//		spheres.push_back(sphere);
-//	}
+	for(int i=0;i<5;++i){
+		auto sphereMat=make_shared<PBRMaterial>(brickwallTexture2);
+		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i/5.0f+0.1);
+		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.9);
+		auto sphere=make_shared<Sphere>(0.3, 30,sphereMat);
+		sphere->model=translate(sphere->model,vec3(-2+i,2.5,0));
+		spheres.push_back(sphere);
+	}
+	for(int i=0;i<5;++i){
+		auto sphereMat=make_shared<PBRMaterial>(brickwallTexture2);
+		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i/5.0f+0.1);
+		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.6);
+		auto sphere=make_shared<Sphere>(0.3, 30,sphereMat);
+		sphere->model=translate(sphere->model,vec3(-2+i,1.8,0));
+		spheres.push_back(sphere);
+	}
+	for(int i=0;i<5;++i){
+		auto sphereMat=make_shared<PBRMaterial>(brickwallTexture2);
+		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i/5.0f+0.1);
+		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.35);
+		auto sphere=make_shared<Sphere>(0.3, 30,sphereMat);
+		sphere->model=translate(sphere->model,vec3(-2+i,1.1,0));
+		spheres.push_back(sphere);
+	}
 	for(int i=0;i<5;++i){
 		auto sphereMat=make_shared<PBRMaterial>(brickwallTexture2);
 		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i/5.0f+0.1);
@@ -81,7 +81,7 @@ int main() {
 	auto pointLight=make_shared<PointLight>(glm::vec3(0.0f, 2.0f, 2.0f),glm::vec3(3));
 
 	auto scene=make_shared<Scene>(800,600,0.3,glm::vec3(0));
-	scene->addLight(spotLight);
+	scene->addLight(pointLight);
 	scene->addCamera(camera);
 
 	for(auto& s:spheres)scene->addObject(s);
