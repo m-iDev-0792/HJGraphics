@@ -107,6 +107,11 @@ std::shared_ptr<HJGraphics::Mesh> HJGraphics::Model::processMesh(aiMesh *mesh, c
 		//create a new material
 		std::cout<<"create new material "<<material->GetName().C_Str()<<std::endl;
 		std::shared_ptr<Material> newMat;
+
+//		uint mod=0;
+//		material->Get(AI_MATKEY_SHADING_MODEL,mod);
+//		std::cout<<"mod="<<mod<<std::endl;//when illum=1 mod=0; illum=2 mod=3 other illum mod=2
+
 		if(materialType==MaterialType::PBR){
 			//-------------------------------------PBR Material------------------------------------
 			// 1. albedo maps

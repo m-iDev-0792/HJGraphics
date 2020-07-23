@@ -5,10 +5,7 @@
 
 HJGraphics::Mesh::Mesh(const std::shared_ptr<Material>& _material) {
 	if(_material== nullptr){
-		materialType=MaterialType::EMPTY;
 		std::cerr<<"Warning @ Mesh::Mesh(std::shared_ptr<Material> _material): _material is nullptr!"<<std::endl;
-	}else{
-		materialType=_material->materialType;
 	}
 	material=_material;
 
@@ -26,10 +23,7 @@ HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector
 	glGenBuffers(1, &EBO);
 
 	if(_material == nullptr){
-		materialType=MaterialType::EMPTY;
 		std::cerr<<"Warning @ Mesh::Mesh(const std::vector<Vertex14>&  const std::vector<GLuint>& , const std::shared_ptr<Material>& _material): _material is nullptr!"<<std::endl;
-	}else{
-		materialType=_material->materialType;
 	}
 	material=_material;
 

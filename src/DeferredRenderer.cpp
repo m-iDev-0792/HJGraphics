@@ -337,13 +337,20 @@ void HJGraphics::DeferredRenderer::renderPBR() {
 	//-----------------------------
 	//if there is a framebuffer, then bind it, and draw it after post-processing
 	if(deferredTarget)deferredTarget->clearBind();
-
+	else glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//bind PBRgBuffer texture
 	PBRgBuffer->bindTextures();
 
+	//-------------------------Be Careful Zone!!!--------------------//
+	//Enable blend for light shading
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE,GL_ONE);
+	//disable z-buffer writing by using glDepthMask(GL_FALSE),note that disable GL_DEPTH_TEST is not enough
+	//seems like glDisable(GL_DEPTH_TEST) not working good, we still need to disable z-buffer writing
+	glDepthMask(GL_FALSE);
 	glDisable(GL_DEPTH_TEST);
+	//---------------------------------------------------------------//
+
 	//[3.1]-------ambient shading----------
 	PBRlightingShader->use();
 	PBRlightingShader->setInt("lightType",3);
@@ -433,8 +440,12 @@ void HJGraphics::DeferredRenderer::renderPBR() {
 	glCullFace(GL_BACK);
 	glDisable(GL_CULL_FACE);
 
+	//-------------------------Be Careful Zone!!!--------------------//
+	glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
+	//---------------------------------------------------------------//
+
 	//-----------------------------
 	//4. custom forward rendering
 	//-----------------------------

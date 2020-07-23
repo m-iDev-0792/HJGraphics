@@ -151,7 +151,7 @@ void HJGraphics::Window::run() {
 		inputCallback(frameDeltaTime);
 		lastTime = currentTime;
 		render();
-		renderUI();
+		renderUI(frameDeltaTime);
 		swapBuffer();
 		glfwPollEvents();
 	}
@@ -159,14 +159,21 @@ void HJGraphics::Window::run() {
 void HJGraphics::Window::render() {
 	if(renderer)renderer->renderPBR();
 }
-void HJGraphics::Window::renderUI() {
+void HJGraphics::Window::renderUI(float deltaTime) {
 	if(textRenderer==nullptr)return;
+	static float deltaList[10]={1000.0f/fps};
+	static int index=0;
+	deltaList[index]=deltaTime;
+	index=(index+1)%10;
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_DEPTH_TEST);
 	textRenderer->renderTextDynamic("Key A S D W: move camera",glm::vec2(10,580),glm::vec3(1,0,0),1);
 	textRenderer->renderTextDynamic("Key Q E: up and down",glm::vec2(10,555),glm::vec3(1,0,0),1);
 	textRenderer->renderTextDynamic("Key O: SSAO off/on",glm::vec2(10,530),glm::vec3(1,0,0),1);
+	auto frameRate=std::to_string(static_cast<int>(10*1000/(deltaList[0]+deltaList[1]+deltaList[2]+deltaList[3]+deltaList[4]+
+			deltaList[5]+deltaList[6]+deltaList[7]+deltaList[8]+deltaList[9])));
+	textRenderer->renderTextDynamic(frameRate+std::string("fps"),glm::vec2(600,580),glm::vec3(1,0,0),1);
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 }

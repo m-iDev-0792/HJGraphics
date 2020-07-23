@@ -26,6 +26,10 @@ int main() {
 	TextureList brickwallTexture{"../texture/brickwall.jpg"_diffuse, "../texture/brickwall_normal.jpg"_normal};
 	auto brickMaterial=make_shared<PBRMaterial>(brickwallTexture);
 
+	auto cylinder=make_shared<Cylinder>(0.25, 3, 30, brickMaterial);
+	cylinder->model=translate(cylinder->model,vec3(0.0f,0.0f,1.0f));
+	cylinder->model=rotate(cylinder->model,radians(90.0f),vec3(1.0f,0.0f,0.0f));
+
 	auto box=make_shared<Box>(2, 2, 2,brickMaterial);
 	box->model=translate(box->model,vec3(0.0f,0.0f,-2.5f));
 

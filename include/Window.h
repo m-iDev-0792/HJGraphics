@@ -54,7 +54,7 @@ namespace HJGraphics {
 
 		void render() override;
 
-		void renderUI();
+		void renderUI(float deltaTime);
 
 		void customInit() override;
 	};
