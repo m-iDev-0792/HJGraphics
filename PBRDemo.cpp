@@ -82,6 +82,7 @@ int main() {
 
 	auto scene=make_shared<Scene>(800,600,0.3,glm::vec3(0));
 	scene->addLight(pointLight);
+	scene->addLight(spotLight);
 	scene->addCamera(camera);
 
 	for(auto& s:spheres)scene->addObject(s);

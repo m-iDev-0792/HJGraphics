@@ -48,6 +48,11 @@ void HJGraphics::DeferredRenderer::render() {
 	gBufferPass(gBuffer);
 
 	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
+
+	//---disable depth test for ao and shading---//
+	glDisable(GL_DEPTH_TEST);
+	//-------------------------------------------//
+
 	//-----------------------------
 	//2.1 SSAO (Optional)
 	//-----------------------------
@@ -66,9 +71,11 @@ void HJGraphics::DeferredRenderer::render() {
 	//bind gBuffer texture
 	gBuffer->bindTextures();
 
+	//------Enable blend for light shading------//
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE,GL_ONE);
-	glDisable(GL_DEPTH_TEST);
+	//------------------------------------------//
+
 	//[3.1]-------ambient shading----------
 	ambientShader->use();
 	ambientShader->set4fm("projectionView", glm::mat4(1.0f));
@@ -109,8 +116,12 @@ void HJGraphics::DeferredRenderer::render() {
 			renderMesh(light->lightVolume);
 		}
 	}
+
+	//-------Enable Cull face for spot and point light-------//
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
+	//-------------------------------------------------------//
+
 	//[3.3]-------spotlight shading----------
 	if(mainScene->spotLights.size()>0) {
 		//write uniforms
@@ -152,11 +163,13 @@ void HJGraphics::DeferredRenderer::render() {
 			renderMesh(light->lightVolume);
 		}
 	}
+	//-------Restore OpenGL state-------//
 	glCullFace(GL_BACK);
 	glDisable(GL_CULL_FACE);
-
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
+	//----------------------------------//
+	
 	//-----------------------------
 	//4. custom forward rendering
 	//-----------------------------
@@ -323,6 +336,11 @@ void HJGraphics::DeferredRenderer::renderPBR() {
 	gBufferPass(PBRgBuffer);
 
 	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
+
+	//---disable depth test for ao and shading---//
+	glDisable(GL_DEPTH_TEST);
+	//-------------------------------------------//
+
 	//-----------------------------
 	//2.1 SSAO (Optional)
 	//-----------------------------
@@ -341,15 +359,10 @@ void HJGraphics::DeferredRenderer::renderPBR() {
 	//bind PBRgBuffer texture
 	PBRgBuffer->bindTextures();
 
-	//-------------------------Be Careful Zone!!!--------------------//
-	//Enable blend for light shading
+	//------Enable blend for light shading------//
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE,GL_ONE);
-	//disable z-buffer writing by using glDepthMask(GL_FALSE),note that disable GL_DEPTH_TEST is not enough
-	//seems like glDisable(GL_DEPTH_TEST) not working good, we still need to disable z-buffer writing
-	glDepthMask(GL_FALSE);
-	glDisable(GL_DEPTH_TEST);
-	//---------------------------------------------------------------//
+	//------------------------------------------//
 
 	//[3.1]-------ambient shading----------
 	PBRlightingShader->use();
@@ -390,8 +403,12 @@ void HJGraphics::DeferredRenderer::renderPBR() {
 			renderMesh(light->lightVolume);
 		}
 	}
+
+	//-------Enable Cull face for spot and point light-------//
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
+	//-------------------------------------------------------//
+
 	//[3.3]-------spotlight shading----------
 	if(mainScene->spotLights.size()>0) {
 		//write uniforms
@@ -437,14 +454,13 @@ void HJGraphics::DeferredRenderer::renderPBR() {
 			renderMesh(light->lightVolume);
 		}
 	}
+
+	//-------Restore OpenGL state-------//
 	glCullFace(GL_BACK);
 	glDisable(GL_CULL_FACE);
-
-	//-------------------------Be Careful Zone!!!--------------------//
-	glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	//---------------------------------------------------------------//
+	//----------------------------------//
 
 	//-----------------------------
 	//4. custom forward rendering
