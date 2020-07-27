@@ -70,7 +70,7 @@ Fig.4 basic material
 - [x] HDR
 - [x] Deferred shading
 - [x] PBR Shading
-- [ ] Motion Blur
+- [x] Motion Blur(Camera)
 - [ ] Depth of field
 
 # Acknowledge

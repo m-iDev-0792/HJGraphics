@@ -29,6 +29,8 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,int _internalFormat
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, dataType, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	//set up rbo
 	if(hasDepthRBO){
@@ -59,7 +61,7 @@ void HJGraphics::FrameBuffer::drawBuffer() {
 
 void HJGraphics::FrameBuffer::clearBind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//WARNING! FrameBuffer will turn black if we don't clear DEPTH_BUFFER_BIT
 }
 void HJGraphics::FrameBuffer::unbind() {

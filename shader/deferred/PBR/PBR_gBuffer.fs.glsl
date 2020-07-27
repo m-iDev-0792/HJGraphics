@@ -29,7 +29,7 @@ void main(){
     //----------GBuffer output--------------
     //gPosition
     gPositionDepth.xyz=position;
-    gPositionDepth.w=linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
+    gPositionDepth.w=gl_FragCoord.z;//linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
     //gNormal
     gNormal=normal;
     vec3 N=texture(material.normalMap,uv).rgb;

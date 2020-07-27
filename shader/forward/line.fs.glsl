@@ -1,6 +1,6 @@
 #version 330 core
+layout (location = 0) out vec4 FragColor;
 in vec3 lineColor;
-out vec4 FragColor;
 void main() {
-    FragColor=vec4(lineColor,1.0f);
+    FragColor=vec4(lineColor,gl_FragCoord.z);//store depth in alpha for motion blur
 }

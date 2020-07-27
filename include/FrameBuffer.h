@@ -32,6 +32,7 @@ namespace HJGraphics{
 		void drawBuffer();
 	};
 	class HDRFrameBuffer: public FrameBuffer{
+	public:
 		HDRFrameBuffer(int _width,int _height):FrameBuffer(_width,_height,GL_RGB16F,GL_RGB,GL_FLOAT) {
 
 		}

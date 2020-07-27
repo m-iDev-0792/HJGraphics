@@ -78,7 +78,10 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 		}
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_O) == GLFW_PRESS){
-		renderer->enableAO=!renderer->enableAO;
+		enableAO=renderer->enableAO=!renderer->enableAO;
+	}
+	if(glfwGetKey(windowPtr, GLFW_KEY_B) == GLFW_PRESS){
+		enableMotionBlur=renderer->enableMotionBlur=!renderer->enableMotionBlur;
 	}
 }
 void HJGraphics::Window::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
@@ -139,6 +142,8 @@ void HJGraphics::Window::customInit() {
 //	glEnable(GL_CULL_FACE);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	if(renderer)renderer->renderInit();
+	enableMotionBlur=renderer->enableMotionBlur;
+	enableAO=renderer->enableAO;
 }
 void HJGraphics::Window::run() {
 	glfwMakeContextCurrent(windowPtr);
@@ -168,12 +173,17 @@ void HJGraphics::Window::renderUI(float deltaTime) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_DEPTH_TEST);
-	textRenderer->renderTextDynamic("Key A S D W: move camera",glm::vec2(10,580),glm::vec3(1,0,0),1);
-	textRenderer->renderTextDynamic("Key Q E: up and down",glm::vec2(10,555),glm::vec3(1,0,0),1);
-	textRenderer->renderTextDynamic("Key O: SSAO off/on",glm::vec2(10,530),glm::vec3(1,0,0),1);
+	int textStartY=height-20;
+	textRenderer->renderTextDynamic("Key A S D W: move camera",glm::vec2(10,textStartY),glm::vec3(1,0,0),1);
+	textRenderer->renderTextDynamic("Key Q E: up and down",glm::vec2(10,textStartY-25),glm::vec3(1,0,0),1);
+	if(enableAO)textRenderer->renderTextDynamic("Key O: SSAO(on)",glm::vec2(10,textStartY-50),glm::vec3(1,0,0),1);
+	else textRenderer->renderTextDynamic("Key O: SSAO(off)",glm::vec2(10,textStartY-50),glm::vec3(1,0,0),1);
+
+	if(enableMotionBlur)textRenderer->renderTextDynamic("Key B: MotionBlur(on)",glm::vec2(10,textStartY-75),glm::vec3(1,0,0),1);
+	else textRenderer->renderTextDynamic("Key B: MotionBlur(off)",glm::vec2(10,textStartY-75),glm::vec3(1,0,0),1);
 	auto frameRate=std::to_string(static_cast<int>(10*1000/(deltaList[0]+deltaList[1]+deltaList[2]+deltaList[3]+deltaList[4]+
 			deltaList[5]+deltaList[6]+deltaList[7]+deltaList[8]+deltaList[9])));
-	textRenderer->renderTextDynamic(frameRate+std::string("fps"),glm::vec2(600,580),glm::vec3(1,0,0),1);
+	textRenderer->renderTextDynamic(frameRate+std::string("fps"),glm::vec2(width-80,textStartY),glm::vec3(1,0,0),1);
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 }

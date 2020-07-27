@@ -8,7 +8,7 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 
 	gBuffer = std::make_shared<BlinnPhongGBuffer>(_width, _height);
 	gBuffer->shader = std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/gBuffer.fs.glsl"_fs});
-	deferredTarget=std::make_shared<FrameBuffer>(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT);
+	deferredTarget=std::make_shared<FrameBuffer>(_width, _height, GL_RGBA16F, GL_RGBA, GL_FLOAT);
 //	deferredTarget=nullptr;//bug when deferredTarget=nullptr?No, just too dark to recognize graphics
 	ssaoPass=std::make_shared<SSAO>(glm::vec2(width,height),glm::vec2(16),32,1,0.5);
 	defaultAOTex=std::make_shared<SolidTexture>(glm::vec3(1.0f));
@@ -16,6 +16,8 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	//        Init Settings
 	//-------------------------------
 	enableAO=true;
+	enableMotionBlur=true;
+	motionBlurSampleNum=5;
 
 	//-------------------------------
 	//        Shaders
@@ -35,6 +37,8 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 HJGraphics::DeferredRenderer::DeferredRenderer():DeferredRenderer(800,600) {}
 
 void HJGraphics::DeferredRenderer::render() {
+	//update camera matrices
+	mainScene->mainCamera->updateMatrices();
 	//-----------------------------
 	//1. rendering shadow map
 	//-----------------------------
@@ -169,7 +173,7 @@ void HJGraphics::DeferredRenderer::render() {
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	//----------------------------------//
-	
+
 	//-----------------------------
 	//4. custom forward rendering
 	//-----------------------------
@@ -199,14 +203,28 @@ void HJGraphics::DeferredRenderer::render() {
 
 }
 void HJGraphics::DeferredRenderer::postprocess() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0, 0, 0, 1);
+//	if(enableMotionBlur){
+//		//copy depth bit from deferredTarget to depthMap(not working)
+//		glBindFramebuffer(GL_READ_FRAMEBUFFER, deferredTarget->fbo);
+//		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+//		glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST );
+//	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
+	glm::mat4 inverseProjectionView=glm::inverse(projectionView);
+	glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
 	postprocessShader->use();
 	postprocessShader->setInt("screenTexture",0);
 	postprocessShader->set2fv("size",glm::vec2(width,height));
+	postprocessShader->setBool("enableMotionBlur",enableMotionBlur);
+	postprocessShader->setInt("motionBlurSampleNum",motionBlurSampleNum);
+	postprocessShader->set4fm("inverseProjectionView",inverseProjectionView);
+	postprocessShader->set4fm("previousProjectionView",previousProjectionView);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, deferredTarget->tex);
+	glDisable(GL_DEPTH_TEST);
 	Quad3D::draw();
+	glEnable(GL_DEPTH_TEST);
 }
 void HJGraphics::DeferredRenderer::renderInit() {
 	//Allocate shadow maps for lights that casts shadow
@@ -309,7 +327,6 @@ void HJGraphics::DeferredRenderer::shadowPass() {
 void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBuffer>& buffer) {
 	buffer->bind();
 	buffer->shader->use();
-	mainScene->mainCamera->updateMatrices();
 	buffer->shader->set4fm("view", mainScene->mainCamera->view);
 	buffer->shader->set4fm("projection", mainScene->mainCamera->projection);
 	buffer->shader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
@@ -322,6 +339,9 @@ void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBuffer>& b
 	buffer->unbind();
 }
 void HJGraphics::DeferredRenderer::renderPBR() {
+	//update camera matrices
+	mainScene->mainCamera->updateMatrices();
+
 	//-----------------------------
 	//1. rendering shadow map
 	//-----------------------------
@@ -485,7 +505,6 @@ void HJGraphics::DeferredRenderer::renderPBR() {
 	//5. post process
 	//-----------------------------
 	if(deferredTarget){
-		deferredTarget->unbind();
 		postprocess();
 	}
 

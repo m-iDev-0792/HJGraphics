@@ -17,6 +17,10 @@ HJGraphics::Camera::Camera(glm::vec3 _position, glm::vec3 _direction, float _asp
 }
 //TODO. how to make this process automatic?
 void HJGraphics::Camera::updateMatrices() {
+	static bool firstUpdate=true;
+	previousView=view;
+	previousProjection=projection;
+
 	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec3 cameraRight = glm::normalize(glm::cross(worldUp, direction));
 	glm::vec3 cameraUp = glm::cross(direction, cameraRight);
@@ -25,4 +29,10 @@ void HJGraphics::Camera::updateMatrices() {
 	view = glm::lookAt(position, position + direction, cameraUp);
 	projection=glm::mat4(1.0f);
 	projection=glm::perspective<float>(glm::radians(fov),aspect,zNear,zFar);
+	if(firstUpdate){
+		previousView=view;
+		previousProjection=projection;
+		firstUpdate=false;
+	}
+
 }

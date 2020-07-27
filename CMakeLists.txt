@@ -4,7 +4,6 @@ project(HJGraphics)
 set(CMAKE_CXX_STANDARD 14)
 include_directories(3rd-party)
 include_directories(include)
-include_directories(fuck)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src HJGRAPHICS_SRC)
 #-----------set up 3rd-party lib include-----------
 include_directories(3rd-party/freetype2)#set include path for freetype

@@ -1,6 +1,5 @@
 #version 330
-out vec4 FragColor;
-
+layout (location = 0) out vec4 FragColor;
 //********common uniform begin********
 
 uniform vec3 cameraPosition;
@@ -73,14 +72,14 @@ void main() {
         attenuation*=shadowFactor;
     }else if(lightType==3){//ambient
         float ao=texture(gAO,uv).r;
-        FragColor=vec4(ao*albedo*globalAmbiendStrength,1.0);
+        FragColor=vec4(ao*albedo*globalAmbiendStrength,texture(gPositionDepth,uv).w);
         return;
     }
 
     //actual lighting
     //review: Lo=  (kD * albedo / pi + kD * D * G * F/(4 * WiDotN * WoDotN)) * Li * WiDotN
     vec3 Li=lightColor*attenuation;
-//    F0=vec3(0.04);
+    //F0=vec3(0.04);
     F0 = mix(F0, albedo, metallic);
 
     //some dot values
@@ -99,5 +98,5 @@ void main() {
     kD *= 1.0 - metallic;//pure metal doesn't have diffuse
     //review again: Lo=  (kD * albedo / pi + kD * D * G * F/(4 * WiDotN * WoDotN)) * Li * WiDotN
     vec3 Lo=(kD*albedo/PI + D*G*F/BRDFdenom) * Li * NdotWi;//note: no kS because F already contain it
-    FragColor=vec4(Lo,1.0);
+    FragColor=vec4(Lo,0.0);
 }

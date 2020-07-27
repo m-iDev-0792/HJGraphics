@@ -55,6 +55,8 @@ namespace HJGraphics {
 
 		//settings
 		bool enableAO;
+		bool enableMotionBlur;
+		int motionBlurSampleNum;
 		
 		//shadow maps
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMap>> shadowMaps;
