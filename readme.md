@@ -64,13 +64,16 @@ Fig.4 basic material
 - glm 0.9.9.8
 - stb
 - freetype 2.10.2
+
+Build passed on Windows 10(Visual Studio 2017) and macOS 10.14(CLion)
 # Continue advancing
 - [x] SSAO
 - [ ] Load scene via JSON file
 - [x] HDR
 - [x] Deferred shading
 - [x] PBR Shading
-- [x] Motion Blur(Camera)
+- [x] Motion Blur(Camera & Mesh)
+- [ ] Animater
 - [ ] Depth of field
 
 # Acknowledge

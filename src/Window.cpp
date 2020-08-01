@@ -149,26 +149,29 @@ void HJGraphics::Window::run() {
 	glfwMakeContextCurrent(windowPtr);
 	customInit();
 	auto lastTime=std::chrono::high_resolution_clock::now();
+	auto startTime=lastTime;
+	long long frameCount=0;
 	while(!shouldClose()){
 		auto currentTime=std::chrono::high_resolution_clock::now();
 		auto frameDeltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+		auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count();
 		if(frameDeltaTime<1000.0/fps)continue;//too short, ignore input
 		inputCallback(frameDeltaTime);
 		lastTime = currentTime;
-		render();
+		render(frameDeltaTime,elapsedTime,++frameCount);
 		renderUI(frameDeltaTime);
 		swapBuffer();
 		glfwPollEvents();
 	}
 }
-void HJGraphics::Window::render() {
-	if(renderer)renderer->renderPBR();
+void HJGraphics::Window::render(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
+	if(renderer)renderer->renderPBR(frameDeltaTime,elapsedTime,frameCount);
 }
-void HJGraphics::Window::renderUI(float deltaTime) {
+void HJGraphics::Window::renderUI(long long  deltaTime) {
 	if(textRenderer==nullptr)return;
 	static float deltaList[10]={1000.0f/fps};
 	static int index=0;
-	deltaList[index]=deltaTime;
+	deltaList[index]=deltaTime;//ok deltaTime won't be to large
 	index=(index+1)%10;
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

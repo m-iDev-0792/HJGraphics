@@ -24,6 +24,7 @@ namespace HJGraphics {
 
 		glm::mat4 model;
 		glm::mat4 projectionView;
+		glm::mat4 previousProjectionView;
 
 		virtual std::shared_ptr<Shader> getDefaultShader()=0;
 

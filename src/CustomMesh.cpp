@@ -69,6 +69,7 @@ void HJGraphics::Coordinate::draw() {
 	defaultShader->use();
 	defaultShader->set4fm("model",model);
 	defaultShader->set4fm("projectionView",projectionView);
+	defaultShader->set4fm("previousProjectionView",previousProjectionView);
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_LINES,0,6);
 }
@@ -139,6 +140,7 @@ void HJGraphics::Grid::draw() {
 	defaultShader->use();
 	defaultShader->set3fv("lineColor",lineColor);
 	defaultShader->set4fm("projectionView",projectionView);
+	defaultShader->set4fm("previousProjectionView",previousProjectionView);
 	glBindVertexArray(VAO);
 	const int n=(2*cellNum+1)*2*2;
 	if(mode&GRIDMODE::XZ){
@@ -230,6 +232,7 @@ std::shared_ptr<HJGraphics::Shader> HJGraphics::Skybox::getDefaultShader() {
 void HJGraphics::Skybox::draw() {
 	defaultShader->use();
 	defaultShader->set4fm("projectionView",projectionView);
+	defaultShader->set4fm("previousProjectionView",previousProjectionView);
 	defaultShader->setInt("skybox",0);
 	defaultShader->setInt("gammaCorrection",gammaCorrection);
 	glBindVertexArray(VAO);

@@ -46,6 +46,8 @@ namespace HJGraphics {
 
 		Texture2D();
 
+		Texture2D(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, GLenum _filter, GLenum _wrap);
+
 		void loadFromPath(const std::string &_path, bool gammaCorrection=false);
 	};
 	class SolidTexture : public Texture{

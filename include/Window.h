@@ -54,9 +54,9 @@ namespace HJGraphics {
 
 		void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) override;
 
-		void render() override;
+		void render(long long frameDeltaTime,long long elapsedTime,long long frameCount) override;
 
-		void renderUI(float deltaTime);
+		void renderUI(long long deltaTime);
 
 		void customInit() override;
 	};

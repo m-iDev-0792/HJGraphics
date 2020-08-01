@@ -32,6 +32,8 @@ int main() {
 
 	auto plane=make_shared<Plane>(8, 8,8, brickMaterial);
 
+
+
 	auto soliddiffuse=make_shared<SolidTexture>(glm::vec3(0.5,0.0,0.0));
 	soliddiffuse->usage="diffuse";
 	TextureList brickwallTexture2{soliddiffuse, "../texture/brickwall_normal.jpg"_normal};
@@ -73,6 +75,8 @@ int main() {
 		auto sphere=make_shared<Sphere>(0.3, 30,sphereMat);
 		sphere->model=translate(sphere->model,vec3(-2+i,0.4,0));
 		spheres.push_back(sphere);
+		auto simpleAnimater=make_shared<DemoSinAnimater>(sphere->model,vec3(0,0,-2),3.0,i);
+		sphere->animater=simpleAnimater;
 	}
 
 

@@ -27,15 +27,30 @@ namespace HJGraphics{
 
 		void clearBind();
 
+		void bind();
+
 		void unbind();
 
-		void drawBuffer();
+		void debugDrawBuffer();
+
+		virtual void bindAttachments();
+
+		void setDrawBuffers(int n){
+			std::vector<GLenum> attach(n,0);
+			for(int i=0;i<n;++i)attach[i]=GL_COLOR_ATTACHMENT0+i;
+			glDrawBuffers(n,&attach[0]);
+		}
 	};
-	class HDRFrameBuffer: public FrameBuffer{
+
+	class DeferredTarget: public FrameBuffer{
 	public:
-		HDRFrameBuffer(int _width,int _height):FrameBuffer(_width,_height,GL_RGB16F,GL_RGB,GL_FLOAT) {
+		GLuint sharedVelocity;
+		DeferredTarget(int _width,int _height):FrameBuffer(_width,_height,GL_RGBA16F,GL_RGBA,GL_FLOAT){
 
 		}
+		DeferredTarget(int _width,int _height, GLuint _sharedVelocity);
+
+		void bindAttachments() override;
 	};
 }
 

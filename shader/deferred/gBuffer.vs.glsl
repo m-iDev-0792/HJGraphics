@@ -8,12 +8,13 @@ layout (location = 4) in vec3 aBitangent;
 out vec3 normal;
 out vec2 uv;
 out vec3 position;
+out vec3 previousPosition;
 out mat3 TBN;
 
 uniform mat4 model;
+uniform mat4 previousModel;
 uniform mat4 view;
 uniform mat4 projection;
-
 
 void main(){
     //calc TBN matrix
@@ -33,6 +34,7 @@ void main(){
 	normal=N;
     uv=aUV;
     position=vec3(model*vec4(aPos,1.0f));
+    previousPosition=vec3(previousModel*vec4(aPos,1.0f));
 
     gl_Position=projection*view*model*vec4(aPos,1.0f);
 }

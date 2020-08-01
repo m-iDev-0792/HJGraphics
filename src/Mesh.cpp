@@ -9,15 +9,16 @@ HJGraphics::Mesh::Mesh(const std::shared_ptr<Material>& _material) {
 	}
 	material=_material;
 
-	lastModel= model = glm::mat4(1.0f);
+	previousModel= model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
 	castShadow = true;
 	primitiveType = Triangle;
+	animater=nullptr;
 }
 HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::shared_ptr<Material>& _material){
-	lastModel= model = glm::mat4(1.0f);
+	previousModel= model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
@@ -29,6 +30,7 @@ HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector
 
 	castShadow = true;
 	primitiveType = Triangle;
+	animater=nullptr;
 	indices=_indices;
 	for(auto &v:_vertices)addVertex(v);
 	Mesh::commitData();

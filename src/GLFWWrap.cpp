@@ -79,7 +79,7 @@ void HJGraphics::GLFWWrap::scrollCallback(GLFWwindow *window, double xoffset, do
  * This function is called when we need to render something
  * 每次渲染时会调用这个函数
  */
-void HJGraphics::GLFWWrap::render() {
+void HJGraphics::GLFWWrap::render(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
 
 }
 /*
@@ -99,12 +99,15 @@ void HJGraphics::GLFWWrap::run() {
 	glfwMakeContextCurrent(windowPtr);
 	customInit();
 	auto lastTime = std::chrono::high_resolution_clock::now();
+	auto startTime=lastTime;
+	long long framecount=0;
 	while(!shouldClose()){
 		auto currentTime = std::chrono::high_resolution_clock::now();
 		auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+		auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count();
 		lastTime = currentTime;
 		inputCallback(deltaTime);
-		render();
+		render(deltaTime,elapsedTime,++framecount);
 		swapBuffer();
 		static bool macMoved = false;
 		if(!macMoved) {

@@ -39,6 +39,19 @@ HJGraphics::Texture2D::Texture2D() :Texture(GL_TEXTURE_2D){
 	texMinFilter=DEFAULT_MIN_FILTER;
 	texMagFilter=GL_LINEAR;
 }
+HJGraphics::Texture2D::Texture2D(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, GLenum _filter, GLenum _wrap): Texture(GL_TEXTURE_2D){
+	texWidth=_width;
+	texHeight=_height;
+	texMinFilter=texMagFilter=_filter;
+	texWrapS=texWrapT=_wrap;
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, _internalFormat, texWidth, texHeight, 0, _format, _dataType, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrap);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrap);
+}
 void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCorrection) {
 	glActiveTexture(GL_TEXTURE0+textureN);
 	glBindTexture(GL_TEXTURE_2D, id);

@@ -22,13 +22,13 @@ namespace HJGraphics {
 
 		void setMainScene(std::shared_ptr<Scene> _mainScene) { mainScene = _mainScene; }
 		
-		void render();
+		void render(long long frameDeltaTime,long long elapsedTime,long long frameCount);
 
-		void renderPBR();
+		void renderPBR(long long frameDeltaTime,long long elapsedTime,long long frameCount);
 
 		void renderInit();
 
-		void postprocess();
+		void postprocess(long long frameDeltaTime);
 
 		void renderMesh(std::shared_ptr<Mesh> m);
 	private:
@@ -51,12 +51,16 @@ namespace HJGraphics {
 		//pbr
 		std::shared_ptr<GBuffer> PBRgBuffer;
 		std::shared_ptr<Shader> PBRlightingShader;
+		//motion blur
+		std::shared_ptr<Texture2D> sharedVelocity;
 
 
 		//settings
 		bool enableAO;
 		bool enableMotionBlur;
 		int motionBlurSampleNum;
+		int motionBlurTargetFPS;
+		float motionBlurPower;
 		
 		//shadow maps
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMap>> shadowMaps;
@@ -64,6 +68,7 @@ namespace HJGraphics {
 
 
 		//render pass
+		void prepareRendering(long long frameDeltaTime,long long elapsedTime,long long frameCount);//update mesh states etc.
 		void shadowPass();
 		void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
 

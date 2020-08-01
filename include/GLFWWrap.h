@@ -31,7 +31,7 @@ namespace HJGraphics {
 
 		virtual void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
 
-		virtual void render();
+		virtual void render(long long frameDeltaTime,long long elapsedTime,long long frameCount);
 
 		virtual void customInit();
 

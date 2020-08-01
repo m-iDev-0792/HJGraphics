@@ -5,7 +5,7 @@
 #define HJGRAPHICS_MESH_H
 #include "Material.h"
 #include "Vertex.h"
-
+#include "Animater.h"
 namespace HJGraphics {
 	class DeferredRenderer;
 
@@ -35,7 +35,8 @@ namespace HJGraphics {
 		std::vector<GLuint> indices;
 	public:
 		glm::mat4 model;
-		glm::mat4 lastModel;//for motion blur
+		glm::mat4 previousModel;//for motion blur
+		std::shared_ptr<Animater> animater;
 		std::shared_ptr<Material> material;
 
 		Mesh(const std::shared_ptr<Material>& _material);
