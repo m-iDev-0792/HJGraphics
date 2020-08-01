@@ -4,19 +4,11 @@
 #include "Shape.h"
 #include "Vertex.h"
 #include "Utility.h"
-HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath, std::string _normPath) : Cylinder(_radius, _length, _partition) {
-	if (!_diffPath.empty()) {
-		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath,true));
-		else material.diffuseMaps[0] = Texture2D(_diffPath,true);
-	}
-	if (!_specPath.empty()) {
-		if (material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specPath));
-		else material.specularMaps[0] = Texture2D(_specPath);
-	}
-	if (!_normPath.empty()) {
-		if (material.normalMaps.empty())material.normalMaps.push_back(Texture2D(_normPath));
-		else material.normalMaps[0] = Texture2D(_normPath);
-	}
+
+HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition, const std::shared_ptr<Material>& _material):Mesh(_material) {
+	radius = _radius; length = _length; partition = _partition;
+	generateData();
+	Mesh::commitData();
 }
 
 void HJGraphics::Cylinder::generateData() {
@@ -68,36 +60,13 @@ void HJGraphics::Cylinder::generateData() {
 	}
 }
 
-HJGraphics::Cylinder::Cylinder(float _radius, float _length, GLuint _partition) {
-	radius = _radius; length = _length; partition = _partition;
-	generateData();
-	commitData();
-}
-HJGraphics::Cylinder::Cylinder() : Cylinder(1.0f, 4.0f, 50) {
-}
 
-
-HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height) {
+HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height, const std::shared_ptr<Material>& _material):Mesh(_material) {
 	width = _width; depth = _depth; height = _height;
 	generateData();
-	commitData();
+	Mesh::commitData();
 }
-HJGraphics::Box::Box() : Box(5, 5, 5) {
-}
-HJGraphics::Box::Box(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath) : Box(_width, _depth, _height) {
-	if (!_diffPath.empty()) {
-		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_diffPath,true));
-		else material.diffuseMaps[0] = Texture2D(_diffPath,true);
-	}
-	if (!_specPath.empty()) {
-		if (material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specPath));
-		else material.specularMaps[0] = Texture2D(_specPath);
-	}
-	if (!_normPath.empty()) {
-		if (material.normalMaps.empty())material.normalMaps.push_back(Texture2D(_normPath));
-		else material.normalMaps[0] = Texture2D(_normPath);
-	}
-}
+
 void HJGraphics::Box::generateData() {
 	clear();
 	const GLfloat halfWidth = width / 2;
@@ -171,27 +140,12 @@ void HJGraphics::Box::generateData() {
 	}
  }
 
-
-HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _texPath, GLfloat _texStretchRatio) {
+//real constructor
+HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height,GLfloat _texStretchRatio, const std::shared_ptr<Material>& _material):Mesh(_material) {
 	width = _width; height = _height; texStretchRatio = _texStretchRatio;
-	if (!_texPath.empty()) {
-		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_texPath,true));
-		else material.diffuseMaps[0] = Texture2D(_texPath,true);
-	}
 	generateData();
-	commitData();
+	Mesh::commitData();
 }
-HJGraphics::Plane::Plane(GLfloat _width, GLfloat _height, std::string _diffuseTexPath, std::string _specularTexPath, std::string _normalTexPath, GLfloat _texStretchRatio) : Plane(_width, _height, _diffuseTexPath, _texStretchRatio) {
-	if (!_specularTexPath.empty()) {
-		if (material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specularTexPath));
-		else material.specularMaps[0] = Texture2D(_specularTexPath);
-	}
-	if (!_normalTexPath.empty()) {
-		if (material.normalMaps.empty())material.normalMaps.push_back(Texture2D(_normalTexPath));
-		else material.normalMaps[0] = Texture2D(_normalTexPath);
-	}
-}
-HJGraphics::Plane::Plane() : Plane(5, 5) {}
 
 void HJGraphics::Plane::generateData() {
 	clear();
@@ -210,31 +164,14 @@ void HJGraphics::Plane::generateData() {
 	addVertex(glm::vec3(-width / 2, 0, -height / 2), glm::vec2(0, texStretchRatio), glm::vec3(0, 1, 0), glm::vec3(t1.x, t1.y, t1.z), glm::vec3(b1.x, b1.y, b1.z));
 }
 
-
-HJGraphics::Sphere::Sphere() : Sphere(1) {
-
-}
-HJGraphics::Sphere::Sphere(float _R, int _partition, std::string _texPath) {
+//real constructor
+HJGraphics::Sphere::Sphere(float _R, int _partition, const std::shared_ptr<Material>& _material):Mesh(_material) {
 	partition = _partition;
 	R = _R;
-	if (!_texPath.empty()) {
-		if (material.diffuseMaps.empty())material.diffuseMaps.push_back(Texture2D(_texPath,true));
-		else material.diffuseMaps[0] = Texture2D(_texPath,true);
-	}
 	generateData();
-	commitData();
+	Mesh::commitData();
 }
-HJGraphics::Sphere::Sphere(float _R, int _partition, std::string _diffuseTexPath, std::string _specularTexPath,
-                           std::string _normalTexPath) : Sphere(_R, _partition, _diffuseTexPath) {
-	if (!_specularTexPath.empty()) {
-		if (material.specularMaps.empty())material.specularMaps.push_back(Texture2D(_specularTexPath));
-		else material.specularMaps[0] = Texture2D(_specularTexPath);
-	}
-	if (!_normalTexPath.empty()) {
-		if (material.normalMaps.empty())material.normalMaps.push_back(Texture2D(_normalTexPath));
-		else material.normalMaps[0] = Texture2D(_normalTexPath);
-	}
-}
+
 void HJGraphics::Sphere::generateData() {
 	clear();
 	std::vector<Vertex8> vertices;

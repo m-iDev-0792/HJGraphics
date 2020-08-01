@@ -1,6 +1,6 @@
 ![HJGraphics](attachment/HJGraphics.png)
 # HJGraphics
-HJGraphics is a very simple 3D graphic framework based on OpenGL API, and also my attempt to build a relatively complete tiny 3D graphic framework from the ground up. It is a part of my graduation project as well.
+HJGraphics is a very simple 3D graphic framework based on OpenGL API, and also my attempt to build a relatively complete tiny 3D graphic framework from the ground up. It is a part of my bachelor graduation project as well.
 
 By using HJGraphics, you can create OpenGL environment easily and draw some funny 3D objects with only a few lines of codes.
 
@@ -36,33 +36,45 @@ HJGraphics has...
     * Parallel light
     * Spot light
     * Shadow for 3 kinds of lights above 
-* Material : basic material, diffuse map, specular map, normal map and height map.
-* Renderer : deferred and forward shading support, HDR rendering, SSAO, post-processing.
+* Material : BlinnPhong material and UE4 workflow PBR material.
+* Renderer : deferred and forward shading support, HDR rendering, SSAO, post-processing, text rendering.
 # Gallery
 ![](attachment/multiLight.png)
 
 Fig.1 unlimited number of lights and shadow support
 
+![](attachment/PBRMaterial.png)
+
+![](attachment/PBRModel.png)
+
+Fig.2 PBR model and shading
+
 
 ![](attachment/model.png)
 
-Fig.2 model loading support (only `obj` format fully supported now)
+Fig.3 model loading support (only `obj` format fully supported now)
 
 ![](attachment/material.png)
 
-Fig.3 basic material
+Fig.4 basic material
 # Dependencies
 - Assimp 5.0.1 64bit
 - GLFW 3.3 64bit
 - GLAD
-- glm
+- glm 0.9.9.8
 - stb
+- freetype 2.10.2
+
+Build passed on Windows 10(Visual Studio 2017) and macOS 10.14(CLion)
 # Continue advancing
 - [x] SSAO
 - [ ] Load scene via JSON file
 - [x] HDR
 - [x] Deferred shading
-- [ ] PBR Shading
+- [x] PBR Shading
+- [x] Motion Blur(Camera & Mesh)
+- [ ] Animater
+- [ ] Depth of field
 
 # Acknowledge
 Amazing tutorials : [learnopengl.com](https://www.learnopengl.com)

@@ -8,6 +8,7 @@
 #include <chrono>
 #include "GLFWWrap.h"
 #include "DeferredRenderer.h"
+#include "TextRenderer.h"
 namespace HJGraphics {
 
 	class Window : public GLFWWrap {
@@ -25,6 +26,7 @@ namespace HJGraphics {
 		int getFPS(){return fps;}
 
 		std::shared_ptr<DeferredRenderer> renderer;
+		std::shared_ptr<TextRenderer> textRenderer;
 	protected:
 		float fov;
 		bool firstMouse;
@@ -38,6 +40,8 @@ namespace HJGraphics {
 		glm::vec3 originalDirection;
 
 		int fps;
+		bool enableMotionBlur;
+		bool enableAO;
 
 
 		void framebufferSizeCallback(GLFWwindow *window, int width, int height) override;
@@ -50,7 +54,9 @@ namespace HJGraphics {
 
 		void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) override;
 
-		void render() override;
+		void render(long long frameDeltaTime,long long elapsedTime,long long frameCount) override;
+
+		void renderUI(long long deltaTime);
 
 		void customInit() override;
 	};

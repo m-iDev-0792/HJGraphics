@@ -3,7 +3,9 @@ layout (location = 0) in vec3 aPos;
 uniform mat4 model;
 uniform mat4 projectionView;
 
+out vec3 position;
 void main()
 {
-    gl_Position = projectionView*model*vec4(aPos, 1.0);
+    position=vec3(model*vec4(aPos, 1.0));
+    gl_Position = projectionView*vec4(position, 1.0);
 }

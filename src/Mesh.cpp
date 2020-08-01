@@ -3,32 +3,37 @@
 // Created by 何振邦(m_iDev_0792) on 2020/2/17.
 //
 
-HJGraphics::Mesh::Mesh() {
-	model = glm::mat4(1.0f);
+HJGraphics::Mesh::Mesh(const std::shared_ptr<Material>& _material) {
+	if(_material== nullptr){
+		std::cerr<<"Warning @ Mesh::Mesh(std::shared_ptr<Material> _material): _material is nullptr!"<<std::endl;
+	}
+	material=_material;
+
+	previousModel= model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
 	castShadow = true;
 	primitiveType = Triangle;
+	animater=nullptr;
 }
-HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::vector<Texture2D>& _textures){
-	model = glm::mat4(1.0f);
+HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector<GLuint>& _indices, const std::shared_ptr<Material>& _material){
+	previousModel= model = glm::mat4(1.0f);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
+
+	if(_material == nullptr){
+		std::cerr<<"Warning @ Mesh::Mesh(const std::vector<Vertex14>&  const std::vector<GLuint>& , const std::shared_ptr<Material>& _material): _material is nullptr!"<<std::endl;
+	}
+	material=_material;
+
 	castShadow = true;
 	primitiveType = Triangle;
-
-	material.clearTextures();
-	material.loadTextures(_textures);
-
-	material.shininess=48;
-	material.ambientStrength=0.3f;
-	material.specularStrength=1.0f;
-	material.diffuseStrength=0.7f;
+	animater=nullptr;
 	indices=_indices;
 	for(auto &v:_vertices)addVertex(v);
-	commitData();
+	Mesh::commitData();
 }
 void HJGraphics::Mesh::commitData(){
 	std::vector<float> data;

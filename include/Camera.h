@@ -27,6 +27,9 @@ namespace HJGraphics {
 		
 		glm::mat4 view;
 		glm::mat4 projection;
+
+		glm::mat4 previousView;
+		glm::mat4 previousProjection;
 		Camera();
 
 		Camera(glm::vec3 _position, glm::vec3 _direction, float _aspect = 4 / 3.0f, float _fov = 45.0f,

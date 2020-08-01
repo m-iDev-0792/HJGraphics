@@ -3,13 +3,13 @@
 //
 
 #include "Shader.h"
-std::string readText(const std::string& filename)
-{
+#include <regex>
+std::string readText(const std::string& filename){
 	using namespace std;
 	ifstream file(filename, ios::in);
 	if (!file.is_open()) {
-		cout << "ERROR @ readText(const string&) : can't load text file:" << filename << endl;
-		return nullptr;
+		cerr << "ERROR @ readText(const string&) : can't load text file:" << filename << endl;
+		return std::string();
 	}
 	string text;
 	file.seekg(0, ios::end);
@@ -19,38 +19,124 @@ std::string readText(const std::string& filename)
 	file.close();
 	return text;
 }
-HJGraphics::Shader* HJGraphics::makeShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath){
-	auto vsCode = readText(vsPath);
-	auto fsCode = readText(fsPath);
-	std::string gsCode;
-	if (!gsPath.empty())gsCode = readText(gsPath);
-	Shader* shader;
-	try {
-		shader = new Shader(vsCode, fsCode, gsCode);
-	}
-	catch (...) {
-		std::cout << "Error @ makeShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
-	}
-	return shader;
+std::string getBasePath(const std::string &path){
+	std::string nullPath;
+	if(path.empty())return nullPath;
+	int pos=-1;
+	for(int i=path.size()-1;i>=0;--i)
+		if('/'==path[i]){
+			pos=i;
+			break;
+		}
+	if(-1==pos)return nullPath;
+	else return path.substr(0,pos+1);
 }
-std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath)
-{
-	auto vsCode = readText(vsPath);
-	auto fsCode = readText(fsPath);
-	std::string gsCode;
-	if (!gsPath.empty())gsCode = readText(gsPath);
+
+void HJGraphics::preprocessShaderCode(std::string &source, const std::string &basePath){
+	std::regex reg{R"(#include".+")"};//Note: no space behind #include
+	std::smatch matches;
+	std::sregex_iterator it(source.begin(), source.end(), reg);
+	std::sregex_iterator end;
+	std::vector<std::string> includeCodes;
+	std::vector<std::string> includePath;
+	for (; it != end; ++it) {
+		auto path=it->str();
+		includePath.push_back(path);
+		path=path.substr(9,path.size()-10);
+		auto originalCode=readText(basePath+path);
+		auto newBasePath=getBasePath(basePath+path);
+		preprocessShaderCode(originalCode,newBasePath);//process recursively
+		includeCodes.push_back(originalCode);
+	}
+	if(includePath.empty())return;
+	//replace
+	for(int i=0;i<includePath.size();++i){
+		std::regex p{includePath[i]};
+		source=std::regex_replace(source,p,includeCodes[i]);
+	}
+}
+HJGraphics::ShaderCode HJGraphics::operator ""_vs(const char* str,size_t n){
+	auto code=readText(str);
+	auto basePath=getBasePath(str);
+	HJGraphics::preprocessShaderCode(code,basePath);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Vertex,code);
+}
+HJGraphics::ShaderCode HJGraphics::operator ""_fs(const char* str,size_t n){
+	auto code=readText(str);
+	auto basePath=getBasePath(str);
+	HJGraphics::preprocessShaderCode(code,basePath);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Fragment,code);
+}
+HJGraphics::ShaderCode HJGraphics::operator ""_gs(const char* str,size_t n){
+	auto code=readText(str);
+	auto basePath=getBasePath(str);
+	HJGraphics::preprocessShaderCode(code,basePath);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Geometry,code);
+}
+HJGraphics::ShaderCode HJGraphics::operator ""_tcs(const char* str,size_t n){
+	auto code=readText(str);
+	auto basePath=getBasePath(str);
+	HJGraphics::preprocessShaderCode(code,basePath);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::TessControl,code);
+}
+HJGraphics::ShaderCode HJGraphics::operator ""_tes(const char* str,size_t n){
+	auto code=readText(str);
+	auto basePath=getBasePath(str);
+	HJGraphics::preprocessShaderCode(code,basePath);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::TessEvaluation,code);
+}
+HJGraphics::ShaderCode HJGraphics::operator ""_cs(const char* str,size_t n){
+	auto code=readText(str);
+	auto basePath=getBasePath(str);
+	HJGraphics::preprocessShaderCode(code,basePath);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Compute,code);
+}
+std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath){
+	auto vsCode = readText(vsPath);auto vsBasePath=getBasePath(vsPath);preprocessShaderCode(vsCode,vsBasePath);
+	auto fsCode = readText(fsPath);auto fsBasePath=getBasePath(fsPath);preprocessShaderCode(fsCode,fsBasePath);
+	std::string gsCode,gsBasePath;
+	if (!gsPath.empty()){
+		gsCode = readText(gsPath);
+		gsBasePath=getBasePath(gsPath);
+		preprocessShaderCode(gsCode,gsBasePath);
+	}
 	std::shared_ptr<Shader> shader;
 	try {
 		shader = std::make_shared<Shader>(vsCode, fsCode, gsCode);
-	}
-	catch (...) {
-		std::cout << "Error @ makeSharedShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
+	}catch (...) {
+		std::cerr << "Error @ makeSharedShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
 	}
 	return shader;
 }
 
-HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode, const std::string& gsCode)
-{
+HJGraphics::Shader::Shader(ShaderCodeList codes){
+	std::vector<GLuint> shaderID(codes.size(),-1);
+	int i=0;
+	for(auto &code:codes){
+		shaderID[i]=glCreateShader(SHADER_TYPE_LIST[static_cast<int>(code.type)]);
+		const char* pcode=code.code.c_str();
+		glShaderSource(shaderID[i], 1, &pcode, nullptr);
+		glCompileShader(shaderID[i]);
+		checkCompileError(shaderID[i], SHADER_NAME_LIST[static_cast<int>(code.type)]);
+		++i;
+	}
+	id = glCreateProgram();
+	for(auto& si:shaderID){
+		glAttachShader(id, si);
+	}
+	glLinkProgram(id);
+	if(!checkCompileError(id, "PROGRAM")) {
+		std::cout << "----Compile shader program not successful----" << std::endl;
+		for(auto &code:codes){
+			std::cout << SHADER_NAME_LIST[static_cast<int>(code.type)]<<" code:" << std::endl << code.code << std::endl;
+		}
+		throw "loading shader failed";
+	}
+	for(auto& si:shaderID){
+		glDeleteShader(si);
+	}
+}
+HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode, const std::string& gsCode){
 	const char *vertexCode = vsCode.c_str();
 	const char *fragmentCode = fsCode.c_str();
 	const char *geometryCode = gsCode.c_str();
@@ -67,8 +153,7 @@ HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode,
 	glCompileShader(fragmentID);
 	checkCompileError(fragmentID, "FRAGMENT");
 
-	if(!gsCode.empty())
-	{
+	if(!gsCode.empty()){
 		geometryID = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(geometryID, 1, &geometryCode, nullptr);
 		glCompileShader(geometryID);

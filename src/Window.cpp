@@ -17,6 +17,7 @@ HJGraphics::Window::Window(int _width,int _height,std::string _title): GLFWWrap(
 	pitch = 0.0f;
 	moveSpeed=0.01;
 	fps=60;
+	textRenderer=std::make_shared<TextRenderer>("../font/Courier-BOLDITALIC.ttf",glm::vec2(width,height),20);
 }
 void HJGraphics::Window::inputCallback(long long deltaTime) {
 	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -25,6 +26,12 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 	}
 	float move = moveSpeed * deltaTime;
 	auto pCamera=renderer->mainScene->getMainCamera();
+
+	//-------------------------------
+	//        Key Event Handling
+	//-------------------------------
+	static long long accmuDeltaTime=0;
+
 	if(glfwGetKey(windowPtr, GLFW_KEY_A) == GLFW_PRESS){
 		//left
 		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
@@ -55,6 +62,12 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 		//down
 		pCamera->position+=glm::vec3(0,-1,0)*move;
 	}
+
+	//if key press time is too short just ignore it
+	if(accmuDeltaTime<10000/fps){
+		accmuDeltaTime+=deltaTime;
+		return;
+	}else accmuDeltaTime=0;
 	if(glfwGetKey(windowPtr, GLFW_KEY_M) == GLFW_PRESS){
 		static bool wireMode=false;
 		wireMode=!wireMode;
@@ -65,7 +78,10 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 		}
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_O) == GLFW_PRESS){
-		renderer->enableAO=!renderer->enableAO;
+		enableAO=renderer->enableAO=!renderer->enableAO;
+	}
+	if(glfwGetKey(windowPtr, GLFW_KEY_B) == GLFW_PRESS){
+		enableMotionBlur=renderer->enableMotionBlur=!renderer->enableMotionBlur;
 	}
 }
 void HJGraphics::Window::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
@@ -126,22 +142,51 @@ void HJGraphics::Window::customInit() {
 //	glEnable(GL_CULL_FACE);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	if(renderer)renderer->renderInit();
+	enableMotionBlur=renderer->enableMotionBlur;
+	enableAO=renderer->enableAO;
 }
 void HJGraphics::Window::run() {
 	glfwMakeContextCurrent(windowPtr);
 	customInit();
 	auto lastTime=std::chrono::high_resolution_clock::now();
+	auto startTime=lastTime;
+	long long frameCount=0;
 	while(!shouldClose()){
 		auto currentTime=std::chrono::high_resolution_clock::now();
 		auto frameDeltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
-		if(frameDeltaTime<1000.0/fps)continue;
+		auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count();
+		if(frameDeltaTime<1000.0/fps)continue;//too short, ignore input
 		inputCallback(frameDeltaTime);
 		lastTime = currentTime;
-		render();
+		render(frameDeltaTime,elapsedTime,++frameCount);
+		renderUI(frameDeltaTime);
 		swapBuffer();
 		glfwPollEvents();
 	}
 }
-void HJGraphics::Window::render() {
-	if(renderer)renderer->render();
+void HJGraphics::Window::render(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
+	if(renderer)renderer->renderPBR(frameDeltaTime,elapsedTime,frameCount);
+}
+void HJGraphics::Window::renderUI(long long  deltaTime) {
+	if(textRenderer==nullptr)return;
+	static float deltaList[10]={1000.0f/fps};
+	static int index=0;
+	deltaList[index]=deltaTime;//ok deltaTime won't be to large
+	index=(index+1)%10;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+	int textStartY=height-20;
+	textRenderer->renderTextDynamic("Key A S D W: move camera",glm::vec2(10,textStartY),glm::vec3(1,0,0),1);
+	textRenderer->renderTextDynamic("Key Q E: up and down",glm::vec2(10,textStartY-25),glm::vec3(1,0,0),1);
+	if(enableAO)textRenderer->renderTextDynamic("Key O: SSAO(on)",glm::vec2(10,textStartY-50),glm::vec3(1,0,0),1);
+	else textRenderer->renderTextDynamic("Key O: SSAO(off)",glm::vec2(10,textStartY-50),glm::vec3(1,0,0),1);
+
+	if(enableMotionBlur)textRenderer->renderTextDynamic("Key B: MotionBlur(on)",glm::vec2(10,textStartY-75),glm::vec3(1,0,0),1);
+	else textRenderer->renderTextDynamic("Key B: MotionBlur(off)",glm::vec2(10,textStartY-75),glm::vec3(1,0,0),1);
+	auto frameRate=std::to_string(static_cast<int>(10*1000/(deltaList[0]+deltaList[1]+deltaList[2]+deltaList[3]+deltaList[4]+
+			deltaList[5]+deltaList[6]+deltaList[7]+deltaList[8]+deltaList[9])));
+	textRenderer->renderTextDynamic(frameRate+std::string("fps"),glm::vec2(width-80,textStartY),glm::vec3(1,0,0),1);
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
 }

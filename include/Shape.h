@@ -12,11 +12,7 @@ namespace HJGraphics {
 		float length;
 		GLuint partition;
 
-		Cylinder();
-
-		Cylinder(float _radius, float _length, GLuint _partition = 10);
-
-		Cylinder(float _radius, float _length, GLuint _partition, std::string _diffPath, std::string _specPath = "", std::string _normPath = "");
+		Cylinder(float _radius, float _length, GLuint _partition, const std::shared_ptr<Material>& _material);
 
 		void generateData();
 	};
@@ -28,11 +24,7 @@ namespace HJGraphics {
 		GLfloat depth;
 		GLfloat height;
 
-		Box();
-
-		Box(GLfloat _width, GLfloat _depth, GLfloat _height);
-
-		Box(GLfloat _width, GLfloat _depth, GLfloat _height, std::string _diffPath, std::string _specPath, std::string _normPath);
+		Box(GLfloat _width, GLfloat _depth, GLfloat _height, const std::shared_ptr<Material>& _material);
 
 		void generateData();
 	};
@@ -43,11 +35,7 @@ namespace HJGraphics {
 		GLfloat height;
 		GLfloat texStretchRatio;
 
-		Plane();
-
-		Plane(GLfloat _width, GLfloat _height, std::string texPath = "", GLfloat _texStretchRatio = 1.0f);
-
-		Plane(GLfloat _width, GLfloat _height, std::string diffuseTexPath, std::string specularTexPath, std::string normalTexPath, GLfloat _texStretchRatio);
+		Plane(GLfloat _width, GLfloat _height, GLfloat _texStretchRatio, const std::shared_ptr<Material>& _material);
 
 		void generateData();
 	};
@@ -57,11 +45,7 @@ namespace HJGraphics {
 		int partition;
 		float R;
 
-		Sphere();
-
-		Sphere(float _R, int _partition = 50, std::string texPath = "");
-
-		Sphere(float _R, int _partition, std::string diffuseTexPath, std::string specularTexPath, std::string normalTexPath);
+		Sphere(float _R, int _partition, const std::shared_ptr<Material>& _material);
 
 		void generateData();
 	};

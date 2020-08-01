@@ -18,7 +18,12 @@ bool HJGraphics::Quad3D::uninit=true;
 GLuint HJGraphics::Quad3DWithTexCoord::VAO;
 GLuint HJGraphics::Quad3DWithTexCoord::VBO;
 bool HJGraphics::Quad3DWithTexCoord::uninit=true;
-
+//---------------Design philosophy--------------
+//      draw() should not change OpenGL state
+//   state change should be done outside draw()
+//So don't disable/enable depth test inside draw()
+//     even though you are well-intentioned
+//---------------Design philosophy--------------
 void HJGraphics::Quad2D::draw() {
 	if(uninit){
 		uninit=false;
@@ -45,10 +50,7 @@ void HJGraphics::Quad2D::draw() {
 		glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,2* sizeof(GLfloat),(void*)0);
 	}
 	glBindVertexArray(VAO);
-	glDisable(GL_DEPTH_TEST);
 	glDrawArrays(GL_TRIANGLES,0,6);
-	glEnable(GL_DEPTH_TEST);
-
 }
 
 void HJGraphics::Quad2DWithTexCoord::draw() {
@@ -79,10 +81,7 @@ void HJGraphics::Quad2DWithTexCoord::draw() {
 		glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,4* sizeof(GLfloat),(void*)(2*sizeof(GLfloat)));
 	}
 	glBindVertexArray(VAO);
-	glDisable(GL_DEPTH_TEST);
 	glDrawArrays(GL_TRIANGLES,0,6);
-	glEnable(GL_DEPTH_TEST);
-
 }
 
 void HJGraphics::Quad3D::draw() {
@@ -111,9 +110,7 @@ void HJGraphics::Quad3D::draw() {
 		glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3* sizeof(GLfloat),(void*)0);
 	}
 	glBindVertexArray(VAO);
-	glDisable(GL_DEPTH_TEST);
 	glDrawArrays(GL_TRIANGLES,0,6);
-	glEnable(GL_DEPTH_TEST);
 }
 void HJGraphics::Quad3DWithTexCoord::draw() {
 	if(uninit){
@@ -143,7 +140,5 @@ void HJGraphics::Quad3DWithTexCoord::draw() {
 		glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5* sizeof(GLfloat),(void*)(3*sizeof(GLfloat)));
 	}
 	glBindVertexArray(VAO);
-	glDisable(GL_DEPTH_TEST);
 	glDrawArrays(GL_TRIANGLES,0,6);
-	glEnable(GL_DEPTH_TEST);
 }

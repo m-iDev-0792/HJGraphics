@@ -24,6 +24,7 @@ namespace HJGraphics {
 
 		glm::mat4 model;
 		glm::mat4 projectionView;
+		glm::mat4 previousProjectionView;
 
 		virtual std::shared_ptr<Shader> getDefaultShader()=0;
 
@@ -99,11 +100,12 @@ namespace HJGraphics {
 
 		float radius;
 		CubeMapTexture cubeMapTexture;
+		bool gammaCorrection;
 
 		Skybox() = delete;
 
 		Skybox(float _radius, std::string rightTex, std::string leftTex, std::string upTex,
-		       std::string downTex, std::string frontTex, std::string backTex);
+		       std::string downTex, std::string frontTex, std::string backTex,bool _gammaCorrection=true);
 
 		std::shared_ptr<Shader> getDefaultShader() override ;
 

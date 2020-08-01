@@ -52,8 +52,9 @@ void main() {
         float rangeCheck=smoothstep(0,1,ssaoRadius/abs(depth-sampleDepth));
         occlusionNum+=(depth<=sampleDepth-ssaoBias?1:0)*rangeCheck;//note that greater depth means closer distance,0=far 1=near
 
-        //occlusion test version 2
-//        float depth=texture(gPositionDepth,projectedPosition.xy).w;//get real depth
+        //occlusion test version 2,set ssaoBias to 0.65 is suitable
+//        float depth=texture(gPositionDepth,projectedPosition.xy).w*2.0-1;//get real depth
+//        depth=linearizeDepth(depth,zNearAndzFar.x,zNearAndzFar.y);
 //        float sampleDepth=linearizeDepth(projectedPosition.z,zNearAndzFar.x,zNearAndzFar.y);
 //        float rangeCheck=smoothstep(0,1,ssaoRadius/abs(depth-sampleDepth));
 //        occlusionNum+=(depth<=sampleDepth-ssaoBias?1:0)*rangeCheck;//note that less depth means closer distance

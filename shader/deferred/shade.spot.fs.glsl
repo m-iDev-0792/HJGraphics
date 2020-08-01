@@ -3,18 +3,8 @@
 #define PCF_SHADOW
 out vec4 FragColor;
 
-//********common uniform begin********
+#include"common/shadeCommon.glsl"
 
-uniform vec3 cameraPosition;
-
-//gBuffer - texture binding point 0~4
-uniform sampler2D gPositionDepth;
-uniform sampler2D gNormal;
-uniform sampler2D gDiffSpec;
-uniform sampler2D gShinAlphaReflectRefract;
-uniform sampler2D gAmbiDiffSpecStrength;
-uniform vec2 gBufferSize;
-//********common uniform end********
 
 //light Info
 uniform vec3 lightPosition;
@@ -59,7 +49,6 @@ float spotShadowCalculation(vec4 fragPosLightSpace)
         return shadow;
     #endif
 }
-
 vec3 spotLight(){
     vec2 texCoord=vec2(gl_FragCoord.x/gBufferSize.x,gl_FragCoord.y/gBufferSize.y);
     //default color

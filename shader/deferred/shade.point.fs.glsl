@@ -3,17 +3,8 @@
 #define PCF_SHADOW
 out vec4 FragColor;
 
-//********common uniform begin********
-uniform vec3 cameraPosition;
+#include"common/shadeCommon.glsl"
 
-//gBuffer - texture binding point 0~4
-uniform sampler2D gPositionDepth;
-uniform sampler2D gNormal;
-uniform sampler2D gDiffSpec;
-uniform sampler2D gShinAlphaReflectRefract;
-uniform sampler2D gAmbiDiffSpecStrength;
-uniform vec2 gBufferSize;
-//********common uniform end********
 
 //light Info
 uniform vec3 lightPosition;
@@ -22,7 +13,7 @@ uniform mat4 lightSpaceMatrix;
 uniform vec3 attenuationVec;//x=linear y=quadratic z=constant
 uniform bool hasShadow;
 uniform float shadowZFar;
-uniform samplerCube shadowMap;
+uniform samplerCube shadowCubeMap;
 
 float pointShadowCalculation(vec3 fragPosLightSpace);
 vec3 pointLight();
@@ -47,7 +38,7 @@ float pointShadowCalculation(vec3 fragPosLightSpace)
     float bias = 0.05f;
     #ifndef PCF_SHADOW
     //Original Version without PCF shadow
-        float closestDepth = texture(shadowMap,lightToFrag).r;
+        float closestDepth = texture(shadowCubeMap,lightToFrag).r;
         closestDepth *= shadowZFar;
         return (currentDepth - bias > closestDepth) ? 0.0 : 1.0;
     #else
@@ -55,7 +46,7 @@ float pointShadowCalculation(vec3 fragPosLightSpace)
         float shadow=0.0f;
         float diskRadius = (1.0 + (currentDepth / shadowZFar)) / 100.0;// a too large diskRadius value produces a strange effect
         for(int i = 0; i < 20; ++i){
-            float closestDepth = texture(shadowMap, lightToFrag + sampleOffsetDirections[i] * diskRadius).r;
+            float closestDepth = texture(shadowCubeMap, lightToFrag + sampleOffsetDirections[i] * diskRadius).r;
             closestDepth *= shadowZFar;
             if(currentDepth - bias <= closestDepth)
                 shadow += 1.0;

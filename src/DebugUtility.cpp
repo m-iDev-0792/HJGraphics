@@ -34,4 +34,6 @@ void getGLError(){
 	else if(e==GL_STACK_OVERFLOW)std::cout<<"Stack overflow error"<<std::endl;
 	else if(e==GL_STACK_UNDERFLOW)std::cout<<"Stack underflow"<<std::endl;
 	else if(e==GL_OUT_OF_MEMORY)std::cout<<"Out of memory error"<<std::endl;
+	else if(e==GL_INVALID_OPERATION)std::cout<<"Invalid operation error"<<std::endl;
+	else std::cout<<"Other error"<<std::endl;
 }
