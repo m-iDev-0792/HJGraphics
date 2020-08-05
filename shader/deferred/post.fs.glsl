@@ -28,7 +28,7 @@ void main(){
         vec2 sampleCoord=texCoord;
 
         int realSampleNum=clamp(motionBlurSampleNum,1,MAX_MOTION_BLUR_SAMPLES);
-        for (int i = 0; i <= realSampleNum; ++i) {
+        for (int i = 1; i <= realSampleNum; ++i) {
             sampleCoord=texCoord-velocity*(float(i) / float(realSampleNum - 1) - 0.3);
             color+=texture(screenTexture,sampleCoord).rgb;
         }
