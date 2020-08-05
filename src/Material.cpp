@@ -73,7 +73,7 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
 			internalFormat=gammaCorrection?GL_SRGB_ALPHA:format;
 		}
 		else{
-			std::cout<<"ERROR @ Texture2D::loadFromPath : can't solve image channel (channel = "<<imgChannel<<")"<<std::endl;
+			std::cerr<<"ERROR @ Texture2D::loadFromPath : can't solve image channel (channel = "<<imgChannel<<")"<<std::endl;
 			return;
 		}
 		texWidth=imgWidth;texHeight=imgHeight;texChannel=imgChannel;
@@ -398,7 +398,7 @@ void HJGraphics::PBRMaterial::loadTexture(const std::shared_ptr<Texture> &t) {
 		albedoMap=t;
 	}else if("normal" == t->usage){
 		normalMap=t;
-	}else if("metalllic" == t->usage){
+	}else if("metallic" == t->usage){
 		metallicMap=t;
 	}else if("roughness" == t->usage||"specular" == t->usage){
 		roughnessMap=t;
