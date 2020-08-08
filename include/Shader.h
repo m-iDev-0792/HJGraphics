@@ -49,7 +49,7 @@ namespace HJGraphics {
 
 		Shader(ShaderCodeList codes);
 
-		void use() { glUseProgram(id); };
+		void use() { GL.useProgram(id); };
 
 		void setFloat(const std::string &name, float value) {
 			auto loc=glGetUniformLocation(id, name.c_str());

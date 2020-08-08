@@ -53,10 +53,10 @@ namespace HJGraphics {
 		}
 
 		virtual void bindTextures(){
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, gPositionDepth);
-			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D,gNormal);
+			GL.activeTexture(GL_TEXTURE0);
+			GL.bindTexture(GL_TEXTURE_2D, gPositionDepth);
+			GL.activeTexture(GL_TEXTURE1);
+			GL.bindTexture(GL_TEXTURE_2D,gNormal);
 		}
 
 		virtual void writeUniform(std::shared_ptr<Shader> shader){

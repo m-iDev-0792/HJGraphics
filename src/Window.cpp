@@ -137,9 +137,9 @@ void HJGraphics::Window::framebufferSizeCallback(GLFWwindow *window, int width, 
 
 }
 void HJGraphics::Window::customInit() {
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LINE_SMOOTH);
-//	glEnable(GL_CULL_FACE);
+	GL.enable(GL_DEPTH_TEST);
+	GL.enable(GL_LINE_SMOOTH);
+//	GL.enable(GL_CULL_FACE);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	if(renderer)renderer->renderInit();
 	enableMotionBlur=renderer->enableMotionBlur;
@@ -173,9 +173,9 @@ void HJGraphics::Window::renderUI(long long  deltaTime) {
 	static int index=0;
 	deltaList[index]=deltaTime;//ok deltaTime won't be to large
 	index=(index+1)%10;
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDisable(GL_DEPTH_TEST);
+	GL.enable(GL_BLEND);
+	GL.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	GL.disable(GL_DEPTH_TEST);
 	int textStartY=height-20;
 	textRenderer->renderTextDynamic("Key A S D W: move camera",glm::vec2(10,textStartY),glm::vec3(1,0,0),1);
 	textRenderer->renderTextDynamic("Key Q E: up and down",glm::vec2(10,textStartY-25),glm::vec3(1,0,0),1);
@@ -187,6 +187,6 @@ void HJGraphics::Window::renderUI(long long  deltaTime) {
 	auto frameRate=std::to_string(static_cast<int>(10*1000/(deltaList[0]+deltaList[1]+deltaList[2]+deltaList[3]+deltaList[4]+
 			deltaList[5]+deltaList[6]+deltaList[7]+deltaList[8]+deltaList[9])));
 	textRenderer->renderTextDynamic(frameRate+std::string("fps"),glm::vec2(width-80,textStartY),glm::vec3(1,0,0),1);
-	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
+	GL.disable(GL_BLEND);
+	GL.enable(GL_DEPTH_TEST);
 }

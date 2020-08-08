@@ -45,7 +45,7 @@ HJGraphics::Texture2D::Texture2D(int _width, int _height, GLenum _internalFormat
 	texMinFilter=texMagFilter=_filter;
 	texWrapS=texWrapT=_wrap;
 	glGenTextures(1, &id);
-	glBindTexture(GL_TEXTURE_2D, id);
+	GL.bindTexture(GL_TEXTURE_2D, id);
 	glTexImage2D(GL_TEXTURE_2D, 0, _internalFormat, texWidth, texHeight, 0, _format, _dataType, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filter);
@@ -53,8 +53,8 @@ HJGraphics::Texture2D::Texture2D(int _width, int _height, GLenum _internalFormat
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrap);
 }
 void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCorrection) {
-	glActiveTexture(GL_TEXTURE0+textureN);
-	glBindTexture(GL_TEXTURE_2D, id);
+	GL.activeTexture(GL_TEXTURE0+textureN);
+	GL.bindTexture(GL_TEXTURE_2D, id);
 	int imgWidth,imgHeight,imgChannel;
 	auto data=stbi_load(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
 
@@ -114,8 +114,8 @@ HJGraphics::SolidTexture::SolidTexture(float _color):Texture(GL_TEXTURE_2D){
 }
 void HJGraphics::SolidTexture::setColor(float _color) {
 	color=glm::vec3(_color);
-	glActiveTexture(GL_TEXTURE0+textureN);
-	glBindTexture(GL_TEXTURE_2D, id);
+	GL.activeTexture(GL_TEXTURE0+textureN);
+	GL.bindTexture(GL_TEXTURE_2D, id);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 1, 1, 0, GL_RED,GL_FLOAT, &_color);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapT);
@@ -125,8 +125,8 @@ void HJGraphics::SolidTexture::setColor(float _color) {
 void HJGraphics::SolidTexture::setColor(glm::vec3 _color) {
 	color=_color;
 	unsigned char data[3]={static_cast<unsigned char>(color.r*255),static_cast<unsigned char>(color.g*255),static_cast<unsigned char>(color.b*255)};
-	glActiveTexture(GL_TEXTURE0+textureN);
-	glBindTexture(GL_TEXTURE_2D, id);
+	GL.activeTexture(GL_TEXTURE0+textureN);
+	GL.bindTexture(GL_TEXTURE_2D, id);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB,
 	             GL_UNSIGNED_BYTE, data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
@@ -161,8 +161,8 @@ HJGraphics::CubeMapTexture::CubeMapTexture(const std::string &rightTex, const st
 void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex, const std::string &downTex,
                                               const std::string &frontTex, const std::string &backTex) {
 	std::string tex[6]={rightTex,leftTex,upTex,downTex,frontTex,backTex};
-	glActiveTexture(GL_TEXTURE0+textureN);
-	glBindTexture(GL_TEXTURE_CUBE_MAP,id);
+	GL.activeTexture(GL_TEXTURE0+textureN);
+	GL.bindTexture(GL_TEXTURE_CUBE_MAP,id);
 	for(int i=0;i<6;++i){
 		int imgWidth,imgHeight,imgChannel;
 		auto data=stbi_load(tex[i].c_str(),&imgWidth,&imgHeight,&imgChannel,0);
@@ -294,17 +294,17 @@ bool HJGraphics::BlinnPhongMaterial::setValue(const std::string& name, float val
 	return false;
 }
 void HJGraphics::BlinnPhongMaterial::bindTexture() {
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, diffuseMap->id);
+		GL.activeTexture(GL_TEXTURE0);
+		GL.bindTexture(GL_TEXTURE_2D, diffuseMap->id);
 
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, specularMap->id);
+		GL.activeTexture(GL_TEXTURE1);
+		GL.bindTexture(GL_TEXTURE_2D, specularMap->id);
 
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, normalMap->id);
+		GL.activeTexture(GL_TEXTURE2);
+		GL.bindTexture(GL_TEXTURE_2D, normalMap->id);
 
-//		glActiveTexture(GL_TEXTURE3);
-//		glBindTexture(GL_TEXTURE_2D,heightMap->id);
+//		GL.activeTexture(GL_TEXTURE3);
+//		GL.bindTexture(GL_TEXTURE_2D,heightMap->id);
 }
 
 void HJGraphics::BlinnPhongMaterial::writeToShader(std::shared_ptr<Shader> shader) {
@@ -364,18 +364,18 @@ HJGraphics::PBRMaterial::PBRMaterial(glm::vec3 _albedo, float _metallic, float _
 	F0Map=std::make_shared<SolidTexture>(_f0);
 }
 void HJGraphics::PBRMaterial::bindTexture() {
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,albedoMap->id);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D,normalMap->id);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D,metallicMap->id);
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D,roughnessMap->id);
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_2D,F0Map->id);
-//	glActiveTexture(GL_TEXTURE5);
-//	glBindTexture(GL_TEXTURE_2D,heightMap->id);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_2D,albedoMap->id);
+	GL.activeTexture(GL_TEXTURE1);
+	GL.bindTexture(GL_TEXTURE_2D,normalMap->id);
+	GL.activeTexture(GL_TEXTURE2);
+	GL.bindTexture(GL_TEXTURE_2D,metallicMap->id);
+	GL.activeTexture(GL_TEXTURE3);
+	GL.bindTexture(GL_TEXTURE_2D,roughnessMap->id);
+	GL.activeTexture(GL_TEXTURE4);
+	GL.bindTexture(GL_TEXTURE_2D,F0Map->id);
+//	GL.activeTexture(GL_TEXTURE5);
+//	GL.bindTexture(GL_TEXTURE_2D,heightMap->id);
 }
 
 void HJGraphics::PBRMaterial::writeToShader(std::shared_ptr<Shader> shader) {

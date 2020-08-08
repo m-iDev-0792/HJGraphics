@@ -58,7 +58,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
 
 	//---disable depth test for ao and shading---//
-	glDisable(GL_DEPTH_TEST);
+	GL.disable(GL_DEPTH_TEST);
 	//-------------------------------------------//
 
 	//-----------------------------
@@ -90,8 +90,8 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	gBuffer->bindTextures();
 
 	//------Enable blend for light shading------//
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE,GL_ONE);
+	GL.enable(GL_BLEND);
+	GL.blendFunc(GL_ONE,GL_ONE);
 	//------------------------------------------//
 
 	//[3.1]-------ambient shading----------
@@ -102,9 +102,9 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	//bind AO texture
 	{
 		ambientShader->setInt("ao",5);
-		glActiveTexture(GL_TEXTURE5);
-		if(enableAO)glBindTexture(GL_TEXTURE_2D,ssaoPass->ssao->tex);
-		else glBindTexture(GL_TEXTURE_2D,defaultAOTex->id);
+		GL.activeTexture(GL_TEXTURE5);
+		if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->tex);
+		else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
 	}
 	gBuffer->writeUniform(ambientShader);
 	Quad3D::draw();
@@ -130,16 +130,16 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 			auto light = mainScene->parallelLights[i];
 			light->writeUniform(lightingShader);
 			if (light->castShadow) {
-				glActiveTexture(GL_TEXTURE10);
-				glBindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+				GL.activeTexture(GL_TEXTURE10);
+				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
 			}
 			renderMesh(light->lightVolume);
 		}
 	}
 
 	//-------Enable Cull face for spot and point light-------//
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
+	GL.enable(GL_CULL_FACE);
+	GL.cullFace(GL_FRONT);
 	//-------------------------------------------------------//
 
 	//[3.3]-------spotlight shading----------
@@ -158,8 +158,8 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 			auto light = mainScene->spotLights[i];
 			light->writeUniform(lightingShader);
 			if (light->castShadow) {
-				glActiveTexture(GL_TEXTURE10);
-				glBindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+				GL.activeTexture(GL_TEXTURE10);
+				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
 			}
 			renderMesh(light->lightVolume);
 		}
@@ -181,17 +181,17 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 			lightingShader->set4fm("model", glm::translate(glm::mat4(1.0f), light->position));//set 'model' matrix
 			light->writeUniform(lightingShader);
 			if (light->castShadow) {
-				glActiveTexture(GL_TEXTURE11);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->tex);
+				GL.activeTexture(GL_TEXTURE11);
+				GL.bindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->tex);
 			}
 			renderMesh(light->lightVolume);
 		}
 	}
 	//-------Restore OpenGL state-------//
-	glCullFace(GL_BACK);
-	glDisable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
+	GL.cullFace(GL_BACK);
+	GL.disable(GL_CULL_FACE);
+	GL.enable(GL_DEPTH_TEST);
+	GL.disable(GL_BLEND);
 	//----------------------------------//
 
 	//-----------------------------
@@ -237,6 +237,19 @@ void HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime) {
 	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
 	glm::mat4 inverseProjectionView=glm::inverse(projectionView);
 	glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
+//	glm::vec4 position(574/800.0*2-1,(1.0-512/600.0)*2-1,-0.99,1);//(0.5037*2-1,0.4800*2-1,0.99219*2-1,1);
+//	position=inverseProjectionView*position;
+//	position/=position.w;
+//	showVec4(position);
+//
+//	glm::vec4 worldPos(3.969,0,3.957, 1.0);//(0.25684, 0, 0.38574, 1.0)
+//	worldPos= projectionView * worldPos;
+//	worldPos/=worldPos.w;
+//	worldPos=worldPos*0.5f+0.5f;
+//	showVec4(worldPos);
+//	showMat4(projectionView);
+//	std::cout<<std::endl;
+
 	postprocessShader->use();
 	postprocessShader->setInt("screenTexture",0);
 	postprocessShader->setInt("velocity",1);
@@ -247,13 +260,13 @@ void HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime) {
 	postprocessShader->setFloat("motionBlurPower",motionBlurPower);
 	postprocessShader->setInt("motionBlurTargetFPS",motionBlurTargetFPS);
 	postprocessShader->setInt("frameDeltaTime",frameDeltaTime);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, deferredTarget->tex);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, sharedVelocity->id);
-	glDisable(GL_DEPTH_TEST);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_2D, deferredTarget->tex);
+	GL.activeTexture(GL_TEXTURE1);
+	GL.bindTexture(GL_TEXTURE_2D, sharedVelocity->id);
+	GL.disable(GL_DEPTH_TEST);
 	Quad3D::draw();
-	glEnable(GL_DEPTH_TEST);
+	GL.enable(GL_DEPTH_TEST);
 }
 void HJGraphics::DeferredRenderer::renderInit() {
 	//Allocate shadow maps for lights that casts shadow
@@ -390,7 +403,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
 
 	//---disable depth test for ao and shading---//
-	glDisable(GL_DEPTH_TEST);
+	GL.disable(GL_DEPTH_TEST);
 	//-------------------------------------------//
 
 	//-----------------------------
@@ -422,8 +435,8 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	PBRgBuffer->bindTextures();
 
 	//------Enable blend for light shading------//
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE,GL_ONE);
+	GL.enable(GL_BLEND);
+	GL.blendFunc(GL_ONE,GL_ONE);
 	//------------------------------------------//
 
 	//[3.1]-------ambient shading----------
@@ -435,9 +448,9 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	//bind AO texture
 	{
 		PBRlightingShader->setInt("gAO",5);
-		glActiveTexture(GL_TEXTURE5);
-		if(enableAO)glBindTexture(GL_TEXTURE_2D,ssaoPass->ssao->tex);
-		else glBindTexture(GL_TEXTURE_2D,defaultAOTex->id);
+		GL.activeTexture(GL_TEXTURE5);
+		if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->tex);
+		else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
 	}
 	PBRgBuffer->writeUniform(PBRlightingShader);
 	Quad3D::draw();
@@ -459,16 +472,16 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 			auto light = mainScene->parallelLights[i];
 			light->writeUniform(PBRlightingShader);
 			if (light->castShadow) {
-				glActiveTexture(GL_TEXTURE10);
-				glBindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+				GL.activeTexture(GL_TEXTURE10);
+				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
 			}
 			renderMesh(light->lightVolume);
 		}
 	}
 
 	//-------Enable Cull face for spot and point light-------//
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
+	GL.enable(GL_CULL_FACE);
+	GL.cullFace(GL_FRONT);
 	//-------------------------------------------------------//
 
 	//[3.3]-------spotlight shading----------
@@ -487,8 +500,8 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 			auto light = mainScene->spotLights[i];
 			light->writeUniform(PBRlightingShader);
 			if (light->castShadow) {
-				glActiveTexture(GL_TEXTURE10);
-				glBindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+				GL.activeTexture(GL_TEXTURE10);
+				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
 			}
 			renderMesh(light->lightVolume);
 		}
@@ -510,18 +523,18 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 			PBRlightingShader->set4fm("model", glm::translate(glm::mat4(1.0f), light->position));//set 'model' matrix
 			light->writeUniform(PBRlightingShader);
 			if (light->castShadow) {
-				glActiveTexture(GL_TEXTURE11);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->tex);
+				GL.activeTexture(GL_TEXTURE11);
+				GL.bindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->tex);
 			}
 			renderMesh(light->lightVolume);
 		}
 	}
 
 	//-------Restore OpenGL state-------//
-	glCullFace(GL_BACK);
-	glDisable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
+	GL.cullFace(GL_BACK);
+	GL.disable(GL_CULL_FACE);
+	GL.enable(GL_DEPTH_TEST);
+	GL.disable(GL_BLEND);
 	//----------------------------------//
 
 	//-----------------------------

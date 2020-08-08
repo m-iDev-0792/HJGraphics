@@ -24,14 +24,14 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height,int _internalFormat
 
 	//set up texColorBuffer
 	glGenTextures(1, &tex);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_2D, tex);
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, dataType, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	GL.bindTexture(GL_TEXTURE_2D, 0);
 	//set up rbo
 	if(hasDepthRBO){
 		glGenRenderbuffers(1, &rbo);
@@ -54,8 +54,8 @@ void HJGraphics::FrameBuffer::debugDrawBuffer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	defaultShader->use();
 	defaultShader->setInt("screenTexture",0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_2D, tex);
 	Quad2DWithTexCoord::draw();
 }
 void HJGraphics::FrameBuffer::bindAttachments() {

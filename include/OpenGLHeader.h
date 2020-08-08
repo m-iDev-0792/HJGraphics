@@ -11,7 +11,7 @@
 #define HJGRAPHICS_GLAD
 
 #ifdef HJGRAPHICS_GLAD
-#include "glad/glad.h"
+#include "OpenGLCache.h"
 #endif
 
 #ifdef HJGRAPHICS_QT

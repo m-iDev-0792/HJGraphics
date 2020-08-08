@@ -236,7 +236,7 @@ void HJGraphics::Skybox::draw() {
 	defaultShader->setInt("skybox",0);
 	defaultShader->setInt("gammaCorrection",gammaCorrection);
 	glBindVertexArray(VAO);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture.id);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture.id);
 	glDrawArrays(GL_TRIANGLES,0,36);
 }

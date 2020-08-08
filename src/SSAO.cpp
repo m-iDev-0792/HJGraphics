@@ -43,8 +43,8 @@ void HJGraphics::SSAO::generateSamplesAndNoise() {
 	}
 	//create ssaoNoise texture buffer
 	glGenTextures(1, &ssaoNoise);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, ssaoNoise);
+	GL.activeTexture(GL_TEXTURE2);
+	GL.bindTexture(GL_TEXTURE_2D, ssaoNoise);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, ssaoNoiseSize.x, ssaoNoiseSize.y, 0, GL_RGB, GL_FLOAT, &noises[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -56,8 +56,8 @@ void HJGraphics::SSAO::blur() {
 	ssaoBlurShader->use();
 	ssaoBlurShader->setInt("radius",ssaoBlurRaidus);
 	ssaoBlurShader->setInt("ssao",0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,ssao->tex);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_2D,ssao->tex);
 	Quad2D::draw();
 	ssaoBlured->unbind();
 }
@@ -79,12 +79,12 @@ void HJGraphics::SSAO::render(GLuint gPositionDepth, GLuint gNormal, glm::mat4 p
 	ssaoShader->setInt("gPositionDepth",0);
 	ssaoShader->setInt("gNormal",1);
 	ssaoShader->setInt("ssaoNoise",2);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,gPositionDepth);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D,gNormal);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D,ssaoNoise);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_2D,gPositionDepth);
+	GL.activeTexture(GL_TEXTURE1);
+	GL.bindTexture(GL_TEXTURE_2D,gNormal);
+	GL.activeTexture(GL_TEXTURE2);
+	GL.bindTexture(GL_TEXTURE_2D,ssaoNoise);
 	Quad2D::draw();
 	blur();
 }
