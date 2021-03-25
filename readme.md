@@ -19,7 +19,7 @@ renderer->setMainScene(scene);
 window.renderer=renderer;
 window.run();
 ```
-
+![](attachment/demo.gif)
 # Features
 HJGraphics has...
 
@@ -37,7 +37,8 @@ HJGraphics has...
     * Spot light
     * Shadow for 3 kinds of lights above 
 * Material : BlinnPhong material and UE4 workflow PBR material.
-* Renderer : deferred and forward shading support, HDR rendering, SSAO, post-processing, text rendering.
+* Renderer : deferred and forward shading support, SSAO, text rendering.
+* Post-Processing : Motion Blur(Both camera & object), HDR
 # Gallery
 ![](attachment/multiLight.png)
 
@@ -72,8 +73,8 @@ Build passed on Windows 10(Visual Studio 2017) and macOS 10.14(CLion)
 - [x] HDR
 - [x] Deferred shading
 - [x] PBR Shading
-- [x] Motion Blur(Camera & Mesh)
-- [ ] Animater
+- [x] Motion Blur
+- [x] Animater(basic)
 - [ ] Depth of field
 
 # Acknowledge

@@ -56,7 +56,17 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
 	GL.activeTexture(GL_TEXTURE0+textureN);
 	GL.bindTexture(GL_TEXTURE_2D, id);
 	int imgWidth,imgHeight,imgChannel;
-	auto data=stbi_load(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
+	bool loadHDR=false;
+	void *data=nullptr;
+	GLuint dataType;
+	if(_path.substr(_path.size()-3,3)==std::string("hdr")){
+		loadHDR=true;
+		data=stbi_loadf(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
+		dataType=GL_FLOAT;
+	}else{
+		data=stbi_load(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
+		dataType=GL_UNSIGNED_BYTE;
+	}
 
 	if(data!= nullptr) {
 		GLuint format,internalFormat;
@@ -66,11 +76,13 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
 		}
 		else if(imgChannel==3){
 			format=GL_RGB;
-			internalFormat=gammaCorrection?GL_SRGB:format;
+			if(loadHDR)internalFormat=GL_RGB16F;
+			else internalFormat=gammaCorrection?GL_SRGB:format;
 		}
 		else if(imgChannel==4){
 			format=GL_RGBA;
-			internalFormat=gammaCorrection?GL_SRGB_ALPHA:format;
+			if(loadHDR)internalFormat=GL_RGBA16F;
+			else internalFormat=gammaCorrection?GL_SRGB_ALPHA:format;
 		}
 		else{
 			std::cerr<<"ERROR @ Texture2D::loadFromPath : can't solve image channel (channel = "<<imgChannel<<")"<<std::endl;
@@ -78,7 +90,7 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
 		}
 		texWidth=imgWidth;texHeight=imgHeight;texChannel=imgChannel;
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, imgWidth, imgHeight, 0, format,
-		             GL_UNSIGNED_BYTE, data);
+		             dataType, data);
 		if(DEFAULT_MIN_FILTER!=GL_NEAREST)glGenerateMipmap(GL_TEXTURE_2D);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapT);

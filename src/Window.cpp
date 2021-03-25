@@ -3,6 +3,7 @@
 //
 
 #include "Window.h"
+#include "glm/gtc/quaternion.hpp"
 HJGraphics::Window::Window(){
 
 }

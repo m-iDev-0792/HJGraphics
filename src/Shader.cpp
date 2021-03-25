@@ -33,8 +33,7 @@ std::string getBasePath(const std::string &path){
 }
 
 void HJGraphics::preprocessShaderCode(std::string &source, const std::string &basePath){
-	std::regex reg{R"(#include".+")"};//Note: no space behind #include
-	std::smatch matches;
+	std::regex reg{R"(#include\s*"[^"]+")"};//Note: no space behind #include
 	std::sregex_iterator it(source.begin(), source.end(), reg);
 	std::sregex_iterator end;
 	std::vector<std::string> includeCodes;
@@ -42,7 +41,8 @@ void HJGraphics::preprocessShaderCode(std::string &source, const std::string &ba
 	for (; it != end; ++it) {
 		auto path=it->str();
 		includePath.push_back(path);
-		path=path.substr(9,path.size()-10);
+		auto pos = path.find('\"');
+		path=path.substr(pos+1,path.size()-pos-2);
 		auto originalCode=readText(basePath+path);
 		auto newBasePath=getBasePath(basePath+path);
 		preprocessShaderCode(originalCode,newBasePath);//process recursively
