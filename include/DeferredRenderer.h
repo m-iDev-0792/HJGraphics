@@ -47,13 +47,11 @@ namespace HJGraphics {
 
 		std::shared_ptr<Shader> pointLightShadowShader;
 		std::shared_ptr<Shader> parallelSpotLightShadowShader;
-		//BlinnPhong
-		std::shared_ptr<GBuffer> gBuffer;
+
 		std::shared_ptr<GBufferNew> gBufferNew;
-		std::shared_ptr<Shader> ambientShader;
+		//BlinnPhong
 		std::shared_ptr<Shader> lightingShader;
 		//pbr
-		std::shared_ptr<GBuffer> PBRgBuffer;
 		std::shared_ptr<Shader> PBRlightingShader;
 		//motion blur
 		std::shared_ptr<Texture2D> sharedVelocity;
@@ -74,7 +72,6 @@ namespace HJGraphics {
 		//render pass
 		void prepareRendering(long long frameDeltaTime,long long elapsedTime,long long frameCount);//update mesh states etc.
 		void shadowPass();
-		void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
         void gBufferPass(const std::shared_ptr<GBufferNew>& buffer);
 	};
 }
