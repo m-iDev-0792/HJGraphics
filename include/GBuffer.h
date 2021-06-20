@@ -12,16 +12,18 @@
 namespace HJGraphics {
 	class DeferredRenderer;
 
-    class GBufferNew : public FrameBufferNew{
+    class GBuffer : public FrameBuffer{
         friend DeferredRenderer;
     protected:
         std::shared_ptr<Shader> shader;
     public:
-        GBufferNew(int _width, int _height);
+        GBuffer(int _width, int _height);
 
         virtual void bindTextures() const;
 
         virtual void writeUniform(std::shared_ptr<Shader> shader)const;
+
+        GLint getId(const std::string& _name)const;
     };
 }
 #endif

@@ -7,7 +7,7 @@
 #include <string>
 #include <iostream>
 
-HJGraphics::GBufferNew::GBufferNew(int _width, int _height) {
+HJGraphics::GBuffer::GBuffer(int _width, int _height) {
     width=_width;
     height=_height;
     //set up normal
@@ -32,17 +32,17 @@ HJGraphics::GBufferNew::GBufferNew(int _width, int _height) {
     depthAttachment=depthStencil;
     stencilAttachment=depthStencil;
 
-    FrameBufferNew::bindAttachments();
+    FrameBuffer::bindAttachments();
     setDrawBuffers(colorAttachments.size());
 
     //check framebuffer completeness
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR::GBufferNew:: Framebuffer is not complete!" << std::endl;
+        std::cout << "ERROR::GBuffer:: Framebuffer is not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 
-void HJGraphics::GBufferNew::bindTextures() const{
+void HJGraphics::GBuffer::bindTextures() const{
     for(int i=0;i<colorAttachments.size()-1;++i){
         GL.activeTexture(GL_TEXTURE0+i);
         GL.bindTexture(GL_TEXTURE_2D, colorAttachments[i]->getId());
@@ -55,7 +55,7 @@ void HJGraphics::GBufferNew::bindTextures() const{
     }
 
 }
-void HJGraphics::GBufferNew::writeUniform(std::shared_ptr<Shader> shader) const {
+void HJGraphics::GBuffer::writeUniform(std::shared_ptr<Shader> shader) const {
     for(int i=0;i<colorAttachments.size()-1;++i){
         shader->setInt(colorAttachments[i]->name,i);
     }
@@ -64,4 +64,13 @@ void HJGraphics::GBufferNew::writeUniform(std::shared_ptr<Shader> shader) const 
 
     }
     shader->set2fv("gBufferSize",glm::vec2(width,height));
+}
+
+GLint HJGraphics::GBuffer::getId(const std::string &_name) const {
+    for(const auto& a:colorAttachments){
+        if(a->name==_name)return a->getId();
+    }
+    if(depthAttachment->name==_name)return depthAttachment->getId();
+    else if(stencilAttachment->name==_name)return stencilAttachment->getId();
+    return -1;
 }

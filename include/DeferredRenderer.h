@@ -21,19 +21,14 @@ namespace HJGraphics {
 		DeferredRenderer(int _width,int _height);
 
 		void setMainScene(std::shared_ptr<Scene> _mainScene) { mainScene = _mainScene; }
-		
-		void render(long long frameDeltaTime,long long elapsedTime,long long frameCount);
 
-		void renderPBR(long long frameDeltaTime,long long elapsedTime,long long frameCount);
-
-        void renderNew(long long frameDeltaTime,long long elapsedTime,long long frameCount);
-
+        void render(long long frameDeltaTime, long long elapsedTime, long long frameCount);
 
         void renderInit();
 
 		void postprocess(long long frameDeltaTime);
 
-		void renderMesh(std::shared_ptr<Mesh> m);
+		void renderMesh(const std::shared_ptr<Mesh>& m);
 	private:
 		//important members!
 		int width,height;
@@ -48,14 +43,11 @@ namespace HJGraphics {
 		std::shared_ptr<Shader> pointLightShadowShader;
 		std::shared_ptr<Shader> parallelSpotLightShadowShader;
 
-		std::shared_ptr<GBufferNew> gBufferNew;
+		std::shared_ptr<GBuffer> gBuffer;
 		//BlinnPhong
 		std::shared_ptr<Shader> lightingShader;
 		//pbr
 		std::shared_ptr<Shader> PBRlightingShader;
-		//motion blur
-		std::shared_ptr<Texture2D> sharedVelocity;
-
 
 		//settings
 		bool enableAO;
@@ -65,14 +57,14 @@ namespace HJGraphics {
 		float motionBlurPower;
 		
 		//shadow maps
-		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMapNew>> shadowMaps;
-		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowCubeMapNew>> shadowCubeMaps;
+		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMap>> shadowMaps;
+		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowCubeMap>> shadowCubeMaps;
 
 
 		//render pass
 		void prepareRendering(long long frameDeltaTime,long long elapsedTime,long long frameCount);//update mesh states etc.
 		void shadowPass();
-        void gBufferPass(const std::shared_ptr<GBufferNew>& buffer);
+        void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
 	};
 }
 #endif

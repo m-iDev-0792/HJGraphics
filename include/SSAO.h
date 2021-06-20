@@ -10,8 +10,8 @@
 namespace HJGraphics{
 	class SSAO {
 	public:
-		std::shared_ptr<FrameBufferNew> ssao;
-		std::shared_ptr<FrameBufferNew> ssaoBlured;
+		std::shared_ptr<FrameBuffer> ssao;
+		std::shared_ptr<FrameBuffer> ssaoBlured;
 		glm::vec2 ssaoSize;
 
 		GLuint ssaoNoise;

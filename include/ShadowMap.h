@@ -7,15 +7,15 @@
 #include "FrameBuffer.h"
 namespace HJGraphics {
 
-    class ShadowMapNew :public FrameBufferNew{
+    class ShadowMap : public FrameBuffer{
     public:
-        ShadowMapNew();
-        ShadowMapNew(int _width, int _height);
+        ShadowMap();
+        ShadowMap(int _width, int _height);
     };
-    class ShadowCubeMapNew:public FrameBufferNew {
+    class ShadowCubeMap: public FrameBuffer {
     public:
-        ShadowCubeMapNew();
-        ShadowCubeMapNew(int _width, int _height=0);
+        ShadowCubeMap();
+        ShadowCubeMap(int _width, int _height=0);
         void bindAttachments() override;
     };
 }

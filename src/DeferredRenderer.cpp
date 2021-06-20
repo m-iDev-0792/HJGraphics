@@ -6,9 +6,9 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	//-------------------------------
 	width=_width;height=_height;
 
-	gBufferNew=std::make_shared<GBufferNew>(_width,_height);
-	gBufferNew->shader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
-    deferredTarget=std::make_shared<DeferredTarget>(_width, _height,gBufferNew->colorAttachments[3]);
+    gBuffer=std::make_shared<GBuffer>(_width, _height);
+    gBuffer->shader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
+    deferredTarget=std::make_shared<DeferredTarget>(_width, _height, gBuffer->colorAttachments[3]);
 
 	ssaoPass=std::make_shared<SSAO>(glm::vec2(width,height),glm::vec2(16),32,1,0.5);
 	defaultAOTex=std::make_shared<SolidTexture>(glm::vec3(1.0f));
@@ -82,27 +82,27 @@ void HJGraphics::DeferredRenderer::renderInit() {
 	for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
 		auto light = mainScene->parallelLights[i];
 		if(light->castShadow) {
-			auto newSM = std::make_shared<ShadowMapNew>();
+			auto newSM = std::make_shared<ShadowMap>();
 			shadowMaps[light] = newSM;
 		}
 	}
 	for (int i = 0; i < mainScene->spotLights.size(); ++i) {
 		auto light = mainScene->spotLights[i];
 		if (light->castShadow) {
-			auto newSM = std::make_shared<ShadowMapNew>();
+			auto newSM = std::make_shared<ShadowMap>();
 			shadowMaps[light] = newSM;
 		}
 	}
 	for (int i = 0; i < mainScene->pointLights.size(); ++i) {
 		auto light = mainScene->pointLights[i];
 		if (light->castShadow) {
-			auto newSCM = std::make_shared<ShadowCubeMapNew>();
+			auto newSCM = std::make_shared<ShadowCubeMap>();
 			shadowCubeMaps[light] = newSCM;
 		}
 	}
 }
 
-void HJGraphics::DeferredRenderer::renderMesh(std::shared_ptr<Mesh> m) {
+void HJGraphics::DeferredRenderer::renderMesh(const std::shared_ptr<Mesh>& m) {
 	glBindVertexArray(m->VAO);
 	if (m->indices.size() > 0) {
 		glDrawElements(m->primitiveType, m->drawNum, GL_UNSIGNED_INT, nullptr);
@@ -176,7 +176,7 @@ void HJGraphics::DeferredRenderer::shadowPass() {
 	}
 }
 
-void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBufferNew>& buffer) {
+void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBuffer>& buffer) {
     glViewport(0,0,buffer->width,buffer->height);
     buffer->clearBind();
     buffer->shader->use();
@@ -195,7 +195,7 @@ void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBufferNew>
     buffer->unbind();
 }
 
-void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
+void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long elapsedTime, long long frameCount) {
     prepareRendering(frameDeltaTime,elapsedTime,frameCount);
 
     //-----------------------------
@@ -206,7 +206,7 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
     //-----------------------------
     //2. rendering G-buffer
     //-----------------------------
-    gBufferPass(gBufferNew);
+    gBufferPass(gBuffer);
 
     glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
     glm::mat4 inverseProjectionView=glm::inverse(projectionView);
@@ -220,8 +220,8 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
     //2.1 SSAO (Optional)
     //-----------------------------
     if(ssaoPass&&enableAO){
-        ssaoPass->render(gBufferNew->colorAttachments[0]->getId(),gBufferNew->depthAttachment->getId(),projectionView, inverseProjectionView,
-                         glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar),mainScene->mainCamera->position);
+        ssaoPass->render(gBuffer->colorAttachments[0]->getId(), gBuffer->depthAttachment->getId(), projectionView, inverseProjectionView,
+                         glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar), mainScene->mainCamera->position);
     }
 
 
@@ -241,8 +241,8 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
     }
     else glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //bind gBufferNew texture
-    gBufferNew->bindTextures();
+    //bind gBuffer texture
+    gBuffer->bindTextures();
 
     //------Enable blend for light shading------//
     GL.enable(GL_BLEND);
@@ -263,7 +263,7 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
         if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
         else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
     }
-    gBufferNew->writeUniform(PBRlightingShader);
+    gBuffer->writeUniform(PBRlightingShader);
     Quad3D::draw();
 
 
@@ -278,7 +278,7 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
         PBRlightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
         PBRlightingShader->setInt("shadowMap", 10);
         PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
-        gBufferNew->writeUniform(PBRlightingShader);
+        gBuffer->writeUniform(PBRlightingShader);
         for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
             auto light = mainScene->parallelLights[i];
             light->writeUniform(PBRlightingShader);
@@ -306,7 +306,7 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
         PBRlightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
         PBRlightingShader->setInt("shadowMap", 10);
         PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
-        gBufferNew->writeUniform(PBRlightingShader);
+        gBuffer->writeUniform(PBRlightingShader);
         for (int i = 0; i < mainScene->spotLights.size(); ++i) {
             auto light = mainScene->spotLights[i];
             light->writeUniform(PBRlightingShader);
@@ -328,7 +328,7 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
         PBRlightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
         PBRlightingShader->setInt("shadowMap", 10);//useless actually,otherwise cause gl_invalid_operation!
         PBRlightingShader->setInt("shadowCubeMap", 11);
-        gBufferNew->writeUniform(PBRlightingShader);
+        gBuffer->writeUniform(PBRlightingShader);
         for (int i = 0; i < mainScene->pointLights.size(); ++i) {
             auto light = mainScene->pointLights[i];
             PBRlightingShader->set4fm("model", glm::translate(glm::mat4(1.0f), light->position));//set 'model' matrix
@@ -354,12 +354,12 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
     if(!mainScene->forwardMeshes.empty()) {
         //copy depth
         if (deferredTarget) {
-            gBufferNew->copyDepthBitTo(deferredTarget->id);
+            gBuffer->copyDepthBitTo(deferredTarget->id);
             //todo. gBuffer->copyDepthBitTo will change read buffer and write buffer, add deferredTarget->bind(); is safer
             deferredTarget->setDrawBuffers(2);//open attachment0 for color and attachment1 for velocity
         } else {
             //WARNING.when deferredTarget is nullptr, the output graphics in the screen could be too dark to recognize
-            gBufferNew->copyDepthBitTo(0);
+            gBuffer->copyDepthBitTo(0);
         }
         for (auto &fm:mainScene->forwardMeshes) {
             fm->projectionView = projectionView;

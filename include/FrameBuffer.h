@@ -28,7 +28,7 @@ namespace HJGraphics{
 	};
     struct FrameBufferAttachment{
         std::string name;
-        GLuint slot;//which slot to bind?
+        GLuint slot;//which slot to bind? not used for now
         std::shared_ptr<GLResource> attachment;
         FrameBufferAttachmentType type;
         FrameBufferAttachment()=default;
@@ -39,7 +39,7 @@ namespace HJGraphics{
             return attachment?attachment->id:0;
         }
     };
-    class FrameBufferNew : public GLResource {
+    class FrameBuffer : public GLResource {
     public:
         std::vector<std::shared_ptr<FrameBufferAttachment>> colorAttachments;
         std::shared_ptr<FrameBufferAttachment> depthAttachment;
@@ -50,13 +50,13 @@ namespace HJGraphics{
 
         static std::shared_ptr<Shader> defaultShader;
 
-        FrameBufferNew();
+        FrameBuffer();
 
         //create a framebuffer constaions one color attachment
-        FrameBufferNew(int _width,int _height,int _internalFormat=GL_RGB,int _format=GL_RGB,int _dataType=GL_UNSIGNED_BYTE,int _filter=GL_LINEAR,bool _createDepthRBO=true);
+        FrameBuffer(int _width, int _height, int _internalFormat=GL_RGB, int _format=GL_RGB, int _dataType=GL_UNSIGNED_BYTE, int _filter=GL_LINEAR, bool _createDepthRBO=true);
 
         //more general constructor for creating a framebuffer, resources are pre-allocated
-        FrameBufferNew(int _width,int _height,std::vector<std::shared_ptr<FrameBufferAttachment>>& _colors,std::shared_ptr<FrameBufferAttachment> _depth,std::shared_ptr<FrameBufferAttachment> _stencil);
+        FrameBuffer(int _width, int _height, std::vector<std::shared_ptr<FrameBufferAttachment>>& _colors, std::shared_ptr<FrameBufferAttachment> _depth, std::shared_ptr<FrameBufferAttachment> _stencil);
 
         void clearBind() const;
 
@@ -89,11 +89,11 @@ namespace HJGraphics{
         }
     };
 
-	class DeferredTarget: public FrameBufferNew{
+	class DeferredTarget: public FrameBuffer{
 	public:
         std::shared_ptr<FrameBufferAttachment> sharedVelocity;
 
-		DeferredTarget(int _width,int _height):FrameBufferNew(_width,_height,GL_RGBA16F,GL_RGBA,GL_FLOAT){
+		DeferredTarget(int _width,int _height): FrameBuffer(_width, _height, GL_RGBA16F, GL_RGBA, GL_FLOAT){
 		}
 		DeferredTarget(int _width,int _height, std::shared_ptr<FrameBufferAttachment> _sharedVelocity);
 	};

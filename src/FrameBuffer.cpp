@@ -6,20 +6,20 @@
 #include "Material.h"
 #include "Quad.h"
 
-std::shared_ptr<HJGraphics::Shader> HJGraphics::FrameBufferNew::defaultShader= nullptr;
+std::shared_ptr<HJGraphics::Shader> HJGraphics::FrameBuffer::defaultShader= nullptr;
 
-HJGraphics::DeferredTarget::DeferredTarget(int _width,int _height, std::shared_ptr<FrameBufferAttachment> _sharedVelocity):FrameBufferNew(_width,_height,GL_RGB16F,GL_RGB,GL_FLOAT) {
+HJGraphics::DeferredTarget::DeferredTarget(int _width,int _height, std::shared_ptr<FrameBufferAttachment> _sharedVelocity): FrameBuffer(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT) {
 	sharedVelocity=_sharedVelocity;
 	colorAttachments.push_back(sharedVelocity);
 }
 
-HJGraphics::FrameBufferNew::FrameBufferNew(){
+HJGraphics::FrameBuffer::FrameBuffer(){
     width=height=0;
     glGenFramebuffers(1, &id);
     glBindFramebuffer(GL_FRAMEBUFFER, id);
 }
 
-HJGraphics::FrameBufferNew::FrameBufferNew(int _width, int _height,int _internalFormat,int _format,int _dataType,int _filter,bool _createDepthRBO) {
+HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, int _internalFormat, int _format, int _dataType, int _filter, bool _createDepthRBO) {
     if(defaultShader== nullptr){
         defaultShader=std::make_shared<Shader>(ShaderCodeList{"../shader/forward/framebufferVertex.glsl"_vs, "../shader/forward/framebufferFragment.glsl"_fs});
     }
@@ -52,7 +52,7 @@ HJGraphics::FrameBufferNew::FrameBufferNew(int _width, int _height,int _internal
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-HJGraphics::FrameBufferNew::FrameBufferNew(int _width,int _height,std::vector<std::shared_ptr<HJGraphics::FrameBufferAttachment>>& _colors,std::shared_ptr<HJGraphics::FrameBufferAttachment> _depth,std::shared_ptr<HJGraphics::FrameBufferAttachment> _stencil){
+HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, std::vector<std::shared_ptr<HJGraphics::FrameBufferAttachment>>& _colors, std::shared_ptr<HJGraphics::FrameBufferAttachment> _depth, std::shared_ptr<HJGraphics::FrameBufferAttachment> _stencil){
     colorAttachments=_colors;
     depthAttachment=_depth;
     stencilAttachment=_stencil;
@@ -60,14 +60,14 @@ HJGraphics::FrameBufferNew::FrameBufferNew(int _width,int _height,std::vector<st
     height=_height;
     glGenFramebuffers(1, &id);
     glBindFramebuffer(GL_FRAMEBUFFER, id);
-    FrameBufferNew::bindAttachments();
+    FrameBuffer::bindAttachments();
     //check framebuffer completeness
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void HJGraphics::FrameBufferNew::debugDrawBuffer(int index) {
+void HJGraphics::FrameBuffer::debugDrawBuffer(int index) {
     if(colorAttachments.size()>=index){
         std::cerr<<"Error @ FrameBuffer::debugDrawBuffer : index exceed attachment index range"<<std::endl;
         return;
@@ -79,7 +79,7 @@ void HJGraphics::FrameBufferNew::debugDrawBuffer(int index) {
     GL.bindTexture(GL_TEXTURE_2D, colorAttachments[index]->attachment->id);
     Quad2DWithTexCoord::draw();
 }
-void HJGraphics::FrameBufferNew::bindAttachments() {
+void HJGraphics::FrameBuffer::bindAttachments() {
     for(int i=0;i<colorAttachments.size();++i){
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+i, GL_TEXTURE_2D, colorAttachments[i]->attachment->id, 0);
     }
@@ -114,7 +114,7 @@ void HJGraphics::FrameBufferNew::bindAttachments() {
         }
     }
 }
-void HJGraphics::FrameBufferNew::clearAttachments(glm::vec4 clearColor,float depthValue,int stencilValue) {
+void HJGraphics::FrameBuffer::clearAttachments(glm::vec4 clearColor, float depthValue, int stencilValue) {
     float transparent[]={clearColor.x,clearColor.y,clearColor.z,clearColor.w};
     for(auto i=0;i<colorAttachments.size();++i)glClearBufferfv(GL_COLOR, i, transparent);
     if(hasDepthAttachment()){
@@ -124,19 +124,19 @@ void HJGraphics::FrameBufferNew::clearAttachments(glm::vec4 clearColor,float dep
         glClearBufferiv(GL_STENCIL, 0, &stencilValue);
     }
 }
-void HJGraphics::FrameBufferNew::clearBind() const {
+void HJGraphics::FrameBuffer::clearBind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, id);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//WARNING! FrameBufferNew will turn black if we don't clear DEPTH_BUFFER_BIT
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//WARNING! FrameBuffer will turn black if we don't clear DEPTH_BUFFER_BIT
 }
-void HJGraphics::FrameBufferNew::bind() const {
+void HJGraphics::FrameBuffer::bind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, id);
 }
-void HJGraphics::FrameBufferNew::unbind() {
+void HJGraphics::FrameBuffer::unbind() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void HJGraphics::FrameBufferNew::copyDepthBitTo(GLuint target) {
+void HJGraphics::FrameBuffer::copyDepthBitTo(GLuint target) {
     if(hasDepthAttachment()){
         glBindFramebuffer(GL_READ_FRAMEBUFFER, id);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, target);
