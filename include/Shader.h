@@ -17,6 +17,7 @@
 #include <vector>
 #include <initializer_list>
 #include "OpenGLHeader.h"
+#include "Common.h"
 //#define SHADER_UNIFORM_DEBUG
 namespace HJGraphics {
 	enum class ShaderCodeType{
@@ -32,7 +33,8 @@ namespace HJGraphics {
 	struct ShaderCode{
 		ShaderCodeType type;
 		std::string code;
-		ShaderCode(ShaderCodeType _type,std::string _code):type(_type),code(std::move(_code)){}
+		std::string src;
+		ShaderCode(ShaderCodeType _type,std::string _code,std::string _src=std::string()):type(_type),code(std::move(_code)),src(_src){}
 	};
 	ShaderCode operator ""_vs(const char* str,size_t n);
 	ShaderCode operator ""_fs(const char* str,size_t n);
@@ -43,13 +45,13 @@ namespace HJGraphics {
 
 	typedef std::initializer_list<ShaderCode> ShaderCodeList;
 
-	class Shader {
+	class Shader : public GLResource {
 	public:
 		Shader(const std::string& vsCode, const std::string& fsCode, const std::string& gsCode);
 
 		Shader(ShaderCodeList codes);
 
-		void use() { glUseProgram(id); };
+		void use() { GL.useProgram(id); };
 
 		void setFloat(const std::string &name, float value) {
 			auto loc=glGetUniformLocation(id, name.c_str());
@@ -129,11 +131,9 @@ namespace HJGraphics {
 		GLuint getID() { return id; };
 
 	private:
-		GLuint id;
-
 		std::vector<GLuint> fragSubroutine;
 
-		bool checkCompileError(GLuint shader, std::string type);
+		bool checkCompileError(GLuint shader, std::string type, std::string src=std::string());
 
 	};
 	void preprocessShaderCode(std::string &source, const std::string &basePath);

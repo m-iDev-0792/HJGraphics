@@ -113,7 +113,7 @@ enum aiTextureMapMode
      */
     aiTextureMapMode_Wrap = 0x0,
 
-    /** Texture coordinates outside [0...1]
+    /** Texture2D coordinates outside [0...1]
      *  are clamped to the nearest valid value.
      */
     aiTextureMapMode_Clamp = 0x1,
@@ -735,7 +735,7 @@ public:
 
     // -------------------------------------------------------------------
     /** Get the number of textures for a particular texture type.
-     *  @param type Texture type to check for
+     *  @param type Texture2D type to check for
      *  @return Number of textures for this type.
      *  @note A texture can be easily queried using #GetTexture() */
     unsigned int GetTextureCount(aiTextureType type) const;
@@ -1521,7 +1521,7 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialString(const C_STRUCT aiMaterial* pMat,
 // ---------------------------------------------------------------------------
 /** Get the number of textures for a particular texture type.
  *  @param[in] pMat Pointer to the input material. May not be NULL
- *  @param type Texture type to check for
+ *  @param type Texture2D type to check for
  *  @return Number of textures for this type.
  *  @note A texture can be easily queried using #aiGetMaterialTexture() */
 // ---------------------------------------------------------------------------

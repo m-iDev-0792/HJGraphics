@@ -23,6 +23,7 @@ namespace HJGraphics {
 	public:
 
 		glm::mat4 model;
+		glm::mat4 previousModel;
 		glm::mat4 projectionView;
 		glm::mat4 previousProjectionView;
 

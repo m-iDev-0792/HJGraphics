@@ -33,7 +33,7 @@ HJGraphics::TextRenderer::TextRenderer(std::string _font,glm::vec2 _size,int _te
 
 		GLuint texture;
 		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		GL.bindTexture(GL_TEXTURE_2D, texture);
 		glTexImage2D(GL_TEXTURE_2D,0,GL_RED,face->glyph->bitmap.width,face->glyph->bitmap.rows,0,
 				GL_RED,GL_UNSIGNED_BYTE,face->glyph->bitmap.buffer);
 
@@ -70,7 +70,7 @@ void HJGraphics::TextRenderer::renderTextDynamic(std::string text, glm::vec2 pos
 	textShader->set4fm("projection",projection);
 	textShader->set3fv("textColor",color);
 	textShader->setInt("text",0);
-	glActiveTexture(GL_TEXTURE0);
+	GL.activeTexture(GL_TEXTURE0);
 	glBindVertexArray(VAO);
 
 	float x=position.x;
@@ -94,7 +94,7 @@ void HJGraphics::TextRenderer::renderTextDynamic(std::string text, glm::vec2 pos
 				{ xpos + w, ypos,       1.0, 1.0 },
 				{ xpos + w, ypos + h,   1.0, 0.0 }
 		};
-		glBindTexture(GL_TEXTURE_2D, ch.id);
+		GL.bindTexture(GL_TEXTURE_2D, ch.id);
 		//update VBO
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
@@ -104,5 +104,5 @@ void HJGraphics::TextRenderer::renderTextDynamic(std::string text, glm::vec2 pos
 		x += (ch.advance >> 6) * scale; // 位偏移6个单位来获取单位为像素的值 (2^6 = 64)
 	}
 //	glBindVertexArray(0);
-//	glBindTexture(GL_TEXTURE_2D, 0);
+//	GL.bindTexture(GL_TEXTURE_2D, 0);
 }

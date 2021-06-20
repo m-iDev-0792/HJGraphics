@@ -3,14 +3,19 @@ layout (location = 0) out vec4 FragColor;
 //********common uniform begin********
 
 uniform vec3 cameraPosition;
-//PBR_gBuffer - texture binding point 0~4
-uniform sampler2D gPositionDepth;
-uniform sampler2D gNormal;
-uniform sampler2D gAlbedoMetallic;
-uniform sampler2D gF0Roughness;
+uniform mat4 inverseProjectionView;
+//PBR_gBuffer - texture binding point 0~3
+uniform sampler2D gNormal;//0
+uniform sampler2D gAlbedoMetallic;//1
+uniform sampler2D gF0Roughness;//2
+uniform sampler2D gDepth;//3
 uniform sampler2D gAO;//5
 uniform vec2 gBufferSize;
 
+const int PARALLELLIGHT=0;
+const int SPOTLIGHT=1;
+const int POINTLIGHT=2;
+const int AMBIENT=3;
 //light Info
 uniform int lightType;//0=para 1=spot 2=point 3=ambient
 uniform vec3 lightPosition;
@@ -21,9 +26,10 @@ uniform mat4 lightSpaceMatrix;
 uniform vec3 attenuationVec;//x=linear y=quadratic z=constant
 uniform vec2 innerOuterCos;
 
-uniform float globalAmbiendStrength;
+uniform float globalAmbientStrength;
 
 //shadow
+
 uniform float shadowZFar;
 uniform bool hasShadow;
 uniform sampler2D shadowMap;//10
@@ -32,6 +38,14 @@ uniform samplerCube shadowCubeMap;//11
 
 #include"../common/shadowCalculate.glsl"
 #include"PBR_Common.glsl"
+
+vec3 worldPosition(vec2 uv, float depth, mat4 inverseProjectionView){
+    vec4 clipSpace = vec4(uv * 2.0 - vec2(1.0), 2.0 * depth - 1.0, 1.0);
+    //vec4 position = inverseProjection * clipSpace; // Use this for view space
+    vec4 position = inverseProjectionView * clipSpace; // Use this for world space
+    return(position.xyz / position.w);
+}
+
 
 void main() {
     vec2 uv=vec2(gl_FragCoord.x/gBufferSize.x,gl_FragCoord.y/gBufferSize.y);
@@ -43,17 +57,17 @@ void main() {
     float roughness=texture(gF0Roughness,uv).a;
 
     //geometry property
-    vec3 position=texture(gPositionDepth,uv).xyz;
+    vec3 position=worldPosition(uv,texture(gDepth,uv).r,inverseProjectionView);
     vec3 N=texture(gNormal,uv).xyz;
     vec3 Wo=normalize(cameraPosition-position);
     vec3 Wi=lightType==0?-normalize(lightDirection):normalize(lightPosition-position);
     vec3 H=normalize(Wi+Wo);//half-way vector
 
     float attenuation=1.0;
-    if(lightType==0){//parallel light
+    if(lightType==PARALLELLIGHT){//parallel light
         float shadowFactor=hasShadow?parallelShadowCalculation(lightSpaceMatrix*vec4(position,1.0f)):1.0f;
         attenuation*=shadowFactor;
-    }else if(lightType==1){//spotlight
+    }else if(lightType==SPOTLIGHT){//spotlight
         float shadowFactor=hasShadow?spotShadowCalculation(lightSpaceMatrix*vec4(position,1.0f)):1.0f;
         //calculate attenuation
         float distance=length(position-lightPosition);
@@ -64,15 +78,15 @@ void main() {
         float intensity=clamp((cutOffCos-outerCos)/(innerCos-outerCos),0.0,1.0);
         attenuation*=intensity;
         attenuation*=shadowFactor;
-    }else if(lightType==2){//pointlight
+    }else if(lightType==POINTLIGHT){//pointlight
         float shadowFactor=hasShadow?pointShadowCalculation(vec4(position,1.0)):1.0f;
         //calculate attenuation
         float distance=length(position-lightPosition);
         attenuation=1.0/(attenuationVec.z+attenuationVec.x * distance+attenuationVec.y * distance*distance);
         attenuation*=shadowFactor;
-    }else if(lightType==3){//ambient
+    }else if(lightType==AMBIENT){//ambient
         float ao=texture(gAO,uv).r;
-        FragColor=vec4(ao*albedo*globalAmbiendStrength,texture(gPositionDepth,uv).w);
+        FragColor=vec4(ao*albedo*globalAmbientStrength,1.0);
         return;
     }
 
@@ -98,5 +112,5 @@ void main() {
     kD *= 1.0 - metallic;//pure metal doesn't have diffuse
     //review again: Lo=  (kD * albedo / pi + kD * D * G * F/(4 * WiDotN * WoDotN)) * Li * WiDotN
     vec3 Lo=(kD*albedo/PI + D*G*F/BRDFdenom) * Li * NdotWi;//note: no kS because F already contain it
-    FragColor=vec4(Lo,0.0);
+    FragColor=vec4(Lo,1.0);
 }

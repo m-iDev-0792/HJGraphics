@@ -16,8 +16,8 @@ HJGraphics::SSAO::SSAO(glm::vec2 _ssaoSize, glm::vec2 _ssaoNoiseSize, float _sam
 	ssaoBias=_ssaoBias;
 	ssaoBlurRaidus=_ssaoBlurRadius;
 	//create ssao and ssaoBlured framebuffers
-	ssao=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
-	ssaoBlured=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
+	ssao=std::make_shared<FrameBuffer>(ssaoSize.x, ssaoSize.y, GL_RED, GL_RED, GL_FLOAT, GL_LINEAR, false);
+	ssaoBlured=std::make_shared<FrameBuffer>(ssaoSize.x, ssaoSize.y, GL_RED, GL_RED, GL_FLOAT, GL_LINEAR, false);
 	if(ssaoShader==nullptr)ssaoShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/ssao.vs.glsl"_vs, "../shader/deferred/ssao.fs.glsl"_fs});
 	if(ssaoBlurShader==nullptr)ssaoBlurShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/ssao.vs.glsl"_vs, "../shader/deferred/ssaoBlur.fs.glsl"_fs});
 	generateSamplesAndNoise();
@@ -43,8 +43,8 @@ void HJGraphics::SSAO::generateSamplesAndNoise() {
 	}
 	//create ssaoNoise texture buffer
 	glGenTextures(1, &ssaoNoise);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, ssaoNoise);
+	GL.activeTexture(GL_TEXTURE2);
+	GL.bindTexture(GL_TEXTURE_2D, ssaoNoise);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, ssaoNoiseSize.x, ssaoNoiseSize.y, 0, GL_RGB, GL_FLOAT, &noises[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -56,12 +56,12 @@ void HJGraphics::SSAO::blur() {
 	ssaoBlurShader->use();
 	ssaoBlurShader->setInt("radius",ssaoBlurRaidus);
 	ssaoBlurShader->setInt("ssao",0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,ssao->tex);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_2D,ssao->colorAttachments[0]->getId());
 	Quad2D::draw();
 	ssaoBlured->unbind();
 }
-void HJGraphics::SSAO::render(GLuint gPositionDepth, GLuint gNormal, glm::mat4 projectionMat,glm::vec2 zNearAndzFar,glm::vec3 cameraPosition) {
+void HJGraphics::SSAO::render(GLuint gNormal,GLuint gDepth, glm::mat4 projectionMat, glm::mat4 inverseProjectionView, glm::vec2 zNearAndzFar, glm::vec3 cameraPosition){
 	//render ssao
 	ssao->clearBind();
 	//bind uniform
@@ -75,16 +75,17 @@ void HJGraphics::SSAO::render(GLuint gPositionDepth, GLuint gNormal, glm::mat4 p
 	ssaoShader->set3fv("cameraPosition",cameraPosition);
 	for(int i=0;i<sampleNum;++i)ssaoShader->set3fv("samples["+std::to_string(i)+"]",samples[i]);
 	ssaoShader->set4fm("projection",projectionMat);
+	ssaoShader->set4fm("inverseProjectionView",inverseProjectionView);
 	//bind sampler2D
-	ssaoShader->setInt("gPositionDepth",0);
-	ssaoShader->setInt("gNormal",1);
+    ssaoShader->setInt("gNormal",0);
+    ssaoShader->setInt("gDepth",1);
 	ssaoShader->setInt("ssaoNoise",2);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,gPositionDepth);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D,gNormal);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D,ssaoNoise);
+    GL.activeTexture(GL_TEXTURE0);
+    GL.bindTexture(GL_TEXTURE_2D, gNormal);
+	GL.activeTexture(GL_TEXTURE1);
+	GL.bindTexture(GL_TEXTURE_2D, gDepth);
+	GL.activeTexture(GL_TEXTURE2);
+	GL.bindTexture(GL_TEXTURE_2D,ssaoNoise);
 	Quad2D::draw();
 	blur();
 }

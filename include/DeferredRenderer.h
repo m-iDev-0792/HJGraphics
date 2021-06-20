@@ -21,21 +21,19 @@ namespace HJGraphics {
 		DeferredRenderer(int _width,int _height);
 
 		void setMainScene(std::shared_ptr<Scene> _mainScene) { mainScene = _mainScene; }
-		
-		void render(long long frameDeltaTime,long long elapsedTime,long long frameCount);
 
-		void renderPBR(long long frameDeltaTime,long long elapsedTime,long long frameCount);
+        void render(long long frameDeltaTime, long long elapsedTime, long long frameCount);
 
-		void renderInit();
+        void renderInit();
 
 		void postprocess(long long frameDeltaTime);
 
-		void renderMesh(std::shared_ptr<Mesh> m);
+		void renderMesh(const std::shared_ptr<Mesh>& m);
 	private:
 		//important members!
 		int width,height;
 		std::shared_ptr<Scene> mainScene;
-		std::shared_ptr<FrameBuffer> deferredTarget;
+		std::shared_ptr<DeferredTarget> deferredTarget;
 
 		std::shared_ptr<SSAO> ssaoPass;
 		std::shared_ptr<SolidTexture> defaultAOTex;
@@ -44,16 +42,12 @@ namespace HJGraphics {
 
 		std::shared_ptr<Shader> pointLightShadowShader;
 		std::shared_ptr<Shader> parallelSpotLightShadowShader;
-		//BlinnPhong
+
 		std::shared_ptr<GBuffer> gBuffer;
-		std::shared_ptr<Shader> ambientShader;
+		//BlinnPhong
 		std::shared_ptr<Shader> lightingShader;
 		//pbr
-		std::shared_ptr<GBuffer> PBRgBuffer;
 		std::shared_ptr<Shader> PBRlightingShader;
-		//motion blur
-		std::shared_ptr<Texture2D> sharedVelocity;
-
 
 		//settings
 		bool enableAO;
@@ -70,8 +64,7 @@ namespace HJGraphics {
 		//render pass
 		void prepareRendering(long long frameDeltaTime,long long elapsedTime,long long frameCount);//update mesh states etc.
 		void shadowPass();
-		void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
-
+        void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
 	};
 }
 #endif

@@ -17,7 +17,7 @@ int main() {
 	Camera camera(cameraPos,cameraDirection);
 
 	auto coord=make_shared<Coordinate>();
-	auto skybox=make_shared<Skybox>(15,string("../texture/envmap_miramar/miramar_rt.tga"),
+	auto skybox=make_shared<Skybox>(25,string("../texture/envmap_miramar/miramar_rt.tga"),
 	                                string("../texture/envmap_miramar/miramar_lf.tga"),
 	                                string("../texture/envmap_miramar/miramar_up.tga"),
 	                                string("../texture/envmap_miramar/miramar_dn.tga"),

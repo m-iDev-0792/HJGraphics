@@ -33,8 +33,7 @@ std::string getBasePath(const std::string &path){
 }
 
 void HJGraphics::preprocessShaderCode(std::string &source, const std::string &basePath){
-	std::regex reg{R"(#include".+")"};//Note: no space behind #include
-	std::smatch matches;
+	std::regex reg{R"(#include\s*"[^"]+")"};//Note: no space behind #include
 	std::sregex_iterator it(source.begin(), source.end(), reg);
 	std::sregex_iterator end;
 	std::vector<std::string> includeCodes;
@@ -42,7 +41,8 @@ void HJGraphics::preprocessShaderCode(std::string &source, const std::string &ba
 	for (; it != end; ++it) {
 		auto path=it->str();
 		includePath.push_back(path);
-		path=path.substr(9,path.size()-10);
+		auto pos = path.find('\"');
+		path=path.substr(pos+1,path.size()-pos-2);
 		auto originalCode=readText(basePath+path);
 		auto newBasePath=getBasePath(basePath+path);
 		preprocessShaderCode(originalCode,newBasePath);//process recursively
@@ -59,37 +59,37 @@ HJGraphics::ShaderCode HJGraphics::operator ""_vs(const char* str,size_t n){
 	auto code=readText(str);
 	auto basePath=getBasePath(str);
 	HJGraphics::preprocessShaderCode(code,basePath);
-	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Vertex,code);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Vertex,code,str);
 }
 HJGraphics::ShaderCode HJGraphics::operator ""_fs(const char* str,size_t n){
 	auto code=readText(str);
 	auto basePath=getBasePath(str);
 	HJGraphics::preprocessShaderCode(code,basePath);
-	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Fragment,code);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Fragment,code,str);
 }
 HJGraphics::ShaderCode HJGraphics::operator ""_gs(const char* str,size_t n){
 	auto code=readText(str);
 	auto basePath=getBasePath(str);
 	HJGraphics::preprocessShaderCode(code,basePath);
-	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Geometry,code);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Geometry,code,str);
 }
 HJGraphics::ShaderCode HJGraphics::operator ""_tcs(const char* str,size_t n){
 	auto code=readText(str);
 	auto basePath=getBasePath(str);
 	HJGraphics::preprocessShaderCode(code,basePath);
-	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::TessControl,code);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::TessControl,code,str);
 }
 HJGraphics::ShaderCode HJGraphics::operator ""_tes(const char* str,size_t n){
 	auto code=readText(str);
 	auto basePath=getBasePath(str);
 	HJGraphics::preprocessShaderCode(code,basePath);
-	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::TessEvaluation,code);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::TessEvaluation,code,str);
 }
 HJGraphics::ShaderCode HJGraphics::operator ""_cs(const char* str,size_t n){
 	auto code=readText(str);
 	auto basePath=getBasePath(str);
 	HJGraphics::preprocessShaderCode(code,basePath);
-	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Compute,code);
+	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Compute,code,str);
 }
 std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath){
 	auto vsCode = readText(vsPath);auto vsBasePath=getBasePath(vsPath);preprocessShaderCode(vsCode,vsBasePath);
@@ -117,7 +117,7 @@ HJGraphics::Shader::Shader(ShaderCodeList codes){
 		const char* pcode=code.code.c_str();
 		glShaderSource(shaderID[i], 1, &pcode, nullptr);
 		glCompileShader(shaderID[i]);
-		checkCompileError(shaderID[i], SHADER_NAME_LIST[static_cast<int>(code.type)]);
+		checkCompileError(shaderID[i], SHADER_NAME_LIST[static_cast<int>(code.type)],code.src);
 		++i;
 	}
 	id = glCreateProgram();
@@ -177,23 +177,23 @@ HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode,
 }
 
 
-bool HJGraphics::Shader::checkCompileError(GLuint shader, std::string type){
+bool HJGraphics::Shader::checkCompileError(GLuint shader, std::string type, std::string src){
 	int success=1;
 	char infoLog[1024];
 	if (type != "PROGRAM") {
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 		if (!success) {
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR @ Shader::checkCompileError(GLuint,std::string) : SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog
-			          << "\n -- --------------------------------------------------- -- " << std::endl;
+			std::cout << "ERROR @ Shader::checkCompileError(GLuint,std::string,std::string) : SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog;
+			if(!src.empty())std::cout<<"code loaded from "<<src<<std::endl;
 		}
 	} else {
 		glGetProgramiv(shader, GL_LINK_STATUS, &success);
 		if (!success) {
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR @ Shader::checkCompileError(GLuint,std::string) : PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog
-			          << "\n -- --------------------------------------------------- -- " << std::endl;
-		}
+			std::cout << "ERROR @ Shader::checkCompileError(GLuint,std::string,std::string) : PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog;
+            if(!src.empty())std::cout<<"code loaded from "<<src<<std::endl;
+        }
 	}
 	return success;
 }
