@@ -27,6 +27,7 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 	}
 	float move = moveSpeed * deltaTime;
 	auto pCamera=renderer->mainScene->getMainCamera();
+	pCamera->previousPosition=pCamera->position;//NOTE! Important, do not change!
 
 	//-------------------------------
 	//        Key Event Handling
@@ -166,7 +167,7 @@ void HJGraphics::Window::run() {
 	}
 }
 void HJGraphics::Window::render(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
-	if(renderer)renderer->renderPBR(frameDeltaTime,elapsedTime,frameCount);
+	if(renderer)renderer->renderNew(frameDeltaTime,elapsedTime,frameCount);
 }
 void HJGraphics::Window::renderUI(long long  deltaTime) {
 	if(textRenderer==nullptr)return;

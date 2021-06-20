@@ -8,6 +8,7 @@
 #include <memory>
 #include "OpenGLHeader.h"
 #include "Shader.h"
+#include "FrameBuffer.h"
 namespace HJGraphics {
 	class DeferredRenderer;
 	class GBuffer{
@@ -15,9 +16,8 @@ namespace HJGraphics {
 	protected:
 		GLuint fbo;
 		GLuint rbo;
-		GLuint gPositionDepth;
-		GLuint gNormal;
-		GLuint sharedVelocity;
+		GLuint gNormalDepth;
+		GLuint sharedVelocity=-1;
 
 		int width;
 		int height;
@@ -41,8 +41,8 @@ namespace HJGraphics {
 		void bind();
 
 		void unbind();
-
-		void copyDepthBit(GLuint target = 0);
+        //warning: this operation will change DrawBuffer and ReadBuffer
+		void copyDepthBitTo(GLuint target = 0);
 
 		virtual void bindAttachmentsSetDrawBuffers()=0;
 
@@ -54,14 +54,11 @@ namespace HJGraphics {
 
 		virtual void bindTextures(){
 			GL.activeTexture(GL_TEXTURE0);
-			GL.bindTexture(GL_TEXTURE_2D, gPositionDepth);
-			GL.activeTexture(GL_TEXTURE1);
-			GL.bindTexture(GL_TEXTURE_2D,gNormal);
+			GL.bindTexture(GL_TEXTURE_2D, gNormalDepth);
 		}
 
 		virtual void writeUniform(std::shared_ptr<Shader> shader){
-			shader->setInt("gPositionDepth",0);
-			shader->setInt("gNormal",1);
+			shader->setInt("gNormalDepth",0);
 			shader->set2fv("gBufferSize",glm::vec2(width,height));
 		}
 	};
@@ -69,8 +66,7 @@ namespace HJGraphics {
 		friend DeferredRenderer;
 	protected:
 		GLuint gDiffSpec;
-		GLuint gShinAlphaReflectRefract;
-		GLuint gAmbiDiffSpecStrength;
+		GLuint gAmbiDiffSpecStrengthShin;
 	public:
 		BlinnPhongGBuffer(int _width, int _height);
 
@@ -106,5 +102,18 @@ namespace HJGraphics {
 			clearAttachments(4);
 		}
 	};
+
+
+    class GBufferNew : public FrameBufferNew{
+        friend DeferredRenderer;
+    protected:
+        std::shared_ptr<Shader> shader;
+    public:
+        GBufferNew(int _width, int _height);
+
+        virtual void bindTextures() const;
+
+        virtual void writeUniform(std::shared_ptr<Shader> shader)const;
+    };
 }
 #endif

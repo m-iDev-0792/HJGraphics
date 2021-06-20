@@ -16,8 +16,9 @@
 namespace HJGraphics {
 	enum LightType {
 		ParallelLightType,
-		PointLightType,
-		SpotLightType
+		SpotLightType,
+        PointLightType,
+        AmbientType
 	};
 
 	class Mesh;

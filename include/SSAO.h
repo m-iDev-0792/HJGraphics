@@ -32,10 +32,11 @@ namespace HJGraphics{
 		// ssaoRadius: according to your model size, greater radius , darker ao and larger ao range
 		// ssaoBlurRaidus: not too large, 1~3 is enough
 		// ssaoNoiseSize: greater size, smoother ao
-		// ssaoBias: less biass, darker ao
+		// ssaoBias: less bias, darker ao
 		SSAO(glm::vec2 _ssaoSize, glm::vec2 _ssaoNoiseSize, float _sampleNum, int _ssaoBlurRadius=1, float _ssaoRadius=0.3,
 		     float _ssaoBias=0.01);
-		void render(GLuint gPositionDepth, GLuint gNormal, glm::mat4 projectionMat,glm::vec2 zNearAndzFar,glm::vec3 cameraPosition);
+		void render(GLuint gNormal,GLuint gDepth, glm::mat4 projectionMat, glm::mat4 inverseProjectionView, glm::vec2 zNearAndzFar, glm::vec3 cameraPosition);
+
 		void generateSamplesAndNoise();
 		void blur();
 	};

@@ -20,6 +20,11 @@ uniform bool hasShadow;
 uniform sampler2D shadowMap;//10
 uniform samplerCube shadowCubeMap;//11
 
+const int PARALLELLIGHT=0;
+const int SPOTLIGHT=1;
+const int POINTLIGHT=2;
+const int AMBIENT=3;
+
 vec3 parallelLight();
 vec3 pointLight();
 vec3 spotLight();
@@ -39,9 +44,9 @@ vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
 
 void main(){
     vec3 Color;
-    if(lightType==0)Color=parallelLight();
-    else if(lightType==1)Color=spotLight();
-    else if(lightType==2)Color=pointLight();
+    if(lightType==PARALLELLIGHT)Color=parallelLight();
+    else if(lightType==SPOTLIGHT)Color=spotLight();
+    else if(lightType==POINTLIGHT)Color=pointLight();
     FragColor=vec4(Color,1.0f);
 }
 //////////////////////////////////////////////////////////////////
@@ -79,21 +84,15 @@ vec3 parallelLight(){
     vec4 diffSpec=texture(gDiffSpec,texCoord);
     vec3 diffColor=diffSpec.rgb;
     vec3 specColor=vec3(diffSpec.a);
-    vec3 normal=texture(gNormal,texCoord).rgb;
-    vec3 position=texture(gPositionDepth,texCoord).xyz;
+    vec3 normal=texture(gNormalDepth,texCoord).rgb;
+    vec3 position=worldPosition(texCoord,texture(gNormalDepth,texCoord).w,inverseProjectionView);
 
-    //other parameters
-    vec4 saff=texture(gShinAlphaReflectRefract,texCoord);
-    float shininess=saff.x;
-    float alpha=saff.y;
-    float reflection=saff.z;
-    float refraction=saff.w;
+    vec4 pack=texture(gAmbiDiffSpecStrengthShin,texCoord).xyzw;
+    float ambiStrength=pack.x;
+    float diffStrength=pack.y;
+    float specStrength=pack.z;
+    float shininess=pack.w;
 
-    //strength
-    vec3 strength=texture(gAmbiDiffSpecStrength,texCoord).xyz;
-    float ambiStrength=strength.x;
-    float diffStrength=strength.y;
-    float specStrength=strength.z;
 
     //calculate shadow
     float shadowFactor=hasShadow?parallelShadowCalculation(lightSpaceMatrix*vec4(position,1.0f)):1.0f;
@@ -150,21 +149,14 @@ vec3 pointLight(){
     vec4 diffSpec=texture(gDiffSpec,texCoord);
     vec3 diffColor=diffSpec.rgb;
     vec3 specColor=vec3(diffSpec.a);
-    vec3 normal=texture(gNormal,texCoord).rgb;
-    vec3 position=texture(gPositionDepth,texCoord).xyz;
+    vec3 normal=texture(gNormalDepth,texCoord).rgb;
+    vec3 position=worldPosition(texCoord,texture(gNormalDepth,texCoord).w,inverseProjectionView);
 
-    //other parameters
-    vec4 saff=texture(gShinAlphaReflectRefract,texCoord);
-    float shininess=saff.x;
-    float alpha=saff.y;
-    float reflection=saff.z;
-    float refraction=saff.w;
-
-    //strength
-    vec3 strength=texture(gAmbiDiffSpecStrength,texCoord).xyz;
-    float ambiStrength=strength.x;
-    float diffStrength=strength.y;
-    float specStrength=strength.z;
+    vec4 pack=texture(gAmbiDiffSpecStrengthShin,texCoord).xyzw;
+    float ambiStrength=pack.x;
+    float diffStrength=pack.y;
+    float specStrength=pack.z;
+    float shininess=pack.w;
 
     //calculate shadow
     float shadowFactor=hasShadow?pointShadowCalculation(vec4(position,1.0)):1.0f;
@@ -226,21 +218,14 @@ vec3 spotLight(){
     vec4 diffSpec=texture(gDiffSpec,texCoord);
     vec3 diffColor=diffSpec.rgb;
     vec3 specColor=vec3(diffSpec.a);
-    vec3 normal=texture(gNormal,texCoord).rgb;
-    vec3 position=texture(gPositionDepth,texCoord).xyz;
+    vec3 normal=texture(gNormalDepth,texCoord).rgb;
+    vec3 position=worldPosition(texCoord,texture(gNormalDepth,texCoord).w,inverseProjectionView);
 
-    //other parameters
-    vec4 saff=texture(gShinAlphaReflectRefract,texCoord);
-    float shininess=saff.x;
-    float alpha=saff.y;
-    float reflection=saff.z;
-    float refraction=saff.w;
-
-    //strength
-    vec3 strength=texture(gAmbiDiffSpecStrength,texCoord).xyz;
-    float ambiStrength=strength.x;
-    float diffStrength=strength.y;
-    float specStrength=strength.z;
+    vec4 pack=texture(gAmbiDiffSpecStrengthShin,texCoord).xyzw;
+    float ambiStrength=pack.x;
+    float diffStrength=pack.y;
+    float specStrength=pack.z;
+    float shininess=pack.w;
 
     //calculate shadow
     float shadowFactor=hasShadow?spotShadowCalculation(lightSpaceMatrix*vec4(position,1.0f)):1.0f;

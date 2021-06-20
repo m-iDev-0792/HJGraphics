@@ -26,7 +26,10 @@ namespace HJGraphics {
 
 		void renderPBR(long long frameDeltaTime,long long elapsedTime,long long frameCount);
 
-		void renderInit();
+        void renderNew(long long frameDeltaTime,long long elapsedTime,long long frameCount);
+
+
+        void renderInit();
 
 		void postprocess(long long frameDeltaTime);
 
@@ -46,6 +49,7 @@ namespace HJGraphics {
 		std::shared_ptr<Shader> parallelSpotLightShadowShader;
 		//BlinnPhong
 		std::shared_ptr<GBuffer> gBuffer;
+		std::shared_ptr<GBufferNew> gBufferNew;
 		std::shared_ptr<Shader> ambientShader;
 		std::shared_ptr<Shader> lightingShader;
 		//pbr
@@ -63,15 +67,15 @@ namespace HJGraphics {
 		float motionBlurPower;
 		
 		//shadow maps
-		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMap>> shadowMaps;
-		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowCubeMap>> shadowCubeMaps;
+		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMapNew>> shadowMaps;
+		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowCubeMapNew>> shadowCubeMaps;
 
 
 		//render pass
 		void prepareRendering(long long frameDeltaTime,long long elapsedTime,long long frameCount);//update mesh states etc.
 		void shadowPass();
 		void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
-
+        void gBufferPass(const std::shared_ptr<GBufferNew>& buffer);
 	};
 }
 #endif

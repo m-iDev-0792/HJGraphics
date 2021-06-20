@@ -231,6 +231,8 @@ std::shared_ptr<HJGraphics::Shader> HJGraphics::Skybox::getDefaultShader() {
 }
 void HJGraphics::Skybox::draw() {
 	defaultShader->use();
+	defaultShader->set4fm("model",model);
+	defaultShader->set4fm("previousModel",previousModel);
 	defaultShader->set4fm("projectionView",projectionView);
 	defaultShader->set4fm("previousProjectionView",previousProjectionView);
 	defaultShader->setInt("skybox",0);

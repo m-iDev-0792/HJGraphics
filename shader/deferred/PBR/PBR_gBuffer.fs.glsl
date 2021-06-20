@@ -1,9 +1,8 @@
 #version 330 core
-layout (location = 0) out vec4 gPositionDepth;
-layout (location = 1) out vec3 gNormal;
-layout (location = 2) out vec4 gAlbedoMetallic;
-layout (location = 3) out vec4 gF0Roughness;
-layout (location = 4) out vec2 gVelocity;
+layout (location = 0) out vec4 gNormalDepth;
+layout (location = 1) out vec4 gAlbedoMetallic;
+layout (location = 2) out vec4 gF0Roughness;
+layout (location = 3) out vec2 gVelocity;
 
 in vec3 normal;
 in vec2 uv;
@@ -32,14 +31,13 @@ float linearizeDepth(float depth,float zNear,float zFar){
 }
 void main(){
     //----------GBuffer output--------------
-    //gPosition
-    gPositionDepth.xyz=position;
-    gPositionDepth.w=gl_FragCoord.z;//linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
-    //gNormal
-    gNormal=normal;
+    //gNormalDepth
+    gNormalDepth.xyz=normal;
     vec3 N=texture(material.normalMap,uv).rgb;
     N = normalize(N * 2.0 - 1.0);
-    gNormal=normalize(TBN * N);
+    gNormalDepth.xyz=normalize(TBN * N);
+    gNormalDepth.w=gl_FragCoord.z;//linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
+
     //gAlbedoMetallic
     gAlbedoMetallic.rgb=texture(material.albedoMap,uv).rgb;
     gAlbedoMetallic.a=texture(material.metallicMap,uv).r;

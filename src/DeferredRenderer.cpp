@@ -12,7 +12,12 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 
 	PBRgBuffer = std::make_shared<PBRGBuffer>(_width, _height,sharedVelocity->id);
 	PBRgBuffer->shader = std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
-	deferredTarget=std::make_shared<DeferredTarget>(_width, _height,sharedVelocity->id);
+
+	gBufferNew=std::make_shared<GBufferNew>(_width,_height);
+	gBufferNew->shader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
+    deferredTarget=std::make_shared<DeferredTarget>(_width, _height,gBufferNew->colorAttachments[3]->getId());
+
+//	deferredTarget=std::make_shared<DeferredTarget>(_width, _height,sharedVelocity->id);
 
 	ssaoPass=std::make_shared<SSAO>(glm::vec2(width,height),glm::vec2(16),32,1,0.5);
 	defaultAOTex=std::make_shared<SolidTexture>(glm::vec3(1.0f));
@@ -55,7 +60,8 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	gBufferPass(gBuffer);
 
 	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
-	glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
+    glm::mat4 inverseProjectionView=glm::inverse(projectionView);
+    glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
 
 	//---disable depth test for ao and shading---//
 	GL.disable(GL_DEPTH_TEST);
@@ -65,8 +71,8 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	//2.1 SSAO (Optional)
 	//-----------------------------
 	if(ssaoPass&&enableAO){
-		ssaoPass->render(gBuffer->gPositionDepth,gBuffer->gNormal,projectionView,
-				glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar),mainScene->mainCamera->position);
+        ssaoPass->render(gBuffer->gNormalDepth,gBuffer->gNormalDepth,projectionView, inverseProjectionView,
+                         glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar),mainScene->mainCamera->position);
 	}
 
 
@@ -98,7 +104,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	ambientShader->use();
 	ambientShader->set4fm("projectionView", glm::mat4(1.0f));
 	ambientShader->set4fm("model", glm::mat4(1.0f));
-	ambientShader->setFloat("globalAmbiendStrength",mainScene->ambientFactor);
+	ambientShader->setFloat("globalAmbientStrength",mainScene->ambientFactor);
 	//bind AO texture
 	{
 		ambientShader->setInt("ao",5);
@@ -112,6 +118,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	lightingShader->use();
 	//shared uniform
 	lightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+	lightingShader->set4fm("inverseProjectionView", inverseProjectionView);
 	lightingShader->setInt("shadowMap", 10);
 	lightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
 	//[3.2]-------parallel light shading----------
@@ -121,7 +128,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 		lightingShader->set4fm("projectionView", glm::mat4(1.0f));
 		lightingShader->set4fm("model", glm::mat4(1.0f));
 		//for fragment shader
-		lightingShader->setInt("lightType", 0);
+		lightingShader->setInt("lightType", LightType::ParallelLightType);
 		lightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
 		lightingShader->setInt("shadowMap", 10);
 		lightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
@@ -131,7 +138,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 			light->writeUniform(lightingShader);
 			if (light->castShadow) {
 				GL.activeTexture(GL_TEXTURE10);
-				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
 			}
 			renderMesh(light->lightVolume);
 		}
@@ -149,7 +156,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 		lightingShader->set4fm("projectionView", projectionView);
 		lightingShader->set4fm("model", glm::mat4(1.0f));
 		//for fragment shader
-		lightingShader->setInt("lightType", 1);
+		lightingShader->setInt("lightType", LightType::SpotLightType);
 		lightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
 		lightingShader->setInt("shadowMap", 10);
 		lightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
@@ -159,7 +166,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 			light->writeUniform(lightingShader);
 			if (light->castShadow) {
 				GL.activeTexture(GL_TEXTURE10);
-				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
 			}
 			renderMesh(light->lightVolume);
 		}
@@ -171,7 +178,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 		//for vertex shader
 		lightingShader->set4fm("projectionView", projectionView);//NOTE. we also need to set 'model' matrix for every light
 		//for fragment shader
-		lightingShader->setInt("lightType", 2);
+		lightingShader->setInt("lightType", LightType::PointLightType);
 		lightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
 		lightingShader->setInt("shadowMap", 10);
 		lightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
@@ -182,7 +189,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 			light->writeUniform(lightingShader);
 			if (light->castShadow) {
 				GL.activeTexture(GL_TEXTURE11);
-				GL.bindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->tex);
+				GL.bindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->depthAttachment->getId());
 			}
 			renderMesh(light->lightVolume);
 		}
@@ -200,11 +207,12 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	if(!mainScene->forwardMeshes.empty()) {
 		//copy depth
 		if (deferredTarget) {
-			gBuffer->copyDepthBit(deferredTarget->fbo);
+            gBuffer->copyDepthBitTo(deferredTarget->fbo);
+			//todo. gBuffer->copyDepthBitTo will change read buffer and write buffer, add deferredTarget->bind(); is safer
 			deferredTarget->setDrawBuffers(2);//open attachment0 for color and attachment1 for velocity
 		} else {
 			//WARNING.when deferredTarget is nullptr, the output graphics in the screen could be too dark to recognize
-			gBuffer->copyDepthBit(0);
+            gBuffer->copyDepthBitTo(0);
 		}
 		for (auto &fm:mainScene->forwardMeshes) {
 			fm->projectionView = projectionView;
@@ -230,6 +238,14 @@ void HJGraphics::DeferredRenderer::prepareRendering(long long frameDeltaTime, lo
 		mesh->previousModel=mesh->model;
 		if(mesh->animater){
 			mesh->animater->apply(mesh->model,frameDeltaTime,elapsedTime,frameCount);
+		}
+	}
+	//update skybox position
+	for(auto& fMesh:mainScene->forwardMeshes){
+		if(typeid(*fMesh).name()==typeid(Skybox).name()){
+			fMesh->previousModel=fMesh->model;
+			auto diff=mainScene->mainCamera->position - mainScene->mainCamera->previousPosition;
+			fMesh->model=glm::translate(fMesh->model,diff);
 		}
 	}
 }
@@ -263,7 +279,7 @@ void HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime) {
 	GL.activeTexture(GL_TEXTURE0);
 	GL.bindTexture(GL_TEXTURE_2D, deferredTarget->tex);
 	GL.activeTexture(GL_TEXTURE1);
-	GL.bindTexture(GL_TEXTURE_2D, sharedVelocity->id);
+	GL.bindTexture(GL_TEXTURE_2D, std::dynamic_pointer_cast<DeferredTarget>(deferredTarget)->sharedVelocity);
 	GL.disable(GL_DEPTH_TEST);
 	Quad3D::draw();
 	GL.enable(GL_DEPTH_TEST);
@@ -273,21 +289,21 @@ void HJGraphics::DeferredRenderer::renderInit() {
 	for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
 		auto light = mainScene->parallelLights[i];
 		if(light->castShadow) {
-			auto newSM = std::make_shared<ShadowMap>();
+			auto newSM = std::make_shared<ShadowMapNew>();
 			shadowMaps[light] = newSM;
 		}
 	}
 	for (int i = 0; i < mainScene->spotLights.size(); ++i) {
 		auto light = mainScene->spotLights[i];
 		if (light->castShadow) {
-			auto newSM = std::make_shared<ShadowMap>();
+			auto newSM = std::make_shared<ShadowMapNew>();
 			shadowMaps[light] = newSM;
 		}
 	}
 	for (int i = 0; i < mainScene->pointLights.size(); ++i) {
 		auto light = mainScene->pointLights[i];
 		if (light->castShadow) {
-			auto newSCM = std::make_shared<ShadowCubeMap>();
+			auto newSCM = std::make_shared<ShadowCubeMapNew>();
 			shadowCubeMaps[light] = newSCM;
 		}
 	}
@@ -311,7 +327,7 @@ void HJGraphics::DeferredRenderer::shadowPass() {
 			auto lightMatrix = light->getLightMatrix();
 			auto sm = shadowMaps[light];
 			glViewport(0,0,sm->width,sm->height);
-			sm->bindFBO();
+			sm->bind();
 			glClear(GL_DEPTH_BUFFER_BIT);
 			parallelSpotLightShadowShader->set4fm("lightMatrix", lightMatrix[0]);
 			for (auto &m : mainScene->meshes) {
@@ -330,7 +346,7 @@ void HJGraphics::DeferredRenderer::shadowPass() {
 			auto lightMatrix = light->getLightMatrix();
 			auto sm = shadowMaps[light];
 			glViewport(0,0,sm->width,sm->height);
-			sm->bindFBO();
+			sm->bind();
 			glClear(GL_DEPTH_BUFFER_BIT);
 			parallelSpotLightShadowShader->set4fm("lightMatrix", lightMatrix[0]);
 			for (auto &m : mainScene->meshes) {
@@ -349,7 +365,7 @@ void HJGraphics::DeferredRenderer::shadowPass() {
 			auto lightMatrices = light->getLightMatrix();
 			auto sm = shadowCubeMaps[light];
 			glViewport(0,0,sm->width,sm->height);
-			sm->bindFBO();
+			sm->bind();
 			glClear(GL_DEPTH_BUFFER_BIT);
 			pointLightShadowShader->set4fm("lightMatrix", glm::mat4(1.0f));
 			for (int j = 0; j < 6; ++j)
@@ -367,6 +383,7 @@ void HJGraphics::DeferredRenderer::shadowPass() {
 	}
 }
 void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBuffer>& buffer) {
+    glViewport(0,0,buffer->width,buffer->height);
 	buffer->clearBind();//todo. potential bug, clear velocity once to fix it
 	buffer->bindAttachmentsSetDrawBuffers();
 	buffer->shader->use();
@@ -376,6 +393,7 @@ void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBuffer>& b
 	buffer->shader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
 	for (auto& m : mainScene->meshes) {
 		buffer->shader->set4fm("model", m->model);
+		buffer->shader->set4fm("normalModel",glm::transpose(glm::inverse(m->model)));
 		buffer->shader->set4fm("previousModel", m->previousModel);//todo. write a function to  update model replace model to previous model
 		m->material->bindTexture();
 		m->material->writeToShader(buffer->shader);
@@ -389,6 +407,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	//-----------------------------
 	//1. rendering shadow map
 	//-----------------------------
+	//glClear step seems unnecessary
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0, 0, 0, 1);
 	shadowPass();
@@ -396,10 +415,10 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	//-----------------------------
 	//2. rendering G-buffer
 	//-----------------------------
-	glViewport(0,0,width,height);
 	gBufferPass(PBRgBuffer);
 
 	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
+	glm::mat4 inverseProjectionView=glm::inverse(projectionView);
 	glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
 
 	//---disable depth test for ao and shading---//
@@ -410,7 +429,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	//2.1 SSAO (Optional)
 	//-----------------------------
 	if(ssaoPass&&enableAO){
-		ssaoPass->render(PBRgBuffer->gPositionDepth,PBRgBuffer->gNormal,projectionView,
+		ssaoPass->render(PBRgBuffer->gNormalDepth,PBRgBuffer->gNormalDepth,projectionView, inverseProjectionView,
 		                 glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar),mainScene->mainCamera->position);
 	}
 
@@ -441,10 +460,11 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 
 	//[3.1]-------ambient shading----------
 	PBRlightingShader->use();
-	PBRlightingShader->setInt("lightType",3);
+	PBRlightingShader->set4fm("inverseProjectionView", inverseProjectionView);
+	PBRlightingShader->setInt("lightType",LightType::AmbientType);
 	PBRlightingShader->set4fm("projectionView", glm::mat4(1.0f));
 	PBRlightingShader->set4fm("model", glm::mat4(1.0f));
-	PBRlightingShader->setFloat("globalAmbiendStrength",mainScene->ambientFactor);
+	PBRlightingShader->setFloat("globalAmbientStrength",mainScene->ambientFactor);
 	//bind AO texture
 	{
 		PBRlightingShader->setInt("gAO",5);
@@ -463,7 +483,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 		PBRlightingShader->set4fm("projectionView", glm::mat4(1.0f));
 		PBRlightingShader->set4fm("model", glm::mat4(1.0f));
 		//for fragment shader
-		PBRlightingShader->setInt("lightType", 0);
+		PBRlightingShader->setInt("lightType", LightType::ParallelLightType);
 		PBRlightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
 		PBRlightingShader->setInt("shadowMap", 10);
 		PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
@@ -473,7 +493,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 			light->writeUniform(PBRlightingShader);
 			if (light->castShadow) {
 				GL.activeTexture(GL_TEXTURE10);
-				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
 			}
 			renderMesh(light->lightVolume);
 		}
@@ -491,7 +511,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 		PBRlightingShader->set4fm("projectionView", projectionView);
 		PBRlightingShader->set4fm("model", glm::mat4(1.0f));
 		//for fragment shader
-		PBRlightingShader->setInt("lightType", 1);
+		PBRlightingShader->setInt("lightType", LightType::SpotLightType);
 		PBRlightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
 		PBRlightingShader->setInt("shadowMap", 10);
 		PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
@@ -501,7 +521,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 			light->writeUniform(PBRlightingShader);
 			if (light->castShadow) {
 				GL.activeTexture(GL_TEXTURE10);
-				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->tex);
+				GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
 			}
 			renderMesh(light->lightVolume);
 		}
@@ -513,7 +533,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 		//for vertex shader
 		PBRlightingShader->set4fm("projectionView", projectionView);//NOTE. we also need to set 'model' matrix for every light
 		//for fragment shader
-		PBRlightingShader->setInt("lightType", 2);
+		PBRlightingShader->setInt("lightType", LightType::PointLightType);
 		PBRlightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
 		PBRlightingShader->setInt("shadowMap", 10);//useless actually,otherwise cause gl_invalid_operation!
 		PBRlightingShader->setInt("shadowCubeMap", 11);
@@ -524,7 +544,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 			light->writeUniform(PBRlightingShader);
 			if (light->castShadow) {
 				GL.activeTexture(GL_TEXTURE11);
-				GL.bindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->tex);
+				GL.bindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->depthAttachment->getId());
 			}
 			renderMesh(light->lightVolume);
 		}
@@ -543,11 +563,12 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	if(!mainScene->forwardMeshes.empty()) {
 		//copy depth
 		if (deferredTarget) {
-			PBRgBuffer->copyDepthBit(deferredTarget->fbo);
+            PBRgBuffer->copyDepthBitTo(deferredTarget->fbo);
+            //todo. gBuffer->copyDepthBitTo will change read buffer and write buffer, add deferredTarget->bind(); is safer
 			deferredTarget->setDrawBuffers(2);//open attachment0 for color and attachment1 for velocity
 		} else {
 			//WARNING.when deferredTarget is nullptr, the output graphics in the screen could be too dark to recognize
-			PBRgBuffer->copyDepthBit(0);
+            PBRgBuffer->copyDepthBitTo(0);
 		}
 		for (auto &fm:mainScene->forwardMeshes) {
 			fm->projectionView = projectionView;
@@ -565,3 +586,212 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	}
 
 }
+
+
+
+
+void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBufferNew>& buffer) {
+    glViewport(0,0,buffer->width,buffer->height);
+    buffer->clearBind();
+    buffer->shader->use();
+    buffer->shader->set4fm("view", mainScene->mainCamera->view);
+    buffer->shader->set4fm("projection", mainScene->mainCamera->projection);
+    buffer->shader->set4fm("previousProjectionView", mainScene->mainCamera->previousProjection*mainScene->mainCamera->previousView);
+    buffer->shader->set2fv("zNearAndzFar",glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar));
+    for (auto& m : mainScene->meshes) {
+        buffer->shader->set4fm("model", m->model);
+        buffer->shader->set4fm("normalModel",glm::transpose(glm::inverse(m->model)));
+        buffer->shader->set4fm("previousModel", m->previousModel);//todo. write a function to  update model replace model to previous model
+        m->material->bindTexture();
+        m->material->writeToShader(buffer->shader);
+        renderMesh(m);
+    }
+    buffer->unbind();
+}
+
+void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
+    prepareRendering(frameDeltaTime,elapsedTime,frameCount);
+
+    //-----------------------------
+    //1. rendering shadow map
+    //-----------------------------
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0, 0, 0, 1);
+    shadowPass();
+
+    //-----------------------------
+    //2. rendering G-buffer
+    //-----------------------------
+    gBufferPass(gBufferNew);
+
+    glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
+    glm::mat4 inverseProjectionView=glm::inverse(projectionView);
+    glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
+
+    //---disable depth test for ao and shading---//
+    GL.disable(GL_DEPTH_TEST);
+    //-------------------------------------------//
+
+    //-----------------------------
+    //2.1 SSAO (Optional)
+    //-----------------------------
+    if(ssaoPass&&enableAO){
+        ssaoPass->render(gBufferNew->colorAttachments[0]->getId(),gBufferNew->depthAttachment->getId(),projectionView, inverseProjectionView,
+                         glm::vec2(mainScene->mainCamera->zNear,mainScene->mainCamera->zFar),mainScene->mainCamera->position);
+    }
+
+
+    //-----------------------------
+    //3. deferred shading
+    //-----------------------------
+    //if there is a framebuffer, then bind it, and draw it after post-processing
+    if(deferredTarget){
+        deferredTarget->bind();
+        deferredTarget->bindAttachments();
+        deferredTarget->setDrawBuffers(1);//open attachment0 for color shading
+        //clear buffer depth and attachment0 color
+        static const float transparent[] = { 0, 0, 0, 0 };
+        static const float one=1.0f;
+        glClearBufferfv(GL_COLOR, 0, transparent);
+        glClearBufferfv(GL_DEPTH, 0, &one);
+    }
+    else glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //bind gBufferNew texture
+    gBufferNew->bindTextures();
+
+    //------Enable blend for light shading------//
+    GL.enable(GL_BLEND);
+    GL.blendFunc(GL_ONE,GL_ONE);
+    //------------------------------------------//
+
+    //[3.1]-------ambient shading----------
+    PBRlightingShader->use();
+    PBRlightingShader->set4fm("inverseProjectionView", inverseProjectionView);
+    PBRlightingShader->setInt("lightType",LightType::AmbientType);
+    PBRlightingShader->set4fm("projectionView", glm::mat4(1.0f));
+    PBRlightingShader->set4fm("model", glm::mat4(1.0f));
+    PBRlightingShader->setFloat("globalAmbientStrength",mainScene->ambientFactor);
+    //bind AO texture
+    {
+        PBRlightingShader->setInt("gAO",5);
+        GL.activeTexture(GL_TEXTURE5);
+        if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->tex);
+        else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
+    }
+    gBufferNew->writeUniform(PBRlightingShader);
+    Quad3D::draw();
+
+
+    //[3.2]-------parallel light shading----------
+    if(mainScene->parallelLights.size()>0) {
+        //write uniforms
+        //for vertex shader
+        PBRlightingShader->set4fm("projectionView", glm::mat4(1.0f));
+        PBRlightingShader->set4fm("model", glm::mat4(1.0f));
+        //for fragment shader
+        PBRlightingShader->setInt("lightType", LightType::ParallelLightType);
+        PBRlightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+        PBRlightingShader->setInt("shadowMap", 10);
+        PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
+        gBufferNew->writeUniform(PBRlightingShader);
+        for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
+            auto light = mainScene->parallelLights[i];
+            light->writeUniform(PBRlightingShader);
+            if (light->castShadow) {
+                GL.activeTexture(GL_TEXTURE10);
+                GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
+            }
+            renderMesh(light->lightVolume);
+        }
+    }
+
+    //-------Enable Cull face for spot and point light-------//
+    GL.enable(GL_CULL_FACE);
+    GL.cullFace(GL_FRONT);
+    //-------------------------------------------------------//
+
+    //[3.3]-------spotlight shading----------
+    if(mainScene->spotLights.size()>0) {
+        //write uniforms
+        //for vertex shader
+        PBRlightingShader->set4fm("projectionView", projectionView);
+        PBRlightingShader->set4fm("model", glm::mat4(1.0f));
+        //for fragment shader
+        PBRlightingShader->setInt("lightType", LightType::SpotLightType);
+        PBRlightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+        PBRlightingShader->setInt("shadowMap", 10);
+        PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
+        gBufferNew->writeUniform(PBRlightingShader);
+        for (int i = 0; i < mainScene->spotLights.size(); ++i) {
+            auto light = mainScene->spotLights[i];
+            light->writeUniform(PBRlightingShader);
+            if (light->castShadow) {
+                GL.activeTexture(GL_TEXTURE10);
+                GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
+            }
+            renderMesh(light->lightVolume);
+        }
+    }
+
+    //[3.4]-------point light shading----------
+    if(mainScene->pointLights.size()>0) {
+        //write uniforms
+        //for vertex shader
+        PBRlightingShader->set4fm("projectionView", projectionView);//NOTE. we also need to set 'model' matrix for every light
+        //for fragment shader
+        PBRlightingShader->setInt("lightType", LightType::PointLightType);
+        PBRlightingShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+        PBRlightingShader->setInt("shadowMap", 10);//useless actually,otherwise cause gl_invalid_operation!
+        PBRlightingShader->setInt("shadowCubeMap", 11);
+        gBufferNew->writeUniform(PBRlightingShader);
+        for (int i = 0; i < mainScene->pointLights.size(); ++i) {
+            auto light = mainScene->pointLights[i];
+            PBRlightingShader->set4fm("model", glm::translate(glm::mat4(1.0f), light->position));//set 'model' matrix
+            light->writeUniform(PBRlightingShader);
+            if (light->castShadow) {
+                GL.activeTexture(GL_TEXTURE11);
+                GL.bindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->depthAttachment->getId());
+            }
+            renderMesh(light->lightVolume);
+        }
+    }
+
+    //-------Restore OpenGL state-------//
+    GL.cullFace(GL_BACK);
+    GL.disable(GL_CULL_FACE);
+    GL.enable(GL_DEPTH_TEST);
+    GL.disable(GL_BLEND);
+    //----------------------------------//
+
+    //-----------------------------
+    //4. custom forward rendering
+    //-----------------------------
+    if(!mainScene->forwardMeshes.empty()) {
+        //copy depth
+        if (deferredTarget) {
+            gBufferNew->copyDepthBitTo(deferredTarget->fbo);
+            //todo. gBuffer->copyDepthBitTo will change read buffer and write buffer, add deferredTarget->bind(); is safer
+            deferredTarget->setDrawBuffers(2);//open attachment0 for color and attachment1 for velocity
+        } else {
+            //WARNING.when deferredTarget is nullptr, the output graphics in the screen could be too dark to recognize
+            gBufferNew->copyDepthBitTo(0);
+        }
+        for (auto &fm:mainScene->forwardMeshes) {
+            fm->projectionView = projectionView;
+            fm->previousProjectionView = previousProjectionView;
+            fm->draw();
+        }
+    }
+
+    //-----------------------------
+    //5. post process
+    //-----------------------------
+    if(deferredTarget){
+        deferredTarget->unbind();
+        postprocess(frameDeltaTime);
+    }
+
+}
+
+

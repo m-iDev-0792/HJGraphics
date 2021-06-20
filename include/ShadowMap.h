@@ -4,7 +4,7 @@
 
 #ifndef HJGRAPHICS_SHADOWMAP_H
 #define HJGRAPHICS_SHADOWMAP_H
-#include "OpenGLHeader.h"
+#include "FrameBuffer.h"
 namespace HJGraphics {
 	class ShadowMap {
 	public:
@@ -26,6 +26,19 @@ namespace HJGraphics {
 		ShadowCubeMap(int _width, int _height=0);
 		void bindFBO();
 	};
+
+
+    class ShadowMapNew :public FrameBufferNew{
+    public:
+        ShadowMapNew();
+        ShadowMapNew(int _width, int _height);
+    };
+    class ShadowCubeMapNew:public FrameBufferNew {
+    public:
+        ShadowCubeMapNew();
+        ShadowCubeMapNew(int _width, int _height=0);
+        void bindAttachments() override;
+    };
 }
 
 #endif

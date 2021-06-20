@@ -1,10 +1,8 @@
 #version 330 core
-layout (location = 0) out vec4 gPositionDepth;
-layout (location = 1) out vec3 gNormal;
-layout (location = 2) out vec4 gDiffSpec;
-layout (location = 3) out vec4 gShinAlphaReflectRefract;
-layout (location = 4) out vec3 gAmbiDiffSpecStrength;
-layout (location = 5) out vec2 gVelocity;
+layout (location = 0) out vec4 gNormalDepth;
+layout (location = 1) out vec4 gDiffSpec;
+layout (location = 2) out vec4 gAmbiDiffSpecStrengthShin;
+layout (location = 3) out vec2 gVelocity;
 
 
 in vec3 normal;
@@ -21,11 +19,7 @@ struct Material{
     float ambientStrength;
     float diffuseStrength;
     float specularStrength;
-
     float shininess;
-    float alpha;
-    float reflective;
-    float refractive;
 
     sampler2D diffuseMap;
     sampler2D specularMap;
@@ -41,9 +35,12 @@ float linearizeDepth(float depth,float zNear,float zFar){
 }
 void main(){
 	//----------GBuffer output--------------
-	//gPosition
-	gPositionDepth.xyz=position;
-    gPositionDepth.w=linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
+	//gNormalDepth
+    gNormalDepth.xyz=normal;
+    vec3 N=texture(material.normalMap,uv).rgb;
+    N = normalize(N * 2.0 - 1.0);
+    gNormalDepth.xyz=normalize(TBN * N);
+    gNormalDepth.w=linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
 	//gDiffSpec
 	vec3 diff=vec3(1.0);
     diff=texture(material.diffuseMap,uv).rgb;
@@ -53,17 +50,8 @@ void main(){
     spec=texture(material.specularMap,uv).r;
 	gDiffSpec=vec4(diff,spec);
 
-	//gNormal
-	gNormal=normal;
-    vec3 N=texture(material.normalMap,uv).rgb;
-    N = normalize(N * 2.0 - 1.0);
-    gNormal=normalize(TBN * N);
-
-    //gShinAlphaReflectRefract
-    gShinAlphaReflectRefract=vec4(material.shininess,material.alpha,material.reflective,material.refractive);
-
-    //gAmbiDiffSpecStrength
-    gAmbiDiffSpecStrength=vec3(material.ambientStrength,material.diffuseStrength,material.specularStrength);
+    //gAmbiDiffSpecStrengthShin
+    gAmbiDiffSpecStrengthShin=vec4(material.ambientStrength,material.diffuseStrength,material.specularStrength,material.shininess);
 
     //gVelocity   why in fragment shader? avoid interpolation
     vec4 positionNDC=projection*view*vec4(position,1.0);

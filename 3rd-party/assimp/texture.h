@@ -181,7 +181,7 @@ struct aiTexture {
      */
     C_STRUCT aiTexel* pcData;
 
-    /** Texture original filename
+    /** Texture2D original filename
     *
     * Used to get the texture reference
     */

@@ -7,6 +7,9 @@ uniform int gammaCorrection;
 const float gamma = 2.2;
 uniform mat4 projectionView;
 uniform mat4 previousProjectionView;
+uniform mat4 model;
+uniform mat4 previousModel;
+
 void main(){
     vec3 color;
     if(gammaCorrection==1)color = pow(texture(skybox, position).xyz, vec3(gamma));
@@ -14,10 +17,10 @@ void main(){
     FragColor = vec4(color,1.0);
 
     //gVelocity   why in fragment shader? avoid interpolation
-    vec4 positionNDC=projectionView*vec4(position,1.0);
+    vec4 positionNDC=projectionView*model*vec4(position,1.0);
     positionNDC/=positionNDC.w;
     positionNDC.xy=positionNDC.xy*0.5+0.5;
-    vec4 previousPositionNDC=previousProjectionView*vec4(position,1.0);
+    vec4 previousPositionNDC=previousProjectionView*previousModel*vec4(position,1.0);
     previousPositionNDC/=previousPositionNDC.w;
     previousPositionNDC.xy=previousPositionNDC.xy*0.5+0.5;
     gVelocity=positionNDC.xy-previousPositionNDC.xy;

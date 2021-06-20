@@ -3,6 +3,7 @@
 //
 
 #include "GBuffer.h"
+#include "Texture.h"
 #include <string>
 #include <iostream>
 void HJGraphics::GBuffer::clearBind() {
@@ -18,7 +19,7 @@ void HJGraphics::GBuffer::unbind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void HJGraphics::GBuffer::copyDepthBit(GLuint target) {
+void HJGraphics::GBuffer::copyDepthBitTo(GLuint target) {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, target);
 	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST );
@@ -30,9 +31,9 @@ HJGraphics::BlinnPhongGBuffer::BlinnPhongGBuffer(int _width, int _height): GBuff
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-	//set up position and depth(in linear space)
-	glGenTextures(1, &gPositionDepth);
-	GL.bindTexture(GL_TEXTURE_2D, gPositionDepth);
+	//set up normal and depth(in linear space)
+	glGenTextures(1, &gNormalDepth);
+	GL.bindTexture(GL_TEXTURE_2D, gNormalDepth);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -40,16 +41,7 @@ HJGraphics::BlinnPhongGBuffer::BlinnPhongGBuffer(int _width, int _height): GBuff
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPositionDepth, 0);
-
-	//set up normal
-	glGenTextures(1, &gNormal);
-	GL.bindTexture(GL_TEXTURE_2D, gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gNormalDepth, 0);
 
 	//set up diff and spec
 	glGenTextures(1, &gDiffSpec);
@@ -58,29 +50,20 @@ HJGraphics::BlinnPhongGBuffer::BlinnPhongGBuffer(int _width, int _height): GBuff
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gDiffSpec, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gDiffSpec, 0);
 
 	//set up shinness alpha reflection refraction
-	glGenTextures(1, &gShinAlphaReflectRefract);
-	GL.bindTexture(GL_TEXTURE_2D, gShinAlphaReflectRefract);
+	glGenTextures(1, &gAmbiDiffSpecStrengthShin);
+	GL.bindTexture(GL_TEXTURE_2D, gAmbiDiffSpecStrengthShin);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gShinAlphaReflectRefract, 0);
-
-	//set up strength
-	glGenTextures(1, &gAmbiDiffSpecStrength);
-	GL.bindTexture(GL_TEXTURE_2D, gAmbiDiffSpecStrength);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, gAmbiDiffSpecStrength, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAmbiDiffSpecStrengthShin, 0);
 	
 	//bind color attachment 
-	GLuint attachments[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
-	glDrawBuffers(5, attachments);
+	GLuint attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+	glDrawBuffers(3, attachments);
 	
 	//set up rbo
 	glGenRenderbuffers(1, &rbo);
@@ -101,22 +84,15 @@ HJGraphics::BlinnPhongGBuffer::BlinnPhongGBuffer(int _width, int _height, GLuint
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-	//set up position and depth(in linear space)
-	glGenTextures(1, &gPositionDepth);
-	GL.bindTexture(GL_TEXTURE_2D, gPositionDepth);
+	//set up normal and depth(in linear space)
+	glGenTextures(1, &gNormalDepth);
+	GL.bindTexture(GL_TEXTURE_2D, gNormalDepth);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	//set up normal
-	glGenTextures(1, &gNormal);
-	GL.bindTexture(GL_TEXTURE_2D, gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	//set up diff and spec
 	glGenTextures(1, &gDiffSpec);
@@ -125,17 +101,10 @@ HJGraphics::BlinnPhongGBuffer::BlinnPhongGBuffer(int _width, int _height, GLuint
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	//set up shinness alpha reflection refraction
-	glGenTextures(1, &gShinAlphaReflectRefract);
-	GL.bindTexture(GL_TEXTURE_2D, gShinAlphaReflectRefract);
+	//set up strength shin
+	glGenTextures(1, &gAmbiDiffSpecStrengthShin);
+	GL.bindTexture(GL_TEXTURE_2D, gAmbiDiffSpecStrengthShin);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	//set up strength
-	glGenTextures(1, &gAmbiDiffSpecStrength);
-	GL.bindTexture(GL_TEXTURE_2D, gAmbiDiffSpecStrength);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -152,33 +121,25 @@ HJGraphics::BlinnPhongGBuffer::BlinnPhongGBuffer(int _width, int _height, GLuint
 
 void HJGraphics::BlinnPhongGBuffer::bindTextures() {
 	GL.activeTexture(GL_TEXTURE0);
-	GL.bindTexture(GL_TEXTURE_2D, gPositionDepth);
+	GL.bindTexture(GL_TEXTURE_2D, gNormalDepth);
 	GL.activeTexture(GL_TEXTURE1);
-	GL.bindTexture(GL_TEXTURE_2D,gNormal);
-	GL.activeTexture(GL_TEXTURE2);
 	GL.bindTexture(GL_TEXTURE_2D,gDiffSpec);
-	GL.activeTexture(GL_TEXTURE3);
-	GL.bindTexture(GL_TEXTURE_2D,gShinAlphaReflectRefract);
-	GL.activeTexture(GL_TEXTURE4);
-	GL.bindTexture(GL_TEXTURE_2D,gAmbiDiffSpecStrength);
+	GL.activeTexture(GL_TEXTURE2);
+	GL.bindTexture(GL_TEXTURE_2D,gAmbiDiffSpecStrengthShin);
 }
 void HJGraphics::BlinnPhongGBuffer::writeUniform(std::shared_ptr<Shader> shader) {
-	shader->setInt("gPositionDepth",0);
-	shader->setInt("gNormal",1);
-	shader->setInt("gDiffSpec",2);
-	shader->setInt("gShinAlphaReflectRefract",3);
-	shader->setInt("gAmbiDiffSpecStrength",4);
+	shader->setInt("gNormalDepth",0);
+	shader->setInt("gDiffSpec",1);
+	shader->setInt("gAmbiDiffSpecStrengthShin",2);
 	shader->set2fv("gBufferSize",glm::vec2(width,height));
 }
 void HJGraphics::BlinnPhongGBuffer::bindAttachmentsSetDrawBuffers() {
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPositionDepth, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gDiffSpec, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gShinAlphaReflectRefract, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, gAmbiDiffSpecStrength, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT5, GL_TEXTURE_2D, sharedVelocity, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gNormalDepth, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gDiffSpec, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAmbiDiffSpecStrengthShin, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, sharedVelocity, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-	setDrawBuffers(6);
+	setDrawBuffers(4);
 }
 //////////////////////////////////////////////////////////////////
 HJGraphics::PBRGBuffer::PBRGBuffer(int _width, int _height): GBuffer(_width, _height) {
@@ -186,8 +147,8 @@ HJGraphics::PBRGBuffer::PBRGBuffer(int _width, int _height): GBuffer(_width, _he
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 	//set up position and depth(in linear space)
-	glGenTextures(1, &gPositionDepth);
-	GL.bindTexture(GL_TEXTURE_2D, gPositionDepth);
+	glGenTextures(1, &gNormalDepth);
+	GL.bindTexture(GL_TEXTURE_2D, gNormalDepth);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -195,16 +156,7 @@ HJGraphics::PBRGBuffer::PBRGBuffer(int _width, int _height): GBuffer(_width, _he
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPositionDepth, 0);
-
-	//set up normal
-	glGenTextures(1, &gNormal);
-	GL.bindTexture(GL_TEXTURE_2D, gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gNormalDepth, 0);
 
 	//set up albedo and metallic
 	glGenTextures(1, &gAlbedoMetallic);
@@ -213,7 +165,7 @@ HJGraphics::PBRGBuffer::PBRGBuffer(int _width, int _height): GBuffer(_width, _he
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedoMetallic, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gAlbedoMetallic, 0);
 
 	//set up F0 and roughness
 	glGenTextures(1, &gF0Roughness);
@@ -222,11 +174,11 @@ HJGraphics::PBRGBuffer::PBRGBuffer(int _width, int _height): GBuffer(_width, _he
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	//bind
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gF0Roughness, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gF0Roughness, 0);
 
 	//bind color attachment
-	GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3};
-	glDrawBuffers(4, attachments);
+	GLuint attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+	glDrawBuffers(3, attachments);
 
 	//set up rbo
 	glGenRenderbuffers(1, &rbo);
@@ -245,21 +197,14 @@ HJGraphics::PBRGBuffer::PBRGBuffer(int _width, int _height,GLuint _sharedVelocit
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 	//set up position and depth(in linear space)
-	glGenTextures(1, &gPositionDepth);
-	GL.bindTexture(GL_TEXTURE_2D, gPositionDepth);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+	glGenTextures(1, &gNormalDepth);
+	GL.bindTexture(GL_TEXTURE_2D, gNormalDepth);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	//set up normal
-	glGenTextures(1, &gNormal);
-	GL.bindTexture(GL_TEXTURE_2D, gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	//set up albedo and metallic
 	glGenTextures(1, &gAlbedoMetallic);
@@ -288,28 +233,84 @@ HJGraphics::PBRGBuffer::PBRGBuffer(int _width, int _height,GLuint _sharedVelocit
 }
 void HJGraphics::PBRGBuffer::bindTextures() {
 	GL.activeTexture(GL_TEXTURE0);
-	GL.bindTexture(GL_TEXTURE_2D, gPositionDepth);
+	GL.bindTexture(GL_TEXTURE_2D, gNormalDepth);
 	GL.activeTexture(GL_TEXTURE1);
-	GL.bindTexture(GL_TEXTURE_2D, gNormal);
-	GL.activeTexture(GL_TEXTURE2);
 	GL.bindTexture(GL_TEXTURE_2D, gAlbedoMetallic);
-	GL.activeTexture(GL_TEXTURE3);
+	GL.activeTexture(GL_TEXTURE2);
 	GL.bindTexture(GL_TEXTURE_2D, gF0Roughness);
 
 }
 void HJGraphics::PBRGBuffer::writeUniform(std::shared_ptr<Shader> shader) {
-	shader->setInt("gPositionDepth",0);
-	shader->setInt("gNormal",1);
-	shader->setInt("gAlbedoMetallic",2);
-	shader->setInt("gF0Roughness",3);
+	shader->setInt("gNormalDepth",0);
+	shader->setInt("gAlbedoMetallic",1);
+	shader->setInt("gF0Roughness",2);
 	shader->set2fv("gBufferSize",glm::vec2(width,height));
 }
 void HJGraphics::PBRGBuffer::bindAttachmentsSetDrawBuffers() {
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPositionDepth, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedoMetallic, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gF0Roughness, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, sharedVelocity, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gNormalDepth, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gAlbedoMetallic, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gF0Roughness, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, sharedVelocity, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-	setDrawBuffers(5);
+	setDrawBuffers(4);
+}
+
+////////////////////////////////////////////New////////////////////////////////////////////
+HJGraphics::GBufferNew::GBufferNew(int _width, int _height) {
+    width=_width;
+    height=_height;
+    //set up normal
+    auto gNormalTex=std::make_shared<Texture2D>(width,height,GL_RGB16F,GL_RGB,GL_FLOAT,GL_NEAREST,GL_CLAMP_TO_EDGE);
+    auto gNormal=std::make_shared<FrameBufferAttachment>(gNormalTex,0,"gNormal");
+    colorAttachments.push_back(gNormal);
+    //set up albedo and metallic
+    auto gAlbedoMetallicTex=std::make_shared<Texture2D>(width,height,GL_RGBA,GL_RGBA,GL_UNSIGNED_BYTE,GL_NEAREST,GL_CLAMP_TO_EDGE);
+    auto gAlbedoMetallic=std::make_shared<FrameBufferAttachment>(gAlbedoMetallicTex,1,"gAlbedoMetallic");
+    colorAttachments.push_back(gAlbedoMetallic);
+    //set up F0 and roughness
+    auto gF0RoughnessTex=std::make_shared<Texture2D>(width,height,GL_RGBA,GL_RGBA,GL_UNSIGNED_BYTE,GL_NEAREST,GL_CLAMP_TO_EDGE);
+    auto gF0Roughness=std::make_shared<FrameBufferAttachment>(gF0RoughnessTex,2,"gF0Roughness");
+    colorAttachments.push_back(gF0Roughness);
+    //set up sharedVelocity
+    auto gVelocityTex=std::make_shared<Texture2D>(width,height,GL_RG16F,GL_RG,GL_FLOAT,GL_NEAREST,GL_CLAMP_TO_EDGE);
+    auto gVelocity=std::make_shared<FrameBufferAttachment>(gVelocityTex,3,"gVelocity");
+    colorAttachments.push_back(gVelocity);
+    //set up rbo
+    auto depthStencilTex=std::make_shared<Texture2D>(width,height,GL_DEPTH24_STENCIL8,GL_DEPTH_STENCIL,GL_UNSIGNED_INT_24_8,GL_NEAREST,GL_CLAMP_TO_EDGE);
+    auto depthStencil=std::make_shared<FrameBufferAttachment>(depthStencilTex,0,"gDepth");
+    depthAttachment=depthStencil;
+    stencilAttachment=depthStencil;
+
+    FrameBufferNew::bindAttachments();
+    setDrawBuffers(colorAttachments.size());
+
+    //check framebuffer completeness
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::GBufferNew:: Framebuffer is not complete!" << std::endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+
+void HJGraphics::GBufferNew::bindTextures() const{
+    for(int i=0;i<colorAttachments.size()-1;++i){
+        GL.activeTexture(GL_TEXTURE0+i);
+        GL.bindTexture(GL_TEXTURE_2D, colorAttachments[i]->getId());
+    }
+    if(hasDepthAttachment()){
+        GL.activeTexture(GL_TEXTURE3);
+        GL.bindTexture(GL_TEXTURE_2D,depthAttachment->getId());
+    }else{
+        std::cout<<"Error @ GBuffer::bindTextures: no depth attachment to bind"<<std::endl;
+    }
+
+}
+void HJGraphics::GBufferNew::writeUniform(std::shared_ptr<Shader> shader) const {
+    for(int i=0;i<colorAttachments.size()-1;++i){
+        shader->setInt(colorAttachments[i]->name,i);
+    }
+    if(hasDepthAttachment()){
+        shader->setInt(depthAttachment->name,3);
+
+    }
+    shader->set2fv("gBufferSize",glm::vec2(width,height));
 }
