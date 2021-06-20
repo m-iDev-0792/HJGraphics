@@ -38,7 +38,7 @@ namespace HJGraphics {
 		//important members!
 		int width,height;
 		std::shared_ptr<Scene> mainScene;
-		std::shared_ptr<FrameBuffer> deferredTarget;
+		std::shared_ptr<DeferredTarget> deferredTarget;
 
 		std::shared_ptr<SSAO> ssaoPass;
 		std::shared_ptr<SolidTexture> defaultAOTex;

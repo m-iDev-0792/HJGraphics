@@ -20,39 +20,6 @@ namespace HJGraphics{
             glBindRenderbuffer(GL_RENDERBUFFER, 0);
         }
     };
-	class FrameBuffer{
-	public:
-		unsigned int fbo;
-		unsigned int rbo;
-		unsigned int tex;
-		int width;
-		int height;
-		int internalFormat;
-		int format;
-		int dataType;
-		int filter;
-		bool hasDepthRBO;
-
-		static std::shared_ptr<Shader> defaultShader;
-
-		FrameBuffer(int _width,int _height,int _internalFormat=GL_RGB,int _format=GL_RGB,int _dataType=GL_UNSIGNED_BYTE,int _filter=GL_LINEAR,bool _hasDepthRBO=true);
-
-		void clearBind();
-
-		void bind();
-
-		void unbind();
-
-		void debugDrawBuffer();
-
-		virtual void bindAttachments();
-
-		void setDrawBuffers(int n){
-			std::vector<GLenum> attach(n,0);
-			for(int i=0;i<n;++i)attach[i]=GL_COLOR_ATTACHMENT0+i;
-			glDrawBuffers(n,&attach[0]);
-		}
-	};
 
 	enum class FrameBufferAttachmentType{
 	    Texture2D,
@@ -122,15 +89,13 @@ namespace HJGraphics{
         }
     };
 
-	class DeferredTarget: public FrameBuffer{
+	class DeferredTarget: public FrameBufferNew{
 	public:
-		GLuint sharedVelocity;
-		DeferredTarget(int _width,int _height):FrameBuffer(_width,_height,GL_RGBA16F,GL_RGBA,GL_FLOAT){
+        std::shared_ptr<FrameBufferAttachment> sharedVelocity;
 
+		DeferredTarget(int _width,int _height):FrameBufferNew(_width,_height,GL_RGBA16F,GL_RGBA,GL_FLOAT){
 		}
-		DeferredTarget(int _width,int _height, GLuint _sharedVelocity);
-
-		void bindAttachments() override;
+		DeferredTarget(int _width,int _height, std::shared_ptr<FrameBufferAttachment> _sharedVelocity);
 	};
 }
 

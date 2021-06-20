@@ -15,7 +15,7 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 
 	gBufferNew=std::make_shared<GBufferNew>(_width,_height);
 	gBufferNew->shader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
-    deferredTarget=std::make_shared<DeferredTarget>(_width, _height,gBufferNew->colorAttachments[3]->getId());
+    deferredTarget=std::make_shared<DeferredTarget>(_width, _height,gBufferNew->colorAttachments[3]);
 
 //	deferredTarget=std::make_shared<DeferredTarget>(_width, _height,sharedVelocity->id);
 
@@ -109,7 +109,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	{
 		ambientShader->setInt("ao",5);
 		GL.activeTexture(GL_TEXTURE5);
-		if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->tex);
+		if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
 		else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
 	}
 	gBuffer->writeUniform(ambientShader);
@@ -207,7 +207,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime,long long ela
 	if(!mainScene->forwardMeshes.empty()) {
 		//copy depth
 		if (deferredTarget) {
-            gBuffer->copyDepthBitTo(deferredTarget->fbo);
+            gBuffer->copyDepthBitTo(deferredTarget->id);
 			//todo. gBuffer->copyDepthBitTo will change read buffer and write buffer, add deferredTarget->bind(); is safer
 			deferredTarget->setDrawBuffers(2);//open attachment0 for color and attachment1 for velocity
 		} else {
@@ -277,9 +277,9 @@ void HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime) {
 	postprocessShader->setInt("motionBlurTargetFPS",motionBlurTargetFPS);
 	postprocessShader->setInt("frameDeltaTime",frameDeltaTime);
 	GL.activeTexture(GL_TEXTURE0);
-	GL.bindTexture(GL_TEXTURE_2D, deferredTarget->tex);
+	GL.bindTexture(GL_TEXTURE_2D, deferredTarget->colorAttachments[0]->getId());
 	GL.activeTexture(GL_TEXTURE1);
-	GL.bindTexture(GL_TEXTURE_2D, std::dynamic_pointer_cast<DeferredTarget>(deferredTarget)->sharedVelocity);
+	GL.bindTexture(GL_TEXTURE_2D, deferredTarget->colorAttachments[1]->getId());
 	GL.disable(GL_DEPTH_TEST);
 	Quad3D::draw();
 	GL.enable(GL_DEPTH_TEST);
@@ -469,7 +469,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	{
 		PBRlightingShader->setInt("gAO",5);
 		GL.activeTexture(GL_TEXTURE5);
-		if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->tex);
+		if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
 		else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
 	}
 	PBRgBuffer->writeUniform(PBRlightingShader);
@@ -563,7 +563,7 @@ void HJGraphics::DeferredRenderer::renderPBR(long long frameDeltaTime,long long 
 	if(!mainScene->forwardMeshes.empty()) {
 		//copy depth
 		if (deferredTarget) {
-            PBRgBuffer->copyDepthBitTo(deferredTarget->fbo);
+            PBRgBuffer->copyDepthBitTo(deferredTarget->id);
             //todo. gBuffer->copyDepthBitTo will change read buffer and write buffer, add deferredTarget->bind(); is safer
 			deferredTarget->setDrawBuffers(2);//open attachment0 for color and attachment1 for velocity
 		} else {
@@ -676,7 +676,7 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
     {
         PBRlightingShader->setInt("gAO",5);
         GL.activeTexture(GL_TEXTURE5);
-        if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->tex);
+        if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
         else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
     }
     gBufferNew->writeUniform(PBRlightingShader);
@@ -770,7 +770,7 @@ void HJGraphics::DeferredRenderer::renderNew(long long frameDeltaTime,long long 
     if(!mainScene->forwardMeshes.empty()) {
         //copy depth
         if (deferredTarget) {
-            gBufferNew->copyDepthBitTo(deferredTarget->fbo);
+            gBufferNew->copyDepthBitTo(deferredTarget->id);
             //todo. gBuffer->copyDepthBitTo will change read buffer and write buffer, add deferredTarget->bind(); is safer
             deferredTarget->setDrawBuffers(2);//open attachment0 for color and attachment1 for velocity
         } else {

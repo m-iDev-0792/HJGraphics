@@ -16,8 +16,8 @@ HJGraphics::SSAO::SSAO(glm::vec2 _ssaoSize, glm::vec2 _ssaoNoiseSize, float _sam
 	ssaoBias=_ssaoBias;
 	ssaoBlurRaidus=_ssaoBlurRadius;
 	//create ssao and ssaoBlured framebuffers
-	ssao=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
-	ssaoBlured=std::make_shared<FrameBuffer>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
+	ssao=std::make_shared<FrameBufferNew>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
+	ssaoBlured=std::make_shared<FrameBufferNew>(ssaoSize.x,ssaoSize.y,GL_RED,GL_RED,GL_FLOAT,GL_LINEAR,false);
 	if(ssaoShader==nullptr)ssaoShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/ssao.vs.glsl"_vs, "../shader/deferred/ssao.fs.glsl"_fs});
 	if(ssaoBlurShader==nullptr)ssaoBlurShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/ssao.vs.glsl"_vs, "../shader/deferred/ssaoBlur.fs.glsl"_fs});
 	generateSamplesAndNoise();
@@ -57,7 +57,7 @@ void HJGraphics::SSAO::blur() {
 	ssaoBlurShader->setInt("radius",ssaoBlurRaidus);
 	ssaoBlurShader->setInt("ssao",0);
 	GL.activeTexture(GL_TEXTURE0);
-	GL.bindTexture(GL_TEXTURE_2D,ssao->tex);
+	GL.bindTexture(GL_TEXTURE_2D,ssao->colorAttachments[0]->getId());
 	Quad2D::draw();
 	ssaoBlured->unbind();
 }

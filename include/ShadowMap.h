@@ -6,27 +6,6 @@
 #define HJGRAPHICS_SHADOWMAP_H
 #include "FrameBuffer.h"
 namespace HJGraphics {
-	class ShadowMap {
-	public:
-		GLuint fbo;
-		GLuint tex;
-		int width;
-		int height;
-		ShadowMap();
-		ShadowMap(int _width, int _height);
-		void bindFBO();
-	};
-	class ShadowCubeMap {
-	public:
-		GLuint fbo;
-		GLuint tex;
-		int width;
-		int height;
-		ShadowCubeMap();
-		ShadowCubeMap(int _width, int _height=0);
-		void bindFBO();
-	};
-
 
     class ShadowMapNew :public FrameBufferNew{
     public:
