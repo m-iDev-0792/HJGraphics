@@ -3,6 +3,7 @@
 //
 
 #include "GLFWWrap.h"
+#include "Log.h"
 HJGraphics::GLFWWrap* HJGraphics::GLFWWrap::currentWindow= nullptr;
 bool HJGraphics::GLFWWrap::isFirstInit=true;
 
@@ -14,7 +15,7 @@ HJGraphics::GLFWWrap::GLFWWrap(int _width, int _height, std::string _title): wid
 
 	windowPtr=glfwCreateWindow(_width,_height,_title.c_str(), nullptr, nullptr);
 	if(windowPtr== nullptr){
-		std::cout<<"ERROR @ GLFWWindows : Can't create window "<<windowTitle<<std::endl;
+		SPDLOG_ERROR("Can't create window {}",windowTitle.c_str());
 		throw "ERROR @ GLFWWindows : failed to create glfw window";
 	}
 	glfwSetFramebufferSizeCallback(windowPtr, staticFramebufferSizeCallback);
@@ -24,7 +25,7 @@ HJGraphics::GLFWWrap::GLFWWrap(int _width, int _height, std::string _title): wid
 	glfwGetFramebufferSize(windowPtr, &bufferWidth, &bufferHeight);
 	glfwMakeContextCurrent(windowPtr);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		SPDLOG_CRITICAL("Failed to initialize GLAD");
 		return;
 	}
 	currentWindow=this;

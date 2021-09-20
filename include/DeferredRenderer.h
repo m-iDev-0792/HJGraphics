@@ -32,6 +32,7 @@ namespace HJGraphics {
 	private:
 		//important members!
 		int width,height;
+		int targetWidth,targetHeight;
 		std::shared_ptr<Scene> mainScene;
 		std::shared_ptr<DeferredTarget> deferredTarget;
 

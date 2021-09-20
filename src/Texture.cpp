@@ -4,6 +4,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include "Texture.h"
+#include "Log.h"
 #include "stb/stb_image.h"
 
 /*
@@ -89,7 +90,7 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
             else internalFormat=gammaCorrection?GL_SRGB_ALPHA:format;
         }
         else{
-            std::cerr<<"ERROR @ Texture2D::loadFromPath : can't solve image channel (channel = "<<imgChannel<<")"<<std::endl;
+	        SPDLOG_ERROR("Can't solve image channel (channel = {})",imgChannel);
             return;
         }
         texWidth=imgWidth;texHeight=imgHeight;texChannel=imgChannel;
@@ -104,7 +105,7 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
         stbi_image_free(data);
         path=_path;
     }else{
-        std::cerr << "ERROR @ Texture2D::loadFromPath : can't load image: " << _path << std::endl;
+	    SPDLOG_ERROR("Can't load image from {}",_path.c_str());
     }
 
 }
@@ -207,7 +208,7 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
         else if(imgChannel==4){
             format=GL_RGBA;
         }else{
-            std::cout<<"ERROR @ CubeMapTexture::loadFromPath : can't solve image channel"<<std::endl;
+	        SPDLOG_ERROR("Can't solve image channel {} while processing cube map {}",imgChannel,tex[i].c_str());
             return;
         }
         if(data!= nullptr) {
@@ -216,7 +217,7 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
             stbi_image_free(data);
 
         }else{
-            std::cout<<"ERROR @ CubeMapTexture::loadFromPath : can't load image: "<<tex[i]<<std::endl;
+	        SPDLOG_ERROR("Can't load image {}",tex[i].c_str());
         }
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, texMinFilter);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, texMagFilter);

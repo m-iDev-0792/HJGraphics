@@ -5,7 +5,7 @@
 #include "FrameBuffer.h"
 #include "Material.h"
 #include "Quad.h"
-
+#include "Log.h"
 std::shared_ptr<HJGraphics::Shader> HJGraphics::FrameBuffer::defaultShader= nullptr;
 
 HJGraphics::DeferredTarget::DeferredTarget(int _width,int _height, std::shared_ptr<FrameBufferAttachment> _sharedVelocity): FrameBuffer(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT) {
@@ -48,8 +48,9 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, int _internalForma
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorAttachments.front()->attachment->id, 0);
 
     //check framebuffer completeness
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+	    SPDLOG_ERROR("Framebuffer is not complete!");
+	}
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, std::vector<std::shared_ptr<HJGraphics::FrameBufferAttachment>>& _colors, std::shared_ptr<HJGraphics::FrameBufferAttachment> _depth, std::shared_ptr<HJGraphics::FrameBufferAttachment> _stencil){
@@ -62,14 +63,15 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, std::vector<std::s
     glBindFramebuffer(GL_FRAMEBUFFER, id);
     FrameBuffer::bindAttachments();
     //check framebuffer completeness
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+	    SPDLOG_ERROR("Framebuffer is not complete!");
+	}
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void HJGraphics::FrameBuffer::debugDrawBuffer(int index) {
     if(colorAttachments.size()>=index){
-        std::cerr<<"Error @ FrameBuffer::debugDrawBuffer : index exceed attachment index range"<<std::endl;
+	    SPDLOG_ERROR("index exceed attachment index range");
         return;
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -142,7 +144,7 @@ void HJGraphics::FrameBuffer::copyDepthBitTo(GLuint target) {
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, target);
         glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST );
     }else{
-        std::cout<<"Warning @ FrameBufer::copyDepthBitTo : currrent framebuffer does not have a depth attachment"<<std::endl;
+	    SPDLOG_WARN("currrent framebuffer does not have a depth attachment");
     }
 
 }

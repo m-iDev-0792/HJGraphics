@@ -3,6 +3,7 @@
 //
 
 #include "TextRenderer.h"
+#include "Log.h"
 std::shared_ptr<HJGraphics::Shader> HJGraphics::TextRenderer::textShader=nullptr;
 HJGraphics::TextRenderer::TextRenderer(std::string _font,glm::vec2 _size,int _textHeight) {
 	if(textShader==nullptr)textShader=std::make_shared<Shader>(ShaderCodeList{"../shader/text/text.vs.glsl"_vs, "../shader/text/text.fs.glsl"_fs});
@@ -12,12 +13,14 @@ HJGraphics::TextRenderer::TextRenderer(std::string _font,glm::vec2 _size,int _te
 	projection=glm::ortho(0.0f, size.x, 0.0f, size.y);//NOTE the origin is on the lower left corner
 
 	FT_Library ft;
-	if (FT_Init_FreeType(&ft))
-		std::cerr << "ERROR @ TextRenderer: Could not init FreeType Library" << std::endl;
+	if (FT_Init_FreeType(&ft)) {
+		SPDLOG_ERROR("Could not init FreeType Library");
+	}
 
 	FT_Face face;
-	if (FT_New_Face(ft, fontPath.c_str(), 0, &face))
-		std::cerr << "ERROR @ TextRenderer: Failed to load font" << std::endl;
+	if (FT_New_Face(ft, fontPath.c_str(), 0, &face)){
+		SPDLOG_ERROR("Failed to load font");
+	}
 
 	//here width=0 means we want to fix height and get dynamic width
 	FT_Set_Pixel_Sizes(face, 0, textHeight);
@@ -27,7 +30,7 @@ HJGraphics::TextRenderer::TextRenderer(std::string _font,glm::vec2 _size,int _te
 	for (GLubyte c = 0; c < 128; c++){
 		//load characters
 		if (FT_Load_Char(face, c, FT_LOAD_RENDER)){
-			std::cout << "ERROR @ TextRenderer: Failed to load Glyph" << std::endl;
+			SPDLOG_ERROR("Failed to load Glyph");
 			continue;
 		}
 

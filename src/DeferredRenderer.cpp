@@ -58,11 +58,11 @@ void HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime) {
 	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
 	glm::mat4 inverseProjectionView=glm::inverse(projectionView);
 	glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
-
+	glViewport(0,0,targetWidth,targetHeight);
 	postprocessShader->use();
 	postprocessShader->setInt("screenTexture",0);
 	postprocessShader->setInt("velocity",1);
-	postprocessShader->set2fv("size",glm::vec2(width,height));
+	postprocessShader->set2fv("size",glm::vec2(targetWidth,targetHeight));
 
 	postprocessShader->setBool("enableMotionBlur",enableMotionBlur);
 	postprocessShader->setInt("motionBlurSampleNum",motionBlurSampleNum);

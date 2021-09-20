@@ -136,7 +136,12 @@ void HJGraphics::Window::scrollCallback(GLFWwindow *window, double xoffset, doub
 	pCamera->fov=fov;
 }
 void HJGraphics::Window::framebufferSizeCallback(GLFWwindow *window, int width, int height) {
-
+	bufferWidth=width;
+	bufferHeight=height;
+	if(renderer){
+		renderer->targetWidth=width;
+		renderer->targetHeight=height;
+	}
 }
 void HJGraphics::Window::customInit() {
 	GL.enable(GL_DEPTH_TEST);
@@ -146,6 +151,10 @@ void HJGraphics::Window::customInit() {
 	if(renderer)renderer->renderInit();
 	enableMotionBlur=renderer->enableMotionBlur;
 	enableAO=renderer->enableAO;
+	if(renderer){
+		renderer->targetWidth=bufferWidth;
+		renderer->targetHeight=bufferHeight;
+	}
 }
 void HJGraphics::Window::run() {
 	glfwMakeContextCurrent(windowPtr);

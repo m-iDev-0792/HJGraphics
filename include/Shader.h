@@ -133,7 +133,7 @@ namespace HJGraphics {
 	private:
 		std::vector<GLuint> fragSubroutine;
 
-		bool checkCompileError(GLuint shader, std::string type, std::string src=std::string());
+		static bool checkCompileError(GLuint shader, const std::string& type, const std::string& src=std::string());
 
 	};
 	void preprocessShaderCode(std::string &source, const std::string &basePath);
