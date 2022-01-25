@@ -4,17 +4,16 @@
 
 #include "OpenGLCache.h"
 #define HJG_GLUINT_INIT_VALUE -1
+#define HJG_MAX_TEXTURE_NUM 64
+
+
 HJGraphics::OpenGLCache HJGraphics::GL;
-HJGraphics::OpenGLCache::OpenGLCache() {
+HJGraphics::OpenGLCache::OpenGLCache():textureBinding(HJG_MAX_TEXTURE_NUM,HJG_GLUINT_INIT_VALUE),textureType(HJG_MAX_TEXTURE_NUM,0) {
 	//vao= vbo= ebo= fbo=HJG_GLUINT_INIT_VALUE;
 	program=HJG_GLUINT_INIT_VALUE;//set to max
 	currentTextureSlot=0;
 	blendFuncSrc=blendFuncDst=0;
 	cullFaceFront=0;
-	for(int i=0;i<15;++i){
-		textureBinding.push_back(HJG_GLUINT_INIT_VALUE);//set to max
-		textureType.push_back(0);//set to non-texture
-	}
 }
 void HJGraphics::OpenGLCache::enable(GLenum _state) {
 	auto result=states.find(_state);

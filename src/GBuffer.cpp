@@ -4,6 +4,7 @@
 
 #include "GBuffer.h"
 #include "Texture.h"
+#include "Log.h"
 #include <string>
 #include <iostream>
 
@@ -36,8 +37,9 @@ HJGraphics::GBuffer::GBuffer(int _width, int _height) {
     setDrawBuffers(colorAttachments.size());
 
     //check framebuffer completeness
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR::GBuffer:: Framebuffer is not complete!" << std::endl;
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+	    SPDLOG_ERROR("Framebuffer is not complete!");
+	}
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -51,7 +53,7 @@ void HJGraphics::GBuffer::bindTextures() const{
         GL.activeTexture(GL_TEXTURE3);
         GL.bindTexture(GL_TEXTURE_2D,depthAttachment->getId());
     }else{
-        std::cout<<"Error @ GBuffer::bindTextures: no depth attachment to bind"<<std::endl;
+	    SPDLOG_ERROR("No depth attachment to bind");
     }
 
 }

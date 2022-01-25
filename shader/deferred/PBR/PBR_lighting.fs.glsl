@@ -100,10 +100,11 @@ void main() {
     float NdotWo  = max(dot(N, Wo), 0.0);
     float NdotWi  = max(dot(N, Wi), 0.0);
     float HdotWo  = max(dot(H, Wo), 0.0);
-    float BRDFdenom   = 4.0*NdotWo*NdotWi+0.0001;
+    float NdotH   = max(dot(N, H) , 0.0);
+    float BRDFdenom   = 4.0*NdotWo*NdotWi+0.000001;
 
     //BRDF terms
-    vec3  F = fresnelSchlickFast(HdotWo,F0);
+    vec3  F = fresnelSchlickFast(NdotWo,F0); //Fresnel effect NdotWo > NdotH > HdotWo, though in equation is HdotWo
     float D = D_GGX_TR(N,H,roughness);
     float G = GeometrySmith(NdotWo,NdotWi, roughness);
 
@@ -111,6 +112,6 @@ void main() {
     vec3 kD = vec3(1.0) - kS;
     kD *= 1.0 - metallic;//pure metal doesn't have diffuse
     //review again: Lo=  (kD * albedo / pi + kD * D * G * F/(4 * WiDotN * WoDotN)) * Li * WiDotN
-    vec3 Lo=(kD*albedo/PI + D*G*F/BRDFdenom) * Li * NdotWi;//note: no kS because F already contain it
+    vec3 Lo=(kD*albedo/PI + D*G*F/BRDFdenom) * Li * NdotWi;//note: no kS because F already contains it
     FragColor=vec4(Lo,1.0);
 }

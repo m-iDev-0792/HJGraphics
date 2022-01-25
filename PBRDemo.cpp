@@ -2,14 +2,15 @@
 // Created by 何振邦 on 2020/7/15.
 //
 
-#include <iostream>
 #include "Shader.h"
 #include "HJGraphics.h"
+#include "Log.h"
 using namespace std;
 using namespace glm;
 using namespace HJGraphics;
 int main() {
-
+	INIT_HJGRAPHICS_LOG
+	SPDLOG_INFO("This is a test logging message!");
 	Window window(800,600,"HJGraphics");
 
 	glm::vec3 cameraPos=glm::vec3(5.0f,5.0f,10.0f);

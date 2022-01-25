@@ -3,7 +3,7 @@
 //
 
 #include "Window.h"
-#include "glm/gtc/quaternion.hpp"
+#include "Log.h"
 HJGraphics::Window::Window(){
 
 }
@@ -136,9 +136,15 @@ void HJGraphics::Window::scrollCallback(GLFWwindow *window, double xoffset, doub
 	pCamera->fov=fov;
 }
 void HJGraphics::Window::framebufferSizeCallback(GLFWwindow *window, int width, int height) {
-
+	bufferWidth=width;
+	bufferHeight=height;
+	if(renderer){
+		renderer->targetWidth=width;
+		renderer->targetHeight=height;
+	}
 }
 void HJGraphics::Window::customInit() {
+	SPDLOG_INFO("customInit started");
 	GL.enable(GL_DEPTH_TEST);
 	GL.enable(GL_LINE_SMOOTH);
 //	GL.enable(GL_CULL_FACE);
@@ -146,10 +152,15 @@ void HJGraphics::Window::customInit() {
 	if(renderer)renderer->renderInit();
 	enableMotionBlur=renderer->enableMotionBlur;
 	enableAO=renderer->enableAO;
+	if(renderer){
+		renderer->targetWidth=bufferWidth;
+		renderer->targetHeight=bufferHeight;
+	}
 }
 void HJGraphics::Window::run() {
 	glfwMakeContextCurrent(windowPtr);
 	customInit();
+	SPDLOG_INFO("customInit completed, entering main loop");
 	auto lastTime=std::chrono::high_resolution_clock::now();
 	auto startTime=lastTime;
 	long long frameCount=0;
@@ -165,6 +176,7 @@ void HJGraphics::Window::run() {
 		swapBuffer();
 		glfwPollEvents();
 	}
+	SPDLOG_INFO("main loop exited");
 }
 void HJGraphics::Window::render(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
 	if(renderer)renderer->render(frameDeltaTime, elapsedTime, frameCount);

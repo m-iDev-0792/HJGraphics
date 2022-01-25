@@ -3,6 +3,7 @@
 //
 
 #include "Model.h"
+#include "Log.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <random>
 float random0_1f() {
@@ -14,8 +15,6 @@ float random0_1f() {
 HJGraphics::Model::Model(const std::string& _path,MaterialType _materialType){
 	materialType=_materialType;
 	loadModel(_path);
-	std::cout<<"material num="<<materialLib.size()<<std::endl;
-
 }
 void HJGraphics::Model::scale(float _ratio) {
 	for(auto& o:meshes){
@@ -27,15 +26,13 @@ void HJGraphics::Model::loadModel(const std::string& _path) {
 	const aiScene* scene = importer.ReadFile(_path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
 	// check for errors
 	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
-		std::cout << "ERROR @ Model::loadModel(std::string) : ASSIMP ERROR:: " << importer.GetErrorString() << std::endl;
+		SPDLOG_ERROR("ASSIMP ERROR::{}",importer.GetErrorString());
 		return;
 	}
 	// retrieve the directory path of the filepath
 	directory = _path.substr(0, _path.find_last_of('/'));
 	format = _path.substr(_path.find_last_of(".")+1,_path.size());
-	std::cout<<"load model from path:"<<_path<<std::endl;
-	std::cout<<"model's directory:"<<directory<<std::endl;
-
+	SPDLOG_INFO("Load model from {} in directory {}",_path.c_str(),directory.c_str());
 	processNode(scene->mRootNode, scene);
 }
 void HJGraphics::Model::processNode(aiNode *node, const aiScene *scene) {
@@ -105,7 +102,7 @@ std::shared_ptr<HJGraphics::Mesh> HJGraphics::Model::processMesh(aiMesh *mesh, c
 	auto foundMaterial=materialLib.find(material);
 	if(foundMaterial == materialLib.end()){
 		//create a new material
-		std::cout<<"create new material "<<material->GetName().C_Str()<<std::endl;
+		SPDLOG_INFO("Creating new material {}",material->GetName().C_Str());
 		std::shared_ptr<Material> newMat;
 
 //		uint mod=0;
@@ -167,9 +164,12 @@ std::vector<std::shared_ptr<HJGraphics::Texture>> HJGraphics::Model::loadMateria
 		auto findResult=textures_loaded.find(texStdStrPath);
 		if(findResult==textures_loaded.end()){
 			//create a new texture
+#ifdef __APPLE__
 			auto texture=std::make_shared<Texture2D>(directory+std::string("/")+texStdStrPath,texUsage=="diffuse"||texUsage=="albedo");
-			//Windows Version:
-			//auto texture=std::make_shared<Texture2D>(directory+std::string("\\")+texStdStrPath,texUsage=="diffuse"?true:false);
+#endif
+#ifdef _WIN32
+			auto texture=std::make_shared<Texture2D>(directory+std::string("\\")+texStdStrPath,texUsage=="diffuse"?true:false);
+#endif
 			texture->usage = texUsage;
 			texture->path = texStdStrPath;
 			materialTextures.push_back(texture);

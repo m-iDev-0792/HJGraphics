@@ -8,7 +8,7 @@ const float PI=3.1415926;
 // Wo:fragPos--->eye Wi:fragPos-->light
 
 //------------- F term --------------
-// kS=fresnel, kD=1.0-kS
+// kS=fresnel, kD=(1.0-kS)*(1-metallic)
 // Wo dot H = Wi dot H,they are same!
 vec3 fresnelSchlick(float HdotWo, vec3 F0){
     return F0 + (1.0 - F0) * pow(1.0 - HdotWo, 5.0);

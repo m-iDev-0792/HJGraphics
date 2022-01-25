@@ -12,8 +12,9 @@ uniform mat4 previousModel;
 
 void main(){
     vec3 color;
-    if(gammaCorrection==1)color = pow(texture(skybox, position).xyz, vec3(gamma));
-    else color = texture(skybox, position).xyz;
+    vec3 samplePos=vec3(position.x,position.y,-position.z);
+    if(gammaCorrection==1)color = pow(texture(skybox, samplePos).xyz, vec3(gamma));
+    else color = texture(skybox, samplePos).xyz;
     FragColor = vec4(color,1.0);
 
     //gVelocity   why in fragment shader? avoid interpolation

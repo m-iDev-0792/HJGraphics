@@ -1,11 +1,12 @@
-#include "Mesh.h"
 //
 // Created by 何振邦(m_iDev_0792) on 2020/2/17.
 //
+#include "Mesh.h"
+#include "Log.h"
 
 HJGraphics::Mesh::Mesh(const std::shared_ptr<Material>& _material) {
 	if(_material== nullptr){
-		std::cerr<<"Warning @ Mesh::Mesh(std::shared_ptr<Material> _material): _material is nullptr!"<<std::endl;
+		SPDLOG_WARN("_material is nullptr!");
 	}
 	material=_material;
 
@@ -24,7 +25,7 @@ HJGraphics::Mesh::Mesh(const std::vector<Vertex14>& _vertices, const std::vector
 	glGenBuffers(1, &EBO);
 
 	if(_material == nullptr){
-		std::cerr<<"Warning @ Mesh::Mesh(const std::vector<Vertex14>&  const std::vector<GLuint>& , const std::shared_ptr<Material>& _material): _material is nullptr!"<<std::endl;
+		SPDLOG_WARN("_material is nullptr!");
 	}
 	material=_material;
 
