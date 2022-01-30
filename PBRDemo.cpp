@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "HJGraphics.h"
 #include "Log.h"
+#include "PBRUtility.h"
 using namespace std;
 using namespace glm;
 using namespace HJGraphics;
@@ -93,7 +94,19 @@ int main() {
 	for(auto& s:spheres)scene->addObject(s);
 	scene->addObject(plane);
 	scene->addObject(coord);
-	scene->addObject(skybox);
+//	scene->setSkybox(skybox);
+
+	{
+		auto envirTex=std::make_shared<Texture2D>("../texture/beach.hdr");
+		auto envirCubeMap=std::make_shared<CubeMapTexture>(512, 512, GL_RGB16F, GL_RGB, GL_FLOAT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+		texture2DToCubeMap(envirTex.get(), envirCubeMap.get());
+
+		auto diffuseIrradiance=std::make_shared<CubeMapTexture>(512,512,GL_RGB16F,GL_RGB,GL_FLOAT,GL_LINEAR,GL_CLAMP_TO_EDGE);
+		generateDiffuseIrradianceMap(envirCubeMap.get(), diffuseIrradiance.get(), 0.125);
+		scene->setSkybox(std::make_shared<Skybox>(20, *diffuseIrradiance, false));
+	}
+
+
 
 	auto renderer=make_shared<DeferredRenderer>(scene->getWidth(),scene->getHeight());
 	renderer->setMainScene(scene);

@@ -1,5 +1,5 @@
 #include "DeferredRenderer.h"
-
+#include "PBRUtility.h"
 HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	//-------------------------------
 	//    Init Important Members
@@ -366,14 +366,22 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
             fm->previousProjectionView = previousProjectionView;
             fm->draw();
         }
+		if(mainScene->skybox){
+			auto& skybox=mainScene->skybox;
+			skybox->projectionView = projectionView;
+			skybox->previousProjectionView = previousProjectionView;
+			skybox->draw();
+		}
     }
 
     //-----------------------------
-    //5. post process
+    //5. render deferredTarget and post process
     //-----------------------------
     if(deferredTarget){
         deferredTarget->unbind();
+	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         postprocess(frameDeltaTime);
+//	    test(projectionView);
     }
 
 }

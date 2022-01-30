@@ -1,21 +1,4 @@
-# diffuse irradiance map generation
-## Task 1. Convert 2D HDR image to a cube map
-1. read HDR image as a glTexture2D
-2. generate glTextureCubeMap and allocate space (a texture size required)
-3. write a code fragment to render a unit cube for 6 times using this glTexture2D to get a CubeMap
-
-## Task 2. Read Convert a CubeMap to a diffuse irradiance CubeMap
-1. generate glTextureCubeMap and allocate space (a texture size required)
-2. render a unit cube for 6 times using glTextureCubeMap to generate a diffuse irradiance map
-
-
-
-
-
-
-
-
-
+adjust up vector when current direction is close to (0,1,0)
 
 # TODOs of HJGraphics
 [x] 适配retina屏幕

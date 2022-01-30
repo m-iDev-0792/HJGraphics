@@ -3,6 +3,8 @@
 //
 #include "CustomMesh.h"
 
+#include <utility>
+
 HJGraphics::CustomMesh::CustomMesh(){
 	model=glm::mat4(1.0f);
 	projectionView=glm::mat4(1.0f);
@@ -159,9 +161,8 @@ void HJGraphics::Grid::draw() {
 /*
  * Implement of Skybox
  */
-HJGraphics::Skybox::Skybox(float _radius,std::string rightTex, std::string leftTex,std::string upTex,
-                           std::string downTex,std::string frontTex, std::string backTex,bool _gammaCorrection):cubeMapTexture(rightTex,leftTex,upTex,downTex,frontTex,backTex){
-	std::string tex[6]={rightTex,leftTex,upTex,downTex,frontTex,backTex};
+HJGraphics::Skybox::Skybox(float _radius, CubeMapTexture _cubeMapTexture, bool _gammaCorrection) {
+	cubeMapTexture=std::move(_cubeMapTexture);
 	radius=_radius;
 	gammaCorrection=_gammaCorrection;
 	if(defaultShader== nullptr)defaultShader=std::make_shared<Shader>(ShaderCodeList{"../shader/forward/skybox.vs.glsl"_vs, "../shader/forward/skybox.fs.glsl"_fs});
@@ -216,7 +217,7 @@ HJGraphics::Skybox::Skybox(float _radius,std::string rightTex, std::string leftT
 			cubeVertices[i*6+2]*=radius;
 		}
 	}
-	loadVBOData(cubeVertices, sizeof(GLfloat)*216);
+	loadVBOData(cubeVertices, sizeof(cubeVertices));
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER,VBO);
 	glEnableVertexAttribArray(0);
@@ -226,6 +227,11 @@ HJGraphics::Skybox::Skybox(float _radius,std::string rightTex, std::string leftT
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 }
+HJGraphics::Skybox::Skybox(float _radius,const std::string& rightTex, const std::string& leftTex,const std::string& upTex,
+                           const std::string& downTex,const std::string& frontTex, const std::string& backTex,bool _gammaCorrection):
+						   Skybox(_radius,CubeMapTexture(rightTex,leftTex,upTex,downTex,frontTex,backTex),_gammaCorrection){
+}
+
 std::shared_ptr<HJGraphics::Shader> HJGraphics::Skybox::getDefaultShader() {
 	return defaultShader;
 }

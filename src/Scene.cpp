@@ -11,14 +11,16 @@ HJGraphics::Scene::Scene(GLuint _sceneWidth, GLuint _sceneHeight, GLfloat _ambie
 }
 
 void HJGraphics::Scene::addObject(std::shared_ptr<Mesh> mesh) {
-	if (mesh != nullptr)meshes.push_back(mesh);
+	if (mesh)meshes.push_back(mesh);
 }
 void HJGraphics::Scene::addObject(std::shared_ptr<CustomMesh> mesh) {
-	if (mesh != nullptr)forwardMeshes.push_back(mesh);
+	if (mesh)forwardMeshes.push_back(mesh);
 }
-
+void HJGraphics::Scene::setSkybox(std::shared_ptr<Skybox> _skybox) {
+	if(_skybox)skybox=_skybox;
+}
 void HJGraphics::Scene::addObject(std::shared_ptr<Model> model) {
-	if (model != nullptr){
+	if (model){
 		models.push_back(model);
 		for(auto &m:model->meshes)meshes.push_back(m);
 	}

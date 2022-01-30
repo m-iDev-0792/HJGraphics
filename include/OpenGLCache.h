@@ -1,6 +1,8 @@
 //
 // Created by 何振邦 on 2020/8/8.
 //
+#ifndef HJGRAPHICS_OPENGLCACHE_H
+#define HJGRAPHICS_OPENGLCACHE_H
 #include "glad/glad.h"
 #include <map>
 #include <vector>
@@ -42,3 +44,4 @@ namespace HJGraphics{
 	};
 	extern OpenGLCache GL;
 }
+#endif

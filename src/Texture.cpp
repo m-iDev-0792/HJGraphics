@@ -64,9 +64,11 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
     bool loadHDR=false;
     void *data=nullptr;
     GLuint dataType;
-    if(_path.substr(_path.size()-3,3)==std::string("hdr")){
+    if(_path.substr(_path.size()-4,4)==std::string(".hdr")){
         loadHDR=true;
+	    stbi_set_flip_vertically_on_load(true);
         data=stbi_loadf(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
+	    stbi_set_flip_vertically_on_load(false);
         dataType=GL_FLOAT;
     }else{
         data=stbi_load(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
@@ -170,8 +172,10 @@ HJGraphics::CubeMapTexture::CubeMapTexture(int _width, int _height, GLenum _inte
     GL.activeTexture(GL_TEXTURE0);
     GL.bindTexture(GL_TEXTURE_CUBE_MAP, id);
 
-    for (GLuint i = 0; i < 6; ++i)
+    for (GLuint i = 0; i < 6; ++i){
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, _internalFormat, _width, _height, 0, _format, _dataType, nullptr);
+		size[i]=Sizei(_width,_height);
+	}
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, texMagFilter);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, texMinFilter);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, texWrapS);
@@ -201,14 +205,13 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
     for(int i=0;i<6;++i){
         int imgWidth,imgHeight,imgChannel;
         auto data=stbi_load(tex[i].c_str(),&imgWidth,&imgHeight,&imgChannel,0);
+	    size[i]=Sizei(imgWidth,imgHeight);
         GLuint format;
         if(imgChannel==1){
             format=GL_RED;
-        }
-        else if(imgChannel==3){
+        }else if(imgChannel==3){
             format=GL_RGB;
-        }
-        else if(imgChannel==4){
+        }else if(imgChannel==4){
             format=GL_RGBA;
         }else{
 	        SPDLOG_ERROR("Can't solve image channel {} while processing cube map {}",imgChannel,tex[i].c_str());

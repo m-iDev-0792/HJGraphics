@@ -17,11 +17,19 @@
 #include "Common.h"
 
 namespace HJGraphics{
+	struct TextureOption{
+		bool genMipMap = false;
+		bool gammaCorrection = false;
+		GLint texWrapS = GL_REPEAT;
+		GLint texWrapT = GL_REPEAT;
+		GLint texWrapR = GL_REPEAT;
+		GLint texMinFilter = GL_LINEAR;
+		GLint texMagFilter = GL_LINEAR;
+	};
     class Texture : public GLResource  {
     public:
         std::string usage;//usage of the texutre: diffuse? specular? normal?
         std::string path;
-
 
         GLuint textureN;
         GLuint type;
@@ -35,7 +43,6 @@ namespace HJGraphics{
         explicit Texture(GLuint _type, GLuint _texN = 0);
 
         ~Texture();//析构函数里最好不要deleteTexture,太危险了,再按值传递的时候临时Texture会释放掉纹理!!!
-        void texParameteri(GLenum pname, GLint value) { glTexParameteri(type, pname, value); }
     };
 
     class Texture2D : public Texture {
@@ -55,6 +62,7 @@ namespace HJGraphics{
 
         void loadFromPath(const std::string &_path, bool gammaCorrection=false);
     };
+
     class SolidTexture : public Texture{
     public:
         SolidTexture();
@@ -81,6 +89,8 @@ namespace HJGraphics{
 
         void loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
                           const std::string &downTex, const std::string &frontTex, const std::string &backTex);
+
+		Sizei size[6];
     };
 
     typedef std::vector<std::shared_ptr<Texture>> TextureList;

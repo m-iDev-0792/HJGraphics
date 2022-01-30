@@ -172,7 +172,7 @@ void HJGraphics::Window::run() {
 		inputCallback(frameDeltaTime);
 		lastTime = currentTime;
 		render(frameDeltaTime,elapsedTime,++frameCount);
-		renderUI(frameDeltaTime);
+		//renderUI(frameDeltaTime);//todo. Skybox mesh goes wrong when UI enabled
 		swapBuffer();
 		glfwPollEvents();
 	}

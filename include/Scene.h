@@ -28,6 +28,7 @@ namespace HJGraphics {
 		std::vector<std::shared_ptr<Mesh>> meshes;
 		std::vector<std::shared_ptr<Model>> models;
 		std::vector<std::shared_ptr<CustomMesh>> forwardMeshes;
+		std::shared_ptr<Skybox> skybox;
 		std::vector<Camera*> cameras;
 		
 		std::vector<std::shared_ptr<ParallelLight>> parallelLights;
@@ -45,6 +46,8 @@ namespace HJGraphics {
 		void addObject(std::shared_ptr<Model> model);
 
 		void addObject(std::shared_ptr<CustomMesh> mesh);
+
+		void setSkybox(std::shared_ptr<Skybox> _skybox);
 
 		void addCamera(Camera &camera);
 

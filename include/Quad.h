@@ -9,39 +9,32 @@
 #include <memory>
 namespace HJGraphics{
 
-	class Quad2D{
-	private:
-		static GLuint VAO;
-		static GLuint VBO;
-	public:
-		static bool uninit;
+	struct Quad2D{
+		static GLuint getVAO();
 		static void draw();
 	};
 
-	class Quad2DWithTexCoord{
-	private:
-		static GLuint VAO;
-		static GLuint VBO;
-	public:
-		static bool uninit;
+	struct Quad2DWithTexCoord{
+		static GLuint getVAO();
 		static void draw();
 	};
 
-	class Quad3D{
-	private:
-		static GLuint VAO;
-		static GLuint VBO;
-	public:
-		static bool uninit;
+	struct Quad3D{
+		static GLuint getVAO();
 		static void draw();
 	};
 
-	class Quad3DWithTexCoord{
-	private:
-		static GLuint VAO;
-		static GLuint VBO;
-	public:
-		static bool uninit;
+	struct Quad3DWithTexCoord{
+		static GLuint getVAO();
+		static void draw();
+	};
+
+	struct UnitCube{
+		static GLuint getVAO();
+		static void draw();
+	};
+	struct UnitCubeWithTexCoord{
+		static GLuint getVAO();
 		static void draw();
 	};
 }

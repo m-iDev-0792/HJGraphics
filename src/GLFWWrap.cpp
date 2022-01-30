@@ -76,18 +76,11 @@ void HJGraphics::GLFWWrap::mouseCallback(GLFWwindow *window, double xpos, double
 void HJGraphics::GLFWWrap::scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
 
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
-/*
- * This function is called when we need to render something
- * 每次渲染时会调用这个函数
- */
+
 void HJGraphics::GLFWWrap::render(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
 
 }
-/*
- * This function is called before render() is called for the first time
- * 在render()第一次调用之前这个函数会被调用进行初始化
- */
+
 void HJGraphics::GLFWWrap::customInit() {
 
 }

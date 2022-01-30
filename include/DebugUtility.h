@@ -17,7 +17,7 @@ inline void showVec3(glm::vec3 value){
 }
 template <class T> void showVec(T vec){
 	float* p= reinterpret_cast<float*>(&vec);
-	int s= sizeof(vec)/4;
+	int s= sizeof(vec)/sizeof(float);
 	std::cout<<"vec"<<s<<"= ";
 	for(int i=0;i<s;++i){
 		std::cout<<(*(p++))<<", ";

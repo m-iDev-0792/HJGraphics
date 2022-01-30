@@ -5,8 +5,19 @@
 #ifndef HJGRAPHICS_COMMON_H
 #define HJGRAPHICS_COMMON_H
 #include <iostream>
+#include <utility>
 
 namespace HJGraphics {
+	template<typename T> struct Size{
+		T width;
+		T height;
+		Size()=default;
+		Size(T _width,T _height):width(_width),height(_height){}
+	};
+	typedef Size<int> Sizei;
+	typedef Size<unsigned int> Sizeu;
+	typedef Size<float> Sizef;
+
     class GLResource {
     public:
         GLuint id;
@@ -14,7 +25,7 @@ namespace HJGraphics {
 
         GLResource() = default;
 
-        GLResource(GLuint _id, const std::string &_type) : id(_id), resourceType(_type) {}
+        GLResource(GLuint _id, std::string _type) : id(_id), resourceType(std::move(_type)) {}
     };
 
     class VertexArrayBuffer : public GLResource {
