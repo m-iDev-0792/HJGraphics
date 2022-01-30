@@ -164,11 +164,13 @@ std::vector<std::shared_ptr<HJGraphics::Texture>> HJGraphics::Model::loadMateria
 		auto findResult=textures_loaded.find(texStdStrPath);
 		if(findResult==textures_loaded.end()){
 			//create a new texture
+			Texture2DOption option;
+			option.gammaCorrection=texUsage=="diffuse"||texUsage=="albedo";
 #ifdef __APPLE__
-			auto texture=std::make_shared<Texture2D>(directory+std::string("/")+texStdStrPath,texUsage=="diffuse"||texUsage=="albedo");
+			auto texture=std::make_shared<Texture2D>(directory+std::string("/")+texStdStrPath,option);
 #endif
 #ifdef _WIN32
-			auto texture=std::make_shared<Texture2D>(directory+std::string("\\")+texStdStrPath,texUsage=="diffuse"?true:false);
+			auto texture=std::make_shared<Texture2D>(directory+std::string("\\")+texStdStrPath,option);
 #endif
 			texture->usage = texUsage;
 			texture->path = texStdStrPath;

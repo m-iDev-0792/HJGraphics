@@ -161,7 +161,7 @@ void HJGraphics::Grid::draw() {
 /*
  * Implement of Skybox
  */
-HJGraphics::Skybox::Skybox(float _radius, CubeMapTexture _cubeMapTexture, bool _gammaCorrection) {
+HJGraphics::Skybox::Skybox(float _radius, std::shared_ptr<CubeMapTexture> _cubeMapTexture, bool _gammaCorrection) {
 	cubeMapTexture=std::move(_cubeMapTexture);
 	radius=_radius;
 	gammaCorrection=_gammaCorrection;
@@ -229,7 +229,7 @@ HJGraphics::Skybox::Skybox(float _radius, CubeMapTexture _cubeMapTexture, bool _
 }
 HJGraphics::Skybox::Skybox(float _radius,const std::string& rightTex, const std::string& leftTex,const std::string& upTex,
                            const std::string& downTex,const std::string& frontTex, const std::string& backTex,bool _gammaCorrection):
-						   Skybox(_radius,CubeMapTexture(rightTex,leftTex,upTex,downTex,frontTex,backTex),_gammaCorrection){
+						   Skybox(_radius,std::make_shared<CubeMapTexture>(rightTex,leftTex,upTex,downTex,frontTex,backTex),_gammaCorrection){
 }
 
 std::shared_ptr<HJGraphics::Shader> HJGraphics::Skybox::getDefaultShader() {
@@ -245,6 +245,6 @@ void HJGraphics::Skybox::draw() {
 	defaultShader->setInt("gammaCorrection",gammaCorrection);
 	glBindVertexArray(VAO);
 	GL.activeTexture(GL_TEXTURE0);
-	GL.bindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture.id);
+	GL.bindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture->id);
 	glDrawArrays(GL_TRIANGLES,0,36);
 }

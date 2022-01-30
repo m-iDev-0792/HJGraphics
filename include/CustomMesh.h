@@ -100,11 +100,11 @@ namespace HJGraphics {
 		static std::shared_ptr<Shader> defaultShader;
 
 		float radius;
-		CubeMapTexture cubeMapTexture;
+		std::shared_ptr<CubeMapTexture> cubeMapTexture;
 		bool gammaCorrection;
 
 		Skybox() = delete;
-		Skybox(float _radius, CubeMapTexture _cubeMapTexture, bool _gammaCorrection=true);
+		Skybox(float _radius, std::shared_ptr<CubeMapTexture> _cubeMapTexture, bool _gammaCorrection=true);
 		Skybox(float _radius, const std::string& rightTex, const std::string& leftTex, const std::string& upTex,
 		       const std::string& downTex, const std::string& frontTex, const std::string& backTex,bool _gammaCorrection=true);
 

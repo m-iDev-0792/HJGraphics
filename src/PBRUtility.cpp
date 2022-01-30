@@ -138,7 +138,8 @@ void HJGraphics::generateSpecularPrefilteredMap(CubeMapTexture *inCubeMap, CubeM
 
 void HJGraphics::test(glm::mat4 projectionView) {
 	static std::shared_ptr<Shader> shader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/PBR/PBR_Tex2DToCubeMap.vs.glsl"_vs, "../shader/deferred/PBR/PBR_Tex2DToCubeMap.fs.glsl"_fs});
-	static std::shared_ptr<Texture2D> texture=std::make_shared<Texture2D>("../texture/beach.hdr",false);
+
+	static std::shared_ptr<Texture2D> texture=std::make_shared<Texture2D>("../texture/beach.hdr", TextureOption());
 	shader->use();
 	shader->set4fm("projectionView",projectionView);
 	shader->setInt("image",0);

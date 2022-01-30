@@ -10,9 +10,16 @@
 /*
  * Implementation of Texture2D
  */
-HJGraphics::Texture::Texture(GLuint _type,GLuint _texN) {
+HJGraphics::Texture::Texture(GLuint _type) {
     type=_type;
-    textureN=_texN;
+}
+HJGraphics::Texture::Texture(GLuint _type, TextureOption option) {
+	type=_type;
+	texWrapS=option.texWrapS;
+	texWrapT=option.texWrapT;
+	texWrapR=option.texWrapR;
+	texMinFilter=option.texMinFilter;
+	texMagFilter=option.texMagFilter;
 }
 HJGraphics::Texture::~Texture() {
 }
@@ -20,51 +27,32 @@ HJGraphics::Texture::~Texture() {
 /*
  * Implementation of Texture2D
  */
-const auto DEFAULT_MIN_FILTER=GL_LINEAR_MIPMAP_LINEAR;
-HJGraphics::Texture2D::Texture2D(const std::string &path, bool gammaCorrection) : Texture(GL_TEXTURE_2D){
-    glGenTextures(1,&id);
-    texWrapS=GL_REPEAT;
-    texWrapT=GL_REPEAT;
-    texMinFilter=DEFAULT_MIN_FILTER;
-    texMagFilter=GL_LINEAR;
-    loadFromPath(path, gammaCorrection);
+HJGraphics::Texture2D::Texture2D(const std::string &_path, TextureOption option) : Texture(GL_TEXTURE_2D, option) {
+	glGenTextures(1,&id);
+	path=_path;
+	loadFromPath(_path, option.gammaCorrection, option.genMipMap);
 }
-HJGraphics::Texture2D::Texture2D(const std::string &_path, const GLint& _texWrap, bool gammaCorrection): Texture(GL_TEXTURE_2D){
-    glGenTextures(1,&id);
-    texWrapS=texWrapT=_texWrap;
-    texMinFilter=DEFAULT_MIN_FILTER;
-    texMagFilter=GL_LINEAR;
-    loadFromPath(_path, gammaCorrection);
+HJGraphics::Texture2D::Texture2D(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType,
+                                 TextureOption option) : Texture(GL_TEXTURE_2D, option) {
+	texWidth=_width;
+	texHeight=_height;
+	glGenTextures(1, &id);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, _internalFormat, texWidth, texHeight, 0, _format, _dataType, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texMinFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texMagFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapT);
 }
-HJGraphics::Texture2D::Texture2D() :Texture(GL_TEXTURE_2D){
-    glGenTextures(1,&id);
-    texWrapS=GL_REPEAT;
-    texWrapT=GL_REPEAT;
-    texMinFilter=DEFAULT_MIN_FILTER;
-    texMagFilter=GL_LINEAR;
-}
-HJGraphics::Texture2D::Texture2D(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, GLenum _filter, GLenum _wrap): Texture(GL_TEXTURE_2D){
-    texWidth=_width;
-    texHeight=_height;
-    texMinFilter=texMagFilter=_filter;
-    texWrapS=texWrapT=_wrap;
-    glGenTextures(1, &id);
+void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCorrection, bool genMipMap) {
     GL.activeTexture(GL_TEXTURE0);
-    GL.bindTexture(GL_TEXTURE_2D, id);
-    glTexImage2D(GL_TEXTURE_2D, 0, _internalFormat, texWidth, texHeight, 0, _format, _dataType, nullptr);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrap);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrap);
-}
-void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCorrection) {
-    GL.activeTexture(GL_TEXTURE0+textureN);
     GL.bindTexture(GL_TEXTURE_2D, id);
     int imgWidth,imgHeight,imgChannel;
     bool loadHDR=false;
     void *data=nullptr;
     GLuint dataType;
-    if(_path.substr(_path.size()-4,4)==std::string(".hdr")){
+    if(_path.size()>4&&_path.substr(_path.size()-4,4)==std::string(".hdr")){
         loadHDR=true;
 	    stbi_set_flip_vertically_on_load(true);
         data=stbi_loadf(_path.c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
@@ -98,23 +86,24 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
         texWidth=imgWidth;texHeight=imgHeight;texChannel=imgChannel;
         glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, imgWidth, imgHeight, 0, format,
                      dataType, data);
-        if(DEFAULT_MIN_FILTER!=GL_NEAREST)glGenerateMipmap(GL_TEXTURE_2D);
+        if(genMipMap){
+			glGenerateMipmap(GL_TEXTURE_2D);
+			if(!(texMinFilter==GL_LINEAR_MIPMAP_LINEAR || texMinFilter==GL_LINEAR_MIPMAP_NEAREST ||
+			texMinFilter==GL_NEAREST_MIPMAP_LINEAR || texMinFilter==GL_NEAREST_MIPMAP_NEAREST)){
+				SPDLOG_WARN("When loading texture {}. Try to generate mipmap for 2D texture but the texture min filter is not set as a mipmap filter",_path.c_str());
+			}
+		}
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texMinFilter);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texMagFilter);
-
         stbi_image_free(data);
         path=_path;
     }else{
 	    SPDLOG_ERROR("Can't load image from {}",_path.c_str());
     }
-
 }
 
-HJGraphics::SolidTexture::SolidTexture():SolidTexture(glm::vec3(1)){
-
-}
 HJGraphics::SolidTexture::SolidTexture(glm::vec3 _color):Texture(GL_TEXTURE_2D){
     glGenTextures(1,&id);
     texWrapS=GL_REPEAT;
@@ -133,7 +122,7 @@ HJGraphics::SolidTexture::SolidTexture(float _color):Texture(GL_TEXTURE_2D){
 }
 void HJGraphics::SolidTexture::setColor(float _color) {
     color=glm::vec3(_color);
-    GL.activeTexture(GL_TEXTURE0+textureN);
+    GL.activeTexture(GL_TEXTURE0);
     GL.bindTexture(GL_TEXTURE_2D, id);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 1, 1, 0, GL_RED,GL_FLOAT, &_color);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapS);
@@ -144,7 +133,7 @@ void HJGraphics::SolidTexture::setColor(float _color) {
 void HJGraphics::SolidTexture::setColor(glm::vec3 _color) {
     color=_color;
     unsigned char data[3]={static_cast<unsigned char>(color.r*255),static_cast<unsigned char>(color.g*255),static_cast<unsigned char>(color.b*255)};
-    GL.activeTexture(GL_TEXTURE0+textureN);
+    GL.activeTexture(GL_TEXTURE0);
     GL.bindTexture(GL_TEXTURE_2D, id);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB,
                  GL_UNSIGNED_BYTE, data);
@@ -157,14 +146,6 @@ void HJGraphics::SolidTexture::setColor(glm::vec3 _color) {
 /*
  * Implementation of CubeMapTexture
  */
-HJGraphics::CubeMapTexture::CubeMapTexture() :Texture(GL_TEXTURE_CUBE_MAP){
-    glGenTextures(1,&id);
-    texWrapS=GL_CLAMP_TO_EDGE;
-    texWrapT=GL_CLAMP_TO_EDGE;
-    texWrapR=GL_CLAMP_TO_EDGE;
-    texMinFilter=GL_LINEAR;
-    texMagFilter=GL_LINEAR;
-}
 HJGraphics::CubeMapTexture::CubeMapTexture(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, GLenum _filter, GLenum _wrap):Texture(GL_TEXTURE_CUBE_MAP){
     texMinFilter=texMagFilter=_filter;
     texWrapS=texWrapT=texWrapR=_wrap;
@@ -183,9 +164,7 @@ HJGraphics::CubeMapTexture::CubeMapTexture(int _width, int _height, GLenum _inte
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, texWrapR);
 }
 HJGraphics::CubeMapTexture::CubeMapTexture(const std::string &rightTex, const std::string &leftTex, const std::string &upTex, const std::string &downTex,
-                                           const std::string &frontTex, const std::string &backTex,
-                                           GLuint texN): Texture(GL_TEXTURE_CUBE_MAP, texN) {
-    textureN=texN;
+                                           const std::string &frontTex, const std::string &backTex): Texture(GL_TEXTURE_CUBE_MAP) {
     texWrapS=GL_CLAMP_TO_EDGE;
     texWrapT=GL_CLAMP_TO_EDGE;
     texWrapR=GL_CLAMP_TO_EDGE;
@@ -200,7 +179,7 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
     std::string tex[6]={rightTex,   leftTex,    upTex,    downTex,   frontTex,  backTex};
 	SPDLOG_INFO("Loading cubemap\nright = {}\nleft = {}\nup = {}\ndown = {}\nfront = {}\nback = {}",
 				rightTex.c_str(),leftTex.c_str(),upTex.c_str(),downTex.c_str(),frontTex.c_str(),backTex.c_str());
-    GL.activeTexture(GL_TEXTURE0+textureN);
+    GL.activeTexture(GL_TEXTURE0);
     GL.bindTexture(GL_TEXTURE_CUBE_MAP,id);
     for(int i=0;i<6;++i){
         int imgWidth,imgHeight,imgChannel;
@@ -236,42 +215,52 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
  * Implementation of Material
  */
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_diffuse(const char* str,size_t n){
-    auto m=std::make_shared<Texture2D>(str,true);
+	Texture2DOption option;
+	option.gammaCorrection=true;
+    auto m=std::make_shared<Texture2D>(str,option);
     m->usage="diffuse";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_specular(const char* str,size_t n){
-    auto m=std::make_shared<Texture2D>(str);
+	Texture2DOption option;
+    auto m=std::make_shared<Texture2D>(str,option);
     m->usage="specular";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_normal(const char* str,size_t n){
-    auto m=std::make_shared<Texture2D>(str);
+	Texture2DOption option;
+    auto m=std::make_shared<Texture2D>(str,option);
     m->usage="normal";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_metallic(const char* str,size_t n){
-    auto m=std::make_shared<Texture2D>(str);
+	Texture2DOption option;
+    auto m=std::make_shared<Texture2D>(str,option);
     m->usage="metallic";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_roughness(const char* str,size_t n){
-    auto m=std::make_shared<Texture2D>(str,true);
+	Texture2DOption option;
+    auto m=std::make_shared<Texture2D>(str,option);
     m->usage="roughness";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_albedo(const char* str,size_t n){
-    auto m=std::make_shared<Texture2D>(str,true);
+	Texture2DOption option;
+	option.gammaCorrection= true;
+    auto m=std::make_shared<Texture2D>(str,option);
     m->usage="albedo";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_height(const char* str,size_t n){
-    auto m=std::make_shared<Texture2D>(str);
+	Texture2DOption option;
+    auto m=std::make_shared<Texture2D>(str,option);
     m->usage="height";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_F0(const char* str,size_t n){
-    auto m=std::make_shared<Texture2D>(str);
+	Texture2DOption option;
+    auto m=std::make_shared<Texture2D>(str,option);
     m->usage="F0";
     return m;
 }

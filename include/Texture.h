@@ -25,13 +25,12 @@ namespace HJGraphics{
 		GLint texWrapR = GL_REPEAT;
 		GLint texMinFilter = GL_LINEAR;
 		GLint texMagFilter = GL_LINEAR;
+		TextureOption()=default;
 	};
     class Texture : public GLResource  {
     public:
         std::string usage;//usage of the texutre: diffuse? specular? normal?
         std::string path;
-
-        GLuint textureN;
         GLuint type;
 
         GLint texWrapS;
@@ -40,39 +39,40 @@ namespace HJGraphics{
         GLint texMinFilter;
         GLint texMagFilter;
 
-        explicit Texture(GLuint _type, GLuint _texN = 0);
+        Texture(GLuint _type);
+		Texture(GLuint _type, TextureOption option);
 
         ~Texture();//析构函数里最好不要deleteTexture,太危险了,再按值传递的时候临时Texture会释放掉纹理!!!
     };
 
+	struct Texture2DOption : TextureOption {
+		Texture2DOption(){
+			genMipMap = true;
+			texMinFilter = GL_LINEAR_MIPMAP_LINEAR;
+			texMagFilter = GL_LINEAR;
+		}
+	};
     class Texture2D : public Texture {
     public:
-
         int texWidth;
         int texHeight;
         int texChannel;
 
-        explicit Texture2D(const std::string &_path, bool gammaCorrection=false);
+		Texture2D(const std::string &_path, TextureOption option);
 
-        Texture2D(const std::string &_path, const GLint& _texWrap, bool gammaCorrection=false);
+		Texture2D(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, TextureOption option = Texture2DOption());
 
-        Texture2D();
-
-        Texture2D(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, GLenum _filter, GLenum _wrap);
-
-        void loadFromPath(const std::string &_path, bool gammaCorrection=false);
+        void loadFromPath(const std::string &_path, bool gammaCorrection, bool genMipMap);
     };
 
     class SolidTexture : public Texture{
     public:
-        SolidTexture();
         explicit SolidTexture(glm::vec3 _color);
         explicit SolidTexture(float _color);
         void setColor(glm::vec3 _color);
         void setColor(float _color);
 
-    private:
-        glm::vec3 color;
+		glm::vec3 color;
 
 
     };
@@ -82,10 +82,7 @@ namespace HJGraphics{
         CubeMapTexture(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, GLenum _filter, GLenum _wrap);
 
         CubeMapTexture(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
-                       const std::string &downTex, const std::string &frontTex, const std::string &backTex,
-                       GLuint texN = 0);
-
-        CubeMapTexture();
+                       const std::string &downTex, const std::string &frontTex, const std::string &backTex);
 
         void loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
                           const std::string &downTex, const std::string &frontTex, const std::string &backTex);

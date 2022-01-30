@@ -28,8 +28,13 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, int _internalForma
 
     glGenFramebuffers(1, &id);
     glBindFramebuffer(GL_FRAMEBUFFER, id);
-
-    std::shared_ptr<GLResource> tex=std::make_shared<Texture2D>(_width,_height,_internalFormat,_format,_dataType,_filter,GL_CLAMP_TO_EDGE);
+	TextureOption option;
+	option.texMinFilter=_filter;
+	option.texMagFilter=_filter;
+	option.texWrapS=GL_CLAMP_TO_EDGE;
+	option.texWrapT=GL_CLAMP_TO_EDGE;
+	option.texWrapR=GL_CLAMP_TO_EDGE;
+    std::shared_ptr<GLResource> tex=std::make_shared<Texture2D>(_width,_height,_internalFormat,_format,_dataType, option);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     GL.bindTexture(GL_TEXTURE_2D, 0);
