@@ -8,18 +8,20 @@ HJGraphics::Scene::Scene(GLuint _sceneWidth, GLuint _sceneHeight, GLfloat _ambie
 	ambientFactor = _ambient;
 	clearColor = _clearColor;
 	mainCamera = nullptr;
+	skybox=std::make_shared<Skybox>(25.0f);
 }
 
-void HJGraphics::Scene::addObject(std::shared_ptr<Mesh> mesh) {
+void HJGraphics::Scene::addObject(const std::shared_ptr<Mesh>& mesh) {
 	if (mesh)meshes.push_back(mesh);
 }
-void HJGraphics::Scene::addObject(std::shared_ptr<CustomMesh> mesh) {
+void HJGraphics::Scene::addObject(const std::shared_ptr<CustomMesh>& mesh) {
 	if (mesh)forwardMeshes.push_back(mesh);
 }
-void HJGraphics::Scene::setSkybox(std::shared_ptr<Skybox> _skybox) {
-	if(_skybox)skybox=_skybox;
+void HJGraphics::Scene::setSkybox(float _radius, const std::shared_ptr<Texture2D> &_environmentMap) {
+	if(skybox)skybox->radius=_radius;
+	if(_environmentMap)environmentMap=_environmentMap;
 }
-void HJGraphics::Scene::addObject(std::shared_ptr<Model> model) {
+void HJGraphics::Scene::addObject(const std::shared_ptr<Model>& model) {
 	if (model){
 		models.push_back(model);
 		for(auto &m:model->meshes)meshes.push_back(m);

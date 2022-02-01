@@ -20,34 +20,37 @@ namespace HJGraphics {
  */
 	class Scene {
 		friend DeferredRenderer;
+	private:
 		GLuint sceneWidth;
 		GLuint sceneHeight;
 		GLfloat ambientFactor;
 		glm::vec3 clearColor;
 		
+		std::vector<Camera*> cameras;
+		Camera *mainCamera;
+
+		std::shared_ptr<Texture2D> environmentMap;
+		std::shared_ptr<Skybox> skybox;
+
 		std::vector<std::shared_ptr<Mesh>> meshes;
 		std::vector<std::shared_ptr<Model>> models;
 		std::vector<std::shared_ptr<CustomMesh>> forwardMeshes;
-		std::shared_ptr<Skybox> skybox;
-		std::vector<Camera*> cameras;
-		
+
 		std::vector<std::shared_ptr<ParallelLight>> parallelLights;
 		std::vector<std::shared_ptr<SpotLight>> spotLights;
 		std::vector<std::shared_ptr<PointLight>> pointLights;
-
-		Camera *mainCamera;
 	public:
 		Scene();
 
 		Scene(GLuint _sceneWidth, GLuint _sceneHeight, GLfloat _ambient, glm::vec3 _clearColor);
 
-		void addObject(std::shared_ptr<Mesh> mesh);
+		void addObject(const std::shared_ptr<Mesh>& mesh);
 
-		void addObject(std::shared_ptr<Model> model);
+		void addObject(const std::shared_ptr<Model>& model);
 
-		void addObject(std::shared_ptr<CustomMesh> mesh);
+		void addObject(const std::shared_ptr<CustomMesh>& mesh);
 
-		void setSkybox(std::shared_ptr<Skybox> _skybox);
+		void setSkybox(float _radius, const std::shared_ptr<Texture2D>& _environmentMap);
 
 		void addCamera(Camera &camera);
 

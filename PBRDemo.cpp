@@ -11,7 +11,6 @@ using namespace glm;
 using namespace HJGraphics;
 int main() {
 	INIT_HJGRAPHICS_LOG
-	SPDLOG_INFO("This is a test logging message!");
 	Window window(800,600,"HJGraphics");
 
 	glm::vec3 cameraPos=glm::vec3(5.0f,5.0f,10.0f);
@@ -19,12 +18,12 @@ int main() {
 	Camera camera(cameraPos,cameraDirection);
 
 	auto coord=make_shared<Coordinate>();
-	auto skybox=make_shared<Skybox>(25,string("../texture/envmap_miramar/miramar_rt.tga"),
-	                                string("../texture/envmap_miramar/miramar_lf.tga"),
-	                                string("../texture/envmap_miramar/miramar_up.tga"),
-	                                string("../texture/envmap_miramar/miramar_dn.tga"),
-	                                string("../texture/envmap_miramar/miramar_bk.tga"),
-	                                string("../texture/envmap_miramar/miramar_ft.tga"));
+//	auto skybox=make_shared<Skybox>(25,string("../texture/envmap_miramar/miramar_rt.tga"),
+//	                                string("../texture/envmap_miramar/miramar_lf.tga"),
+//	                                string("../texture/envmap_miramar/miramar_up.tga"),
+//	                                string("../texture/envmap_miramar/miramar_dn.tga"),
+//	                                string("../texture/envmap_miramar/miramar_bk.tga"),
+//	                                string("../texture/envmap_miramar/miramar_ft.tga"));
 
 	TextureList brickwallTexture{"../texture/brickwall.jpg"_diffuse, "../texture/brickwall_normal.jpg"_normal};
 	auto brickMaterial=make_shared<PBRMaterial>(brickwallTexture);
@@ -86,27 +85,15 @@ int main() {
 	auto spotLight=make_shared<SpotLight>(glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(-5.0f, 5.0f, 3.0f), glm::vec3(3));
 	auto pointLight=make_shared<PointLight>(glm::vec3(0.0f, 2.0f, 2.0f),glm::vec3(3));
 
-	auto scene=make_shared<Scene>(800,600,0.3,glm::vec3(0));
+	auto scene=make_shared<Scene>(1600,1200,0.3,glm::vec3(0));
 	scene->addLight(pointLight);
-	scene->addLight(spotLight);
+//	scene->addLight(spotLight);
 	scene->addCamera(camera);
 
 	for(auto& s:spheres)scene->addObject(s);
 	scene->addObject(plane);
 	scene->addObject(coord);
-//	scene->setSkybox(skybox);
-
-	{
-		auto envirTex=std::make_shared<Texture2D>("../texture/beach.hdr", Texture2DOption());
-		auto envirCubeMap=std::make_shared<CubeMapTexture>(512, 512, GL_RGB16F, GL_RGB, GL_FLOAT, GL_LINEAR, GL_CLAMP_TO_EDGE);
-		texture2DToCubeMap(envirTex.get(), envirCubeMap.get());
-
-		auto diffuseIrradiance=std::make_shared<CubeMapTexture>(512,512,GL_RGB16F,GL_RGB,GL_FLOAT,GL_LINEAR,GL_CLAMP_TO_EDGE);
-		generateDiffuseIrradianceMap(envirCubeMap.get(), diffuseIrradiance.get(), 0.125);
-		scene->setSkybox(std::make_shared<Skybox>(20, diffuseIrradiance, false));
-	}
-
-
+	scene->setSkybox(25.0f,std::make_shared<Texture2D>("../texture/beach.hdr", Texture2DOption()));
 
 	auto renderer=make_shared<DeferredRenderer>(scene->getWidth(),scene->getHeight());
 	renderer->setMainScene(scene);

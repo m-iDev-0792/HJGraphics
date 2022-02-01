@@ -81,9 +81,16 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_O) == GLFW_PRESS){
 		enableAO=renderer->enableAO=!renderer->enableAO;
+		SPDLOG_INFO("SSAO = {}",enableAO);
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_B) == GLFW_PRESS){
 		enableMotionBlur=renderer->enableMotionBlur=!renderer->enableMotionBlur;
+		SPDLOG_INFO("Motion blur = {}",enableMotionBlur);
+	}
+	if(glfwGetKey(windowPtr, GLFW_KEY_C) == GLFW_PRESS){
+		const char* info[]={"Environment cubemap","Diffuse irradiance","Specular prefiltered"};
+		renderer->skyboxTextureDisplayEnum=(renderer->skyboxTextureDisplayEnum+1)%DeferredRenderer::SkyboxTextureDisplayEnum::SkyboxTextureDisplayEnumNum;
+		SPDLOG_INFO("Skybox texture = {}",info[renderer->skyboxTextureDisplayEnum]);
 	}
 }
 void HJGraphics::Window::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
@@ -147,6 +154,7 @@ void HJGraphics::Window::customInit() {
 	SPDLOG_INFO("customInit started");
 	GL.enable(GL_DEPTH_TEST);
 	GL.enable(GL_LINE_SMOOTH);
+	GL.enable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 //	GL.enable(GL_CULL_FACE);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	if(renderer)renderer->renderInit();
@@ -172,7 +180,7 @@ void HJGraphics::Window::run() {
 		inputCallback(frameDeltaTime);
 		lastTime = currentTime;
 		render(frameDeltaTime,elapsedTime,++frameCount);
-		//renderUI(frameDeltaTime);//todo. Skybox mesh goes wrong when UI enabled
+		renderUI(frameDeltaTime);//todo. Skybox mesh goes wrong when UI enabled
 		swapBuffer();
 		glfwPollEvents();
 	}

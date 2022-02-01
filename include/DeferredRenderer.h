@@ -10,6 +10,7 @@
 #include "Scene.h"
 #include "FrameBuffer.h"
 #include "SSAO.h"
+#include "PBRUtility.h"
 #include <map>
 namespace HJGraphics {
 	class Window;
@@ -49,6 +50,8 @@ namespace HJGraphics {
 		std::shared_ptr<Shader> lightingShader;
 		//pbr
 		std::shared_ptr<Shader> PBRlightingShader;
+		std::shared_ptr<Shader> PBRIBLShader;
+		std::shared_ptr<IBLManager> iblManager;
 
 		//settings
 		bool enableAO;
@@ -56,6 +59,13 @@ namespace HJGraphics {
 		int motionBlurSampleNum;
 		int motionBlurTargetFPS;
 		float motionBlurPower;
+		enum SkyboxTextureDisplayEnum{
+			EnvironmentCubeMap,
+			DiffuseIrradiance,
+			SpecularPrefiltered,
+			SkyboxTextureDisplayEnumNum
+		};
+		int skyboxTextureDisplayEnum;
 		
 		//shadow maps
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMap>> shadowMaps;

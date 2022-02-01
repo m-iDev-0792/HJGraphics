@@ -1,7 +1,7 @@
 #version 330 core
-layout (location = 0) vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
 in vec3 fragPos;
-uniform int sampleNum;
+uniform uint sampleNum;
 uniform samplerCube environmentCubeMap;
 uniform float roughness;
 const float PI = 3.14159265359;
@@ -40,9 +40,9 @@ void main() {
     vec3 R = N;//the reflect direction of our view
 
     float totalWeight = 0.0f;
-    const uint SAMPLE_NUM=uint(sampleNum);
+    uint SAMPLE_NUM=sampleNum;
     for(uint i=0u;i<SAMPLE_NUM;++i){
-        vec2 Xi = Hammersley(i, SAMPLE_COUNT);
+        vec2 Xi = Hammersley(i, SAMPLE_NUM);
         //sample half-way vec around normal then calculate incoming light L
         //equivalent to sample incoming light direction around R
         vec3 H  = ImportanceSampleGGX(Xi, N, roughness);

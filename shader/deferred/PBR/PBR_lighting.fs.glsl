@@ -39,14 +39,6 @@ uniform samplerCube shadowCubeMap;//11
 #include"../common/shadowCalculate.glsl"
 #include"PBR_Common.glsl"
 
-vec3 worldPosition(vec2 uv, float depth, mat4 inverseProjectionView){
-    vec4 clipSpace = vec4(uv * 2.0 - vec2(1.0), 2.0 * depth - 1.0, 1.0);
-    //vec4 position = inverseProjection * clipSpace; // Use this for view space
-    vec4 position = inverseProjectionView * clipSpace; // Use this for world space
-    return(position.xyz / position.w);
-}
-
-
 void main() {
     vec2 uv=vec2(gl_FragCoord.x/gBufferSize.x,gl_FragCoord.y/gBufferSize.y);
 
@@ -58,7 +50,7 @@ void main() {
 
     //geometry property
     vec3 position=worldPosition(uv,texture(gDepth,uv).r,inverseProjectionView);
-    vec3 N=texture(gNormal,uv).xyz;
+    vec3 N=normalize(texture(gNormal,uv).xyz);
     vec3 Wo=normalize(cameraPosition-position);
     vec3 Wi=lightType==0?-normalize(lightDirection):normalize(lightPosition-position);
     vec3 H=normalize(Wi+Wo);//half-way vector
@@ -104,7 +96,7 @@ void main() {
     float BRDFdenom   = 4.0*NdotWo*NdotWi+0.000001;
 
     //BRDF terms
-    vec3  F = fresnelSchlickFast(NdotWo,F0); //Fresnel effect NdotWo > NdotH > HdotWo, though in equation is HdotWo
+    vec3  F = fresnelSchlickRoughnessFast(NdotWo,F0,roughness); //Fresnel effect NdotWo > NdotH > HdotWo, though in equation is HdotWo
     float D = D_GGX_TR(N,H,roughness);
     float G = GeometrySmith(NdotWo,NdotWi, roughness);
 

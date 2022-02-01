@@ -3,6 +3,7 @@
 //
 #include "PBRUtility.h"
 #include "OpenGLCache.h"
+#include "Log.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -90,16 +91,14 @@ void HJGraphics::generateDiffuseIrradianceMap(CubeMapTexture *inCubeMap, CubeMap
 	glDeleteBuffers(1,&captureFBO);
 }
 
-//todo. refactor CubeMapTexture constructor to add more options
-//create a Option struct to store GLenum parameters
 void HJGraphics::generateSpecularPrefilteredMap(CubeMapTexture *inCubeMap, CubeMapTexture *outSpecularPrefiltered,
-                                                int sampleNum) {
+                                                unsigned int sampleNum) {
 	static std::shared_ptr<Shader> shader=std::make_shared<Shader>(ShaderCodeList{
-			"../shader/deferred/PBR/PBR_DiffuseIrradiance.vs.glsl"_vs,
-			"../shader/deferred/PBR/PBR_DiffuseIrradiance.fs.glsl"_fs});
+			"../shader/deferred/PBR/PBR_SpecularPrefiltered.vs.glsl"_vs,
+			"../shader/deferred/PBR/PBR_SpecularPrefiltered.fs.glsl"_fs});
 	shader->use();
 	shader->setInt("environmentCubeMap",0);
-	shader->setFloat("sampleNum",sampleNum);
+	shader->setUint("sampleNum",sampleNum);
 	GL.activeTexture(GL_TEXTURE0);
 	GL.bindTexture(GL_TEXTURE_CUBE_MAP,inCubeMap->id);
 	Sizei bufferSize=outSpecularPrefiltered->size[0];//here simply use first size as all the size of sub-cubemap textures
@@ -136,35 +135,39 @@ void HJGraphics::generateSpecularPrefilteredMap(CubeMapTexture *inCubeMap, CubeM
 	glDeleteBuffers(1,&captureFBO);
 }
 
-void HJGraphics::test(glm::mat4 projectionView) {
-	static std::shared_ptr<Shader> shader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/PBR/PBR_Tex2DToCubeMap.vs.glsl"_vs, "../shader/deferred/PBR/PBR_Tex2DToCubeMap.fs.glsl"_fs});
+std::shared_ptr<HJGraphics::IBLManager>
+HJGraphics::IBLManager::bakeIBLMap(std::shared_ptr<Texture2D> _environmentTex, Sizei enviCubeMapSize,
+                                   Sizei irradianceSize, Sizei prefilteredSize, float irradianceSampleDelta,
+                                   int prefilteredSampleNum) {
+	SPDLOG_INFO("Start baking IBL maps...");
+	auto ibl = std::make_shared<IBLManager>();
+	TextureOption option;
+	option.texMinFilter=GL_LINEAR;
+	option.texMagFilter=GL_LINEAR;
+	option.texWrapS=GL_CLAMP_TO_EDGE;
+	option.texWrapT=GL_CLAMP_TO_EDGE;
+	option.texWrapR=GL_CLAMP_TO_EDGE;
 
-	static std::shared_ptr<Texture2D> texture=std::make_shared<Texture2D>("../texture/beach.hdr", TextureOption());
-	shader->use();
-	shader->set4fm("projectionView",projectionView);
-	shader->setInt("image",0);
-	GL.activeTexture(GL_TEXTURE0);
-	GL.bindTexture(GL_TEXTURE_2D,texture->id);
-	HJGraphics::UnitCube::draw();
-}
-
-std::shared_ptr<HJGraphics::IBLBaker>
-HJGraphics::IBLBaker::bakeIBLMap(std::shared_ptr<Texture2D> _environmentTex, Sizei enviCubeMapSize,
-                                 Sizei irradianceSize,
-                                 Sizei prefilteredSize, float irradianceSampleDelta) {
-	auto ibl = std::make_shared<IBLBaker>();
 	ibl->environmentTex = std::move(_environmentTex);
+	ibl->brdfLUTMap=std::make_shared<Texture2D>("../texture/ibl_brdf_lut.png",TextureOption());
 	ibl->environmentCubeMap = std::make_shared<CubeMapTexture>(enviCubeMapSize.width, enviCubeMapSize.height,
-	                                                           GL_RGB16F, GL_RGB, GL_FLOAT, GL_LINEAR,
-	                                                           GL_CLAMP_TO_EDGE);
+	                                                           GL_RGB16F, GL_RGB, GL_FLOAT, option);
 	texture2DToCubeMap(ibl->environmentTex.get(),ibl->environmentCubeMap.get());
-	ibl->diffuseIrradiance = std::make_shared<CubeMapTexture>(irradianceSize.width, irradianceSize.height,
-	                                                          GL_RGB16F, GL_RGB, GL_FLOAT, GL_LINEAR,
-	                                                          GL_CLAMP_TO_EDGE);
-	generateDiffuseIrradianceMap(ibl->environmentCubeMap.get(), ibl->diffuseIrradiance.get(), irradianceSampleDelta);
-	ibl->specularPrefiltered = std::make_shared<CubeMapTexture>(prefilteredSize.width, prefilteredSize.height,
-	                                                            GL_RGB16F, GL_RGB, GL_FLOAT, GL_LINEAR,
-	                                                            GL_CLAMP_TO_EDGE);
+	SPDLOG_INFO("Baked environment cube map at size=({}, {})",enviCubeMapSize.width, enviCubeMapSize.height);
 
+
+	ibl->diffuseIrradiance = std::make_shared<CubeMapTexture>(irradianceSize.width, irradianceSize.height,
+	                                                          GL_RGB16F, GL_RGB, GL_FLOAT, option);
+	generateDiffuseIrradianceMap(ibl->environmentCubeMap.get(), ibl->diffuseIrradiance.get(), irradianceSampleDelta);
+	SPDLOG_INFO("Baked diffuse irradiance cube map at size = ({}, {}) and sample delta = {}",irradianceSize.width, irradianceSize.height, irradianceSampleDelta);
+
+
+	option.texMinFilter=GL_LINEAR_MIPMAP_LINEAR;
+	option.genMipMap=true;
+	ibl->specularPrefiltered = std::make_shared<CubeMapTexture>(prefilteredSize.width, prefilteredSize.height,
+	                                                            GL_RGB16F, GL_RGB, GL_FLOAT, option);
+	generateSpecularPrefilteredMap(ibl->environmentCubeMap.get(),ibl->specularPrefiltered.get(),prefilteredSampleNum);
+	SPDLOG_INFO("Baked specular prefiltered cube map at size = ({}, {}) and sample delta = {}",prefilteredSize.width, prefilteredSize.height, prefilteredSampleNum);
+	SPDLOG_INFO("Baking IBL maps finished");
 	return ibl;
 }

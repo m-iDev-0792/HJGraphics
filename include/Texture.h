@@ -26,6 +26,21 @@ namespace HJGraphics{
 		GLint texMinFilter = GL_LINEAR;
 		GLint texMagFilter = GL_LINEAR;
 		TextureOption()=default;
+		TextureOption(GLint _texWrap, GLint _texFilter){
+			texWrapS=texWrapR=texWrapT=_texWrap;
+			texMinFilter=texMagFilter=_texFilter;
+		}
+		TextureOption(GLint _texWrap, GLint _texFilter, bool _gammaCorrection){
+			texWrapS=texWrapR=texWrapT=_texWrap;
+			texMinFilter=texMagFilter=_texFilter;
+			gammaCorrection=_gammaCorrection;
+		}
+		TextureOption(GLint _texWrap, GLint _texMinFilter, GLint _texMagFilter, bool _gammaCorrection){
+			texWrapS=texWrapR=texWrapT=_texWrap;
+			texMinFilter=_texMinFilter;
+			texMagFilter=_texMagFilter;
+			gammaCorrection=_gammaCorrection;
+		}
 	};
     class Texture : public GLResource  {
     public:
@@ -39,7 +54,6 @@ namespace HJGraphics{
         GLint texMinFilter;
         GLint texMagFilter;
 
-        Texture(GLuint _type);
 		Texture(GLuint _type, TextureOption option);
 
         ~Texture();//析构函数里最好不要deleteTexture,太危险了,再按值传递的时候临时Texture会释放掉纹理!!!
@@ -73,19 +87,19 @@ namespace HJGraphics{
         void setColor(float _color);
 
 		glm::vec3 color;
-
-
     };
+
+
 
     class CubeMapTexture : public Texture {
     public:
-        CubeMapTexture(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, GLenum _filter, GLenum _wrap);
+	    CubeMapTexture(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, TextureOption option);
 
         CubeMapTexture(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
-                       const std::string &downTex, const std::string &frontTex, const std::string &backTex);
+                       const std::string &downTex, const std::string &frontTex, const std::string &backTex, TextureOption option);
 
         void loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex,
-                          const std::string &downTex, const std::string &frontTex, const std::string &backTex);
+                          const std::string &downTex, const std::string &frontTex, const std::string &backTex, TextureOption option);
 
 		Sizei size[6];
     };

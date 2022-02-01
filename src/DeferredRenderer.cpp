@@ -20,6 +20,7 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	motionBlurSampleNum=8;
 	motionBlurTargetFPS=40;
 	motionBlurPower=1.0f;
+	skyboxTextureDisplayEnum=SkyboxTextureDisplayEnum::EnvironmentCubeMap;
 
 	//-------------------------------
 	//        Shaders
@@ -32,6 +33,7 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	//shading shaders
 	lightingShader  = std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/shade.vs.glsl"_vs, "../shader/deferred/shade.fs.glsl"_fs});
 	PBRlightingShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/shade.vs.glsl"_vs, "../shader/deferred/PBR/PBR_lighting.fs.glsl"_fs});
+	PBRIBLShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/shade.vs.glsl"_vs, "../shader/deferred/PBR/PBR_IBL.fs.glsl"_fs});
 }
 HJGraphics::DeferredRenderer::DeferredRenderer():DeferredRenderer(800,600) {}
 
@@ -45,13 +47,12 @@ void HJGraphics::DeferredRenderer::prepareRendering(long long frameDeltaTime, lo
 			mesh->animater->apply(mesh->model,frameDeltaTime,elapsedTime,frameCount);
 		}
 	}
-	//update skybox position
-	for(auto& fMesh:mainScene->forwardMeshes){
-		if(typeid(*fMesh).name()==typeid(Skybox).name()){
-			fMesh->previousModel=fMesh->model;
-			auto diff=mainScene->mainCamera->position - mainScene->mainCamera->previousPosition;
-			fMesh->model=glm::translate(fMesh->model,diff);
-		}
+	//update skybox transform
+	if(mainScene->skybox){
+		auto& skybox=mainScene->skybox;
+		skybox->previousModel=skybox->model;
+		skybox->model=glm::translate(glm::mat4(1.0f),mainScene->mainCamera->position);
+		skybox->model=glm::scale(skybox->model,glm::vec3(mainScene->skybox->radius));
 	}
 }
 void HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime) {
@@ -78,6 +79,9 @@ void HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime) {
 	GL.enable(GL_DEPTH_TEST);
 }
 void HJGraphics::DeferredRenderer::renderInit() {
+	iblManager=IBLManager::bakeIBLMap(mainScene->environmentMap,Sizei(512,512),
+									  Sizei(128,128),Sizei(128,128),
+									  0.125,1024);
 	//Allocate shadow maps for lights that casts shadow
 	for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
 		auto light = mainScene->parallelLights[i];
@@ -250,21 +254,46 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
     //------------------------------------------//
 
     //[3.1]-------ambient shading----------
-    PBRlightingShader->use();
-    PBRlightingShader->set4fm("inverseProjectionView", inverseProjectionView);
-    PBRlightingShader->setInt("lightType",LightType::AmbientType);
+	//ambient shading with IBL
+	if(iblManager){
+		PBRIBLShader->use();
+		PBRIBLShader->set4fm("projectionView", glm::mat4(1.0f));
+		PBRIBLShader->set4fm("model", glm::mat4(1.0f));
+		PBRIBLShader->set4fm("inverseProjectionView", inverseProjectionView);
+		PBRIBLShader->set3fv("cameraPosition", mainScene->mainCamera->position);
+		gBuffer->writeUniform(PBRIBLShader);
+		PBRIBLShader->setInt("gAO",5);
+		GL.activeTexture(GL_TEXTURE5);
+		if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
+		else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
+
+		PBRIBLShader->setInt("irradianceMap",6);
+		GL.activeTexture(GL_TEXTURE6);
+		GL.bindTexture(GL_TEXTURE_CUBE_MAP,iblManager->diffuseIrradiance->id);
+		PBRIBLShader->setInt("prefilteredMap",7);
+		GL.activeTexture(GL_TEXTURE7);
+		GL.bindTexture(GL_TEXTURE_CUBE_MAP,iblManager->specularPrefiltered->id);
+		PBRIBLShader->setInt("brdfLUTMap",8);
+		GL.activeTexture(GL_TEXTURE8);
+		GL.bindTexture(GL_TEXTURE_2D,iblManager->brdfLUTMap->id);
+		Quad3D::draw();
+	}
+	//ambient shading without IBL
+	PBRlightingShader->use();
     PBRlightingShader->set4fm("projectionView", glm::mat4(1.0f));
     PBRlightingShader->set4fm("model", glm::mat4(1.0f));
+    PBRlightingShader->set4fm("inverseProjectionView", inverseProjectionView);
+    PBRlightingShader->setInt("lightType",LightType::AmbientType);
     PBRlightingShader->setFloat("globalAmbientStrength",mainScene->ambientFactor);
     //bind AO texture
-    {
+    if(!iblManager){
         PBRlightingShader->setInt("gAO",5);
         GL.activeTexture(GL_TEXTURE5);
         if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
         else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
     }
     gBuffer->writeUniform(PBRlightingShader);
-    Quad3D::draw();
+	if(!iblManager)Quad3D::draw();
 
 
     //[3.2]-------parallel light shading----------
@@ -364,13 +393,19 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
         for (auto &fm:mainScene->forwardMeshes) {
             fm->projectionView = projectionView;
             fm->previousProjectionView = previousProjectionView;
-            fm->draw();
+	        fm->draw(nullptr);
         }
 		if(mainScene->skybox){
 			auto& skybox=mainScene->skybox;
 			skybox->projectionView = projectionView;
 			skybox->previousProjectionView = previousProjectionView;
-			skybox->draw();
+			if(skyboxTextureDisplayEnum==EnvironmentCubeMap){
+				skybox->draw(&iblManager->environmentCubeMap->id);
+			}else if(skyboxTextureDisplayEnum==DiffuseIrradiance){
+				skybox->draw(&iblManager->diffuseIrradiance->id);
+			}else if(skyboxTextureDisplayEnum==SpecularPrefiltered){
+				skybox->draw(&iblManager->specularPrefiltered->id);
+			}
 		}
     }
 
@@ -381,7 +416,6 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
         deferredTarget->unbind();
 	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         postprocess(frameDeltaTime);
-//	    test(projectionView);
     }
 
 }

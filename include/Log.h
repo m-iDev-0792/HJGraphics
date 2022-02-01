@@ -4,6 +4,7 @@
 
 #ifndef HJGRAPHICS_LOG_H
 #define HJGRAPHICS_LOG_H
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -15,5 +16,6 @@
 	auto HJGLogger = std::make_shared<spdlog::logger>("HJG", begin(sinks), end(sinks));\
 	HJGLogger->sinks()[0]->set_pattern("[%s:%#@%!]%^[%l]%$ %v");\
 	HJGLogger->sinks()[1]->set_pattern("[%H:%M:%S][%s:%#@%!][%l] %v");\
-	spdlog::set_default_logger(HJGLogger);
+	spdlog::set_default_logger(HJGLogger);\
+	spdlog::set_level(spdlog::level::debug);
 #endif //HJGRAPHICS_LOG_H

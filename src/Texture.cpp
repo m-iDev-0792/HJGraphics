@@ -10,9 +10,6 @@
 /*
  * Implementation of Texture2D
  */
-HJGraphics::Texture::Texture(GLuint _type) {
-    type=_type;
-}
 HJGraphics::Texture::Texture(GLuint _type, TextureOption option) {
 	type=_type;
 	texWrapS=option.texWrapS;
@@ -99,12 +96,14 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texMagFilter);
         stbi_image_free(data);
         path=_path;
+	    SPDLOG_DEBUG("Loaded texture2D from {}, size=({},{},{}), gamma correction={}, loadHDR={}, genMipMap={}",
+					 _path.c_str(),imgWidth,imgHeight,imgChannel,gammaCorrection,loadHDR,genMipMap);
     }else{
 	    SPDLOG_ERROR("Can't load image from {}",_path.c_str());
     }
 }
 
-HJGraphics::SolidTexture::SolidTexture(glm::vec3 _color):Texture(GL_TEXTURE_2D){
+HJGraphics::SolidTexture::SolidTexture(glm::vec3 _color):Texture(GL_TEXTURE_2D, TextureOption()){
     glGenTextures(1,&id);
     texWrapS=GL_REPEAT;
     texWrapT=GL_REPEAT;
@@ -112,7 +111,7 @@ HJGraphics::SolidTexture::SolidTexture(glm::vec3 _color):Texture(GL_TEXTURE_2D){
     texMagFilter=GL_NEAREST;
     setColor(_color);
 }
-HJGraphics::SolidTexture::SolidTexture(float _color):Texture(GL_TEXTURE_2D){
+HJGraphics::SolidTexture::SolidTexture(float _color):Texture(GL_TEXTURE_2D, TextureOption()){
     glGenTextures(1,&id);
     texWrapS=GL_REPEAT;
     texWrapT=GL_REPEAT;
@@ -146,70 +145,98 @@ void HJGraphics::SolidTexture::setColor(glm::vec3 _color) {
 /*
  * Implementation of CubeMapTexture
  */
-HJGraphics::CubeMapTexture::CubeMapTexture(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, GLenum _filter, GLenum _wrap):Texture(GL_TEXTURE_CUBE_MAP){
-    texMinFilter=texMagFilter=_filter;
-    texWrapS=texWrapT=texWrapR=_wrap;
-    glGenTextures(1, &id);
-    GL.activeTexture(GL_TEXTURE0);
-    GL.bindTexture(GL_TEXTURE_CUBE_MAP, id);
+HJGraphics::CubeMapTexture::CubeMapTexture(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, TextureOption option):
+Texture(GL_TEXTURE_CUBE_MAP, option){
+	glGenTextures(1, &id);
+	GL.activeTexture(GL_TEXTURE0);
+	GL.bindTexture(GL_TEXTURE_CUBE_MAP, id);
 
-    for (GLuint i = 0; i < 6; ++i){
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, _internalFormat, _width, _height, 0, _format, _dataType, nullptr);
+	for (GLuint i = 0; i < 6; ++i){
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, _internalFormat, _width, _height, 0, _format, _dataType, nullptr);
 		size[i]=Sizei(_width,_height);
 	}
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, texMagFilter);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, texMinFilter);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, texWrapS);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, texWrapT);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, texWrapR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, texMagFilter);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, texMinFilter);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, texWrapS);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, texWrapT);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, texWrapR);
+	if(option.genMipMap){
+		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+		if(!(texMinFilter==GL_LINEAR_MIPMAP_LINEAR || texMinFilter==GL_LINEAR_MIPMAP_NEAREST ||
+		     texMinFilter==GL_NEAREST_MIPMAP_LINEAR || texMinFilter==GL_NEAREST_MIPMAP_NEAREST)){
+			SPDLOG_WARN("Try to generate mipmap for cubemap texture but the texture min filter is not set as a mipmap filter");
+		}
+	}
+	SPDLOG_DEBUG("Created empty cubemap texture, size=({},{}), internalFormat={}, format={}, dataType={}, genMipMap={}",
+				 _width,_height,_internalFormat,_format,_dataType, option.genMipMap);
 }
 HJGraphics::CubeMapTexture::CubeMapTexture(const std::string &rightTex, const std::string &leftTex, const std::string &upTex, const std::string &downTex,
-                                           const std::string &frontTex, const std::string &backTex): Texture(GL_TEXTURE_CUBE_MAP) {
-    texWrapS=GL_CLAMP_TO_EDGE;
-    texWrapT=GL_CLAMP_TO_EDGE;
-    texWrapR=GL_CLAMP_TO_EDGE;
-    texMinFilter=GL_LINEAR;
-    texMagFilter=GL_LINEAR;
+                                           const std::string &frontTex, const std::string &backTex, TextureOption option): Texture(GL_TEXTURE_CUBE_MAP, option) {
     glGenTextures(1,&id);
-    loadFromPath(rightTex,leftTex,upTex,downTex,frontTex,backTex);
+    loadFromPath(rightTex,leftTex,upTex,downTex,frontTex,backTex,option);
 }
+
 void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const std::string &leftTex, const std::string &upTex, const std::string &downTex,
-                                              const std::string &frontTex, const std::string &backTex) {
+                                              const std::string &frontTex, const std::string &backTex, TextureOption option) {
 	//                    [+x]       [-x]       [+y]       [-y]       [+z]       [-z]
     std::string tex[6]={rightTex,   leftTex,    upTex,    downTex,   frontTex,  backTex};
-	SPDLOG_INFO("Loading cubemap\nright = {}\nleft = {}\nup = {}\ndown = {}\nfront = {}\nback = {}",
+	SPDLOG_DEBUG("Loading cubemap right = {}; left = {}; up = {}; down = {}; front = {}; back = {}",
 				rightTex.c_str(),leftTex.c_str(),upTex.c_str(),downTex.c_str(),frontTex.c_str(),backTex.c_str());
     GL.activeTexture(GL_TEXTURE0);
     GL.bindTexture(GL_TEXTURE_CUBE_MAP,id);
     for(int i=0;i<6;++i){
         int imgWidth,imgHeight,imgChannel;
-        auto data=stbi_load(tex[i].c_str(),&imgWidth,&imgHeight,&imgChannel,0);
+        void* data;
+        GLuint internalFormat,format,dataType;
+		bool loadHDR=false;
+	    if(tex[i].size()>4&&tex[i].substr(tex[i].size()-4,4)==std::string(".hdr")){
+		    loadHDR=true;
+		    stbi_set_flip_vertically_on_load(true);
+		    data=stbi_loadf(tex[i].c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
+		    stbi_set_flip_vertically_on_load(false);
+		    dataType=GL_FLOAT;
+	    }else{
+		    data=stbi_load(tex[i].c_str(), &imgWidth, &imgHeight, &imgChannel, 0);
+		    dataType=GL_UNSIGNED_BYTE;
+	    }
 	    size[i]=Sizei(imgWidth,imgHeight);
-        GLuint format;
-        if(imgChannel==1){
-            format=GL_RED;
+	    if(imgChannel==1){
+            internalFormat=format=GL_RED;
         }else if(imgChannel==3){
             format=GL_RGB;
+		    if(loadHDR)internalFormat=GL_RGB16F;
+		    else internalFormat=option.gammaCorrection?GL_SRGB:format;
         }else if(imgChannel==4){
             format=GL_RGBA;
+		    if(loadHDR)internalFormat=GL_RGBA16F;
+		    else internalFormat=option.gammaCorrection?GL_SRGB_ALPHA:format;
         }else{
 	        SPDLOG_ERROR("Can't solve image channel {} while processing cube map {}",imgChannel,tex[i].c_str());
             return;
         }
         if(data!= nullptr) {
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, imgWidth, imgHeight, 0, format,
-                         GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, imgWidth, imgHeight, 0, format,
+                         dataType, data);
             stbi_image_free(data);
-
+	        SPDLOG_DEBUG("Loaded cubemap texture {} from {}, size=({},{},{}), gamma correction={}, loadHDR={}, genMipMap={}",
+	                     i,tex[i].c_str(),imgWidth,imgHeight,imgChannel,option.gammaCorrection,loadHDR,option.genMipMap);
         }else{
 	        SPDLOG_ERROR("Can't load image {}",tex[i].c_str());
+	        return;
         }
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, texMinFilter);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, texMagFilter);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, texWrapS);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, texWrapT);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, texWrapR);
     }
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, texMinFilter);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, texMagFilter);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, texWrapS);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, texWrapT);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, texWrapR);
+	if(option.genMipMap){
+		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+		if(!(texMinFilter==GL_LINEAR_MIPMAP_LINEAR || texMinFilter==GL_LINEAR_MIPMAP_NEAREST ||
+		     texMinFilter==GL_NEAREST_MIPMAP_LINEAR || texMinFilter==GL_NEAREST_MIPMAP_NEAREST)){
+			SPDLOG_WARN("Try to generate mipmap for cubemap texture but the texture min filter is not set as a mipmap filter");
+		}
+	}
 }
 /*
  * Implementation of Material

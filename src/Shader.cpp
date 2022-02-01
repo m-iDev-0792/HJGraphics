@@ -185,13 +185,13 @@ bool HJGraphics::Shader::checkCompileError(GLuint shader, const std::string& typ
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 		if (!success) {
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			SPDLOG_ERROR("Failed to compile {} shader from {}",type.c_str(),src.c_str());
+			SPDLOG_ERROR("Failed to compile {} shader from {}, error content:\n{}",type.c_str(),src.c_str(),infoLog);
 		}
 	} else {
 		glGetProgramiv(shader, GL_LINK_STATUS, &success);
 		if (!success) {
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			SPDLOG_ERROR("Failed to link {} shader from {}",type.c_str(),src.c_str());
+			SPDLOG_ERROR("Failed to link {} shader from {}, error content:\n{}",type.c_str(),src.c_str(),infoLog);
         }
 	}
 	return success;

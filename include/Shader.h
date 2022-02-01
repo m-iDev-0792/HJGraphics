@@ -76,6 +76,13 @@ namespace HJGraphics {
 			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
 #endif
 		};
+		void setUint(const std::string &name, unsigned int value) {
+			auto loc=glGetUniformLocation(id, name.c_str());
+			if(loc>=0)glUniform1ui(loc, value);
+#ifdef SHADER_UNIFORM_DEBUG
+			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+#endif
+		};
 
 		void setIntArray(const std::string &name, int *value, int count) {
 			auto loc=glGetUniformLocation(id, name.c_str());

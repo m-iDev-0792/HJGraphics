@@ -2,7 +2,7 @@
 // Created by 何振邦(m_iDev_0792) on 2018/12/14.
 //
 #include "CustomMesh.h"
-
+#include "Log.h"
 #include <utility>
 
 HJGraphics::CustomMesh::CustomMesh(){
@@ -67,7 +67,7 @@ void HJGraphics::Coordinate::commitData() {
 	loadVBOData(vertexData,sizeof(vertexData));
 }
 
-void HJGraphics::Coordinate::draw() {
+void HJGraphics::Coordinate::draw(void *extraData) {
 	defaultShader->use();
 	defaultShader->set4fm("model",model);
 	defaultShader->set4fm("projectionView",projectionView);
@@ -138,7 +138,7 @@ void HJGraphics::Grid::commitData() {
 	loadVBOData(data, sizeof(float)*(2*cellNum+1)*2*3*2);
 	delete[] data;
 }
-void HJGraphics::Grid::draw() {
+void HJGraphics::Grid::draw(void *extraData) {
 	defaultShader->use();
 	defaultShader->set3fv("lineColor",lineColor);
 	defaultShader->set4fm("projectionView",projectionView);
@@ -161,10 +161,8 @@ void HJGraphics::Grid::draw() {
 /*
  * Implement of Skybox
  */
-HJGraphics::Skybox::Skybox(float _radius, std::shared_ptr<CubeMapTexture> _cubeMapTexture, bool _gammaCorrection) {
-	cubeMapTexture=std::move(_cubeMapTexture);
+HJGraphics::Skybox::Skybox(float _radius) {
 	radius=_radius;
-	gammaCorrection=_gammaCorrection;
 	if(defaultShader== nullptr)defaultShader=std::make_shared<Shader>(ShaderCodeList{"../shader/forward/skybox.vs.glsl"_vs, "../shader/forward/skybox.fs.glsl"_fs});
 	GLfloat cubeVertices[]={
 			// positions           normals
@@ -210,13 +208,7 @@ HJGraphics::Skybox::Skybox(float _radius, std::shared_ptr<CubeMapTexture> _cubeM
 			-1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f,
 			-1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f
 	};
-	if(radius!=1.0f){
-		for(int i=0;i<36;++i){
-			cubeVertices[i*6]*=radius;
-			cubeVertices[i*6+1]*=radius;
-			cubeVertices[i*6+2]*=radius;
-		}
-	}
+
 	loadVBOData(cubeVertices, sizeof(cubeVertices));
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER,VBO);
@@ -227,24 +219,30 @@ HJGraphics::Skybox::Skybox(float _radius, std::shared_ptr<CubeMapTexture> _cubeM
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 }
+HJGraphics::Skybox::Skybox(float _radius, std::shared_ptr<CubeMapTexture> _cubeMapTexture): Skybox(_radius) {
+	cubeMapTexture=std::move(_cubeMapTexture);
+}
 HJGraphics::Skybox::Skybox(float _radius,const std::string& rightTex, const std::string& leftTex,const std::string& upTex,
                            const std::string& downTex,const std::string& frontTex, const std::string& backTex,bool _gammaCorrection):
-						   Skybox(_radius,std::make_shared<CubeMapTexture>(rightTex,leftTex,upTex,downTex,frontTex,backTex),_gammaCorrection){
+						   Skybox(_radius,std::make_shared<CubeMapTexture>(rightTex,leftTex,upTex,downTex,frontTex,backTex, TextureOption(GL_CLAMP_TO_EDGE,GL_LINEAR,_gammaCorrection))){
 }
 
 std::shared_ptr<HJGraphics::Shader> HJGraphics::Skybox::getDefaultShader() {
 	return defaultShader;
 }
-void HJGraphics::Skybox::draw() {
+void HJGraphics::Skybox::draw(void *extraData) {
+	if(extraData== nullptr&&cubeMapTexture== nullptr){
+		SPDLOG_ERROR("No cube map texture available in both extraData and cubeMapTexture, failed to draw skybox");
+		return;
+	}
 	defaultShader->use();
 	defaultShader->set4fm("model",model);
 	defaultShader->set4fm("previousModel",previousModel);
 	defaultShader->set4fm("projectionView",projectionView);
 	defaultShader->set4fm("previousProjectionView",previousProjectionView);
 	defaultShader->setInt("skybox",0);
-	defaultShader->setInt("gammaCorrection",gammaCorrection);
 	glBindVertexArray(VAO);
 	GL.activeTexture(GL_TEXTURE0);
-	GL.bindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture->id);
+	GL.bindTexture(GL_TEXTURE_CUBE_MAP, extraData?*reinterpret_cast<int*>(extraData):cubeMapTexture->id);
 	glDrawArrays(GL_TRIANGLES,0,36);
 }

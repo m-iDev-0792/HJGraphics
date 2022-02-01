@@ -13,17 +13,17 @@ namespace HJGraphics{
 	void generateDiffuseIrradianceMap(CubeMapTexture *inCubeMap, CubeMapTexture *outDiffuseIrradianceMap,
 	                                  float sampleDelta);
 	void generateSpecularPrefilteredMap(CubeMapTexture *inCubeMap, CubeMapTexture *outSpecularPrefiltered,
-	                                    int sampleNum);
-	void test(glm::mat4 projectionView);
-
-	struct IBLBaker{
+	                                    unsigned int sampleNum);
+	struct IBLManager{
 		std::shared_ptr<Texture2D> environmentTex;
 		std::shared_ptr<CubeMapTexture> environmentCubeMap;
 		std::shared_ptr<CubeMapTexture> diffuseIrradiance;
 		std::shared_ptr<CubeMapTexture> specularPrefiltered;
-		static std::shared_ptr<IBLBaker>
-		bakeIBLMap(std::shared_ptr<Texture2D> _environmentTex, Sizei enviCubeMapSize, Sizei irradianceSize,
-		           Sizei prefilteredSize, float irradianceSampleDelta);
+		std::shared_ptr<Texture2D> brdfLUTMap;
+		static std::shared_ptr<HJGraphics::IBLManager>
+		bakeIBLMap(std::shared_ptr<Texture2D> _environmentTex, Sizei enviCubeMapSize,
+		           Sizei irradianceSize, Sizei prefilteredSize, float irradianceSampleDelta,
+		           int prefilteredSampleNum);
 	};
 }
 
