@@ -21,8 +21,6 @@ namespace HJGraphics {
 	class Scene {
 		friend DeferredRenderer;
 	private:
-		GLuint sceneWidth;
-		GLuint sceneHeight;
 		GLfloat ambientFactor;
 		glm::vec3 clearColor;
 		
@@ -42,7 +40,7 @@ namespace HJGraphics {
 	public:
 		Scene();
 
-		Scene(GLuint _sceneWidth, GLuint _sceneHeight, GLfloat _ambient, glm::vec3 _clearColor);
+		Scene(GLfloat _ambient, glm::vec3 _clearColor);
 
 		void addObject(const std::shared_ptr<Mesh>& mesh);
 
@@ -61,10 +59,6 @@ namespace HJGraphics {
 		void setAmbient(float ambient){ambientFactor=ambient;}
 
 		Camera* getMainCamera() { return mainCamera; }
-
-		int getWidth(){return sceneWidth;}
-
-		int getHeight(){return sceneHeight;}
 	};
 }
 

@@ -1,10 +1,8 @@
 #include "Scene.h"
-HJGraphics::Scene::Scene() : Scene(800, 600, 0.3f, glm::vec3(0.0f, 0.0f, 1.0f)) {
+HJGraphics::Scene::Scene() : Scene(0.3f, glm::vec3(0.0f, 0.0f, 1.0f)) {
 
 }
-HJGraphics::Scene::Scene(GLuint _sceneWidth, GLuint _sceneHeight, GLfloat _ambient, glm::vec3 _clearColor) {
-	sceneWidth = _sceneWidth;
-	sceneHeight = _sceneHeight;
+HJGraphics::Scene::Scene(GLfloat _ambient, glm::vec3 _clearColor) {
 	ambientFactor = _ambient;
 	clearColor = _clearColor;
 	mainCamera = nullptr;

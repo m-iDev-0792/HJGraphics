@@ -85,7 +85,7 @@ int main() {
 	auto spotLight=make_shared<SpotLight>(glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(-5.0f, 5.0f, 3.0f), glm::vec3(3));
 	auto pointLight=make_shared<PointLight>(glm::vec3(0.0f, 2.0f, 2.0f),glm::vec3(3));
 
-	auto scene=make_shared<Scene>(1600,1200,0.3,glm::vec3(0));
+	auto scene=make_shared<Scene>(0.3,glm::vec3(0));
 	scene->addLight(pointLight);
 //	scene->addLight(spotLight);
 	scene->addCamera(camera);
@@ -95,7 +95,7 @@ int main() {
 	scene->addObject(coord);
 	scene->setSkybox(25.0f,std::make_shared<Texture2D>("../texture/beach.hdr", Texture2DOption()));
 
-	auto renderer=make_shared<DeferredRenderer>(scene->getWidth(),scene->getHeight());
+	auto renderer=make_shared<DeferredRenderer>(1600,1200);
 	renderer->setMainScene(scene);
 	window.renderer=renderer;
 
