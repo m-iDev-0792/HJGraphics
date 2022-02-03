@@ -1,7 +1,7 @@
 //
 // Created by 何振邦 on 2022/1/25.
 //
-#include "PBRUtility.h"
+#include "IBLManager.h"
 #include "OpenGLCache.h"
 #include "Log.h"
 #include <glm/glm.hpp>
@@ -19,7 +19,9 @@ static glm::mat4 captureViews[] =
 				glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
 		};
 void HJGraphics::texture2DToCubeMap(Texture2D *tex2D, CubeMapTexture *cubemap) {
-	static std::shared_ptr<Shader> shader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/PBR/PBR_Tex2DToCubeMap.vs.glsl"_vs, "../shader/deferred/PBR/PBR_Tex2DToCubeMap.fs.glsl"_fs});
+	static std::shared_ptr<Shader> shader=std::make_shared<Shader>(
+			ShaderCodeList{"../shader/deferred/PBR/PBR_DrawCube.vs.glsl"_vs,
+						   "../shader/deferred/PBR/PBR_Tex2DToCubeMap.fs.glsl"_fs});
 	shader->use();
 	shader->setInt("image",0);
 	GL.activeTexture(GL_TEXTURE0);
@@ -55,7 +57,7 @@ void HJGraphics::texture2DToCubeMap(Texture2D *tex2D, CubeMapTexture *cubemap) {
 void HJGraphics::generateDiffuseIrradianceMap(CubeMapTexture *inCubeMap, CubeMapTexture *outDiffuseIrradianceMap,
                                               float sampleDelta) {
 	static std::shared_ptr<Shader> shader=std::make_shared<Shader>(ShaderCodeList{
-		"../shader/deferred/PBR/PBR_DiffuseIrradiance.vs.glsl"_vs,
+		"../shader/deferred/PBR/PBR_DrawCube.vs.glsl"_vs,
 		"../shader/deferred/PBR/PBR_DiffuseIrradiance.fs.glsl"_fs});
 	shader->use();
 	shader->setInt("environmentCubeMap",0);
@@ -94,7 +96,7 @@ void HJGraphics::generateDiffuseIrradianceMap(CubeMapTexture *inCubeMap, CubeMap
 void HJGraphics::generateSpecularPrefilteredMap(CubeMapTexture *inCubeMap, CubeMapTexture *outSpecularPrefiltered,
                                                 unsigned int sampleNum) {
 	static std::shared_ptr<Shader> shader=std::make_shared<Shader>(ShaderCodeList{
-			"../shader/deferred/PBR/PBR_SpecularPrefiltered.vs.glsl"_vs,
+			"../shader/deferred/PBR/PBR_DrawCube.vs.glsl"_vs,
 			"../shader/deferred/PBR/PBR_SpecularPrefiltered.fs.glsl"_fs});
 	shader->use();
 	shader->setInt("environmentCubeMap",0);

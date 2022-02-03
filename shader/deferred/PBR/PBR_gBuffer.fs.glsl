@@ -1,7 +1,7 @@
 #version 330 core
-layout (location = 0) out vec4 gNormalDepth;
-layout (location = 1) out vec4 gAlbedoMetallic;
-layout (location = 2) out vec4 gF0Roughness;
+layout (location = 0) out vec3 gNormal;
+layout (location = 1) out vec3 gAlbedo;
+layout (location = 2) out vec2 gRoughnessMetalllic;
 layout (location = 3) out vec2 gVelocity;
 
 in vec3 normal;
@@ -31,20 +31,14 @@ float linearizeDepth(float depth,float zNear,float zFar){
 }
 void main(){
     //----------GBuffer output--------------
-    //gNormalDepth
-    gNormalDepth.xyz=normal;
+    gNormal=normal;
     vec3 N=texture(material.normalMap,uv).rgb;
     N = normalize(N * 2.0 - 1.0);
-    gNormalDepth.xyz=normalize(TBN * N);
-    gNormalDepth.w=gl_FragCoord.z;//linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
+    gNormal=normalize(TBN * N);
+//    gNormalDepth.w=gl_FragCoord.z;//linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
 
-    //gAlbedoMetallic
-    gAlbedoMetallic.rgb=texture(material.albedoMap,uv).rgb;
-    gAlbedoMetallic.a=texture(material.metallicMap,uv).r;
-
-    //gF0Roughness
-    gF0Roughness.rgb=texture(material.F0Map,uv).rgb;
-    gF0Roughness.a=texture(material.roughnessMap,uv).r;
+    gAlbedo=texture(material.albedoMap,uv).rgb;
+    gRoughnessMetalllic=vec2(texture(material.roughnessMap,uv).r,texture(material.metallicMap,uv).r);
 
     //gVelocity   why in fragment shader? avoid interpolation
     vec4 positionNDC=projection*view*vec4(position,1.0);

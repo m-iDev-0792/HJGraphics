@@ -1,5 +1,16 @@
 adjust up vector when current direction is close to (0,1,0)
-
+gNormal RGB16F RGB
+gAlbedo RGB RGB
+glRoughnessMetallic RG RG
+修改
+GBuffer class ok
+GBuffer write shader ok
+GBuffer bind 
+GBuffer uniform write 
+PBRlighting shader ok
+PBRIBL shader ok
+normal reading ok
+gAO binding point ok
 # TODOs of HJGraphics
 [x] 适配retina屏幕
 - 窗口framebuffer尺寸变化需要通知renderer

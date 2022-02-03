@@ -19,7 +19,7 @@ namespace HJGraphics {
     public:
         GBuffer(int _width, int _height);
 
-        virtual void bindTextures() const;
+        virtual void bindTexturesForShading() const;
 
         virtual void writeUniform(std::shared_ptr<Shader> shader)const;
 

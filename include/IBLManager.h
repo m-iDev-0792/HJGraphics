@@ -2,8 +2,8 @@
 // Created by 何振邦 on 2022/1/25.
 //
 
-#ifndef HJGRAPHICS_PBRUTILITY_H
-#define HJGRAPHICS_PBRUTILITY_H
+#ifndef HJGRAPHICS_IBLMANAGER_H
+#define HJGRAPHICS_IBLMANAGER_H
 
 #include "Texture.h"
 #include "Shader.h"
@@ -28,4 +28,4 @@ namespace HJGraphics{
 }
 
 
-#endif //HJGRAPHICS_PBRUTILITY_H
+#endif //HJGRAPHICS_IBLMANAGER_H

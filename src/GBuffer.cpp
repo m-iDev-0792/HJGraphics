@@ -22,13 +22,13 @@ HJGraphics::GBuffer::GBuffer(int _width, int _height) {
     auto gNormal=std::make_shared<FrameBufferAttachment>(gNormalTex,0,"gNormal");
     colorAttachments.push_back(gNormal);
     //set up albedo and metallic
-    auto gAlbedoMetallicTex=std::make_shared<Texture2D>(width,height,GL_RGBA,GL_RGBA,GL_UNSIGNED_BYTE,option);
-    auto gAlbedoMetallic=std::make_shared<FrameBufferAttachment>(gAlbedoMetallicTex,1,"gAlbedoMetallic");
-    colorAttachments.push_back(gAlbedoMetallic);
+    auto gAlbedoTex=std::make_shared<Texture2D>(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, option);
+    auto gAlbedo=std::make_shared<FrameBufferAttachment>(gAlbedoTex, 1, "gAlbedo");
+    colorAttachments.push_back(gAlbedo);
     //set up F0 and roughness
-    auto gF0RoughnessTex=std::make_shared<Texture2D>(width,height,GL_RGBA,GL_RGBA,GL_UNSIGNED_BYTE,option);
-    auto gF0Roughness=std::make_shared<FrameBufferAttachment>(gF0RoughnessTex,2,"gF0Roughness");
-    colorAttachments.push_back(gF0Roughness);
+    auto gRoughnessMetallicTex=std::make_shared<Texture2D>(width, height, GL_RG, GL_RG, GL_UNSIGNED_BYTE, option);
+    auto gRoughnessMetallic=std::make_shared<FrameBufferAttachment>(gRoughnessMetallicTex, 2, "gRoughnessMetallic");
+    colorAttachments.push_back(gRoughnessMetallic);
     //set up sharedVelocity
     auto gVelocityTex=std::make_shared<Texture2D>(width,height,GL_RG16F,GL_RG,GL_FLOAT,option);
     auto gVelocity=std::make_shared<FrameBufferAttachment>(gVelocityTex,3,"gVelocity");
@@ -50,12 +50,12 @@ HJGraphics::GBuffer::GBuffer(int _width, int _height) {
 }
 
 
-void HJGraphics::GBuffer::bindTextures() const{
-    for(int i=0;i<colorAttachments.size()-1;++i){
+void HJGraphics::GBuffer::bindTexturesForShading() const{
+    for(int i=0;i<colorAttachments.size()-1;++i){//only bind gNormal gAlbedo and gRoughnessMetallic
         GL.activeTexture(GL_TEXTURE0+i);
         GL.bindTexture(GL_TEXTURE_2D, colorAttachments[i]->getId());
     }
-    if(hasDepthAttachment()){
+    if(hasDepthAttachment()){//also bind gDepth
         GL.activeTexture(GL_TEXTURE3);
         GL.bindTexture(GL_TEXTURE_2D,depthAttachment->getId());
     }else{
@@ -64,12 +64,11 @@ void HJGraphics::GBuffer::bindTextures() const{
 
 }
 void HJGraphics::GBuffer::writeUniform(std::shared_ptr<Shader> shader) const {
-    for(int i=0;i<colorAttachments.size()-1;++i){
+    for(int i=0;i<colorAttachments.size()-1;++i){//only write gNormal gAlbedo and gRoughnessMetallic
         shader->setInt(colorAttachments[i]->name,i);
     }
-    if(hasDepthAttachment()){
+    if(hasDepthAttachment()){//also write gDepth
         shader->setInt(depthAttachment->name,3);
-
     }
     shader->set2fv("gBufferSize",glm::vec2(width,height));
 }

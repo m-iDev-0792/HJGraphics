@@ -6,10 +6,10 @@ uniform vec3 cameraPosition;
 uniform mat4 inverseProjectionView;
 //PBR_gBuffer - texture binding point 0~3
 uniform sampler2D gNormal;//0
-uniform sampler2D gAlbedoMetallic;//1
-uniform sampler2D gF0Roughness;//2
+uniform sampler2D gAlbedo;//1
+uniform sampler2D gRoughnessMetallic;//2
 uniform sampler2D gDepth;//3
-uniform sampler2D gAO;//5
+uniform sampler2D gAO;//4
 uniform vec2 gBufferSize;
 
 //--------IBL uniform begin---------
@@ -23,16 +23,16 @@ void main() {
     vec2 uv=vec2(gl_FragCoord.x/gBufferSize.x,gl_FragCoord.y/gBufferSize.y);
 
     //material property
-    vec3 albedo=texture(gAlbedoMetallic,uv).rgb;
-    float metallic=texture(gAlbedoMetallic,uv).a;
-    vec3 F0=texture(gF0Roughness,uv).rgb;
+    vec3 albedo=texture(gAlbedo,uv).rgb;
+    float roughness=texture(gRoughnessMetallic,uv).r;
+    float metallic=texture(gRoughnessMetallic,uv).g;
+    vec3 F0=vec3(0.04);
     F0 = mix(F0, albedo, metallic);
-    float roughness=texture(gF0Roughness,uv).a;
     float ao=texture(gAO,uv).r;
 
     //geometry property
     vec3 position=worldPosition(uv,texture(gDepth,uv).r,inverseProjectionView);
-    vec3 N=normalize(texture(gNormal,uv).xyz);
+    vec3 N=texture(gNormal,uv).xyz;
     vec3 Wo=normalize(cameraPosition-position);
     vec3 Wi = reflect(-Wo, N);//specular reflection ray
     float NdotWo  = max(dot(N, Wo), 0.0);

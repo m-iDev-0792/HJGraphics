@@ -5,7 +5,7 @@
 #include "Shader.h"
 #include "HJGraphics.h"
 #include "Log.h"
-#include "PBRUtility.h"
+#include "IBLManager.h"
 using namespace std;
 using namespace glm;
 using namespace HJGraphics;

@@ -10,7 +10,7 @@
 #include "Scene.h"
 #include "FrameBuffer.h"
 #include "SSAO.h"
-#include "PBRUtility.h"
+#include "IBLManager.h"
 #include <map>
 namespace HJGraphics {
 	class Window;

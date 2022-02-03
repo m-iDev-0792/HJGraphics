@@ -1,5 +1,5 @@
 #include "DeferredRenderer.h"
-#include "PBRUtility.h"
+#include "IBLManager.h"
 HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	//-------------------------------
 	//    Init Important Members
@@ -246,7 +246,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
     else glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //bind gBuffer texture
-    gBuffer->bindTextures();
+	gBuffer->bindTexturesForShading();
 
     //------Enable blend for light shading------//
     GL.enable(GL_BLEND);
@@ -262,8 +262,8 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
 		PBRIBLShader->set4fm("inverseProjectionView", inverseProjectionView);
 		PBRIBLShader->set3fv("cameraPosition", mainScene->mainCamera->position);
 		gBuffer->writeUniform(PBRIBLShader);
-		PBRIBLShader->setInt("gAO",5);
-		GL.activeTexture(GL_TEXTURE5);
+		PBRIBLShader->setInt("gAO",4);
+		GL.activeTexture(GL_TEXTURE4);
 		if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
 		else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
 
@@ -287,8 +287,8 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
     PBRlightingShader->setFloat("globalAmbientStrength",mainScene->ambientFactor);
     //bind AO texture
     if(!iblManager){
-        PBRlightingShader->setInt("gAO",5);
-        GL.activeTexture(GL_TEXTURE5);
+        PBRlightingShader->setInt("gAO",4);
+        GL.activeTexture(GL_TEXTURE4);
         if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
         else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
     }
