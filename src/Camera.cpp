@@ -21,7 +21,12 @@ void HJGraphics::Camera::updateMatrices() {
 	previousView=view;
 	previousProjection=projection;
 
-	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 worldUp;
+	if(glm::length(direction-glm::vec3(0.0f,1.0f,0.0f))>0.001f){
+		worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	}else{
+		worldUp = glm::vec3(1.0f,0.0f,0.0f);
+	}
 	glm::vec3 cameraRight = glm::normalize(glm::cross(worldUp, direction));
 	glm::vec3 cameraUp = glm::cross(direction, cameraRight);
 

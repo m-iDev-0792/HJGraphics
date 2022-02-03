@@ -7,7 +7,7 @@
 #include "Log.h"
 #include <string>
 #include <iostream>
-//todo. refactor GBuffer data pack arrangement
+
 HJGraphics::GBuffer::GBuffer(int _width, int _height) {
     width=_width;
     height=_height;

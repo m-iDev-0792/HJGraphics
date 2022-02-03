@@ -28,9 +28,14 @@ HJGraphics::ParallelLight::ParallelLight(glm::vec3 _dir, glm::vec3 _pos, glm::ve
 	}
 }
 std::vector<glm::mat4> HJGraphics::ParallelLight::getLightMatrix() {
-	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);//TODO. potential bug. when direction is close to worldUp
-	glm::vec3 lightRight = glm::normalize(glm::cross(worldUp, direction));
-	glm::vec3 lightUp = glm::cross(direction, lightRight);
+	glm::vec3 worldUp;
+	if(glm::length(direction-glm::vec3(0.0f,1.0f,0.0f))>0.001f){
+		worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	}else{
+		worldUp = glm::vec3(1.0f,0.0f,0.0f);
+	}
+	glm::vec3 lightLeft = glm::normalize(glm::cross(worldUp, direction));
+	glm::vec3 lightUp = glm::cross(direction, lightLeft);
 	glm::mat4 lightView = glm::lookAt(position, position + direction, lightUp);
 	glm::mat4 lightProjection;
 	lightProjection = glm::ortho(-range, range, -range, range, shadowZNear, shadowZFar);
