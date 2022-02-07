@@ -18,7 +18,9 @@ uniform samplerCube prefilteredMap;//7
 uniform sampler2D brdfLUTMap;//8
 
 #include"PBR_Common.glsl"
-
+vec3 cubeSamplePos(vec3 v){// cubeMap coordinate is in left hand while OpenGL coordinate is in right hand
+    return vec3(v.x,v.y,-v.z);
+}
 void main() {
     vec2 uv=vec2(gl_FragCoord.x/gBufferSize.x,gl_FragCoord.y/gBufferSize.y);
 
@@ -45,9 +47,9 @@ void main() {
     vec3 kD = vec3(1.0) - kS;
     kD *= 1.0 - metallic;//pure metal doesn't have diffuse
 
-    vec3 irradiance=texture(irradianceMap,N).rgb;
+    vec3 irradiance=texture(irradianceMap,cubeSamplePos(N)).rgb;
     const float MAX_MIPMAP_LEVEL = 4.0;
-    vec3 prefilteredColor=textureLod(prefilteredMap,Wi,roughness*MAX_MIPMAP_LEVEL).rgb;
+    vec3 prefilteredColor=textureLod(prefilteredMap,cubeSamplePos(Wi),roughness*MAX_MIPMAP_LEVEL).rgb;
     vec2 envBRDF=texture(brdfLUTMap,vec2(NdotWo,roughness)).rg;
     vec3 Lo=ao*(kD*albedo*irradiance + prefilteredColor * (F * envBRDF.x + envBRDF.y));
     FragColor=vec4(Lo,1.0f);

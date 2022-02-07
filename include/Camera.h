@@ -34,6 +34,8 @@ namespace HJGraphics {
 		       float _zNear = 0.1f, float _zFar = 100.0f);
 
 		void updateMatrices();//this is a testing function
+
+		void writeGizmoData(std::vector<float>& data)const;
 	};
 }
 

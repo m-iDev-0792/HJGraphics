@@ -24,8 +24,8 @@ int main() {
 //	                                string("../texture/envmap_miramar/miramar_dn.tga"),
 //	                                string("../texture/envmap_miramar/miramar_bk.tga"),
 //	                                string("../texture/envmap_miramar/miramar_ft.tga"));
-
-	TextureList brickwallTexture{"../texture/brickwall.jpg"_diffuse, "../texture/brickwall_normal.jpg"_normal};
+	auto normalMap="../texture/brickwall_normal.jpg"_normal;
+	TextureList brickwallTexture{"../texture/brickwall.jpg"_diffuse, normalMap};
 	auto brickMaterial=make_shared<PBRMaterial>(brickwallTexture);
 
 	auto box=make_shared<Box>(2, 2, 2,brickMaterial);
@@ -35,9 +35,9 @@ int main() {
 
 
 
-	auto soliddiffuse=make_shared<SolidTexture>(glm::vec3(0.5,0.0,0.0));
+	auto soliddiffuse=make_shared<SolidTexture>(glm::vec3(0.9,0.9,0.8));
 	soliddiffuse->usage="diffuse";
-	TextureList brickwallTexture2{soliddiffuse, "../texture/brickwall_normal.jpg"_normal};
+	TextureList brickwallTexture2{soliddiffuse,normalMap};
 	//1
 	//|
 	//metallic
@@ -88,12 +88,13 @@ int main() {
 	auto scene=make_shared<Scene>(0.3,glm::vec3(0));
 	scene->addLight(pointLight);
 //	scene->addLight(spotLight);
+//	scene->addLight(paraLight);
 	scene->addCamera(camera);
 
 	for(auto& s:spheres)scene->addObject(s);
 	scene->addObject(plane);
 	scene->addObject(coord);
-	scene->setSkybox(25.0f,std::make_shared<Texture2D>("../texture/beach.hdr", Texture2DOption()));
+	scene->setSkybox(50.0f,std::make_shared<Texture2D>("../texture/beach.hdr", Texture2DOption()));
 
 	auto renderer=make_shared<DeferredRenderer>(1600,1200);
 	renderer->setMainScene(scene);

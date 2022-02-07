@@ -97,11 +97,6 @@ namespace HJGraphics {
 
 	class Skybox : public CustomMesh {
 	public:
-		static std::shared_ptr<Shader> defaultShader;
-
-		float radius;
-		std::shared_ptr<CubeMapTexture> cubeMapTexture;
-
 		Skybox(float _radius);
 
 		Skybox(float _radius, std::shared_ptr<CubeMapTexture> _cubeMapTexture);
@@ -112,6 +107,24 @@ namespace HJGraphics {
 		std::shared_ptr<Shader> getDefaultShader() override ;
 
 		void draw(void *extraData) override;
+
+		static std::shared_ptr<Shader> defaultShader;
+		float radius;
+		std::shared_ptr<CubeMapTexture> cubeMapTexture;
+	};
+
+	class Gizmo : public CustomMesh{
+	public:
+		Gizmo(std::vector<float>& data);
+
+		static std::shared_ptr<Shader> defaultShader;
+
+		std::shared_ptr<Shader> getDefaultShader() override ;
+
+		void draw(void *extraData) override;
+
+		int drawNum;
+
 	};
 
 }

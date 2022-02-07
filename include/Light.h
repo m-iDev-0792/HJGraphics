@@ -41,6 +41,8 @@ namespace HJGraphics {
 		
 		virtual void writeUniform(std::shared_ptr<Shader> lightShader){}
 
+		virtual void writeGizmoData(std::vector<float>& data)const=0;
+
 		Light()=default;
 
 	};
@@ -49,13 +51,15 @@ namespace HJGraphics {
 		float range;
 	public:
 		ParallelLight(glm::vec3 _dir, glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f),
-		              glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f), float _range=10);
+		              glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f), float _range=10, float _zNear=0.1, float _zFar=50.0f);
 
 		static std::shared_ptr<Mesh> lightVolume;
 		
 		std::vector<glm::mat4> getLightMatrix() override;
 		
 		void writeUniform(std::shared_ptr<Shader> lightShader) override;
+
+		void writeGizmoData(std::vector<float>& data)const override;
 	};
 	class SpotLight: public Light {
 		glm::vec3 direction;
@@ -69,7 +73,7 @@ namespace HJGraphics {
 	public:
 		std::shared_ptr<Mesh> lightVolume;
 		
-		SpotLight(glm::vec3 _dir, glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f));
+		SpotLight(glm::vec3 _dir, glm::vec3 _pos = glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f), float _range = 25);
 
 		void setAngle(float _inner,float _outer) {
 			innerAngle = _inner;
@@ -86,6 +90,8 @@ namespace HJGraphics {
 		void writeUniform(std::shared_ptr<Shader> lightShader) override;
 
 		void generateBoundingMesh();
+
+		void writeGizmoData(std::vector<float>& data) const override;
 	};
 	class PointLight: public Light {
 	public:
@@ -108,6 +114,8 @@ namespace HJGraphics {
 		void writeUniform(std::shared_ptr<Shader> lightShader) override;
 
 		void generateBoundingMesh();
+
+		void writeGizmoData(std::vector<float>& data)const override;
 	};
 	
 }

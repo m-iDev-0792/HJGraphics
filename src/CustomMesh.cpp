@@ -35,6 +35,8 @@ void HJGraphics::CustomMesh::loadEBOData(void *data, size_t dataByteSize, int us
 std::shared_ptr<HJGraphics::Shader> HJGraphics::Coordinate::defaultShader= nullptr;
 std::shared_ptr<HJGraphics::Shader> HJGraphics::Grid::defaultShader= nullptr;
 std::shared_ptr<HJGraphics::Shader> HJGraphics::Skybox::defaultShader= nullptr;
+std::shared_ptr<HJGraphics::Shader> HJGraphics::Gizmo::defaultShader= nullptr;
+
 
 HJGraphics::Coordinate::Coordinate() :Coordinate(10.0f,10.0f,10.0f){}
 HJGraphics::Coordinate::Coordinate(GLfloat _xLen, GLfloat _yLen, GLfloat _zLen, glm::vec3 _xColor, glm::vec3 _yColor, glm::vec3 _zColor){
@@ -245,4 +247,27 @@ void HJGraphics::Skybox::draw(void *extraData) {
 	GL.activeTexture(GL_TEXTURE0);
 	GL.bindTexture(GL_TEXTURE_CUBE_MAP, extraData?*reinterpret_cast<int*>(extraData):cubeMapTexture->id);
 	glDrawArrays(GL_TRIANGLES,0,36);
+}
+std::shared_ptr<HJGraphics::Shader> HJGraphics::Gizmo::getDefaultShader() {
+	return defaultShader;
+}
+HJGraphics::Gizmo::Gizmo(std::vector<float> &data) {
+	if(defaultShader== nullptr)defaultShader=std::make_shared<Shader>(
+			ShaderCodeList{"../shader/forward/gizmo.vs.glsl"_vs, "../shader/forward/gizmo.fs.glsl"_fs});
+	drawNum=data.size()/6;
+	loadVBOData(data.data(), sizeof(float)*data.size());
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER,VBO);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,6* sizeof(GLfloat), nullptr);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,6* sizeof(GLfloat),(void*)(3* sizeof(GLfloat)));
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+	glBindVertexArray(0);
+}
+void HJGraphics::Gizmo::draw(void *extraData) {
+	defaultShader->use();
+	defaultShader->set4fm("projectionView",projectionView);
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_LINES,0,drawNum);
 }

@@ -82,6 +82,7 @@ void HJGraphics::DeferredRenderer::renderInit() {
 	iblManager=IBLManager::bakeIBLMap(mainScene->environmentMap,Sizei(512,512),
 									  Sizei(128,128),Sizei(128,128),
 									  0.125,1024);
+	std::vector<float> gizmoData;
 	//Allocate shadow maps for lights that casts shadow
 	for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
 		auto light = mainScene->parallelLights[i];
@@ -89,6 +90,7 @@ void HJGraphics::DeferredRenderer::renderInit() {
 			auto newSM = std::make_shared<ShadowMap>();
 			shadowMaps[light] = newSM;
 		}
+		light->writeGizmoData(gizmoData);
 	}
 	for (int i = 0; i < mainScene->spotLights.size(); ++i) {
 		auto light = mainScene->spotLights[i];
@@ -96,6 +98,7 @@ void HJGraphics::DeferredRenderer::renderInit() {
 			auto newSM = std::make_shared<ShadowMap>();
 			shadowMaps[light] = newSM;
 		}
+		light->writeGizmoData(gizmoData);
 	}
 	for (int i = 0; i < mainScene->pointLights.size(); ++i) {
 		auto light = mainScene->pointLights[i];
@@ -103,15 +106,19 @@ void HJGraphics::DeferredRenderer::renderInit() {
 			auto newSCM = std::make_shared<ShadowCubeMap>();
 			shadowCubeMaps[light] = newSCM;
 		}
+		light->writeGizmoData(gizmoData);
 	}
+	for(int i=0;i<mainScene->cameras.size();++i){
+		mainScene->cameras[i]->writeGizmoData(gizmoData);
+	}
+	gizmo=std::make_shared<Gizmo>(gizmoData);
 }
 
 void HJGraphics::DeferredRenderer::renderMesh(const std::shared_ptr<Mesh>& m) {
 	glBindVertexArray(m->VAO);
 	if (m->indices.size() > 0) {
 		glDrawElements(m->primitiveType, m->drawNum, GL_UNSIGNED_INT, nullptr);
-	}
-	else {
+	}else {
 		glDrawArrays(m->primitiveType, 0, m->drawNum);
 	}
 }
@@ -406,6 +413,10 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
 			}else if(skyboxTextureDisplayEnum==SpecularPrefiltered){
 				skybox->draw(&iblManager->specularPrefiltered->id);
 			}
+		}
+		if(gizmo){
+			gizmo->projectionView=projectionView;
+			gizmo->draw(nullptr);
 		}
     }
 

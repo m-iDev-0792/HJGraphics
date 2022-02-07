@@ -19,7 +19,7 @@ renderer->setMainScene(scene);
 window.renderer=renderer;
 window.run();
 ```
-![](attachment/demo.gif)
+![](attachment/demo.png)
 # Features
 HJGraphics has...
 
@@ -37,7 +37,7 @@ HJGraphics has...
     * Spot light
     * Shadow for 3 kinds of lights above 
 * Material : BlinnPhong material and UE4 workflow PBR material.
-* Renderer : deferred and forward shading support, SSAO, text rendering.
+* Renderer : deferred and forward shading support, SSAO, text rendering, IBL
 * Post-Processing : Motion Blur(Both camera & object), HDR
 # Gallery
 ![](attachment/multiLight.png)
