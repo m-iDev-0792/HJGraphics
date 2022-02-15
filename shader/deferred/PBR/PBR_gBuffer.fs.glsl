@@ -1,7 +1,7 @@
 #version 330 core
 layout (location = 0) out vec3 gNormal;
 layout (location = 1) out vec3 gAlbedo;
-layout (location = 2) out vec2 gRoughnessMetalllic;
+layout (location = 2) out vec3 gRoughnessMetallicReflectable;
 layout (location = 3) out vec2 gVelocity;
 
 in vec3 normal;
@@ -19,7 +19,7 @@ struct PBRMaterial{
     sampler2D normalMap;
     sampler2D metallicMap;
     sampler2D roughnessMap;
-    sampler2D F0Map;
+    float reflectable;
 //    sampler2D heightMap;
 };
 uniform PBRMaterial material;
@@ -38,7 +38,7 @@ void main(){
 //    gNormalDepth.w=gl_FragCoord.z;//linearizeDepth(gl_FragCoord.z,zNearAndzFar.x,zNearAndzFar.y);
 
     gAlbedo=texture(material.albedoMap,uv).rgb;
-    gRoughnessMetalllic=vec2(texture(material.roughnessMap,uv).r,texture(material.metallicMap,uv).r);
+    gRoughnessMetallicReflectable=vec3(texture(material.roughnessMap,uv).r,texture(material.metallicMap,uv).r,material.reflectable);
 
     //gVelocity   why in fragment shader? avoid interpolation
     vec4 positionNDC=projection*view*vec4(position,1.0);

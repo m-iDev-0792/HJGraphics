@@ -11,7 +11,7 @@ namespace HJGraphics{
 	class SSAO {
 	public:
 		std::shared_ptr<FrameBuffer> ssao;
-		std::shared_ptr<FrameBuffer> ssaoBlured;
+		std::shared_ptr<FrameBuffer> ssaoBlurred;
 		glm::vec2 ssaoSize;
 
 		GLuint ssaoNoise;
@@ -21,7 +21,7 @@ namespace HJGraphics{
 		float sampleNum;
 		float ssaoRadius;
 		float ssaoBias;
-		int ssaoBlurRaidus;
+		int ssaoBlurRadius;
 
 		static std::shared_ptr<Shader> ssaoShader;
 		static std::shared_ptr<Shader> ssaoBlurShader;
@@ -30,7 +30,7 @@ namespace HJGraphics{
 		//     Tips: how to set ssao parameters
 		//---------------------------------------
 		// ssaoRadius: according to your model size, greater radius , darker ao and larger ao range
-		// ssaoBlurRaidus: not too large, 1~3 is enough
+		// ssaoBlurRadius: not too large, 1~3 is enough
 		// ssaoNoiseSize: greater size, smoother ao
 		// ssaoBias: less bias, darker ao
 		SSAO(glm::vec2 _ssaoSize, glm::vec2 _ssaoNoiseSize, float _sampleNum, int _ssaoBlurRadius=1, float _ssaoRadius=0.3,

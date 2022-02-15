@@ -8,11 +8,27 @@
 #include "Log.h"
 std::shared_ptr<HJGraphics::Shader> HJGraphics::FrameBuffer::defaultShader= nullptr;
 
-HJGraphics::DeferredTarget::DeferredTarget(int _width,int _height, std::shared_ptr<FrameBufferAttachment> _sharedVelocity): FrameBuffer(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT) {
+//HJGraphics::DeferredTarget::DeferredTarget(int _width,int _height, const std::shared_ptr<FrameBufferAttachment>& _sharedVelocity): FrameBuffer(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT) {
+//	sharedVelocity=_sharedVelocity;
+//	colorAttachments.push_back(sharedVelocity);
+//}
+HJGraphics::DeferredTarget::DeferredTarget(int _width, int _height, const std::shared_ptr<FrameBufferAttachment>& _sharedVelocity) {
+	width=_width;
+	height=_height;
 	sharedVelocity=_sharedVelocity;
-	colorAttachments.push_back(sharedVelocity);
+	TextureOption option(GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR,false);
+	colorAttachments.push_back(std::make_shared<FrameBufferAttachment>(std::make_shared<Texture2D>(_width, _height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, option), 0, "color0"));
+	colorAttachments.push_back(_sharedVelocity);
+	option.texMinFilter=option.texMagFilter=GL_NEAREST;
+	auto depthStencil=std::make_shared<FrameBufferAttachment>(std::make_shared<Texture2D>(_width, _height, GL_DEPTH24_STENCIL8,GL_DEPTH_STENCIL,GL_UNSIGNED_INT_24_8,option), 0, "depth");
+	depthAttachment=stencilAttachment=depthStencil;
+	FrameBuffer::bindAttachments();
+	//check framebuffer completeness
+	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+		SPDLOG_ERROR("Framebuffer is not complete!");
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-
 HJGraphics::FrameBuffer::FrameBuffer(){
     width=height=0;
     glGenFramebuffers(1, &id);
@@ -58,7 +74,7 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, int _internalForma
 	}
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, std::vector<std::shared_ptr<HJGraphics::FrameBufferAttachment>>& _colors, std::shared_ptr<HJGraphics::FrameBufferAttachment> _depth, std::shared_ptr<HJGraphics::FrameBufferAttachment> _stencil){
+HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, const std::vector<std::shared_ptr<FrameBufferAttachment>> &_colors, std::shared_ptr<HJGraphics::FrameBufferAttachment> _depth, std::shared_ptr<HJGraphics::FrameBufferAttachment> _stencil){
     colorAttachments=_colors;
     depthAttachment=_depth;
     stencilAttachment=_stencil;
@@ -74,13 +90,12 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, std::vector<std::s
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void HJGraphics::FrameBuffer::debugDrawBuffer(int index) {
-    if(colorAttachments.size()>=index){
+void HJGraphics::FrameBuffer::debugDrawBuffer(int index) {//todo. add support for drawing multi-channel attachment
+    if(colorAttachments.size()<=index){
 	    SPDLOG_ERROR("index exceed attachment index range");
         return;
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    defaultShader->use();
+	defaultShader->use();
     defaultShader->setInt("screenTexture",0);
     GL.activeTexture(GL_TEXTURE0);
     GL.bindTexture(GL_TEXTURE_2D, colorAttachments[index]->attachment->id);
@@ -149,7 +164,7 @@ void HJGraphics::FrameBuffer::copyDepthBitTo(GLuint target) {
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, target);
         glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST );
     }else{
-	    SPDLOG_WARN("currrent framebuffer does not have a depth attachment");
+	    SPDLOG_WARN("current framebuffer does not have a depth attachment");
     }
 
 }

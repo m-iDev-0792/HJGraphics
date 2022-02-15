@@ -99,6 +99,13 @@ namespace HJGraphics {
 			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
 #endif
 		};
+		void set4fv(const std::string &name, glm::vec4 value) {
+			auto loc=glGetUniformLocation(id, name.c_str());
+			if(loc>=0)glUniform4f(loc, value.x, value.y, value.z, value.w);
+#ifdef SHADER_UNIFORM_DEBUG
+			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+#endif
+		};
 
 		void set2fv(const std::string &name, glm::vec2 value) {
 			auto loc=glGetUniformLocation(id, name.c_str());

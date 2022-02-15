@@ -27,7 +27,7 @@ namespace HJGraphics {
 
         void renderInit();
 
-		void postprocess(long long frameDeltaTime);
+		void postprocess(long long frameDeltaTime, Sizei size, GLuint screenTex, GLuint velocityTex);
 
 		void renderMesh(const std::shared_ptr<Mesh>& m);
 
@@ -44,11 +44,17 @@ namespace HJGraphics {
 		int targetWidth,targetHeight;
 		std::shared_ptr<Scene> mainScene;
 		std::shared_ptr<DeferredTarget> deferredTarget;
+		std::shared_ptr<FrameBuffer> auxiliaryTarget;
+		std::shared_ptr<FrameBuffer> filterTarget;
+		std::shared_ptr<FrameBuffer> ssrTarget;
 
 		std::shared_ptr<SSAO> ssaoPass;
 		std::shared_ptr<SolidTexture> defaultAOTex;
 		//some shaders
 		std::shared_ptr<Shader> postprocessShader;
+		std::shared_ptr<Shader> filterShader;
+		std::shared_ptr<Shader> depthOfFieldShader;
+		std::shared_ptr<Shader> ssrShader;
 
 		std::shared_ptr<Shader> pointLightShadowShader;
 		std::shared_ptr<Shader> parallelSpotLightShadowShader;
@@ -64,6 +70,9 @@ namespace HJGraphics {
 		//settings
 		bool enableAO;
 		bool enableMotionBlur;
+		bool enableDepthOfField;
+		bool enableBloom;
+		bool enableSSR;
 		int motionBlurSampleNum;
 		int motionBlurTargetFPS;
 		float motionBlurPower;

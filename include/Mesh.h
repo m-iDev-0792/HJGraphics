@@ -23,7 +23,6 @@ namespace HJGraphics {
 		GLuint VAO;
 		GLuint VBO;
 		GLuint EBO;
-		bool castShadow;
 		int drawNum;
 		PrimitiveType primitiveType;
 
@@ -38,6 +37,7 @@ namespace HJGraphics {
 		glm::mat4 previousModel;//for motion blur
 		std::shared_ptr<Animater> animater;
 		std::shared_ptr<Material> material;
+		bool castShadow;
 
 		Mesh(const std::shared_ptr<Material>& _material);
 

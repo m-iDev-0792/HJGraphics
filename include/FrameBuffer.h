@@ -56,7 +56,7 @@ namespace HJGraphics{
         FrameBuffer(int _width, int _height, int _internalFormat=GL_RGB, int _format=GL_RGB, int _dataType=GL_UNSIGNED_BYTE, int _filter=GL_LINEAR, bool _createDepthRBO=true);
 
         //more general constructor for creating a framebuffer, resources are pre-allocated
-        FrameBuffer(int _width, int _height, std::vector<std::shared_ptr<FrameBufferAttachment>>& _colors, std::shared_ptr<FrameBufferAttachment> _depth, std::shared_ptr<FrameBufferAttachment> _stencil);
+        FrameBuffer(int _width, int _height, const std::vector<std::shared_ptr<FrameBufferAttachment>> &_colors, std::shared_ptr<FrameBufferAttachment> _depth, std::shared_ptr<FrameBufferAttachment> _stencil);
 
         void clearBind() const;
 
@@ -95,7 +95,7 @@ namespace HJGraphics{
 
 		DeferredTarget(int _width,int _height): FrameBuffer(_width, _height, GL_RGBA16F, GL_RGBA, GL_FLOAT){
 		}
-		DeferredTarget(int _width,int _height, std::shared_ptr<FrameBufferAttachment> _sharedVelocity);
+		DeferredTarget(int _width,int _height, const std::shared_ptr<FrameBufferAttachment>& _sharedVelocity);
 	};
 }
 

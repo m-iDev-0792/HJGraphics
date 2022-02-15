@@ -21,19 +21,19 @@ HJGraphics::GBuffer::GBuffer(int _width, int _height) {
     auto gNormalTex=std::make_shared<Texture2D>(width,height,GL_RGB16F,GL_RGB,GL_FLOAT,option);
     auto gNormal=std::make_shared<FrameBufferAttachment>(gNormalTex,0,"gNormal");
     colorAttachments.push_back(gNormal);
-    //set up albedo and metallic
+    //set up albedo
     auto gAlbedoTex=std::make_shared<Texture2D>(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, option);
     auto gAlbedo=std::make_shared<FrameBufferAttachment>(gAlbedoTex, 1, "gAlbedo");
     colorAttachments.push_back(gAlbedo);
-    //set up F0 and roughness
-    auto gRoughnessMetallicTex=std::make_shared<Texture2D>(width, height, GL_RG, GL_RG, GL_UNSIGNED_BYTE, option);
-    auto gRoughnessMetallic=std::make_shared<FrameBufferAttachment>(gRoughnessMetallicTex, 2, "gRoughnessMetallic");
-    colorAttachments.push_back(gRoughnessMetallic);
+    //set up roughness metallic and reflectable
+    auto gRoughnessMetallicReflectableTex=std::make_shared<Texture2D>(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, option);
+    auto gRoughnessMetallicReflectable=std::make_shared<FrameBufferAttachment>(gRoughnessMetallicReflectableTex, 2, "gRoughnessMetallicReflectable");
+    colorAttachments.push_back(gRoughnessMetallicReflectable);
     //set up sharedVelocity
     auto gVelocityTex=std::make_shared<Texture2D>(width,height,GL_RG16F,GL_RG,GL_FLOAT,option);
     auto gVelocity=std::make_shared<FrameBufferAttachment>(gVelocityTex,3,"gVelocity");
     colorAttachments.push_back(gVelocity);
-    //set up rbo
+    //set up depth and stencil buffer
     auto depthStencilTex=std::make_shared<Texture2D>(width,height,GL_DEPTH24_STENCIL8,GL_DEPTH_STENCIL,GL_UNSIGNED_INT_24_8,option);
     auto depthStencil=std::make_shared<FrameBufferAttachment>(depthStencilTex,0,"gDepth");
     depthAttachment=depthStencil;

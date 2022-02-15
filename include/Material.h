@@ -82,9 +82,8 @@ namespace HJGraphics {
 		std::shared_ptr<Texture> normalMap;//vec3 bind - 1,solidTexture should be vec3(0.5,0.5,1)when there is no normal map
 		std::shared_ptr<Texture> metallicMap;//float bind - 2
 		std::shared_ptr<Texture> roughnessMap;//float bind - 3
-		std::shared_ptr<Texture> F0Map; //vec3 bind - 4
 		std::shared_ptr<Texture> heightMap;//
-
+		float reflectable;
 
 		explicit PBRMaterial(glm::vec3 _albedo=glm::vec3(0.8),float _metallic=0.1,float _roughness=0.5,glm::vec3 _f0=glm::vec3(0.04));
 

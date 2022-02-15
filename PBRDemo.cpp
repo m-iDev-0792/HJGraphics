@@ -25,8 +25,9 @@ int main() {
 //	                                string("../texture/envmap_miramar/miramar_bk.tga"),
 //	                                string("../texture/envmap_miramar/miramar_ft.tga"));
 	auto normalMap="../texture/brickwall_normal.jpg"_normal;
-	TextureList brickwallTexture{"../texture/brickwall.jpg"_diffuse, normalMap};
+	TextureList brickwallTexture{"../texture/brickwall.jpg"_diffuse,normalMap};
 	auto brickMaterial=make_shared<PBRMaterial>(brickwallTexture);
+	brickMaterial->reflectable=1.0f;
 
 	auto box=make_shared<Box>(2, 2, 2,brickMaterial);
 	box->model=translate(box->model,vec3(0.0f,0.0f,-2.5f));

@@ -7,7 +7,7 @@ uniform mat4 inverseProjectionView;
 //PBR_gBuffer - texture binding point 0~3
 uniform sampler2D gNormal;//0
 uniform sampler2D gAlbedo;//1
-uniform sampler2D gRoughnessMetallic;//2
+uniform sampler2D gRoughnessMetallicReflectable;//2
 uniform sampler2D gDepth;//3
 uniform sampler2D gAO;//4
 uniform vec2 gBufferSize;
@@ -44,8 +44,8 @@ void main() {
 
     //material property
     vec3 albedo=texture(gAlbedo,uv).rgb;
-    float roughness=texture(gRoughnessMetallic,uv).r;
-    float metallic=texture(gRoughnessMetallic,uv).g;
+    float roughness=texture(gRoughnessMetallicReflectable,uv).r;
+    float metallic=texture(gRoughnessMetallicReflectable,uv).g;
     vec3 F0=vec3(0.04);
 
     //geometry property
