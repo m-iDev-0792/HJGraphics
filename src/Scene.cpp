@@ -1,24 +1,26 @@
 #include "Scene.h"
-HJGraphics::Scene::Scene() : Scene(800, 600, 0.3f, glm::vec3(0.0f, 0.0f, 1.0f)) {
+HJGraphics::Scene::Scene() : Scene(0.3f, glm::vec3(0.0f, 0.0f, 1.0f)) {
 
 }
-HJGraphics::Scene::Scene(GLuint _sceneWidth, GLuint _sceneHeight, GLfloat _ambient, glm::vec3 _clearColor) {
-	sceneWidth = _sceneWidth;
-	sceneHeight = _sceneHeight;
+HJGraphics::Scene::Scene(GLfloat _ambient, glm::vec3 _clearColor) {
 	ambientFactor = _ambient;
 	clearColor = _clearColor;
 	mainCamera = nullptr;
+	skybox=std::make_shared<Skybox>(25.0f);
 }
 
-void HJGraphics::Scene::addObject(std::shared_ptr<Mesh> mesh) {
-	if (mesh != nullptr)meshes.push_back(mesh);
+void HJGraphics::Scene::addObject(const std::shared_ptr<Mesh>& mesh) {
+	if (mesh)meshes.push_back(mesh);
 }
-void HJGraphics::Scene::addObject(std::shared_ptr<CustomMesh> mesh) {
-	if (mesh != nullptr)forwardMeshes.push_back(mesh);
+void HJGraphics::Scene::addObject(const std::shared_ptr<CustomMesh>& mesh) {
+	if (mesh)forwardMeshes.push_back(mesh);
 }
-
-void HJGraphics::Scene::addObject(std::shared_ptr<Model> model) {
-	if (model != nullptr){
+void HJGraphics::Scene::setSkybox(float _radius, const std::shared_ptr<Texture2D> &_environmentMap) {
+	if(skybox)skybox->radius=_radius;
+	if(_environmentMap)environmentMap=_environmentMap;
+}
+void HJGraphics::Scene::addObject(const std::shared_ptr<Model>& model) {
+	if (model){
 		models.push_back(model);
 		for(auto &m:model->meshes)meshes.push_back(m);
 	}

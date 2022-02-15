@@ -39,3 +39,18 @@ float HJGraphics::random0_1f() {
 	static std::uniform_real_distribution<float> dist(0, 1);
 	return dist(engine);
 }
+
+void HJGraphics::pushCircleData(std::vector<float> &data, glm::vec3 origin, glm::vec3 up, glm::vec3 right, float radius,
+                                glm::vec3 color, int partition) {
+	if(partition<=0){
+		partition=2.0f*3.1415926f*radius/0.5f;
+	}
+	float gap= 2.0f * 3.1415926f / partition;
+	for(int i=0; i < partition; ++i){
+		float a1=gap*i;
+		float a2=gap*(i+1);
+		pushData(data,origin+radius*std::cos(a1)*up+radius*std::sin(a1)*right,color);
+		pushData(data,origin+radius*std::cos(a2)*up+radius*std::sin(a2)*right,color);
+	}
+
+}

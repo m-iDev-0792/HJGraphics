@@ -2,14 +2,15 @@
 // Created by 何振邦 on 2020/7/15.
 //
 
-#include <iostream>
 #include "Shader.h"
 #include "HJGraphics.h"
+#include "Log.h"
+#include "IBLManager.h"
 using namespace std;
 using namespace glm;
 using namespace HJGraphics;
 int main() {
-
+	INIT_HJGRAPHICS_LOG
 	Window window(800,600,"HJGraphics");
 
 	glm::vec3 cameraPos=glm::vec3(5.0f,5.0f,10.0f);
@@ -17,15 +18,16 @@ int main() {
 	Camera camera(cameraPos,cameraDirection);
 
 	auto coord=make_shared<Coordinate>();
-	auto skybox=make_shared<Skybox>(25,string("../texture/envmap_miramar/miramar_rt.tga"),
-	                                string("../texture/envmap_miramar/miramar_lf.tga"),
-	                                string("../texture/envmap_miramar/miramar_up.tga"),
-	                                string("../texture/envmap_miramar/miramar_dn.tga"),
-	                                string("../texture/envmap_miramar/miramar_bk.tga"),
-	                                string("../texture/envmap_miramar/miramar_ft.tga"));
-
-	TextureList brickwallTexture{"../texture/brickwall.jpg"_diffuse, "../texture/brickwall_normal.jpg"_normal};
+//	auto skybox=make_shared<Skybox>(25,string("../texture/envmap_miramar/miramar_rt.tga"),
+//	                                string("../texture/envmap_miramar/miramar_lf.tga"),
+//	                                string("../texture/envmap_miramar/miramar_up.tga"),
+//	                                string("../texture/envmap_miramar/miramar_dn.tga"),
+//	                                string("../texture/envmap_miramar/miramar_bk.tga"),
+//	                                string("../texture/envmap_miramar/miramar_ft.tga"));
+	auto normalMap="../texture/brickwall_normal.jpg"_normal;
+	TextureList brickwallTexture{"../texture/brickwall.jpg"_diffuse,normalMap};
 	auto brickMaterial=make_shared<PBRMaterial>(brickwallTexture);
+	brickMaterial->reflectable=1.0f;
 
 	auto box=make_shared<Box>(2, 2, 2,brickMaterial);
 	box->model=translate(box->model,vec3(0.0f,0.0f,-2.5f));
@@ -34,9 +36,9 @@ int main() {
 
 
 
-	auto soliddiffuse=make_shared<SolidTexture>(glm::vec3(0.5,0.0,0.0));
+	auto soliddiffuse=make_shared<SolidTexture>(glm::vec3(0.9,0.9,0.8));
 	soliddiffuse->usage="diffuse";
-	TextureList brickwallTexture2{soliddiffuse, "../texture/brickwall_normal.jpg"_normal};
+	TextureList brickwallTexture2{soliddiffuse,normalMap};
 	//1
 	//|
 	//metallic
@@ -84,17 +86,18 @@ int main() {
 	auto spotLight=make_shared<SpotLight>(glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(-5.0f, 5.0f, 3.0f), glm::vec3(3));
 	auto pointLight=make_shared<PointLight>(glm::vec3(0.0f, 2.0f, 2.0f),glm::vec3(3));
 
-	auto scene=make_shared<Scene>(800,600,0.3,glm::vec3(0));
+	auto scene=make_shared<Scene>(0.3,glm::vec3(0));
 	scene->addLight(pointLight);
-	scene->addLight(spotLight);
+//	scene->addLight(spotLight);
+//	scene->addLight(paraLight);
 	scene->addCamera(camera);
 
 	for(auto& s:spheres)scene->addObject(s);
 	scene->addObject(plane);
 	scene->addObject(coord);
-	scene->addObject(skybox);
+	scene->setSkybox(50.0f,std::make_shared<Texture2D>("../texture/beach.hdr", Texture2DOption()));
 
-	auto renderer=make_shared<DeferredRenderer>(scene->getWidth(),scene->getHeight());
+	auto renderer=make_shared<DeferredRenderer>(1600,1200);
 	renderer->setMainScene(scene);
 	window.renderer=renderer;
 

@@ -40,9 +40,6 @@ namespace HJGraphics {
 		glm::vec3 originalDirection;
 
 		int fps;
-		bool enableMotionBlur;
-		bool enableAO;
-
 
 		void framebufferSizeCallback(GLFWwindow *window, int width, int height) override;
 

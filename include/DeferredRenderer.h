@@ -10,6 +10,7 @@
 #include "Scene.h"
 #include "FrameBuffer.h"
 #include "SSAO.h"
+#include "IBLManager.h"
 #include <map>
 namespace HJGraphics {
 	class Window;
@@ -26,19 +27,34 @@ namespace HJGraphics {
 
         void renderInit();
 
-		void postprocess(long long frameDeltaTime);
+		void postprocess(long long frameDeltaTime, Sizei size, GLuint screenTex, GLuint velocityTex);
 
 		void renderMesh(const std::shared_ptr<Mesh>& m);
+
+	private:
+		//render pass
+		void prepareRendering(long long frameDeltaTime,long long elapsedTime,long long frameCount);//update mesh states etc.
+
+		void shadowPass();
+
+		void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
 	private:
 		//important members!
 		int width,height;
+		int targetWidth,targetHeight;
 		std::shared_ptr<Scene> mainScene;
 		std::shared_ptr<DeferredTarget> deferredTarget;
+		std::shared_ptr<FrameBuffer> auxiliaryTarget;
+		std::shared_ptr<FrameBuffer> filterTarget;
+		std::shared_ptr<FrameBuffer> ssrTarget;
 
 		std::shared_ptr<SSAO> ssaoPass;
 		std::shared_ptr<SolidTexture> defaultAOTex;
 		//some shaders
 		std::shared_ptr<Shader> postprocessShader;
+		std::shared_ptr<Shader> filterShader;
+		std::shared_ptr<Shader> depthOfFieldShader;
+		std::shared_ptr<Shader> ssrShader;
 
 		std::shared_ptr<Shader> pointLightShadowShader;
 		std::shared_ptr<Shader> parallelSpotLightShadowShader;
@@ -48,23 +64,31 @@ namespace HJGraphics {
 		std::shared_ptr<Shader> lightingShader;
 		//pbr
 		std::shared_ptr<Shader> PBRlightingShader;
+		std::shared_ptr<Shader> PBRIBLShader;
+		std::shared_ptr<IBLManager> iblManager;
 
 		//settings
 		bool enableAO;
 		bool enableMotionBlur;
+		bool enableDepthOfField;
+		bool enableBloom;
+		bool enableSSR;
 		int motionBlurSampleNum;
 		int motionBlurTargetFPS;
 		float motionBlurPower;
+		enum SkyboxTextureDisplayEnum{
+			EnvironmentCubeMap,
+			DiffuseIrradiance,
+			SpecularPrefiltered,
+			SkyboxTextureDisplayEnumNum
+		};
+		int skyboxTextureDisplayEnum;
 		
 		//shadow maps
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowMap>> shadowMaps;
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowCubeMap>> shadowCubeMaps;
 
-
-		//render pass
-		void prepareRendering(long long frameDeltaTime,long long elapsedTime,long long frameCount);//update mesh states etc.
-		void shadowPass();
-        void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
+		std::shared_ptr<Gizmo> gizmo;
 	};
 }
 #endif

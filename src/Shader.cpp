@@ -3,13 +3,14 @@
 //
 
 #include "Shader.h"
+#include "Log.h"
 #include <regex>
 std::string readText(const std::string& filename){
 	using namespace std;
 	ifstream file(filename, ios::in);
 	if (!file.is_open()) {
-		cerr << "ERROR @ readText(const string&) : can't load text file:" << filename << endl;
-		return std::string();
+		SPDLOG_ERROR("can't load text file {}",filename.c_str());
+		return {};
 	}
 	string text;
 	file.seekg(0, ios::end);
@@ -92,6 +93,7 @@ HJGraphics::ShaderCode HJGraphics::operator ""_cs(const char* str,size_t n){
 	return HJGraphics::ShaderCode(HJGraphics::ShaderCodeType::Compute,code,str);
 }
 std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::string& vsPath, const std::string& fsPath, const std::string& gsPath){
+	SPDLOG_INFO("loading shader from {} | {} | {}",vsPath.c_str(),fsPath.c_str(),gsPath.c_str());
 	auto vsCode = readText(vsPath);auto vsBasePath=getBasePath(vsPath);preprocessShaderCode(vsCode,vsBasePath);
 	auto fsCode = readText(fsPath);auto fsBasePath=getBasePath(fsPath);preprocessShaderCode(fsCode,fsBasePath);
 	std::string gsCode,gsBasePath;
@@ -104,7 +106,7 @@ std::shared_ptr<HJGraphics::Shader> HJGraphics::makeSharedShader(const std::stri
 	try {
 		shader = std::make_shared<Shader>(vsCode, fsCode, gsCode);
 	}catch (...) {
-		std::cerr << "Error @ makeSharedShader: " << vsPath << " | " << fsPath << " | " << gsPath << std::endl;
+		SPDLOG_ERROR("failed to make shared shader with {} | {} | {}",vsPath.c_str(),fsPath.c_str(),gsPath.c_str());
 	}
 	return shader;
 }
@@ -126,10 +128,11 @@ HJGraphics::Shader::Shader(ShaderCodeList codes){
 	}
 	glLinkProgram(id);
 	if(!checkCompileError(id, "PROGRAM")) {
-		std::cout << "----Compile shader program not successful----" << std::endl;
+		std::string failedCode;
 		for(auto &code:codes){
-			std::cout << SHADER_NAME_LIST[static_cast<int>(code.type)]<<" code:" << std::endl << code.code << std::endl;
+			failedCode+=SHADER_NAME_LIST[static_cast<int>(code.type)]+" code:\n"+code.code+"\n";
 		}
+		SPDLOG_ERROR("----Failed to compile program----\n{}",failedCode.c_str());
 		throw "loading shader failed";
 	}
 	for(auto& si:shaderID){
@@ -165,9 +168,7 @@ HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode,
 	if (!gsCode.empty())glAttachShader(id, geometryID);
 	glLinkProgram(id);
 	if(!checkCompileError(id, "PROGRAM")) {
-		std::cout << "----Compile shader program not successful----" << std::endl;
-		std::cout << "vsCode:" << std::endl << vsCode << std::endl;
-		std::cout << "fsCode:" << std::endl << fsCode << std::endl;
+		SPDLOG_ERROR("----Failed to compile program----\nVertex shader code:\n{}\nFragment shader code:\n{}",vsCode.c_str(),fsCode.c_str());
 		throw "loading shader failed";
 	}
 
@@ -177,22 +178,20 @@ HJGraphics::Shader::Shader(const std::string& vsCode, const std::string& fsCode,
 }
 
 
-bool HJGraphics::Shader::checkCompileError(GLuint shader, std::string type, std::string src){
+bool HJGraphics::Shader::checkCompileError(GLuint shader, const std::string& type, const std::string& src){
 	int success=1;
 	char infoLog[1024];
 	if (type != "PROGRAM") {
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 		if (!success) {
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR @ Shader::checkCompileError(GLuint,std::string,std::string) : SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog;
-			if(!src.empty())std::cout<<"code loaded from "<<src<<std::endl;
+			SPDLOG_ERROR("Failed to compile {} shader from {}, error content:\n{}",type.c_str(),src.c_str(),infoLog);
 		}
 	} else {
 		glGetProgramiv(shader, GL_LINK_STATUS, &success);
 		if (!success) {
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR @ Shader::checkCompileError(GLuint,std::string,std::string) : PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog;
-            if(!src.empty())std::cout<<"code loaded from "<<src<<std::endl;
+			SPDLOG_ERROR("Failed to link {} shader from {}, error content:\n{}",type.c_str(),src.c_str(),infoLog);
         }
 	}
 	return success;

@@ -29,7 +29,7 @@ namespace HJGraphics {
 
 		virtual std::shared_ptr<Shader> getDefaultShader()=0;
 
-		virtual void draw()=0;
+		virtual void draw(void *extraData) =0;
 
 		void loadVBOData(void *data, size_t dataByteSize, int usageMode = GL_STATIC_DRAW);
 
@@ -62,7 +62,7 @@ namespace HJGraphics {
 
 		std::shared_ptr<Shader> getDefaultShader() override;
 
-		void draw() override;
+		void draw(void *extraData) override;
 
 		void commitData();
 	};
@@ -90,27 +90,41 @@ namespace HJGraphics {
 
 		std::shared_ptr<Shader> getDefaultShader() override;
 
-		void draw() override;
+		void draw(void *extraData) override;
 
 		void commitData();
 	};
 
 	class Skybox : public CustomMesh {
 	public:
-		static std::shared_ptr<Shader> defaultShader;
+		Skybox(float _radius);
 
-		float radius;
-		CubeMapTexture cubeMapTexture;
-		bool gammaCorrection;
+		Skybox(float _radius, std::shared_ptr<CubeMapTexture> _cubeMapTexture);
 
-		Skybox() = delete;
-
-		Skybox(float _radius, std::string rightTex, std::string leftTex, std::string upTex,
-		       std::string downTex, std::string frontTex, std::string backTex,bool _gammaCorrection=true);
+		Skybox(float _radius, const std::string& rightTex, const std::string& leftTex, const std::string& upTex,
+		       const std::string& downTex, const std::string& frontTex, const std::string& backTex,bool _gammaCorrection=true);
 
 		std::shared_ptr<Shader> getDefaultShader() override ;
 
-		void draw() override;
+		void draw(void *extraData) override;
+
+		static std::shared_ptr<Shader> defaultShader;
+		float radius;
+		std::shared_ptr<CubeMapTexture> cubeMapTexture;
+	};
+
+	class Gizmo : public CustomMesh{
+	public:
+		Gizmo(std::vector<float>& data);
+
+		static std::shared_ptr<Shader> defaultShader;
+
+		std::shared_ptr<Shader> getDefaultShader() override ;
+
+		void draw(void *extraData) override;
+
+		int drawNum;
+
 	};
 
 }

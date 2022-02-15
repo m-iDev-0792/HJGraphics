@@ -19,7 +19,7 @@ renderer->setMainScene(scene);
 window.renderer=renderer;
 window.run();
 ```
-![](attachment/demo.gif)
+![](attachment/demo.png)
 # Features
 HJGraphics has...
 
@@ -37,8 +37,8 @@ HJGraphics has...
     * Spot light
     * Shadow for 3 kinds of lights above 
 * Material : BlinnPhong material and UE4 workflow PBR material.
-* Renderer : deferred and forward shading support, SSAO, text rendering.
-* Post-Processing : Motion Blur(Both camera & object), HDR
+* Renderer : deferred and forward shading support, SSAO, text rendering, IBL
+* Post-Processing : Screen Space Reflection, Motion Blur(Both camera & object), HDR, Depth of Field, Chromatic aberration, Bloom
 # Gallery
 ![](attachment/multiLight.png)
 
@@ -48,7 +48,7 @@ Fig.1 unlimited number of lights and shadow support
 
 ![](attachment/PBRModel.png)
 
-Fig.2 PBR model and shading
+Fig.2 PBR shading
 
 
 ![](attachment/model.png)
@@ -65,6 +65,7 @@ Fig.4 basic material
 - glm 0.9.9.8
 - stb
 - freetype 2.10.2
+- SPDLOG
 
 Build passed on Windows 10(Visual Studio 2017) and macOS 10.14(CLion)
 # Continue advancing
@@ -75,10 +76,13 @@ Build passed on Windows 10(Visual Studio 2017) and macOS 10.14(CLion)
 - [x] PBR Shading
 - [x] Motion Blur
 - [x] Animater(basic)
-- [ ] Depth of field
+- [x] Depth of field
+- [x] SSR
 
 # Acknowledge
 Amazing tutorials : [learnopengl.com](https://www.learnopengl.com)
+
+Shader tutorials : [3D Game Shaders For Beginners](https://lettier.github.io/3d-game-shaders-for-beginners)
 
 OpenGL API reference : [OpenGL wiki](https://www.khronos.org/opengl/wiki/)
 

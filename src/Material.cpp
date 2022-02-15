@@ -112,22 +112,20 @@ void HJGraphics::BlinnPhongMaterial::loadTexture(const std::shared_ptr<Texture> 
 std::shared_ptr<HJGraphics::Shader> HJGraphics::PBRMaterial::lightingShader=nullptr;
 HJGraphics::PBRMaterial::PBRMaterial(const std::vector<std::shared_ptr<Texture> > &_textures) {
 	materialType=MaterialType::PBR;
-
+	reflectable = 0.0f;
 	PBRMaterial::loadTextures(_textures);
 	if(!albedoMap)albedoMap=std::make_shared<SolidTexture>(glm::vec3(0.9f, 0.9f, 0.9f));
 	if(!roughnessMap)roughnessMap=std::make_shared<SolidTexture>(0.5);
 	if(!normalMap)normalMap=std::make_shared<SolidTexture>(glm::vec3(0.5, 0.5, 1.0));
 	if(!metallicMap)metallicMap=std::make_shared<SolidTexture>(0.1);
-
-	if(!F0Map)F0Map=std::make_shared<SolidTexture>(glm::vec3(0.04));
 }
 HJGraphics::PBRMaterial::PBRMaterial(glm::vec3 _albedo, float _metallic, float _roughness, glm::vec3 _f0) {
 	materialType=MaterialType::PBR;
+	reflectable = 0.0f;
 	albedoMap=std::make_shared<SolidTexture>(_albedo);
 	normalMap=std::make_shared<SolidTexture>(glm::vec3(0.5, 0.5, 1.0));
 	metallicMap=std::make_shared<SolidTexture>(_metallic);
 	roughnessMap=std::make_shared<SolidTexture>(_roughness);
-	F0Map=std::make_shared<SolidTexture>(_f0);
 }
 void HJGraphics::PBRMaterial::bindTexture() {
 	GL.activeTexture(GL_TEXTURE0);
@@ -138,9 +136,7 @@ void HJGraphics::PBRMaterial::bindTexture() {
 	GL.bindTexture(GL_TEXTURE_2D,metallicMap->id);
 	GL.activeTexture(GL_TEXTURE3);
 	GL.bindTexture(GL_TEXTURE_2D,roughnessMap->id);
-	GL.activeTexture(GL_TEXTURE4);
-	GL.bindTexture(GL_TEXTURE_2D,F0Map->id);
-//	GL.activeTexture(GL_TEXTURE5);
+//	GL.activeTexture(GL_TEXTURE4);
 //	GL.bindTexture(GL_TEXTURE_2D,heightMap->id);
 }
 
@@ -150,8 +146,8 @@ void HJGraphics::PBRMaterial::writeToShader(std::shared_ptr<Shader> shader) {
 	shader->setInt("material.normalMap",1);
 	shader->setInt("material.metallicMap",2);
 	shader->setInt("material.roughnessMap",3);
-	shader->setInt("material.F0Map",4);
-//	shader->setInt("material.heightMap",5);
+	shader->setFloat("material.reflectable",reflectable);
+//	shader->setInt("material.heightMap",4);
 }
 void HJGraphics::PBRMaterial::loadTextures(const std::vector<std::shared_ptr<Texture>> &_textures) {
 	for(auto& t:_textures){
@@ -168,8 +164,6 @@ void HJGraphics::PBRMaterial::loadTexture(const std::shared_ptr<Texture> &t) {
 		metallicMap=t;
 	}else if("roughness" == t->usage||"specular" == t->usage){
 		roughnessMap=t;
-	}else if("F0" == t->usage){
-		F0Map=t;
 	}else if("height" == t->usage){
 		heightMap=t;
 	}

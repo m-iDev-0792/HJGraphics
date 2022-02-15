@@ -6,10 +6,10 @@ uniform vec3 cameraPosition;
 uniform mat4 inverseProjectionView;
 //PBR_gBuffer - texture binding point 0~3
 uniform sampler2D gNormal;//0
-uniform sampler2D gAlbedoMetallic;//1
-uniform sampler2D gF0Roughness;//2
+uniform sampler2D gAlbedo;//1
+uniform sampler2D gRoughnessMetallicReflectable;//2
 uniform sampler2D gDepth;//3
-uniform sampler2D gAO;//5
+uniform sampler2D gAO;//4
 uniform vec2 gBufferSize;
 
 const int PARALLELLIGHT=0;
@@ -39,22 +39,14 @@ uniform samplerCube shadowCubeMap;//11
 #include"../common/shadowCalculate.glsl"
 #include"PBR_Common.glsl"
 
-vec3 worldPosition(vec2 uv, float depth, mat4 inverseProjectionView){
-    vec4 clipSpace = vec4(uv * 2.0 - vec2(1.0), 2.0 * depth - 1.0, 1.0);
-    //vec4 position = inverseProjection * clipSpace; // Use this for view space
-    vec4 position = inverseProjectionView * clipSpace; // Use this for world space
-    return(position.xyz / position.w);
-}
-
-
 void main() {
     vec2 uv=vec2(gl_FragCoord.x/gBufferSize.x,gl_FragCoord.y/gBufferSize.y);
 
     //material property
-    vec3 albedo=texture(gAlbedoMetallic,uv).rgb;
-    float metallic=texture(gAlbedoMetallic,uv).a;
-    vec3 F0=texture(gF0Roughness,uv).rgb;
-    float roughness=texture(gF0Roughness,uv).a;
+    vec3 albedo=texture(gAlbedo,uv).rgb;
+    float roughness=texture(gRoughnessMetallicReflectable,uv).r;
+    float metallic=texture(gRoughnessMetallicReflectable,uv).g;
+    vec3 F0=vec3(0.04);
 
     //geometry property
     vec3 position=worldPosition(uv,texture(gDepth,uv).r,inverseProjectionView);
@@ -100,10 +92,11 @@ void main() {
     float NdotWo  = max(dot(N, Wo), 0.0);
     float NdotWi  = max(dot(N, Wi), 0.0);
     float HdotWo  = max(dot(H, Wo), 0.0);
-    float BRDFdenom   = 4.0*NdotWo*NdotWi+0.0001;
+    float NdotH   = max(dot(N, H) , 0.0);
+    float BRDFdenom   = 4.0*NdotWo*NdotWi+0.000001;
 
     //BRDF terms
-    vec3  F = fresnelSchlickFast(HdotWo,F0);
+    vec3  F = fresnelSchlickRoughnessFast(NdotWo,F0,roughness); //Fresnel effect NdotWo > NdotH > HdotWo, though in equation is HdotWo
     float D = D_GGX_TR(N,H,roughness);
     float G = GeometrySmith(NdotWo,NdotWi, roughness);
 
@@ -111,6 +104,6 @@ void main() {
     vec3 kD = vec3(1.0) - kS;
     kD *= 1.0 - metallic;//pure metal doesn't have diffuse
     //review again: Lo=  (kD * albedo / pi + kD * D * G * F/(4 * WiDotN * WoDotN)) * Li * WiDotN
-    vec3 Lo=(kD*albedo/PI + D*G*F/BRDFdenom) * Li * NdotWi;//note: no kS because F already contain it
+    vec3 Lo=(kD*albedo/PI + D*G*F/BRDFdenom) * Li * NdotWi;//note: no kS because F already contains it
     FragColor=vec4(Lo,1.0);
 }

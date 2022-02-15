@@ -14,12 +14,12 @@ HJGraphics::SSAO::SSAO(glm::vec2 _ssaoSize, glm::vec2 _ssaoNoiseSize, float _sam
 	sampleNum=_sampleNum;
 	ssaoRadius=_ssaoRadius;
 	ssaoBias=_ssaoBias;
-	ssaoBlurRaidus=_ssaoBlurRadius;
-	//create ssao and ssaoBlured framebuffers
+	ssaoBlurRadius=_ssaoBlurRadius;
+	//create ssao and ssaoBlurred framebuffers
 	ssao=std::make_shared<FrameBuffer>(ssaoSize.x, ssaoSize.y, GL_RED, GL_RED, GL_FLOAT, GL_LINEAR, false);
-	ssaoBlured=std::make_shared<FrameBuffer>(ssaoSize.x, ssaoSize.y, GL_RED, GL_RED, GL_FLOAT, GL_LINEAR, false);
-	if(ssaoShader==nullptr)ssaoShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/ssao.vs.glsl"_vs, "../shader/deferred/ssao.fs.glsl"_fs});
-	if(ssaoBlurShader==nullptr)ssaoBlurShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/ssao.vs.glsl"_vs, "../shader/deferred/ssaoBlur.fs.glsl"_fs});
+	ssaoBlurred=std::make_shared<FrameBuffer>(ssaoSize.x, ssaoSize.y, GL_RED, GL_RED, GL_FLOAT, GL_LINEAR, false);
+	if(ssaoShader==nullptr)ssaoShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/AO/ssao.vs.glsl"_vs, "../shader/deferred/AO/ssao.fs.glsl"_fs});
+	if(ssaoBlurShader==nullptr)ssaoBlurShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/AO/ssao.vs.glsl"_vs, "../shader/deferred/AO/ssaoBlur.fs.glsl"_fs});
 	generateSamplesAndNoise();
 }
 void HJGraphics::SSAO::generateSamplesAndNoise() {
@@ -52,14 +52,14 @@ void HJGraphics::SSAO::generateSamplesAndNoise() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 void HJGraphics::SSAO::blur() {
-	ssaoBlured->clearBind();
+	ssaoBlurred->clearBind();
 	ssaoBlurShader->use();
-	ssaoBlurShader->setInt("radius",ssaoBlurRaidus);
+	ssaoBlurShader->setInt("radius", ssaoBlurRadius);
 	ssaoBlurShader->setInt("ssao",0);
 	GL.activeTexture(GL_TEXTURE0);
 	GL.bindTexture(GL_TEXTURE_2D,ssao->colorAttachments[0]->getId());
 	Quad2D::draw();
-	ssaoBlured->unbind();
+	ssaoBlurred->unbind();
 }
 void HJGraphics::SSAO::render(GLuint gNormal,GLuint gDepth, glm::mat4 projectionMat, glm::mat4 inverseProjectionView, glm::vec2 zNearAndzFar, glm::vec3 cameraPosition){
 	//render ssao

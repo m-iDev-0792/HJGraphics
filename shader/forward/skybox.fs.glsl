@@ -3,8 +3,6 @@ layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec2 gVelocity;
 in vec3 position;
 uniform samplerCube skybox;
-uniform int gammaCorrection;
-const float gamma = 2.2;
 uniform mat4 projectionView;
 uniform mat4 previousProjectionView;
 uniform mat4 model;
@@ -12,8 +10,8 @@ uniform mat4 previousModel;
 
 void main(){
     vec3 color;
-    if(gammaCorrection==1)color = pow(texture(skybox, position).xyz, vec3(gamma));
-    else color = texture(skybox, position).xyz;
+    vec3 samplePos=vec3(position.x,position.y,-position.z);
+    color = texture(skybox, samplePos).xyz;
     FragColor = vec4(color,1.0);
 
     //gVelocity   why in fragment shader? avoid interpolation
