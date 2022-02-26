@@ -28,5 +28,7 @@ namespace HJGraphics{
 		data.push_back(v.x);data.push_back(v.y);data.push_back(v.z);
 		data.push_back(c.x);data.push_back(c.y);data.push_back(c.z);
 	}
+	GLenum checkGLError_(const char *file, int line);
+#define checkGLError() checkGLError_(__FILE__, __LINE__)
 }
 #endif //HJGRAPHICS_UTILITY_H

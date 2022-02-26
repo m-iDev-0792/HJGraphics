@@ -4,6 +4,8 @@
 
 #include "Utility.h"
 #include <random>
+#include <iostream>
+
 void HJGraphics::getTangentBitangent(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, glm::vec2 uv0, glm::vec2 uv1, glm::vec2 uv2,glm::vec3& tangent,glm::vec3& bitangent) {
 	glm::vec3 deltaPos1 = v1-v0;
 	glm::vec3 deltaPos2 = v2-v0;
@@ -53,4 +55,23 @@ void HJGraphics::pushCircleData(std::vector<float> &data, glm::vec3 origin, glm:
 		pushData(data,origin+radius*std::cos(a2)*up+radius*std::sin(a2)*right,color);
 	}
 
+}
+
+GLenum HJGraphics::checkGLError_(const char *file, int line){
+	GLenum errorCode;
+	while ((errorCode = glGetError()) != GL_NO_ERROR){
+		std::string error;
+		switch (errorCode){
+			case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
+			case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
+			case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
+			case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
+			case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
+			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+			default: break;
+		}
+		if(error.empty())std::cout <<"[checkGLError]"<< error << " @ " << file << " (" << line << ")" << std::endl;
+	}
+	return errorCode;
 }

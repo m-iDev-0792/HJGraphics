@@ -242,52 +242,42 @@ void HJGraphics::CubeMapTexture::loadFromPath(const std::string &rightTex, const
  * Implementation of Material
  */
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_diffuse(const char* str,size_t n){
-	Texture2DOption option;
-	option.gammaCorrection=true;
-    auto m=std::make_shared<Texture2D>(str,option);
+    auto m=std::make_shared<Texture2D>(str, TextureOption::withMipMapGammaCorrection());
     m->usage="diffuse";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_specular(const char* str,size_t n){
-	Texture2DOption option;
-    auto m=std::make_shared<Texture2D>(str,option);
+    auto m=std::make_shared<Texture2D>(str,TextureOption::withMipMap());
     m->usage="specular";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_normal(const char* str,size_t n){
-	Texture2DOption option;
-    auto m=std::make_shared<Texture2D>(str,option);
+    auto m=std::make_shared<Texture2D>(str,TextureOption::withMipMap());
     m->usage="normal";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_metallic(const char* str,size_t n){
-	Texture2DOption option;
-    auto m=std::make_shared<Texture2D>(str,option);
+    auto m=std::make_shared<Texture2D>(str,TextureOption::withMipMap());
     m->usage="metallic";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_roughness(const char* str,size_t n){
-	Texture2DOption option;
-    auto m=std::make_shared<Texture2D>(str,option);
+    auto m=std::make_shared<Texture2D>(str,TextureOption::withMipMap());
     m->usage="roughness";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_albedo(const char* str,size_t n){
-	Texture2DOption option;
-	option.gammaCorrection= true;
-    auto m=std::make_shared<Texture2D>(str,option);
+    auto m=std::make_shared<Texture2D>(str,TextureOption::withMipMapGammaCorrection());
     m->usage="albedo";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_height(const char* str,size_t n){
-	Texture2DOption option;
-    auto m=std::make_shared<Texture2D>(str,option);
+    auto m=std::make_shared<Texture2D>(str,TextureOption::withMipMap());
     m->usage="height";
     return m;
 }
 std::shared_ptr<HJGraphics::Texture2D> HJGraphics::operator ""_F0(const char* str,size_t n){
-	Texture2DOption option;
-    auto m=std::make_shared<Texture2D>(str,option);
+    auto m=std::make_shared<Texture2D>(str,TextureOption::withMipMap());
     m->usage="F0";
     return m;
 }

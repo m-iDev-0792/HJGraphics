@@ -8,18 +8,14 @@
 #include "Log.h"
 std::shared_ptr<HJGraphics::Shader> HJGraphics::FrameBuffer::defaultShader= nullptr;
 
-//HJGraphics::DeferredTarget::DeferredTarget(int _width,int _height, const std::shared_ptr<FrameBufferAttachment>& _sharedVelocity): FrameBuffer(_width, _height, GL_RGB16F, GL_RGB, GL_FLOAT) {
-//	sharedVelocity=_sharedVelocity;
-//	colorAttachments.push_back(sharedVelocity);
-//}
 HJGraphics::DeferredTarget::DeferredTarget(int _width, int _height, const std::shared_ptr<FrameBufferAttachment>& _sharedVelocity) {
 	width=_width;
 	height=_height;
 	sharedVelocity=_sharedVelocity;
 	TextureOption option(GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR,false);
-	colorAttachments.push_back(std::make_shared<FrameBufferAttachment>(std::make_shared<Texture2D>(_width, _height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, option), 0, "color0"));
+	colorAttachments.push_back(std::make_shared<FrameBufferAttachment>(std::make_shared<Texture2D>(_width, _height, GL_RGBA16F, GL_RGBA, GL_FLOAT, option), 0, "color0"));
 	colorAttachments.push_back(_sharedVelocity);
-	option.texMinFilter=option.texMagFilter=GL_NEAREST;
+	option.setTexFilter(GL_NEAREST);
 	auto depthStencil=std::make_shared<FrameBufferAttachment>(std::make_shared<Texture2D>(_width, _height, GL_DEPTH24_STENCIL8,GL_DEPTH_STENCIL,GL_UNSIGNED_INT_24_8,option), 0, "depth");
 	depthAttachment=stencilAttachment=depthStencil;
 	FrameBuffer::bindAttachments();
@@ -44,12 +40,7 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, int _internalForma
 
     glGenFramebuffers(1, &id);
     glBindFramebuffer(GL_FRAMEBUFFER, id);
-	TextureOption option;
-	option.texMinFilter=_filter;
-	option.texMagFilter=_filter;
-	option.texWrapS=GL_CLAMP_TO_EDGE;
-	option.texWrapT=GL_CLAMP_TO_EDGE;
-	option.texWrapR=GL_CLAMP_TO_EDGE;
+	TextureOption option(GL_CLAMP_TO_EDGE,_filter);
     std::shared_ptr<GLResource> tex=std::make_shared<Texture2D>(_width,_height,_internalFormat,_format,_dataType, option);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -74,7 +65,7 @@ HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, int _internalForma
 	}
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, const std::vector<std::shared_ptr<FrameBufferAttachment>> &_colors, std::shared_ptr<HJGraphics::FrameBufferAttachment> _depth, std::shared_ptr<HJGraphics::FrameBufferAttachment> _stencil){
+HJGraphics::FrameBuffer::FrameBuffer(int _width, int _height, const std::vector<std::shared_ptr<FrameBufferAttachment>> &_colors, const std::shared_ptr<FrameBufferAttachment>& _depth, const std::shared_ptr<FrameBufferAttachment>& _stencil){
     colorAttachments=_colors;
     depthAttachment=_depth;
     stencilAttachment=_stencil;

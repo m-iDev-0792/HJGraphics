@@ -4,6 +4,7 @@
 
 #include "Window.h"
 #include "Log.h"
+#include "Utility.h"
 HJGraphics::Window::Window(){
 
 }
@@ -99,6 +100,15 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 		renderer->enableSSR=!renderer->enableSSR;
 		SPDLOG_INFO("Screen Space Reflection = {}",renderer->enableSSR);
 	}
+	if(glfwGetKey(windowPtr, GLFW_KEY_N) == GLFW_PRESS){
+		renderer->enableSSRBlur=!renderer->enableSSRBlur;
+		SPDLOG_INFO("Blurred Screen Space Reflection = {}",renderer->enableSSRBlur);
+	}
+	if(glfwGetKey(windowPtr, GLFW_KEY_J) == GLFW_PRESS){
+		renderer->enableSSRDebug=!renderer->enableSSRDebug;
+		SPDLOG_INFO("Debug Screen Space Reflection = {}",renderer->enableSSRDebug);
+	}
+
 	if(glfwGetKey(windowPtr, GLFW_KEY_C) == GLFW_PRESS){
 		const char* info[]={"Environment cubemap","Diffuse irradiance","Specular prefiltered"};
 		renderer->skyboxTextureDisplayEnum=(renderer->skyboxTextureDisplayEnum+1)%DeferredRenderer::SkyboxTextureDisplayEnum::SkyboxTextureDisplayEnumNum;
@@ -205,7 +215,7 @@ void HJGraphics::Window::renderUI(long long  deltaTime) {
 	glViewport(0,0,bufferWidth,bufferHeight);
 	static float deltaList[10]={1000.0f/fps};
 	static int index=0;
-	deltaList[index]=deltaTime;//ok deltaTime won't be to large
+	deltaList[index]=deltaTime;//ok deltaTime won't be too large
 	index=(index+1)%10;
 	GL.enable(GL_BLEND);
 	GL.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

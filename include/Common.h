@@ -18,7 +18,7 @@ namespace HJGraphics {
 	typedef Size<unsigned int> Sizeu;
 	typedef Size<float> Sizef;
 
-    class GLResource {
+    class GLResource { //todo. remove GLResource, useless
     public:
         GLuint id;
         std::string resourceType;

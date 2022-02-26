@@ -41,10 +41,45 @@ namespace HJGraphics{
 			texMagFilter=_texMagFilter;
 			gammaCorrection=_gammaCorrection;
 		}
+		TextureOption& setTexWrap(GLint _texWrap){
+			texWrapS=texWrapR=texWrapT=_texWrap;
+			return *this;
+		}
+		TextureOption& setTexWrap(GLint _texWrapS,GLint _texWrapR,GLint _texWrapT){
+			texWrapS=_texWrapS;texWrapR=_texWrapR;texWrapT=_texWrapT;
+			return *this;
+		}
+		TextureOption& setTexFilter(GLint _texFilter){
+			texMinFilter=texMagFilter=_texFilter;
+			return *this;
+		}
+		TextureOption& setTexFilter(GLint _texMinFilter,GLint _texMagFilter){
+			texMinFilter=_texMinFilter;texMagFilter=_texMagFilter;
+			return *this;
+		}
+		TextureOption& setGenMipMap(bool _genMipMap){
+			genMipMap=_genMipMap;
+			return *this;
+		}
+		TextureOption& setGammaCorrection(bool _gamma){
+			gammaCorrection=_gamma;
+			return *this;
+		}
+		static TextureOption withMipMap(){
+			TextureOption opt;
+			opt.genMipMap = true;
+			opt.texMinFilter = GL_LINEAR_MIPMAP_LINEAR;
+			opt.texMagFilter = GL_LINEAR;
+			return opt;
+		}
+		static TextureOption withMipMapGammaCorrection(){
+			return withMipMap().setGammaCorrection(true);
+		}
 	};
+
     class Texture : public GLResource  {
     public:
-        std::string usage;//usage of the texutre: diffuse? specular? normal?
+        std::string usage;//usage of the texture: diffuse? specular? normal?
         std::string path;
         GLuint type;
 
@@ -59,13 +94,6 @@ namespace HJGraphics{
         ~Texture();//析构函数里最好不要deleteTexture,太危险了,再按值传递的时候临时Texture会释放掉纹理!!!
     };
 
-	struct Texture2DOption : TextureOption {
-		Texture2DOption(){
-			genMipMap = true;
-			texMinFilter = GL_LINEAR_MIPMAP_LINEAR;
-			texMagFilter = GL_LINEAR;
-		}
-	};
     class Texture2D : public Texture {
     public:
         int texWidth;
@@ -74,7 +102,7 @@ namespace HJGraphics{
 
 		Texture2D(const std::string &_path, TextureOption option);
 
-		Texture2D(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, TextureOption option = Texture2DOption());
+		Texture2D(int _width, int _height, GLenum _internalFormat, GLenum _format, GLenum _dataType, TextureOption option = TextureOption::withMipMap());
 
         void loadFromPath(const std::string &_path, bool gammaCorrection, bool genMipMap);
     };

@@ -164,7 +164,7 @@ std::vector<std::shared_ptr<HJGraphics::Texture>> HJGraphics::Model::loadMateria
 		auto findResult=textures_loaded.find(texStdStrPath);
 		if(findResult==textures_loaded.end()){
 			//create a new texture
-			Texture2DOption option;
+			auto option= TextureOption::withMipMap();
 			option.gammaCorrection=texUsage=="diffuse"||texUsage=="albedo";
 #ifdef __APPLE__
 			auto texture=std::make_shared<Texture2D>(directory+std::string("/")+texStdStrPath,option);

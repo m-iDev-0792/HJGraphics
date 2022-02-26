@@ -10,15 +10,15 @@
 namespace HJGraphics{
     class RenderBuffer: public GLResource{
     public:
-        int width;
-        int height;
-        GLenum internalFormat;
         RenderBuffer(int _width,int _height,GLenum _internalFormat):width(_width),height(_height),internalFormat(_internalFormat){
             glGenRenderbuffers(1, &id);
             glBindRenderbuffer(GL_RENDERBUFFER, id);
             glRenderbufferStorage(GL_RENDERBUFFER, _internalFormat, width, height);
             glBindRenderbuffer(GL_RENDERBUFFER, 0);
         }
+        int width;
+        int height;
+        GLenum internalFormat;
     };
 
 	enum class FrameBufferAttachmentType{
@@ -27,10 +27,6 @@ namespace HJGraphics{
 	    OtherTexture
 	};
     struct FrameBufferAttachment{
-        std::string name;
-        GLuint slot;//which slot to bind? not used for now
-        std::shared_ptr<GLResource> attachment;
-        FrameBufferAttachmentType type;
         FrameBufferAttachment()=default;
         FrameBufferAttachment(std::shared_ptr<GLResource> _attachment, GLuint _slot, const std::string& _name, FrameBufferAttachmentType _type=FrameBufferAttachmentType::Texture2D):
         attachment(_attachment),slot(_slot),name(_name),type(_type){
@@ -38,25 +34,20 @@ namespace HJGraphics{
         GLuint getId()const{
             return attachment?attachment->id:0;
         }
+        std::string name;
+        GLuint slot;//which slot to bind? not used for now
+        std::shared_ptr<GLResource> attachment;
+        FrameBufferAttachmentType type;
     };
     class FrameBuffer : public GLResource {
     public:
-        std::vector<std::shared_ptr<FrameBufferAttachment>> colorAttachments;
-        std::shared_ptr<FrameBufferAttachment> depthAttachment;
-        std::shared_ptr<FrameBufferAttachment> stencilAttachment;
-
-        int width;
-        int height;
-
-        static std::shared_ptr<Shader> defaultShader;
-
         FrameBuffer();
 
         //create a framebuffer constaions one color attachment
         FrameBuffer(int _width, int _height, int _internalFormat=GL_RGB, int _format=GL_RGB, int _dataType=GL_UNSIGNED_BYTE, int _filter=GL_LINEAR, bool _createDepthRBO=true);
 
         //more general constructor for creating a framebuffer, resources are pre-allocated
-        FrameBuffer(int _width, int _height, const std::vector<std::shared_ptr<FrameBufferAttachment>> &_colors, std::shared_ptr<FrameBufferAttachment> _depth, std::shared_ptr<FrameBufferAttachment> _stencil);
+        FrameBuffer(int _width, int _height, const std::vector<std::shared_ptr<FrameBufferAttachment>> &_colors, const std::shared_ptr<FrameBufferAttachment>& _depth, const std::shared_ptr<FrameBufferAttachment>& _stencil);
 
         void clearBind() const;
 
@@ -68,7 +59,7 @@ namespace HJGraphics{
 
         virtual void bindAttachments();
 
-        virtual void clearAttachments(glm::vec4 clearColor=glm::vec4(0),float depthValue=1.0,int stencilValue=0);
+        virtual void clearAttachments(glm::vec4 clearColor,float depthValue,int stencilValue);
 
         static void setDrawBuffers(int n){
             std::vector<GLenum> attach(n,0);
@@ -87,15 +78,25 @@ namespace HJGraphics{
         inline bool isDepthStencilShareAttachment() const{
             return depthAttachment==stencilAttachment;
         }
+
+    public:
+	    std::vector<std::shared_ptr<FrameBufferAttachment>> colorAttachments;
+	    std::shared_ptr<FrameBufferAttachment> depthAttachment;
+	    std::shared_ptr<FrameBufferAttachment> stencilAttachment;
+
+	    int width;
+	    int height;
+
+	    static std::shared_ptr<Shader> defaultShader;
     };
 
 	class DeferredTarget: public FrameBuffer{
 	public:
-        std::shared_ptr<FrameBufferAttachment> sharedVelocity;
-
 		DeferredTarget(int _width,int _height): FrameBuffer(_width, _height, GL_RGBA16F, GL_RGBA, GL_FLOAT){
 		}
 		DeferredTarget(int _width,int _height, const std::shared_ptr<FrameBufferAttachment>& _sharedVelocity);
+	public:
+		std::shared_ptr<FrameBufferAttachment> sharedVelocity;
 	};
 }
 

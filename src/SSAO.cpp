@@ -6,6 +6,7 @@
 #include "Utility.h"
 std::shared_ptr<HJGraphics::Shader> HJGraphics::SSAO::ssaoShader=nullptr;
 std::shared_ptr<HJGraphics::Shader> HJGraphics::SSAO::ssaoBlurShader=nullptr;
+std::shared_ptr<HJGraphics::SolidTexture> HJGraphics::SSAO::defaultAOTex= nullptr;
 HJGraphics::SSAO::SSAO(glm::vec2 _ssaoSize, glm::vec2 _ssaoNoiseSize, float _sampleNum, int _ssaoBlurRadius,
                        float _ssaoRadius,
                        float _ssaoBias) {
@@ -18,8 +19,9 @@ HJGraphics::SSAO::SSAO(glm::vec2 _ssaoSize, glm::vec2 _ssaoNoiseSize, float _sam
 	//create ssao and ssaoBlurred framebuffers
 	ssao=std::make_shared<FrameBuffer>(ssaoSize.x, ssaoSize.y, GL_RED, GL_RED, GL_FLOAT, GL_LINEAR, false);
 	ssaoBlurred=std::make_shared<FrameBuffer>(ssaoSize.x, ssaoSize.y, GL_RED, GL_RED, GL_FLOAT, GL_LINEAR, false);
-	if(ssaoShader==nullptr)ssaoShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/AO/ssao.vs.glsl"_vs, "../shader/deferred/AO/ssao.fs.glsl"_fs});
-	if(ssaoBlurShader==nullptr)ssaoBlurShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/AO/ssao.vs.glsl"_vs, "../shader/deferred/AO/ssaoBlur.fs.glsl"_fs});
+	if(!ssaoShader)ssaoShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/AO/ssao.vs.glsl"_vs, "../shader/deferred/AO/ssao.fs.glsl"_fs});
+	if(!ssaoBlurShader)ssaoBlurShader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/AO/ssao.vs.glsl"_vs, "../shader/deferred/AO/ssaoBlur.fs.glsl"_fs});
+	if(!defaultAOTex)defaultAOTex=std::make_shared<SolidTexture>(glm::vec3(1.0f));
 	generateSamplesAndNoise();
 }
 void HJGraphics::SSAO::generateSamplesAndNoise() {
@@ -88,4 +90,9 @@ void HJGraphics::SSAO::render(GLuint gNormal,GLuint gDepth, glm::mat4 projection
 	GL.bindTexture(GL_TEXTURE_2D,ssaoNoise);
 	Quad2D::draw();
 	blur();
+}
+
+GLuint HJGraphics::SSAO::getAOTexID(bool enableSSAO) const {
+	if(enableSSAO)return ssaoBlurred->colorAttachments[0]->getId();
+	else return defaultAOTex->id;
 }

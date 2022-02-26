@@ -1,14 +1,12 @@
 #include "DeferredRenderer.h"
 #include "IBLManager.h"
+#include "Utility.h"
 HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	//-------------------------------
 	//    Init Important Members
 	//-------------------------------
 	width=_width;height=_height;
-
     gBuffer=std::make_shared<GBuffer>(_width, _height);
-    gBuffer->shader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
-//    deferredTarget=std::make_shared<DeferredTarget>(_width, _height, gBuffer->colorAttachments[3]);
 	deferredTarget=std::make_shared<DeferredTarget>(_width,_height,gBuffer->colorAttachments[3]);
 	TextureOption option(GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR,false);
 	auxiliaryTarget = std::make_shared<FrameBuffer>(_width, _height,
@@ -19,33 +17,34 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 					                                                                            GL_UNSIGNED_BYTE,
 					                                                                            option), 0, "color0")},
 	                                                gBuffer->depthAttachment, gBuffer->depthAttachment);
-	filterTarget=std::make_shared<FrameBuffer>(_width,_height);
+
+	filterTarget = std::make_shared<FrameBuffer>(_width, _height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, GL_LINEAR,
+	                                             true);//todo. potential bug: UI not rendered when not using depth and stencil attachment
+
 
 	{
-		TextureOption ssrDepthTexOption;
-		ssrDepthTexOption.texMagFilter = GL_NEAREST;
-		ssrDepthTexOption.texMinFilter = GL_NEAREST;
-		ssrDepthTexOption.texWrapS = GL_CLAMP_TO_EDGE;
-		ssrDepthTexOption.texWrapT = GL_CLAMP_TO_EDGE;
-		ssrDepthTexOption.texWrapR = GL_CLAMP_TO_EDGE;
-		int ssrWidth = _width * 0.25;
-		int ssrHeight = _height * 0.25;
-		auto ssrDepthStencil = std::make_shared<FrameBufferAttachment>(
-				std::make_shared<Texture2D>(ssrWidth, ssrHeight, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL,
-				                            GL_UNSIGNED_INT_24_8, ssrDepthTexOption), 0, "depth");
-		TextureOption colorOption;
-		colorOption.texWrapS = GL_CLAMP_TO_EDGE;
-		colorOption.texWrapT = GL_CLAMP_TO_EDGE;
-		colorOption.texWrapR = GL_CLAMP_TO_EDGE;
-		auto ssrColor = std::make_shared<FrameBufferAttachment>(
-				std::make_shared<Texture2D>(ssrWidth, ssrHeight, GL_RGB16F, GL_RGB, GL_FLOAT, colorOption), 0,
-				"color0");
-		ssrTarget = std::make_shared<FrameBuffer>(ssrWidth, ssrHeight, std::vector<std::shared_ptr<FrameBufferAttachment>>{ssrColor},ssrDepthStencil,ssrDepthStencil);
+		float ssrScale = 0.25;
+		int ssrWidth = _width * ssrScale;
+		int ssrHeight = _height * ssrScale;
+		bool ssrNoDepthStencil=true;
+		if(!ssrNoDepthStencil){
+			auto ssrDepthStencil = std::make_shared<FrameBufferAttachment>(
+					std::make_shared<Texture2D>(ssrWidth, ssrHeight, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL,
+					                            GL_UNSIGNED_INT_24_8, TextureOption(GL_CLAMP_TO_EDGE,GL_NEAREST)), 0, "depth");
+
+			auto ssrColor = std::make_shared<FrameBufferAttachment>(
+					std::make_shared<Texture2D>(ssrWidth, ssrHeight, GL_RGB16F, GL_RGB, GL_FLOAT, TextureOption().setTexWrap(GL_CLAMP_TO_EDGE)), 0,
+					"color0");
+			ssrTarget = std::make_shared<FrameBuffer>(ssrWidth, ssrHeight, std::vector<std::shared_ptr<FrameBufferAttachment>>{ssrColor},ssrDepthStencil,ssrDepthStencil);
+		}else{
+			ssrTarget = std::make_shared<FrameBuffer>(ssrWidth,ssrHeight,GL_RGB16F, GL_RGB, GL_FLOAT,GL_LINEAR,false);
+		}
+		ssrBlurredTarget = std::make_shared<FrameBuffer>(ssrWidth,ssrHeight,GL_RGB16F, GL_RGB, GL_FLOAT,GL_LINEAR,false);
 	}
 
 
 	ssaoPass=std::make_shared<SSAO>(glm::vec2(width,height),glm::vec2(16),32,1,0.5);
-	defaultAOTex=std::make_shared<SolidTexture>(glm::vec3(1.0f));
+
 	//-------------------------------
 	//        Init Settings
 	//-------------------------------
@@ -54,6 +53,8 @@ HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
 	enableDepthOfField=true;
 	enableBloom=true;
 	enableSSR=true;
+	enableSSRBlur=true;
+	enableSSRDebug=false;
 	motionBlurSampleNum=8;
 	motionBlurTargetFPS=40;
 	motionBlurPower=1.0f;
@@ -96,7 +97,8 @@ void HJGraphics::DeferredRenderer::prepareRendering(long long frameDeltaTime, lo
 	}
 }
 void
-HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime, Sizei size, GLuint screenTex, GLuint velocityTex) {
+HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime, Sizei size, GLuint screenTex, GLuint velocityTex,
+                                          GLuint ssrTex) {
 	glm::mat4 projectionView = mainScene->mainCamera->projection * mainScene->mainCamera->view;
 	glm::mat4 inverseProjectionView=glm::inverse(projectionView);
 	glm::mat4 previousProjectionView=mainScene->mainCamera->previousProjection * mainScene->mainCamera->previousView;
@@ -114,7 +116,7 @@ HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime, Sizei size, 
 	GL.activeTexture(GL_TEXTURE1);
 	GL.bindTexture(GL_TEXTURE_2D, velocityTex);
 	GL.activeTexture(GL_TEXTURE2);
-	GL.bindTexture(GL_TEXTURE_2D,ssrTarget->colorAttachments[0]->getId());
+	GL.bindTexture(GL_TEXTURE_2D,ssrTex);
 	GL.disable(GL_DEPTH_TEST);
 	Quad3D::draw();
 	GL.enable(GL_DEPTH_TEST);
@@ -293,7 +295,6 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
         glClearBufferfv(GL_COLOR, 0, transparent);
         glClearBufferfv(GL_DEPTH, 0, &one);
     }
-    else glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //bind gBuffer texture
 	gBuffer->bindTexturesForShading();
@@ -314,8 +315,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
 		gBuffer->writeUniform(PBRIBLShader);
 		PBRIBLShader->setInt("gAO",4);
 		GL.activeTexture(GL_TEXTURE4);
-		if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
-		else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
+		GL.bindTexture(GL_TEXTURE_2D,ssaoPass->getAOTexID(enableAO));
 
 		PBRIBLShader->setInt("irradianceMap",6);
 		GL.activeTexture(GL_TEXTURE6);
@@ -339,8 +339,7 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
     if(!iblManager){
         PBRlightingShader->setInt("gAO",4);
         GL.activeTexture(GL_TEXTURE4);
-        if(enableAO)GL.bindTexture(GL_TEXTURE_2D,ssaoPass->ssao->colorAttachments[0]->getId());
-        else GL.bindTexture(GL_TEXTURE_2D,defaultAOTex->id);
+	    GL.bindTexture(GL_TEXTURE_2D,ssaoPass->getAOTexID(enableAO));
     }
     gBuffer->writeUniform(PBRlightingShader);
 	if(!iblManager)Quad3D::draw();
@@ -428,14 +427,9 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
     //----------------------------------//
 
 	if(enableSSR){
-/*		glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer->id);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, ssrTarget->id);
-		glClear(GL_DEPTH_BUFFER_BIT);
-		glBlitFramebuffer(0, 0, gBuffer->width, gBuffer->height, 0, 0, ssrTarget->width, ssrTarget->height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);*/
-
 		ssrTarget->bind();
 		glViewport(0,0,ssrTarget->width,ssrTarget->height);
-		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
 		ssrShader->use();
 		ssrShader->setInt("gNormal",0);
 		ssrShader->setInt("gDepth",1);
@@ -460,15 +454,26 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
 		ssrShader->setFloat("thickness",0.1);
 		ssrShader->setInt("steps",5);
 		Quad3D::draw();
-		bool showSSRDebug= false;
-		if(showSSRDebug){
+		if(enableSSRBlur){
+			ssrBlurredTarget->bind();
+			glViewport(0,0,ssrBlurredTarget->width,ssrBlurredTarget->height);
+			glClear(GL_COLOR_BUFFER_BIT);
+			filterShader->use();
+			filterShader->setInt("colorTexture",0);
+			GL.activeTexture(GL_TEXTURE0);
+			GL.bindTexture(GL_TEXTURE_2D,ssrTarget->colorAttachments[0]->getId());
+			filterShader->setInt("filterType",1);
+			filterShader->setInt("radius",3);
+			Quad3D::draw();
+		}
+		if(enableSSRDebug){
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			glViewport(0,0,targetWidth,targetHeight);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			ssrTarget->defaultShader->use();
 			ssrTarget->defaultShader->setInt("screenTexture",0);
 			GL.activeTexture(GL_TEXTURE0);
-			GL.bindTexture(GL_TEXTURE_2D, ssrTarget->colorAttachments[0]->attachment->id);
+			GL.bindTexture(GL_TEXTURE_2D, enableSSRBlur ? ssrBlurredTarget->colorAttachments[0]->getId() : ssrTarget->colorAttachments[0]->getId());
 			Quad2DWithTexCoord::draw();
 			return;
 		}
@@ -517,19 +522,21 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
     //-----------------------------
     if(deferredTarget){
 		Sizei postSize;
+		//perform post-process at different target according to whether depth of field is enabled
 		if(enableDepthOfField){
 			auxiliaryTarget->bind();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glViewport(0,0,auxiliaryTarget->width,auxiliaryTarget->height);
 			postSize=Sizei(auxiliaryTarget->width,auxiliaryTarget->height);
 		}else{
-			deferredTarget->unbind();
+			glBindFramebuffer(GL_FRAMEBUFFER,0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glViewport(0,0,targetWidth,targetHeight);
 			postSize=Sizei(targetWidth,targetHeight);
 		}
 	    postprocess(frameDeltaTime, postSize,
-					deferredTarget->colorAttachments[0]->getId(), deferredTarget->colorAttachments[1]->getId());
+	                deferredTarget->colorAttachments[0]->getId(), deferredTarget->colorAttachments[1]->getId(),
+	                enableSSRBlur ? ssrBlurredTarget->colorAttachments[0]->getId() : ssrTarget->colorAttachments[0]->getId());
 
 		if(enableDepthOfField){
 			//---get blurred image---

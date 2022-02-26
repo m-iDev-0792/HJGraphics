@@ -57,7 +57,8 @@ void HJGraphics::GLFWWrap::InitGLFWEnvironment(int versionMajor, int versionMino
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,versionMinor);
 	glfwWindowHint(GLFW_OPENGL_PROFILE,profile);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,compat);
-	glfwWindowHint(GLFW_SAMPLES, 4);
+//	glfwWindowHint(GLFW_SAMPLES, 4);
+//	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //These functions are set to empty intentionally!!!

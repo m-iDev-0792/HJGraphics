@@ -95,7 +95,7 @@ int main() {
 	for(auto& s:spheres)scene->addObject(s);
 	scene->addObject(plane);
 	scene->addObject(coord);
-	scene->setSkybox(50.0f,std::make_shared<Texture2D>("../texture/beach.hdr", Texture2DOption()));
+	scene->setSkybox(50.0f,std::make_shared<Texture2D>("../texture/beach.hdr", TextureOption::withMipMap()));
 
 	auto renderer=make_shared<DeferredRenderer>(1600,1200);
 	renderer->setMainScene(scene);

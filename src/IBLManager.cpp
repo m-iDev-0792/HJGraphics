@@ -143,13 +143,7 @@ HJGraphics::IBLManager::bakeIBLMap(std::shared_ptr<Texture2D> _environmentTex, S
                                    int prefilteredSampleNum) {
 	SPDLOG_INFO("Start baking IBL maps...");
 	auto ibl = std::make_shared<IBLManager>();
-	TextureOption option;
-	option.texMinFilter=GL_LINEAR;
-	option.texMagFilter=GL_LINEAR;
-	option.texWrapS=GL_CLAMP_TO_EDGE;
-	option.texWrapT=GL_CLAMP_TO_EDGE;
-	option.texWrapR=GL_CLAMP_TO_EDGE;
-
+	TextureOption option(GL_CLAMP_TO_EDGE,GL_LINEAR);
 	ibl->environmentTex = std::move(_environmentTex);
 	ibl->brdfLUTMap=std::make_shared<Texture2D>("../texture/ibl_brdf_lut.png",TextureOption());
 	ibl->environmentCubeMap = std::make_shared<CubeMapTexture>(enviCubeMapSize.width, enviCubeMapSize.height,

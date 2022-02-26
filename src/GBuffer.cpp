@@ -12,12 +12,7 @@ HJGraphics::GBuffer::GBuffer(int _width, int _height) {
     width=_width;
     height=_height;
     //set up normal
-	TextureOption option;
-	option.texMagFilter=GL_NEAREST;
-	option.texMinFilter=GL_NEAREST;
-	option.texWrapS=GL_CLAMP_TO_EDGE;
-	option.texWrapT=GL_CLAMP_TO_EDGE;
-	option.texWrapR=GL_CLAMP_TO_EDGE;
+	TextureOption option(GL_CLAMP_TO_EDGE,GL_NEAREST);
     auto gNormalTex=std::make_shared<Texture2D>(width,height,GL_RGB16F,GL_RGB,GL_FLOAT,option);
     auto gNormal=std::make_shared<FrameBufferAttachment>(gNormalTex,0,"gNormal");
     colorAttachments.push_back(gNormal);
@@ -47,6 +42,7 @@ HJGraphics::GBuffer::GBuffer(int _width, int _height) {
 	    SPDLOG_ERROR("Framebuffer is not complete!");
 	}
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	shader=std::make_shared<Shader>(ShaderCodeList{"../shader/deferred/gBuffer.vs.glsl"_vs, "../shader/deferred/PBR/PBR_gBuffer.fs.glsl"_fs});
 }
 
 

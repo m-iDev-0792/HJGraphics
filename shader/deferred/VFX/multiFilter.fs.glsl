@@ -3,6 +3,12 @@ layout (location = 0) out vec3 FragColor;
 uniform sampler2D colorTexture;
 uniform int radius;
 uniform int filterType;
+bool inDiamond(float x, float y, float radius){
+    return (abs(x) <= radius - abs(y));
+}
+bool inCircle(float x, float y, float radius){
+    return (distance(vec2(x, y), vec2(0, 0)) <= radius);
+}
 vec3 boxFilter(int radius, vec2 texSize, vec2 fragCoord){
     vec2 texCoord=fragCoord/texSize;
     vec3 fragColor = texture(colorTexture, texCoord).rgb;
@@ -21,18 +27,12 @@ vec3 circleFilter(int radius, vec2 texSize, vec2 fragCoord){
     for (int x = -radius; x <= radius; ++x){
         for (int y = -radius; y <= radius; ++y){
             texCoord=vec2((fragCoord.x+float(x))/float(texSize.x), (fragCoord.y+float(y))/float(texSize.y));
-            float weight=distance(texCoord,fragCoord/texSize)<=radius?1.0:0.0;
+            float weight=inCircle(x,y,radius)?1.0:0.0;
             fragColor += texture(colorTexture, texCoord).rgb*weight;
             count+=weight;
         }
     }
     return fragColor / count;
-}
-bool inDiamond(float x, float y, float radius){
-    return (abs(x) <= radius - abs(y));
-}
-bool inCircle(float x, float y, float radius){
-    return (distance(vec2(x, y), vec2(0, 0)) <= radius);
 }
 vec3 dilate(int radius, vec2 texSize, vec2 fragCoord, float minGrayThreshold, float maxGrayThreshold){
     vec2 texCoord=fragCoord/texSize;
