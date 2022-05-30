@@ -1,4 +1,8 @@
 # TODOs of HJGraphics
+
+### refactor
+- [ ] merge properties of some classes as XXXDescriptor
+
 ### 工具
 
 - [x] 日志系统，设置颜色，是否保存日志文件
