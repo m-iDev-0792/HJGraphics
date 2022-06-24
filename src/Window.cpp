@@ -5,6 +5,10 @@
 #include "Window.h"
 #include "Log.h"
 #include "Utility.h"
+#include "component/CameraComponent.h"
+#include "component/TransformComponent.h"
+#include "MathUtility.h"
+#define ECS_TEST
 HJGraphics::Window::Window(){
 
 }
@@ -28,8 +32,7 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 	}
 	float move = moveSpeed * deltaTime;
 	auto pCamera=renderer->mainScene->getMainCamera();
-	pCamera->previousPosition=pCamera->position;//NOTE! Important, do not change!
-
+	auto pCameraTransComp=renderer->mainScene->getComponent<TransformComponent>(renderer->mainScene->mainCameraEntityID);
 	//-------------------------------
 	//        Key Event Handling
 	//-------------------------------
@@ -39,31 +42,71 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 		//left
 		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
 		pCamera->position-=cameraRight*move;
+#ifdef ECS_TEST
+		{
+			glm::vec3 cameraDirection=getECSCameraDirection(pCameraTransComp->getRotation());
+			glm::vec3 cameraRight=glm::normalize(glm::cross(cameraDirection,glm::vec3(0.0f,1.0f,0.0f)));
+			if(pCameraTransComp)pCameraTransComp->setTranslation(pCameraTransComp->getTranslation()-= cameraRight * move);
+		}
+#endif
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_D) == GLFW_PRESS){
 		//right
 		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
 		pCamera->position+=cameraRight*move;
+#ifdef ECS_TEST
+		{
+			glm::vec3 cameraDirection=getECSCameraDirection(pCameraTransComp->getRotation());
+			glm::vec3 cameraRight=glm::normalize(glm::cross(cameraDirection,glm::vec3(0.0f,1.0f,0.0f)));
+			if(pCameraTransComp)pCameraTransComp->setTranslation(pCameraTransComp->getTranslation()+= cameraRight * move);
+		}
+#endif
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_W) == GLFW_PRESS){
 		//front
 		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
 		glm::vec3 cameraFront=glm::normalize(glm::cross(glm::vec3(0.0f,1.0f,0.0f),cameraRight));
 		pCamera->position+=cameraFront*move;
+#ifdef ECS_TEST
+		{
+			glm::vec3 cameraDirection=getECSCameraDirection(pCameraTransComp->getRotation());
+			glm::vec3 cameraRight=glm::normalize(glm::cross(cameraDirection,glm::vec3(0.0f,1.0f,0.0f)));
+			glm::vec3 cameraFront=glm::normalize(glm::cross(glm::vec3(0.0f,1.0f,0.0f),cameraRight));
+			if(pCameraTransComp)pCameraTransComp->setTranslation(pCameraTransComp->getTranslation()+= cameraFront * move);
+		}
+#endif
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_S) == GLFW_PRESS){
 		//back
 		glm::vec3 cameraRight=glm::normalize(glm::cross(pCamera->direction,glm::vec3(0.0f,1.0f,0.0f)));
 		glm::vec3 cameraFront=glm::normalize(glm::cross(glm::vec3(0.0f,1.0f,0.0f),cameraRight));
 		pCamera->position-=cameraFront*move;
+#ifdef ECS_TEST
+		{
+			glm::vec3 cameraDirection=getECSCameraDirection(pCameraTransComp->getRotation());
+			glm::vec3 cameraRight=glm::normalize(glm::cross(cameraDirection,glm::vec3(0.0f,1.0f,0.0f)));
+			glm::vec3 cameraFront=glm::normalize(glm::cross(glm::vec3(0.0f,1.0f,0.0f),cameraRight));
+			if(pCameraTransComp)pCameraTransComp->setTranslation(pCameraTransComp->getTranslation()-= cameraFront * move);
+		}
+#endif
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_Q) == GLFW_PRESS){
 		//up
 		pCamera->position+=glm::vec3(0,1,0)*move;
+#ifdef ECS_TEST
+		{
+			if(pCameraTransComp)pCameraTransComp->setTranslation(pCameraTransComp->getTranslation()+= glm::vec3(0, 1, 0) * move);
+		}
+#endif
 	}
 	if(glfwGetKey(windowPtr, GLFW_KEY_E) == GLFW_PRESS){
 		//down
 		pCamera->position+=glm::vec3(0,-1,0)*move;
+#ifdef ECS_TEST
+		{
+			if(pCameraTransComp)pCameraTransComp->setTranslation(pCameraTransComp->getTranslation()+= glm::vec3(0, -1, 0) * move);
+		}
+#endif
 	}
 
 	//if key press time is too short just ignore it
@@ -116,10 +159,13 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 	}
 }
 void HJGraphics::Window::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
-	auto pCamera=renderer->mainScene->getMainCamera();
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		mouseDown = true;
-		originalDirection=pCamera->direction;
+		originalDirection=renderer->mainScene->getMainCamera()->direction;
+		if(false){//todo. [ECS]replace it with ecs version
+			auto pCameraTransComp=renderer->mainScene->getComponent<TransformComponent>(renderer->mainScene->mainCameraEntityID);
+			originalDirection=getECSCameraDirection(pCameraTransComp->getRotation());
+		}
 	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
 		mouseDown = false;
@@ -155,7 +201,8 @@ void HJGraphics::Window::mouseCallback(GLFWwindow *window, double xpos, double y
 	newDir=pitchMat*newDir;
 	auto pCamera=renderer->mainScene->getMainCamera();
 	pCamera->direction=newDir;
-
+	auto pCameraTransComp=renderer->mainScene->getComponent<TransformComponent>(renderer->mainScene->mainCameraEntityID);
+	if(pCameraTransComp)pCameraTransComp->setRotation(cameraDirectionToEulerAngle(newDir));
 }
 void HJGraphics::Window::scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
 	if (fov >= 1 && fov <= 60)fov -= yoffset;
@@ -163,6 +210,8 @@ void HJGraphics::Window::scrollCallback(GLFWwindow *window, double xoffset, doub
 	else if (fov >= 60)fov = 60.0f;
 	auto pCamera=renderer->mainScene->getMainCamera();
 	pCamera->fov=fov;
+	auto pCameraComp=renderer->mainScene->getComponent<CameraComponent>(renderer->mainScene->mainCameraEntityID);
+	if(pCameraComp)pCameraComp->setFov(fov);
 }
 void HJGraphics::Window::framebufferSizeCallback(GLFWwindow *window, int width, int height) {
 	bufferWidth=width;
@@ -205,6 +254,7 @@ void HJGraphics::Window::run() {
 		glfwPollEvents();
 	}
 	SPDLOG_INFO("main loop exited");
+	std::cout<<"view matrix correct rate "<<renderer->sameCount<<"/"<<renderer->viewFrameCount<<std::endl;
 }
 void HJGraphics::Window::render(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
 	if(renderer)renderer->render(frameDeltaTime, elapsedTime, frameCount);

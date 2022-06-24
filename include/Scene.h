@@ -5,21 +5,26 @@
 #ifndef HJGRAPHICS_SCENE_H
 #define HJGRAPHICS_SCENE_H
 #define GL_SILENCE_DEPRECATION
-#include <vector>
-#include <glm/glm.hpp>
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
 #include "CustomMesh.h"
 #include "DebugUtility.h"
-
+#include "ECS/ECSScene.h"
+#include "system/CameraSystem.h"
+#include "system/TransformSystem.h"
+#include "system/MeshRenderSystem.h"
 namespace HJGraphics {
 	class DeferredRenderer;
 /*
  * Declare of Scene class ,which is used to manage objects lights and cameras in a scene
  */
-	class Scene {
+	class Scene : public ECSScene{
 		friend DeferredRenderer;
+	public:
+		CameraSystem cameraSystem;
+		TransformSystem transformSystem;
+		MeshRenderSystem renderSystem;
 	private:
 		GLfloat ambientFactor;
 		glm::vec3 clearColor;

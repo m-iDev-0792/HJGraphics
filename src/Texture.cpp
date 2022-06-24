@@ -97,9 +97,9 @@ void HJGraphics::Texture2D::loadFromPath(const std::string &_path, bool gammaCor
         stbi_image_free(data);
         path=_path;
 	    SPDLOG_DEBUG("Loaded texture2D from {}, size=({},{},{}), gamma correction={}, loadHDR={}, genMipMap={}",
-					 _path.c_str(),imgWidth,imgHeight,imgChannel,gammaCorrection,loadHDR,genMipMap);
+					 _path,imgWidth,imgHeight,imgChannel,gammaCorrection,loadHDR,genMipMap);
     }else{
-	    SPDLOG_ERROR("Can't load image from {}",_path.c_str());
+	    SPDLOG_ERROR("Can't load image from {}",_path);
     }
 }
 

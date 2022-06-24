@@ -1,1 +1,2 @@
 add_executable(PBRDemo PBRDemo.cpp)
+add_executable(ECSIntegrationTest ECSIntegrationTest.cpp)

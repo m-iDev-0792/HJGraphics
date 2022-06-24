@@ -32,4 +32,5 @@ inline void showMat4(glm::mat4 value){
 	for(int i=0;i<4;++i)showVec4(value[i]);
 	std::cout<<"mat4 value end;"<<std::endl;
 }
+float getMat4Diff(const glm::mat4& m1,const glm::mat4& m2);
 #endif //HJGRAPHICS_DEBUGUTILITY_H

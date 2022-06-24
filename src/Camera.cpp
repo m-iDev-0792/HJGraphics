@@ -10,7 +10,7 @@ HJGraphics::Camera::Camera():Camera(glm::vec3(5.0f,0.2f,5.0f),glm::vec3(-1.0f,0.
 }
 HJGraphics::Camera::Camera(glm::vec3 _position, glm::vec3 _direction, float _aspect, float _fov, float _zNear,
                float _zFar) {
-	previousPosition=position=_position;
+	position=_position;
 	direction=glm::normalize(_direction);
 	aspect=_aspect;
 	fov=_fov;

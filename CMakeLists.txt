@@ -1,16 +1,18 @@
 cmake_minimum_required(VERSION 3.15)
 add_definitions(-DUNICODE -D_UNICODE)
 project(HJGraphics)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 #-----------include directories---------
+find_package(OpenMP)
 include_directories(include)
 include_directories(3rd-party)
 include_directories(3rd-party/freetype2)#set include path for freetype
 set(HJGRAPHICS_INCLUDE include 3rd-party 3rd-party/freetype2)
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/src HJGRAPHICS_SRC)
-#aux_source_directory(${PROJECT_SOURCE_DIR}/src/ECS HJGRAPHICS_SRC) #todo. not ready yet
-
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/ECS HJGRAPHICS_SRC)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/system HJGRAPHICS_SRC)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/prefab HJGRAPHICS_SRC)
 #-----------set up 3rd-party lib src-----------
 set(GLAD_SRC 3rd-party/glad/glad.c)
 #-----------set up 3rd-party lib link-----------
@@ -47,12 +49,19 @@ ENDIF()
 
 #Set up HJGraphics lib
 add_library(HJGraphics SHARED ${HJGRAPHICS_SRC} ${GLAD_SRC})
-target_link_libraries(HJGraphics ${GLFW3_LIB}  ${ASSIMP_LIB} ${FREETYPE_LIB} ${SPDLOG_LIB})
+target_link_libraries(HJGraphics PUBLIC ${GLFW3_LIB}  ${ASSIMP_LIB} ${FREETYPE_LIB} ${SPDLOG_LIB})
 target_include_directories(HJGraphics PUBLIC ${HJGRAPHICS_INCLUDE})
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(HJGraphics PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 #Set up example targets
 add_subdirectory(example)
-target_link_libraries(PBRDemo HJGraphics)
+target_link_libraries(PBRDemo PUBLIC HJGraphics)
+target_link_libraries(ECSIntegrationTest  PUBLIC HJGraphics)
+
+add_subdirectory(src/ECS/unit-test)
+target_link_libraries(ECS_test HJGraphics)
 
 IF(WIN32)
     add_custom_command(TARGET HJGraphics

@@ -17,16 +17,6 @@ namespace HJGraphics{
 			position=_position;
 			texCoord=_texCoord;
 		}
-		static void setUpVAO_VBO(int VAO,int VBO){
-			glBindVertexArray(VAO);
-			glBindBuffer(GL_ARRAY_BUFFER,VBO);
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex5), nullptr);
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex5), (void *) offsetof(Vertex5, texCoord));
-			glBindBuffer(GL_ARRAY_BUFFER,0);
-			glBindVertexArray(0);
-		}
 	};
 	struct Vertex6{
 		glm::vec3 position;
@@ -35,16 +25,6 @@ namespace HJGraphics{
 		Vertex6(const glm::vec3& _position,const glm::vec3& _normal){
 			position=_position;
 			normal=_normal;
-		}
-		static void setUpVAO_VBO(int VAO,int VBO){
-			glBindVertexArray(VAO);
-			glBindBuffer(GL_ARRAY_BUFFER,VBO);
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex6), nullptr);
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex6), (void *) offsetof(Vertex6, normal));
-			glBindBuffer(GL_ARRAY_BUFFER,0);
-			glBindVertexArray(0);
 		}
 	};
 	struct Vertex8{
@@ -60,18 +40,6 @@ namespace HJGraphics{
 			position=_position;
 			normal=_normal;
 			texCoord=_texCoord;
-		}
-		static void setUpVAO_VBO(int VAO,int VBO){
-			glBindVertexArray(VAO);
-			glBindBuffer(GL_ARRAY_BUFFER,VBO);
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex8), nullptr);
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex8), (void *) offsetof(Vertex8, normal));
-			glEnableVertexAttribArray(2);
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex8), (void *) offsetof(Vertex8, texCoord));
-			glBindBuffer(GL_ARRAY_BUFFER,0);
-			glBindVertexArray(0);
 		}
 	};
 	struct Vertex14{
@@ -103,22 +71,6 @@ namespace HJGraphics{
 			texCoord=v8.texCoord;
 			tangent=_tangent;
 			bitangent=_bitangent;
-		}
-		static void setUpVAO_VBO(int VAO,int VBO){
-			glBindVertexArray(VAO);
-			glBindBuffer(GL_ARRAY_BUFFER,VBO);
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), nullptr);
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, normal));
-			glEnableVertexAttribArray(2);
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, texCoord));
-			glEnableVertexAttribArray(3);
-			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, tangent));
-			glEnableVertexAttribArray(4);
-			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex14), (void *) offsetof(Vertex14, bitangent));
-			glBindBuffer(GL_ARRAY_BUFFER,0);
-			glBindVertexArray(0);
 		}
 	};
 }

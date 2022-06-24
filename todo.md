@@ -9,11 +9,12 @@
 - [x] cmake脚本，编译后自动拷贝dll库
 - [ ] 注释 文档系统
 - [x] debug mesh
-- [ ] options for building HJGraphics as a static or dynamic lib
+- [x] options for building HJGraphics as a static or dynamic lib
 
 ### 渲染
 - [ ] DrawBuffer class封装
 - [ ] renderable 反射系统 序列化 描述 update事件
+- [ ] Material sort, mesh combine
 - [ ] instance mesh
 - [ ] PBR模型加载, 模型转换
 - [ ] 窗口事件注册，lambda？
@@ -34,8 +35,8 @@
 
 ### 材质
 
--[ ] 材质类型(opaque, transparent, forward, unlit ...)
+- [ ] 材质类型(opaque, transparent, forward, unlit ...)
 
 ### 优化
--[ ] dirty flag
--[ ] copy on write, 例如mesh 材质共用
+- [ ] dirty flag
+- [ ] copy on write, 例如mesh 材质共用

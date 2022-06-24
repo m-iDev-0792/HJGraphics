@@ -36,9 +36,10 @@ namespace HJGraphics {
 		//render pass
 		void prepareRendering(long long frameDeltaTime,long long elapsedTime,long long frameCount);//update mesh states etc.
 
-		void shadowPass();
+		void shadowPass(long long frameDeltaTime, long long elapsedTime, long long frameCount);
 
-		void gBufferPass(const std::shared_ptr<GBuffer>& buffer);
+		void gBufferPass(const std::shared_ptr<GBuffer> &buffer, long long frameDeltaTime, long long elapsedTime,
+		                 long long frameCount);
 	private:
 		//important members!
 		int width,height;
@@ -92,6 +93,10 @@ namespace HJGraphics {
 		std::map<std::shared_ptr<Light>, std::shared_ptr<ShadowCubeMap>> shadowCubeMaps;
 
 		std::shared_ptr<Gizmo> gizmo;
+
+		int viewFrameCount=0;
+		int sameCount=0;
+		bool deferredRendererECSDebug;
 	};
 }
 #endif

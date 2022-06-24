@@ -6,6 +6,7 @@
 #include "Log.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <random>
+#include <filesystem>
 float random0_1f() {
 	static std::random_device seed;
 	static std::mt19937 engine(seed());
@@ -31,7 +32,7 @@ void HJGraphics::Model::loadModel(const std::string& _path) {
 	}
 	// retrieve the directory path of the filepath
 	directory = _path.substr(0, _path.find_last_of('/'));
-	format = _path.substr(_path.find_last_of(".")+1,_path.size());
+	format = _path.substr(_path.find_last_of('.')+1,_path.size());
 	SPDLOG_INFO("Load model from {} in directory {}",_path.c_str(),directory.c_str());
 	processNode(scene->mRootNode, scene);
 }
@@ -39,6 +40,7 @@ void HJGraphics::Model::processNode(aiNode *node, const aiScene *scene) {
 	//if(node==NULL)return;
 	for(unsigned int i = 0; i < node->mNumMeshes; i++){
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		auto name=mesh->mName;
 		meshes.push_back(processMesh(mesh, scene));
 	}
 	for(unsigned int i = 0; i < node->mNumChildren; i++){
@@ -158,24 +160,33 @@ std::vector<std::shared_ptr<HJGraphics::Texture>> HJGraphics::Model::loadMateria
 	for(unsigned int i = 0; i < mat->GetTextureCount(type); i++){
 		aiString texAiStrPath;
 		mat->GetTexture(type, i, &texAiStrPath);
-		std::string texStdStrPath(texAiStrPath.C_Str());
-		std::replace(texStdStrPath.begin(),texStdStrPath.end(),'\\','/');
+		std::string texPathStr(texAiStrPath.C_Str());
+		std::replace(texPathStr.begin(), texPathStr.end(), '\\', '/');
 
-		auto findResult=textures_loaded.find(texStdStrPath);
+		std::filesystem::path texPath=texPathStr;
+		if(texPath.is_relative()){
+			texPathStr=directory + std::string("/") + texPathStr;
+			texPath=std::filesystem::path(texPathStr);
+		}
+		std::string texAbsPathStr=std::filesystem::absolute(texPath).string();
+
+		SPDLOG_INFO("loading texture from {}, absolute = {}", texPathStr, texAbsPathStr);
+		auto findResult=textures_loaded.find(texPathStr);
 		if(findResult==textures_loaded.end()){
 			//create a new texture
 			auto option= TextureOption::withMipMap();
 			option.gammaCorrection=texUsage=="diffuse"||texUsage=="albedo";
 #ifdef __APPLE__
-			auto texture=std::make_shared<Texture2D>(directory+std::string("/")+texStdStrPath,option);
+			auto texture=std::make_shared<Texture2D>(texPathStr, option);
 #endif
 #ifdef _WIN32
-			auto texture=std::make_shared<Texture2D>(directory+std::string("\\")+texStdStrPath,option);
+			std::replace(texPathStr.begin(), texPathStr.end(), '/', '\\');
+			auto texture=std::make_shared<Texture2D>(texStdStrPath,option);
 #endif
 			texture->usage = texUsage;
-			texture->path = texStdStrPath;
+			texture->path = texPathStr;
 			materialTextures.push_back(texture);
-			textures_loaded.insert({texStdStrPath,texture});
+			textures_loaded.insert({texPathStr, texture});
 		}else{
 			//add existed texture
 			materialTextures.push_back(findResult->second);

@@ -21,6 +21,7 @@ namespace HJGraphics {
 	class Material {
 	public:
 		MaterialType materialType;
+		std::string name;
 
 		virtual std::shared_ptr<Shader> getShader()=0;
 

@@ -5,7 +5,6 @@
 #ifndef HJGRAPHICS_CAMERA_H
 #define HJGRAPHICS_CAMERA_H
 #include <string>
-#include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -14,7 +13,6 @@ namespace HJGraphics {
 	class Camera {
 	public:
 		glm::vec3 position;
-		glm::vec3 previousPosition;
 		glm::vec3 direction;
 		
 		float fov;

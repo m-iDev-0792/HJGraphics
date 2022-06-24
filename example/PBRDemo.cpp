@@ -2,10 +2,8 @@
 // Created by 何振邦 on 2020/7/15.
 //
 
-#include "Shader.h"
 #include "HJGraphics.h"
 #include "Log.h"
-#include "IBLManager.h"
 using namespace std;
 using namespace glm;
 using namespace HJGraphics;

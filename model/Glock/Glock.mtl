@@ -1,0 +1,5 @@
+newmtl Material
+map_Kd glock_BaseColor.png
+map_bump glock_Normal.png
+map_Ks glock_Roughness.png
+map_Ns glock_Metallic.png

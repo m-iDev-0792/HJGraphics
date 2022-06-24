@@ -13,9 +13,6 @@ namespace HJGraphics {
 	class DeferredRenderer;
 
     class GBuffer : public FrameBuffer{
-        friend DeferredRenderer;
-    protected:
-        std::shared_ptr<Shader> shader;
     public:
         GBuffer(int _width, int _height);
 
@@ -24,6 +21,8 @@ namespace HJGraphics {
         virtual void writeUniform(std::shared_ptr<Shader> shader)const;
 
         GLint getId(const std::string& _name)const;
+    public:
+	    std::shared_ptr<Shader> shader;
     };
 }
 #endif

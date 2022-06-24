@@ -37,3 +37,13 @@ void getGLError(){
 	else if(e==GL_INVALID_OPERATION)std::cout<<"Invalid operation error"<<std::endl;
 	else std::cout<<"Other error"<<std::endl;
 }
+
+float getMat4Diff(const glm::mat4& m1,const glm::mat4& m2){
+	float d=0.0f;
+	for(int i=0;i<4;++i){
+		for(int j=0;j<4;++j){
+			d+=std::abs(m1[i][j]-m2[i][j]);
+		}
+	}
+	return d;
+}

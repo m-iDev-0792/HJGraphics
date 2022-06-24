@@ -72,7 +72,7 @@ void HJGraphics::Mesh::commitData(){
 	}
 	size_t stride = 3 * sizeof(float);
 	if (uv.size() > 0)         stride += 2 * sizeof(float);
-	if (normal.size() > 0)    stride += 3 * sizeof(float);
+	if (normal.size() > 0)    stride += 3 * sizeof(float); //todo. swap uv and noraml order, change gBuffer vertex shader as well
 	if (tangent.size() > 0)   stride += 3 * sizeof(float);
 	if (bitangent.size() > 0) stride += 3 * sizeof(float);
 
