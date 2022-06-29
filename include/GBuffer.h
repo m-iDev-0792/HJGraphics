@@ -18,7 +18,7 @@ namespace HJGraphics {
 
         virtual void bindTexturesForShading() const;
 
-        virtual void writeUniform(std::shared_ptr<Shader> shader)const;
+        virtual void writeUniform(const std::shared_ptr<Shader>& _shader)const;
 
         GLint getId(const std::string& _name)const;
     public:

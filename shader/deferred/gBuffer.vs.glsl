@@ -1,9 +1,10 @@
 #version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec2 aUV;
-layout (location = 2) in vec3 aNormal;
-layout (location = 3) in vec3 aTangent;
-layout (location = 4) in vec3 aBitangent;
+#include "gBuffer_binding.h"
+layout (location = ${GBUFFER_INPUT_POSITION}) in vec3 aPos;
+layout (location = ${GBUFFER_INPUT_UV0}) in vec2 aUV;
+layout (location = ${GBUFFER_INPUT_NORMAL}) in vec3 aNormal;
+layout (location = ${GBUFFER_INPUT_TANGENT}) in vec3 aTangent;
+layout (location = ${GBUFFER_INPUT_BITANGENT}) in vec3 aBitangent;
 
 out vec3 normal;
 out vec2 uv;

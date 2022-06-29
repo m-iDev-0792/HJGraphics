@@ -8,7 +8,7 @@
 #include "component/LightComponent.h"
 #include "component/MeshComponent.h"
 #include "ECS/Entity.h"
-
+//todo. instantiate shadow map and shadow cube map
 namespace HJGraphics {
 	//LightPrefab has light component, transform component, mesh component(light volume)
 

@@ -189,13 +189,8 @@ void HJGraphics::DeferredRenderer::shadowPass(long long frameDeltaTime, long lon
 					renderMesh(m);
 				}
 			}
-			{//ECS render meshes to parallel light
-				MeshRenderSystemExtraData extraData;
-				extraData.shader=parallelSpotLightShadowShader;
-				extraData.renderAttribFilter=RenderAttributeEnum::SHADOWABLE;
-				mainScene->renderSystem.update(mainScene.get(),frameDeltaTime,elapsedTime,frameCount, &extraData);
-			}
-
+			//ECS render meshes to parallel light
+			LightShadowSystem::drawMeshForShadow(mainScene.get(),parallelSpotLightShadowShader);
 		}
 	}
 	if(mainScene->spotLights.size()>0) {
@@ -216,12 +211,8 @@ void HJGraphics::DeferredRenderer::shadowPass(long long frameDeltaTime, long lon
 					renderMesh(m);
 				}
 			}
-			{//ECS render meshes to parallel light
-				MeshRenderSystemExtraData extraData;
-				extraData.shader=parallelSpotLightShadowShader;
-				extraData.renderAttribFilter=RenderAttributeEnum::SHADOWABLE;
-				mainScene->renderSystem.update(mainScene.get(),frameDeltaTime,elapsedTime,frameCount, &extraData);
-			}
+			//ECS render meshes to parallel light
+			LightShadowSystem::drawMeshForShadow(mainScene.get(),parallelSpotLightShadowShader);
 		}
 	}
 	if(mainScene->pointLights.size()>0) {
@@ -247,12 +238,8 @@ void HJGraphics::DeferredRenderer::shadowPass(long long frameDeltaTime, long lon
 					renderMesh(m);
 				}
 			}
-			{//ECS render meshes to parallel light
-				MeshRenderSystemExtraData extraData;
-				extraData.shader=pointLightShadowShader;
-				extraData.renderAttribFilter=RenderAttributeEnum::SHADOWABLE;
-				mainScene->renderSystem.update(mainScene.get(),frameDeltaTime,elapsedTime,frameCount, &extraData);
-			}
+			//ECS render meshes to parallel light
+			LightShadowSystem::drawMeshForShadow(mainScene.get(),pointLightShadowShader);
 		}
 	}
 }
@@ -289,8 +276,8 @@ void HJGraphics::DeferredRenderer::gBufferPass(const std::shared_ptr<GBuffer> &b
 //todo. refactor render function codes
 void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long elapsedTime, long long frameCount) {
 	{
+		mainScene->sineAnimationSystem.update(mainScene.get(),frameDeltaTime,elapsedTime,frameCount, nullptr);
 		mainScene->transformSystem.update(mainScene.get(),frameDeltaTime,elapsedTime,frameCount, nullptr);
-//		return ;
 	}
     prepareRendering(frameDeltaTime,elapsedTime,frameCount);
 
@@ -336,149 +323,158 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
                          zNearAndzFar, mainScene->mainCamera->position);
     }
 
-
-    //-----------------------------
-    //3. deferred shading
-    //-----------------------------
-    //if there is a framebuffer, then bind it, and draw it after post-processing
-    if(deferredTarget){
-        deferredTarget->bind();
-        deferredTarget->bindAttachments();
-        deferredTarget->setDrawBuffers(1);//open attachment0 for color shading
-        //clear buffer depth and attachment0 color
-        static const float transparent[] = { 0, 0, 0, 0 };
-        static const float one=1.0f;
-        glClearBufferfv(GL_COLOR, 0, transparent);
-        glClearBufferfv(GL_DEPTH, 0, &one);
-    }
-
-    //bind gBuffer texture
-	gBuffer->bindTexturesForShading();
-
-    //------Enable blend for light shading------//
-    GL.enable(GL_BLEND);
-    GL.blendFunc(GL_ONE,GL_ONE);
-    //------------------------------------------//
-
-    //[3.1]-------ambient shading----------
 	{
-		//ambient shading with IBL
-		if(iblManager){
-			PBRIBLShader->use();
-			PBRIBLShader->set4fm("projectionView", glm::mat4(1.0f));
-			PBRIBLShader->set4fm("model", glm::mat4(1.0f));
-			PBRIBLShader->set4fm("inverseProjectionView", inverseProjectionView);
-			PBRIBLShader->set3fv("cameraPosition", cameraPosition);
-			gBuffer->writeUniform(PBRIBLShader);
-			PBRIBLShader->setInt("gAO",4);
-			GL.activeTexture(GL_TEXTURE4);
-			GL.bindTexture(GL_TEXTURE_2D,ssaoPass->getAOTexID(enableAO));
+		//-----------------------------
+		//3. deferred shading
+		//-----------------------------
+		//if there is a framebuffer, then bind it, and draw it after post-processing
+		if (deferredTarget) {
+			deferredTarget->bind();
+			deferredTarget->bindAttachments();
+			deferredTarget->setDrawBuffers(1);//open attachment0 for color shading
+			//clear buffer depth and attachment0 color
+			static const float transparent[] = {0, 0, 0, 0};
+			static const float one = 1.0f;
+			glClearBufferfv(GL_COLOR, 0, transparent);
+			glClearBufferfv(GL_DEPTH, 0, &one);
+		}
 
-			PBRIBLShader->setInt("irradianceMap",6);
-			GL.activeTexture(GL_TEXTURE6);
-			GL.bindTexture(GL_TEXTURE_CUBE_MAP,iblManager->diffuseIrradiance->id);
-			PBRIBLShader->setInt("prefilteredMap",7);
-			GL.activeTexture(GL_TEXTURE7);
-			GL.bindTexture(GL_TEXTURE_CUBE_MAP,iblManager->specularPrefiltered->id);
-			PBRIBLShader->setInt("brdfLUTMap",8);
-			GL.activeTexture(GL_TEXTURE8);
-			GL.bindTexture(GL_TEXTURE_2D,iblManager->brdfLUTMap->id);
-			Quad3D::draw();
+		//bind gBuffer texture
+		gBuffer->bindTexturesForShading();
+
+		//------Enable blend for light shading------//
+		GL.enable(GL_BLEND);
+		GL.blendFunc(GL_ONE, GL_ONE);
+		//------------------------------------------//
+
+		//[3.1]-------ambient shading----------
+		{
+			//ambient shading with IBL
+			if (iblManager) {
+				PBRIBLShader->use();
+				PBRIBLShader->set4fm("projectionView", glm::mat4(1.0f));
+				PBRIBLShader->set4fm("model", glm::mat4(1.0f));
+				PBRIBLShader->set4fm("inverseProjectionView", inverseProjectionView);
+				PBRIBLShader->set3fv("cameraPosition", cameraPosition);
+				gBuffer->writeUniform(PBRIBLShader);
+				PBRIBLShader->setInt("gAO", 4);
+				GL.activeTexture(GL_TEXTURE4);
+				GL.bindTexture(GL_TEXTURE_2D, ssaoPass->getAOTexID(enableAO));
+
+				PBRIBLShader->setInt("irradianceMap", 6);
+				GL.activeTexture(GL_TEXTURE6);
+				GL.bindTexture(GL_TEXTURE_CUBE_MAP, iblManager->diffuseIrradiance->id);
+				PBRIBLShader->setInt("prefilteredMap", 7);
+				GL.activeTexture(GL_TEXTURE7);
+				GL.bindTexture(GL_TEXTURE_CUBE_MAP, iblManager->specularPrefiltered->id);
+				PBRIBLShader->setInt("brdfLUTMap", 8);
+				GL.activeTexture(GL_TEXTURE8);
+				GL.bindTexture(GL_TEXTURE_2D, iblManager->brdfLUTMap->id);
+				Quad3D::draw();
+			}
+			//ambient shading without IBL
+			PBRlightingShader->use();
+			PBRlightingShader->set4fm("projectionView", glm::mat4(1.0f));
+			PBRlightingShader->set4fm("model", glm::mat4(1.0f));
+			PBRlightingShader->set4fm("inverseProjectionView", inverseProjectionView);
+			PBRlightingShader->setInt("lightType", LightType::AmbientType);
+			PBRlightingShader->setFloat("globalAmbientStrength", mainScene->ambientFactor);
+			//bind AO texture
+			if (!iblManager) {
+				PBRlightingShader->setInt("gAO", 4);
+				GL.activeTexture(GL_TEXTURE4);
+				GL.bindTexture(GL_TEXTURE_2D, ssaoPass->getAOTexID(enableAO));
+			}
+			gBuffer->writeUniform(PBRlightingShader);
+			if (!iblManager)Quad3D::draw();
 		}
-		//ambient shading without IBL
-		PBRlightingShader->use();
-		PBRlightingShader->set4fm("projectionView", glm::mat4(1.0f));
-		PBRlightingShader->set4fm("model", glm::mat4(1.0f));
-		PBRlightingShader->set4fm("inverseProjectionView", inverseProjectionView);
-		PBRlightingShader->setInt("lightType",LightType::AmbientType);
-		PBRlightingShader->setFloat("globalAmbientStrength",mainScene->ambientFactor);
-		//bind AO texture
-		if(!iblManager){
-			PBRlightingShader->setInt("gAO",4);
-			GL.activeTexture(GL_TEXTURE4);
-			GL.bindTexture(GL_TEXTURE_2D,ssaoPass->getAOTexID(enableAO));
+
+		if (deferredRendererECSDebug)SPDLOG_DEBUG("-----entering light shading pass-------");
+		//[3.2]-------parallel light shading----------
+		if (mainScene->parallelLights.size() > 0) {
+			//write uniforms
+			//for vertex shader
+			PBRlightingShader->set4fm("projectionView", glm::mat4(1.0f));
+			PBRlightingShader->set4fm("model", glm::mat4(1.0f));
+			//for fragment shader
+			PBRlightingShader->setInt("lightType", LightType::ParallelLightType);
+			PBRlightingShader->set3fv("cameraPosition", cameraPosition);
+			PBRlightingShader->setInt("shadowMap", 10);
+			PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
+			gBuffer->writeUniform(PBRlightingShader);
+			for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
+				auto light = mainScene->parallelLights[i];
+				light->writeUniform(PBRlightingShader);
+				if (light->castShadow) {
+					GL.activeTexture(GL_TEXTURE10);
+					GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
+					if (deferredRendererECSDebug)
+						SPDLOG_DEBUG("shading parallel light {} with shadow map id = {}", i,
+						             shadowMaps[light]->depthAttachment->getId());
+				}
+				renderMesh(light->lightVolume);
+			}
 		}
-		gBuffer->writeUniform(PBRlightingShader);
-		if(!iblManager)Quad3D::draw();
+
+		//-------Enable Cull face for spot and point light-------//
+		GL.enable(GL_CULL_FACE);
+		GL.cullFace(GL_FRONT);
+		//-------------------------------------------------------//
+
+		//[3.3]-------spotlight shading----------
+		if (mainScene->spotLights.size() > 0) {
+			//write uniforms
+			//for vertex shader
+			PBRlightingShader->set4fm("projectionView", projectionView);
+			PBRlightingShader->set4fm("model", glm::mat4(1.0f));
+			//for fragment shader
+			PBRlightingShader->setInt("lightType", LightType::SpotLightType);
+			PBRlightingShader->set3fv("cameraPosition", cameraPosition);
+			PBRlightingShader->setInt("shadowMap", 10);
+			PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
+			gBuffer->writeUniform(PBRlightingShader);
+			for (int i = 0; i < mainScene->spotLights.size(); ++i) {
+				auto light = mainScene->spotLights[i];
+				light->writeUniform(PBRlightingShader);
+				if (light->castShadow) {
+					GL.activeTexture(GL_TEXTURE10);
+					GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
+					if (deferredRendererECSDebug)
+						SPDLOG_DEBUG("shading spot light {} with shadow map id = {}", i,
+						             shadowMaps[light]->depthAttachment->getId());
+				}
+				renderMesh(light->lightVolume);
+			}
+		}
+
+		//[3.4]-------point light shading----------
+		if (mainScene->pointLights.size() > 0) {
+			//write uniforms
+			//for vertex shader
+			PBRlightingShader->set4fm("projectionView",
+			                          projectionView);//NOTE. we also need to set 'model' matrix for every light
+			//for fragment shader
+			PBRlightingShader->setInt("lightType", LightType::PointLightType);
+			PBRlightingShader->set3fv("cameraPosition", cameraPosition);
+			PBRlightingShader->setInt("shadowMap", 10);//useless actually,otherwise cause gl_invalid_operation!
+			PBRlightingShader->setInt("shadowCubeMap", 11);
+			gBuffer->writeUniform(PBRlightingShader);
+			for (int i = 0; i < mainScene->pointLights.size(); ++i) {
+				auto light = mainScene->pointLights[i];
+				PBRlightingShader->set4fm("model",
+				                          glm::translate(glm::mat4(1.0f), light->position));//set 'model' matrix
+				light->writeUniform(PBRlightingShader);
+				if (light->castShadow) {
+					GL.activeTexture(GL_TEXTURE11);
+					GL.bindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->depthAttachment->getId());
+					if (deferredRendererECSDebug)
+						SPDLOG_DEBUG("shading point light {} with shadow map id = {}", i,
+						             shadowCubeMaps[light]->depthAttachment->getId());
+				}
+				renderMesh(light->lightVolume);
+			}
+		}
 	}
-
-	if(deferredRendererECSDebug)SPDLOG_DEBUG("-----entering light shading pass-------");
-	//[3.2]-------parallel light shading----------
-    if(mainScene->parallelLights.size()>0) {
-        //write uniforms
-        //for vertex shader
-        PBRlightingShader->set4fm("projectionView", glm::mat4(1.0f));
-        PBRlightingShader->set4fm("model", glm::mat4(1.0f));
-        //for fragment shader
-        PBRlightingShader->setInt("lightType", LightType::ParallelLightType);
-        PBRlightingShader->set3fv("cameraPosition", cameraPosition);
-        PBRlightingShader->setInt("shadowMap", 10);
-        PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
-        gBuffer->writeUniform(PBRlightingShader);
-        for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
-            auto light = mainScene->parallelLights[i];
-            light->writeUniform(PBRlightingShader);
-            if (light->castShadow) {
-                GL.activeTexture(GL_TEXTURE10);
-                GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
-				if(deferredRendererECSDebug)SPDLOG_DEBUG("shading parallel light {} with shadow map id = {}",i,shadowMaps[light]->depthAttachment->getId());
-            }
-            renderMesh(light->lightVolume);
-        }
-    }
-
-    //-------Enable Cull face for spot and point light-------//
-    GL.enable(GL_CULL_FACE);
-    GL.cullFace(GL_FRONT);
-    //-------------------------------------------------------//
-
-    //[3.3]-------spotlight shading----------
-    if(mainScene->spotLights.size()>0) {
-        //write uniforms
-        //for vertex shader
-        PBRlightingShader->set4fm("projectionView", projectionView);
-        PBRlightingShader->set4fm("model", glm::mat4(1.0f));
-        //for fragment shader
-        PBRlightingShader->setInt("lightType", LightType::SpotLightType);
-        PBRlightingShader->set3fv("cameraPosition", cameraPosition);
-        PBRlightingShader->setInt("shadowMap", 10);
-        PBRlightingShader->setInt("shadowCubeMap", 11);//useless actually,otherwise cause gl_invalid_operation!
-        gBuffer->writeUniform(PBRlightingShader);
-        for (int i = 0; i < mainScene->spotLights.size(); ++i) {
-            auto light = mainScene->spotLights[i];
-            light->writeUniform(PBRlightingShader);
-            if (light->castShadow) {
-                GL.activeTexture(GL_TEXTURE10);
-                GL.bindTexture(GL_TEXTURE_2D, shadowMaps[light]->depthAttachment->getId());
-		        if(deferredRendererECSDebug)SPDLOG_DEBUG("shading spot light {} with shadow map id = {}",i,shadowMaps[light]->depthAttachment->getId());
-            }
-            renderMesh(light->lightVolume);
-        }
-    }
-
-    //[3.4]-------point light shading----------
-    if(mainScene->pointLights.size()>0) {
-        //write uniforms
-        //for vertex shader
-        PBRlightingShader->set4fm("projectionView", projectionView);//NOTE. we also need to set 'model' matrix for every light
-        //for fragment shader
-        PBRlightingShader->setInt("lightType", LightType::PointLightType);
-        PBRlightingShader->set3fv("cameraPosition", cameraPosition);
-        PBRlightingShader->setInt("shadowMap", 10);//useless actually,otherwise cause gl_invalid_operation!
-        PBRlightingShader->setInt("shadowCubeMap", 11);
-        gBuffer->writeUniform(PBRlightingShader);
-        for (int i = 0; i < mainScene->pointLights.size(); ++i) {
-            auto light = mainScene->pointLights[i];
-            PBRlightingShader->set4fm("model", glm::translate(glm::mat4(1.0f), light->position));//set 'model' matrix
-            light->writeUniform(PBRlightingShader);
-            if (light->castShadow) {
-                GL.activeTexture(GL_TEXTURE11);
-                GL.bindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMaps[light]->depthAttachment->getId());
-		        if(deferredRendererECSDebug)SPDLOG_DEBUG("shading point light {} with shadow map id = {}",i,shadowCubeMaps[light]->depthAttachment->getId());
-            }
-            renderMesh(light->lightVolume);
-        }
-    }
 
     //-------Restore OpenGL state-------//
     GL.cullFace(GL_BACK);

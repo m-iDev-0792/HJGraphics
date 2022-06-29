@@ -6,7 +6,8 @@
 #include "Log.h"
 #include "prefab/ModelPrefab.h"
 #include "prefab/ShapePrefab.h"
-
+#include "prefab/LightPrefab.h"
+#include "component/AnimationComponent.h"
 using namespace std;
 using namespace glm;
 using namespace HJGraphics;
@@ -23,8 +24,9 @@ int main() {
 
 	ModelPrefab glockPrefab("../model/Glock/Glock.obj",
 	                        CLEAR_VERTEX | RELEASE_ASSIMP_DATA);
-	glockPrefab.position=glm::vec3(-1,1,4);
+	glockPrefab.position=glm::vec3(0,1,4);
 	glockPrefab.scale=glm::vec3(15);
+	glockPrefab.rotation=glm::vec3(0,90,0);
 
 	glm::vec3 cameraPos = glm::vec3(5.0f, 5.0f, 10.0f);
 	glm::vec3 cameraDirection = glm::vec3(0.0f, 0.0f, 0.0f) - cameraPos;
@@ -46,84 +48,84 @@ int main() {
 	cylinderPrefab.position = glm::vec3(3, 0.5, 0);
 	BoxPrefab boxPrefab(1, 1, 1, brickMaterial);
 	boxPrefab.position = glm::vec3(-3, 0.5, 0);
-
-
-	auto box = make_shared<Box>(2, 2, 2, brickMaterial);
-	box->model = translate(box->model, vec3(0.0f, 0.0f, -2.5f));
-
-	auto plane = make_shared<Plane>(8, 8, 8, brickMaterial);
-
+	PlanePrefab floor(15,15,8,brickMaterial);
 
 	auto soliddiffuse = make_shared<SolidTexture>(glm::vec3(0.9, 0.9, 0.8));
 	soliddiffuse->usage = "diffuse";
 	TextureList brickwallTexture2{soliddiffuse, normalMap};
-	//1
-	//|
-	//metallic
-	//|
-	//|
-	//0-----------------roughness------------------>1
-	vector<shared_ptr<Sphere>> spheres;
-	for (int i = 0; i < 5; ++i) {
-		auto sphereMat = make_shared<PBRMaterial>(brickwallTexture2);
-		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i / 5.0f + 0.1);
-		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.9);
-		auto sphere = make_shared<Sphere>(0.3, 30, sphereMat);
-		sphere->model = translate(sphere->model, vec3(-2 + i, 2.5, 0));
-		spheres.push_back(sphere);
-	}
-	for (int i = 0; i < 5; ++i) {
-		auto sphereMat = make_shared<PBRMaterial>(brickwallTexture2);
-		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i / 5.0f + 0.1);
-		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.6);
-		auto sphere = make_shared<Sphere>(0.3, 30, sphereMat);
-		sphere->model = translate(sphere->model, vec3(-2 + i, 1.8, 0));
-		spheres.push_back(sphere);
-	}
-	for (int i = 0; i < 5; ++i) {
-		auto sphereMat = make_shared<PBRMaterial>(brickwallTexture2);
-		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i / 5.0f + 0.1);
-		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.35);
-		auto sphere = make_shared<Sphere>(0.3, 30, sphereMat);
-		sphere->model = translate(sphere->model, vec3(-2 + i, 1.1, 0));
-		spheres.push_back(sphere);
-	}
-	for (int i = 0; i < 5; ++i) {
-		auto sphereMat = make_shared<PBRMaterial>(brickwallTexture2);
-		static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i / 5.0f + 0.1);
-		static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.1);
-		auto sphere = make_shared<Sphere>(0.3, 30, sphereMat);
-		sphere->model = translate(sphere->model, vec3(-2 + i, 0.4, 0));
-		spheres.push_back(sphere);
-		auto simpleAnimater = make_shared<DemoSinAnimater>(sphere->model, vec3(0, 0, -2), 3.0, i);
-		sphere->animater = simpleAnimater;
-	}
 
 
 	auto paraLight = make_shared<ParallelLight>(glm::vec3(-1.0f, -0.7f, -2.0f), glm::vec3(4.0f, 4.0f, 0.0f),
 	                                            glm::vec3(2.0f));
 	auto spotLight = make_shared<SpotLight>(glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(-5.0f, 5.0f, 3.0f), glm::vec3(3));
-	auto pointLight = make_shared<PointLight>(glm::vec3(0.0f, 2.0f, 2.0f), glm::vec3(20));
+	auto pointLight = make_shared<PointLight>(glm::vec3(0.0f, 2.0f, 2.0f), glm::vec3(5));
+
+	SpotLightPrefab spotLightPrefab(glm::vec3(-5.0f, 5.0f, 3.0f),glm::vec3(1.0f, -1.0f, -1.0f),glm::vec3(20,0,0));
 
 	auto scene = make_shared<Scene>(0.3, glm::vec3(0));
 	auto camRes = scene->instantiate(cameraPrefab, "mainCamera");
+	if (camRes.second) {
+		scene->mainCameraEntityID = camRes.first;
+	}
 	scene->instantiate(spherePrefab, "Sphere");
 	scene->instantiate(cylinderPrefab, "Cylinder");
 	scene->instantiate(boxPrefab, "Box");
 	scene->instantiate(planePrefab, "Plane");
 	scene->instantiate(modelPrefab,"FireExt");
 	scene->instantiate(glockPrefab,"Glock");
-	if (camRes.second) {
-		scene->mainCameraEntityID = camRes.first;
+	scene->instantiate(floor,"Floor");
+	scene->instantiate(spotLightPrefab,"spotlight");
+	{
+		//1
+		//|
+		//metallic
+		//|
+		//|
+		//0-----------------roughness------------------>1
+		SpherePrefab templateSphere(0.3, 30, nullptr);
+		for (int i = 0; i < 5; ++i) {
+			auto sphereMat = make_shared<PBRMaterial>(brickwallTexture2);
+			static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i / 5.0f + 0.1);
+			static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.9);
+			templateSphere.position=vec3(-2 + i, 2.5, 0);
+			templateSphere.meshComponent.submeshes[0].material=sphereMat;
+			auto sphereEntity=scene->instantiate(templateSphere, "materialSphere_1_" + std::to_string(i));
+		}
+		for (int i = 0; i < 5; ++i) {
+			auto sphereMat = make_shared<PBRMaterial>(brickwallTexture2);
+			static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i / 5.0f + 0.1);
+			static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.6);
+			templateSphere.position=vec3(-2 + i, 1.8, 0);
+			templateSphere.meshComponent.submeshes[0].material=sphereMat;
+			auto sphereEntity=scene->instantiate(templateSphere, "materialSphere_2_" + std::to_string(i));
+		}
+		for (int i = 0; i < 5; ++i) {
+			auto sphereMat = make_shared<PBRMaterial>(brickwallTexture2);
+			static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i / 5.0f + 0.1);
+			static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.35);
+			templateSphere.position=vec3(-2 + i, 1.1, 0);
+			templateSphere.meshComponent.submeshes[0].material=sphereMat;
+			auto sphereEntity=scene->instantiate(templateSphere, "materialSphere_1_" + std::to_string(i));
+		}
+		for (int i = 0; i < 5; ++i) {
+			auto sphereMat = make_shared<PBRMaterial>(brickwallTexture2);
+			static_pointer_cast<SolidTexture>(sphereMat->roughnessMap)->setColor(i / 5.0f + 0.1);
+			static_pointer_cast<SolidTexture>(sphereMat->metallicMap)->setColor(0.1);
+			templateSphere.position=vec3(-2 + i, 0.4, 0);
+			templateSphere.meshComponent.submeshes[0].material=sphereMat;
+			auto sphereEntity=scene->instantiate(templateSphere, "animatedSphere_" + std::to_string(i));
+			if(sphereEntity.second){
+				auto animComp=scene->addComponent<SineAnimationComponent>(sphereEntity.first,"SineAnimationComp");
+				animComp->originalPosition=vec3(-2 + i, 0.4, 0);
+				animComp->phase=i;
+			}
+		}
 	}
 
 	scene->addLight(pointLight);
 //	scene->addLight(spotLight);
 //	scene->addLight(paraLight);
 	scene->addCamera(camera);
-
-	for (auto &s: spheres)scene->addObject(s);
-	scene->addObject(plane);
 	scene->addObject(coord);
 	scene->setSkybox(50.0f, std::make_shared<Texture2D>("../texture/beach.hdr", TextureOption::withMipMap()));
 

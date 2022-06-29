@@ -27,15 +27,15 @@ namespace HJGraphics {
 
 		virtual void bindTexture()=0;
 
-		virtual void writeToShader(std::shared_ptr<Shader> shader)=0;
+		virtual void writeToShader(const std::shared_ptr<Shader>& shader)=0;
 
 		virtual void loadTextures(const std::vector<std::shared_ptr<Texture>> &_textures)=0;
 
 		virtual void loadTexture(const std::shared_ptr<Texture> &_texture)=0;
 
-		virtual bool setValue(const std::string& name,float value){return false;}
+		virtual bool setValue(const std::string& _name,float value){return false;}
 
-		virtual bool setValue(const std::string& name,glm::vec3 value){return false;}
+		virtual bool setValue(const std::string& _name,glm::vec3 value){return false;}
 	};
 
 	class BlinnPhongMaterial: public Material {
@@ -68,7 +68,7 @@ namespace HJGraphics {
 
 		void bindTexture() override;
 
-		void writeToShader(std::shared_ptr<Shader> shader) override;
+		void writeToShader(const std::shared_ptr<Shader>& shader) override;
 
 		void loadTextures(const std::vector<std::shared_ptr<Texture>> &_textures) override;
 
@@ -98,7 +98,7 @@ namespace HJGraphics {
 
 		void bindTexture()override ;
 
-		void writeToShader(std::shared_ptr<Shader> shader)override ;
+		void writeToShader(const std::shared_ptr<Shader>& shader)override ;
 
 		void loadTextures(const std::vector<std::shared_ptr<Texture>> &_textures)override ;
 

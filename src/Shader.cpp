@@ -34,26 +34,54 @@ std::string getBasePath(const std::string &path){
 }
 
 void HJGraphics::preprocessShaderCode(std::string &source, const std::string &basePath){
-	std::regex reg{R"(#include\s*"[^"]+")"};//Note: no space behind #include
-	std::sregex_iterator it(source.begin(), source.end(), reg);
-	std::sregex_iterator end;
-	std::vector<std::string> includeCodes;
-	std::vector<std::string> includePath;
-	for (; it != end; ++it) {
-		auto path=it->str();
-		includePath.push_back(path);
-		auto pos = path.find('\"');
-		path=path.substr(pos+1,path.size()-pos-2);
-		auto originalCode=readText(basePath+path);
-		auto newBasePath=getBasePath(basePath+path);
-		preprocessShaderCode(originalCode,newBasePath);//process recursively
-		includeCodes.push_back(originalCode);
+	{
+		std::regex reg{R"(#include\s*"[^"]+")"};
+		std::sregex_iterator it(source.begin(), source.end(), reg);
+		std::sregex_iterator end;
+		std::vector<std::string> includeCodes;
+		std::vector<std::string> includePath;
+		for (; it != end; ++it) {
+			auto path=it->str();
+			includePath.push_back(path);
+			auto pos = path.find('\"');
+			path=path.substr(pos+1,path.size()-pos-2);
+			auto originalCode=readText(basePath+path);
+			auto newBasePath=getBasePath(basePath+path);
+			preprocessShaderCode(originalCode,newBasePath);//process recursively
+			includeCodes.push_back(originalCode);
+		}
+		if(includePath.empty())return;
+		//replace #include with real code
+		for(int i=0;i<includePath.size();++i){
+			std::regex p{includePath[i]};
+			source=std::regex_replace(source,p,includeCodes[i]);
+		}
 	}
-	if(includePath.empty())return;
-	//replace
-	for(int i=0;i<includePath.size();++i){
-		std::regex p{includePath[i]};
-		source=std::regex_replace(source,p,includeCodes[i]);
+
+	//replace single line #define XXX YYY
+	{
+		//parse
+		std::regex reg{R"(#define\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*([^\s]*)[\n\r])"};
+		std::sregex_iterator it(source.begin(), source.end(), reg);
+		std::sregex_iterator end;
+		std::map<std::string,std::string> macroDatabase;
+		for (; it != end; ++it) {
+			macroDatabase[it->str(1)]=it->str(2);
+		}
+		//replace
+		std::regex repReg{R"(\$\{\s*([a-zA-Z_][a-zA-Z_0-9]*)\s*\})"};
+		std::sregex_iterator itRep(source.begin(), source.end(), repReg);
+		std::vector<std::string> repList;
+		for(;itRep!=end;++itRep){
+			repList.push_back(itRep->str(1));
+		}
+		for(auto& r:repList){
+			auto iter=macroDatabase.find(r);
+			if(iter != macroDatabase.end()){
+				std::regex p{R"(\$\{\s*)"+r+R"(\s*\})"};
+				source=std::regex_replace(source,p,iter->second);
+			}
+		}
 	}
 }
 HJGraphics::ShaderCode HJGraphics::operator ""_vs(const char* str,size_t n){

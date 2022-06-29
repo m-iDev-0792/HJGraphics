@@ -73,7 +73,7 @@ void HJGraphics::BlinnPhongMaterial::bindTexture() {
 //		GL.bindTexture(GL_TEXTURE_2D,heightMap->id);
 }
 
-void HJGraphics::BlinnPhongMaterial::writeToShader(std::shared_ptr<Shader> shader) {
+void HJGraphics::BlinnPhongMaterial::writeToShader(const std::shared_ptr<Shader>& shader) {
 	//Caution! call shader->use() before calling this function
 	shader->setInt("material.diffuseMap",0);
 	shader->setInt("material.specularMap",1);
@@ -140,7 +140,7 @@ void HJGraphics::PBRMaterial::bindTexture() {
 //	GL.bindTexture(GL_TEXTURE_2D,heightMap->id);
 }
 
-void HJGraphics::PBRMaterial::writeToShader(std::shared_ptr<Shader> shader) {
+void HJGraphics::PBRMaterial::writeToShader(const std::shared_ptr<Shader>& shader) {
 	//Caution! call shader->use() before calling this function
 	shader->setInt("material.albedoMap",0);
 	shader->setInt("material.normalMap",1);

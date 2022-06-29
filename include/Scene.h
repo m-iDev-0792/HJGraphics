@@ -14,6 +14,8 @@
 #include "system/CameraSystem.h"
 #include "system/TransformSystem.h"
 #include "system/MeshRenderSystem.h"
+#include "system/LightSystem.h"
+#include "system/AnimationSystem.h"
 namespace HJGraphics {
 	class DeferredRenderer;
 /*
@@ -25,6 +27,9 @@ namespace HJGraphics {
 		CameraSystem cameraSystem;
 		TransformSystem transformSystem;
 		MeshRenderSystem renderSystem;
+		LightShadowSystem lightShadowSystem;
+		LightDeferredShadingSystem lightShadingSystem;
+		SineAnimationSystem sineAnimationSystem;
 	private:
 		GLfloat ambientFactor;
 		glm::vec3 clearColor;

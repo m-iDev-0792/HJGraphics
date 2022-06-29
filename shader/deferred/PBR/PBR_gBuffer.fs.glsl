@@ -1,8 +1,10 @@
 #version 330 core
-layout (location = 0) out vec3 gNormal;
-layout (location = 1) out vec3 gAlbedo;
-layout (location = 2) out vec3 gRoughnessMetallicReflectable;
-layout (location = 3) out vec2 gVelocity;
+#include "../gBuffer_binding.h"
+//identifiers in layouts is an unsupported extension
+layout (location = ${GBUFFER_OUTPUT_NORMAL}) out vec3 gNormal;
+layout (location = ${GBUFFER_OUTPUT_ALBEDO}) out vec3 gAlbedo;
+layout (location = ${GBUFFER_OUTPUT_ROUGHNESS_METALLIC_REFLECTABLE}) out vec3 gRoughnessMetallicReflectable;
+layout (location = ${GBUFFER_OUTPUT_VELOCITY}) out vec2 gVelocity;
 
 in vec3 normal;
 in vec2 uv;

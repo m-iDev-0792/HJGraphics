@@ -100,17 +100,14 @@ void HJGraphics::ModelPrefab::processMesh(aiMesh *mesh, const aiScene *scene) {
 	SPDLOG_INFO("Processing mesh {}", mesh->mName.C_Str());
 	if (mesh->HasPositions()) {
 		subMesh.vertexData.vertexContentEnum |= VertexContentEnum::POSITION;
-		subMesh.vertexData.vertexFloatNum += 3;
 		SPDLOG_INFO("Position vertex channel detected");
 	}
 	if (mesh->HasNormals()) {
 		subMesh.vertexData.vertexContentEnum |= VertexContentEnum::NORMAL;
-		subMesh.vertexData.vertexFloatNum += 3;
 		SPDLOG_INFO("Normal vertex channel detected");
 	}
 	if (mesh->HasTextureCoords(0)) {
 		subMesh.vertexData.vertexContentEnum |= VertexContentEnum::UV0;
-		subMesh.vertexData.vertexFloatNum += 2;
 		SPDLOG_INFO("UV0 vertex channel detected");
 	}
 	if (mesh->HasTextureCoords(1)) {
@@ -120,10 +117,10 @@ void HJGraphics::ModelPrefab::processMesh(aiMesh *mesh, const aiScene *scene) {
 	}
 	if (mesh->HasTangentsAndBitangents()) {
 		subMesh.vertexData.vertexContentEnum |= (VertexContentEnum::TANGENT | VertexContentEnum::BITANGENT);
-		subMesh.vertexData.vertexFloatNum += 6;
 		SPDLOG_INFO("Tangent and Bitangent vertex channels detected");
 	}
 	auto vce = subMesh.vertexData.vertexContentEnum;
+	subMesh.vertexData.vertexFloatNum = getFloatNumFromVertexContent(vce);
 	for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
 		if (vce & VertexContentEnum::POSITION) {
 			subMesh.vertexData.data.push_back(mesh->mVertices[i].x);

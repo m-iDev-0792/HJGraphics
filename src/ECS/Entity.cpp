@@ -96,8 +96,6 @@ HJGraphics::Entity *HJGraphics::EntityManager::getEntityData(const std::string& 
 }
 
 std::set<HJGraphics::EntityID> HJGraphics::EntityManager::getEntities(ArcheType _archeType) const {
-	auto iter = archeTypeEntityList.find(_archeType);
-	if (iter != archeTypeEntityList.end())return iter->second;
 	std::set<EntityID> res;
 	for (auto &at: archeTypeEntityList) {
 		if ((at.first & _archeType) == _archeType) {

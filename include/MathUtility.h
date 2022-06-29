@@ -17,7 +17,7 @@ namespace HJGraphics{
 		else return -1;
 	}
 
-	//Apply rotation using euler angle, angle is in degree
+	//Apply rotation using euler angle, angle is in degree, rotation order: XYZ
 	glm::vec3 applyEulerRotation(glm::vec3 direction, glm::vec3 eulerAngle);
 
 	inline glm::vec3 getECSCameraDirection(glm::vec3 eulerAngle){

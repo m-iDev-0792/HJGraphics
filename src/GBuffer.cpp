@@ -7,26 +7,26 @@
 #include "Log.h"
 #include <string>
 #include <iostream>
-
+#include "shader/deferred/gBuffer_binding.h"
 HJGraphics::GBuffer::GBuffer(int _width, int _height) {
     width=_width;
     height=_height;
     //set up normal
 	TextureOption option(GL_CLAMP_TO_EDGE,GL_NEAREST);
     auto gNormalTex=std::make_shared<Texture2D>(width,height,GL_RGB16F,GL_RGB,GL_FLOAT,option);
-    auto gNormal=std::make_shared<FrameBufferAttachment>(gNormalTex,0,"gNormal");
+    auto gNormal=std::make_shared<FrameBufferAttachment>(gNormalTex,GBUFFER_OUTPUT_NORMAL,"gNormal");
     colorAttachments.push_back(gNormal);
     //set up albedo
     auto gAlbedoTex=std::make_shared<Texture2D>(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, option);
-    auto gAlbedo=std::make_shared<FrameBufferAttachment>(gAlbedoTex, 1, "gAlbedo");
+    auto gAlbedo=std::make_shared<FrameBufferAttachment>(gAlbedoTex, GBUFFER_OUTPUT_ALBEDO, "gAlbedo");
     colorAttachments.push_back(gAlbedo);
     //set up roughness metallic and reflectable
     auto gRoughnessMetallicReflectableTex=std::make_shared<Texture2D>(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, option);
-    auto gRoughnessMetallicReflectable=std::make_shared<FrameBufferAttachment>(gRoughnessMetallicReflectableTex, 2, "gRoughnessMetallicReflectable");
+    auto gRoughnessMetallicReflectable=std::make_shared<FrameBufferAttachment>(gRoughnessMetallicReflectableTex, GBUFFER_OUTPUT_ROUGHNESS_METALLIC_REFLECTABLE, "gRoughnessMetallicReflectable");
     colorAttachments.push_back(gRoughnessMetallicReflectable);
     //set up sharedVelocity
     auto gVelocityTex=std::make_shared<Texture2D>(width,height,GL_RG16F,GL_RG,GL_FLOAT,option);
-    auto gVelocity=std::make_shared<FrameBufferAttachment>(gVelocityTex,3,"gVelocity");
+    auto gVelocity=std::make_shared<FrameBufferAttachment>(gVelocityTex,GBUFFER_OUTPUT_VELOCITY,"gVelocity");
     colorAttachments.push_back(gVelocity);
     //set up depth and stencil buffer
     auto depthStencilTex=std::make_shared<Texture2D>(width,height,GL_DEPTH24_STENCIL8,GL_DEPTH_STENCIL,GL_UNSIGNED_INT_24_8,option);
@@ -47,7 +47,9 @@ HJGraphics::GBuffer::GBuffer(int _width, int _height) {
 
 
 void HJGraphics::GBuffer::bindTexturesForShading() const{
-    for(int i=0;i<colorAttachments.size()-1;++i){//only bind gNormal gAlbedo and gRoughnessMetallic
+	//only bind gNormal gAlbedo and gRoughnessMetallic
+	//the binding points are implicit encoded to 0,1,2 respectively
+    for(int i=0;i<colorAttachments.size()-1;++i){
         GL.activeTexture(GL_TEXTURE0+i);
         GL.bindTexture(GL_TEXTURE_2D, colorAttachments[i]->getId());
     }
@@ -59,14 +61,14 @@ void HJGraphics::GBuffer::bindTexturesForShading() const{
     }
 
 }
-void HJGraphics::GBuffer::writeUniform(std::shared_ptr<Shader> shader) const {
+void HJGraphics::GBuffer::writeUniform(const std::shared_ptr<Shader>& _shader) const { //binding for lighting
     for(int i=0;i<colorAttachments.size()-1;++i){//only write gNormal gAlbedo and gRoughnessMetallic
-        shader->setInt(colorAttachments[i]->name,i);
+        _shader->setInt(colorAttachments[i]->name, i);
     }
     if(hasDepthAttachment()){//also write gDepth
-        shader->setInt(depthAttachment->name,3);
+        _shader->setInt(depthAttachment->name, LIGHTING_TEX_GBUFFER_DEPTH);
     }
-    shader->set2fv("gBufferSize",glm::vec2(width,height));
+    _shader->set2fv("gBufferSize", glm::vec2(width, height));
 }
 
 GLint HJGraphics::GBuffer::getId(const std::string &_name) const {

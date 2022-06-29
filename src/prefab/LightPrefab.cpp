@@ -12,9 +12,9 @@ HJGraphics::SpotLightPrefab::SpotLightPrefab(glm::vec3 _position, glm::vec3 _dir
 	position = _position;
 	direction = _direction;
 	light.color = _color;
-	light.setRange(_range);
-	light.setInnerAngle(_innerAngle);
-	light.setOuterAngle(_outerAngle);
+	light.range=_range;
+	light.innerAngle=_innerAngle;
+	light.outerAngle=_outerAngle;
 }
 
 bool HJGraphics::SpotLightPrefab::instantiate(HJGraphics::ECSScene *_scene, const HJGraphics::EntityID &_id) const {
@@ -32,19 +32,20 @@ bool HJGraphics::SpotLightPrefab::instantiate(HJGraphics::ECSScene *_scene, cons
 			submesh.name = "DefaultSpotLightVolumeMesh";
 			submesh.vertexData= generateSpotLightUnitVolume();
 			submesh.drawStart = 0;
-			submesh.drawNum = submesh.vertexData.data.size() / submesh.vertexData.vertexFloatNum;
+			submesh.drawNum = submesh.vertexData.data.size() / getFloatNumFromVertexContent(submesh.vertexData.vertexContentEnum);
 			genVAOVBO(submesh.buffer);
 			commitVertexDataToBuffer(submesh.vertexData.vertexContentEnum, submesh.buffer, submesh.vertexData.data,
 			                         submesh.vertexData.indices);
 			submesh.vertexData.free();
+			submesh.renderAttribute=RenderAttributeEnum::IGNORED;//light mesh will be ignored
 			sharedSubmeshCreated=true;
 		}
 		meshComp->submeshes.push_back(submesh);
 		//set transform component
 		transComp->setTranslation(position);
 		transComp->setRotation(cameraDirectionToEulerAngle(direction));
-		float r=light.getRange()*glm::tan(glm::radians(light.getOuterAngle()))*1.41f;
-		transComp->setScale(glm::vec3(r,r,light.getRange()));
+		float r=light.range*glm::tan(glm::radians(light.outerAngle))*1.41f;
+		transComp->setScale(glm::vec3(r,r,light.range));
 		return true;
 	}
 	return false;
@@ -53,8 +54,8 @@ bool HJGraphics::SpotLightPrefab::instantiate(HJGraphics::ECSScene *_scene, cons
 HJGraphics::VertexData
 HJGraphics::SpotLightPrefab::generateSpotLightUnitVolume() {
 	VertexData vertexData;
-	vertexData.vertexFloatNum = 3;
 	vertexData.vertexContentEnum = VertexContentEnum::POSITION;
+	vertexData.vertexFloatNum = getFloatNumFromVertexContent(vertexData.vertexContentEnum);
 	auto& data=vertexData.data;
 	glm::vec3 origin(0.0f);
 	glm::vec3 direction(0,0,-1);
@@ -87,7 +88,7 @@ HJGraphics::ParallelLightPrefab::ParallelLightPrefab(glm::vec3 _direction, glm::
 	position = _position;
 	direction = _direction;
 	light.color = _color;
-	light.setRange(0);
+	light.range=0;
 	light.shadowRange=_shadowRange;
 }
 
@@ -106,11 +107,12 @@ bool HJGraphics::ParallelLightPrefab::instantiate(HJGraphics::ECSScene *_scene, 
 			submesh.name = "DefaultSpotLightVolumeMesh";
 			submesh.vertexData= generateParallelLightUnitVolume();
 			submesh.drawStart = 0;
-			submesh.drawNum = submesh.vertexData.data.size() / submesh.vertexData.vertexFloatNum;
+			submesh.drawNum = submesh.vertexData.data.size() / getFloatNumFromVertexContent(submesh.vertexData.vertexContentEnum);
 			genVAOVBO(submesh.buffer);
 			commitVertexDataToBuffer(submesh.vertexData.vertexContentEnum, submesh.buffer, submesh.vertexData.data,
 			                         submesh.vertexData.indices);
 			submesh.vertexData.free();
+			submesh.renderAttribute=RenderAttributeEnum::IGNORED;//light mesh will be ignored
 			sharedSubmeshCreated=true;
 		}
 		meshComp->submeshes.push_back(submesh);
@@ -126,8 +128,8 @@ bool HJGraphics::ParallelLightPrefab::instantiate(HJGraphics::ECSScene *_scene, 
 HJGraphics::VertexData
 HJGraphics::ParallelLightPrefab::generateParallelLightUnitVolume() {
 	VertexData vertexData;
-	vertexData.vertexFloatNum = 3;
 	vertexData.vertexContentEnum = VertexContentEnum::POSITION;
+	vertexData.vertexFloatNum = getFloatNumFromVertexContent(vertexData.vertexContentEnum);
 	auto& data=vertexData.data;
 	std::vector<glm::vec3> vertices{glm::vec3(-1,1,0),glm::vec3(-1,-1,0),glm::vec3(1,1,0),
 	                         glm::vec3(-1,-1,0),glm::vec3(1,-1,0),glm::vec3(1,1,0)};
@@ -142,7 +144,7 @@ HJGraphics::ParallelLightPrefab::generateParallelLightUnitVolume() {
 HJGraphics::PointLightPrefab::PointLightPrefab(glm::vec3 _position, glm::vec3 _color, float _range) {
 	position = _position;
 	light.color = _color;
-	light.setRange(_range);
+	light.range=_range;
 }
 
 bool HJGraphics::PointLightPrefab::instantiate(HJGraphics::ECSScene *_scene, const HJGraphics::EntityID &_id) const {
@@ -160,17 +162,18 @@ bool HJGraphics::PointLightPrefab::instantiate(HJGraphics::ECSScene *_scene, con
 			submesh.name = "DefaultSpotLightVolumeMesh";
 			submesh.vertexData= generatePointLightUnitVolume();
 			submesh.drawStart = 0;
-			submesh.drawNum = submesh.vertexData.data.size() / submesh.vertexData.vertexFloatNum;
+			submesh.drawNum = submesh.vertexData.data.size() / getFloatNumFromVertexContent(submesh.vertexData.vertexContentEnum);
 			genVAOVBO(submesh.buffer);
 			commitVertexDataToBuffer(submesh.vertexData.vertexContentEnum, submesh.buffer, submesh.vertexData.data,
 			                         submesh.vertexData.indices);
 			submesh.vertexData.free();
+			submesh.renderAttribute=RenderAttributeEnum::IGNORED;//light mesh will be ignored
 			sharedSubmeshCreated=true;
 		}
 		meshComp->submeshes.push_back(submesh);
 		//set up transform component
 		transComp->setTranslation(position);
-		transComp->setScale(glm::vec3(light.getRange()));
+		transComp->setScale(glm::vec3(light.range));
 		return true;
 	}
 	return false;
@@ -187,7 +190,7 @@ HJGraphics::AmbientLightPrefab::AmbientLightPrefab(float _strength) {
 
 bool HJGraphics::AmbientLightPrefab::instantiate(HJGraphics::ECSScene *_scene, const HJGraphics::EntityID &_id) const {
 	if(!_id.isValid())return false;
-	auto lightComp=_scene->addComponent<AmbientLightComponent>(_id,"SpotLightComponent");
+	auto lightComp=_scene->addComponent<AmbientLightComponent>(_id,"AmbientLightComponent");
 	if(lightComp){
 		*lightComp=light;
 		return true;

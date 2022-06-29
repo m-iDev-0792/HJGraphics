@@ -9,21 +9,23 @@
 #include "Vertex.h"
 
 namespace HJGraphics {
-	enum VertexContentEnum {
-		NONE = 0,
-		POSITION = 1,
-		UV0 = 1 << 1,
-		UV1 = 1 << 2,
-		NORMAL = 1 << 3,
-		TANGENT = 1 << 4,
-		BITANGENT = 1 << 5,
-		INDEX = 1 << 6
+	struct VertexContentEnum {
+		enum {
+			NONE = 0,
+			POSITION = 1,
+			UV0 = 1 << 1,
+			UV1 = 1 << 2,
+			NORMAL = 1 << 3,
+			TANGENT = 1 << 4,
+			BITANGENT = 1 << 5,
+			INDEX = 1 << 6
+		};
 	};
 
 	static unsigned getFloatNumFromVertexContent(unsigned int _flag){
 		unsigned  floatNum=0;
 		struct _FloatNum{
-			VertexContentEnum contentEnum;
+			unsigned contentEnum;
 			unsigned floatNum;
 		};
 		static _FloatNum numList[]={
@@ -71,14 +73,17 @@ namespace HJGraphics {
 	}
 
 	struct VertexAttribInfo {
-		VertexContentEnum contentEnum;
+		unsigned contentEnum;
 		unsigned size;
 		std::string usage;
 	};
 
-	enum RenderAttributeEnum {
-		VISIBLE = 1,
-		SHADOWABLE = 1 << 1
+	struct RenderAttributeEnum {
+		enum{
+			IGNORED = 0,
+			VISIBLE = 1,
+			SHADOWABLE = 1 << 1
+		};
 	};
 
 	struct SubMesh {

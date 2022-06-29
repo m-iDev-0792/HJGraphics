@@ -78,10 +78,10 @@ bool HJGraphics::SpherePrefab::instantiate(HJGraphics::ECSScene *_scene, const H
 
 HJGraphics::VertexData HJGraphics::SpherePrefab::generateSphereVertexData(float _radius, int _partition) {
 	VertexData vertexData;
-	vertexData.vertexFloatNum = 14;
 	vertexData.vertexContentEnum = (VertexContentEnum::POSITION | VertexContentEnum::UV0 |
 	                                        VertexContentEnum::NORMAL | VertexContentEnum::TANGENT |
 	                                        VertexContentEnum::BITANGENT);
+	vertexData.vertexFloatNum = getFloatNumFromVertexContent(vertexData.vertexContentEnum);
 	auto &data = vertexData.data;
 	std::vector<Vertex8> vertices;
 	int vertDiv = _partition / 2;
@@ -198,10 +198,10 @@ bool HJGraphics::CylinderPrefab::instantiate(HJGraphics::ECSScene *_scene, const
 HJGraphics::VertexData
 HJGraphics::CylinderPrefab::generateCylinderVertexData(float _radius, float _length, unsigned int _partition) {
 	VertexData vertexData;
-	vertexData.vertexFloatNum = 14;
 	vertexData.vertexContentEnum = (VertexContentEnum::POSITION | VertexContentEnum::UV0 |
 	                                VertexContentEnum::NORMAL | VertexContentEnum::TANGENT |
 	                                VertexContentEnum::BITANGENT);
+	vertexData.vertexFloatNum = getFloatNumFromVertexContent(vertexData.vertexContentEnum);
 	auto &data = vertexData.data;
 	std::vector<Vertex8> vertices;
 	double gap = 2 * 3.1415926 / _partition;
@@ -288,10 +288,10 @@ bool HJGraphics::BoxPrefab::instantiate(HJGraphics::ECSScene *_scene, const HJGr
 
 HJGraphics::VertexData HJGraphics::BoxPrefab::generateBoxVertexData(float _width, float _depth, float _height) {
 	VertexData vertexData;
-	vertexData.vertexFloatNum = 14;
 	vertexData.vertexContentEnum = (VertexContentEnum::POSITION | VertexContentEnum::UV0 |
 	                                        VertexContentEnum::NORMAL | VertexContentEnum::TANGENT |
 	                                        VertexContentEnum::BITANGENT);
+	vertexData.vertexFloatNum = getFloatNumFromVertexContent(vertexData.vertexContentEnum);
 	auto &data = vertexData.data;
 	{//generate data
 		std::vector<glm::vec3> position;
@@ -422,10 +422,10 @@ bool HJGraphics::PlanePrefab::instantiate(HJGraphics::ECSScene *_scene, const HJ
 HJGraphics::VertexData
 HJGraphics::PlanePrefab::generatePlaneVertexData(float _width, float _height, float _texStretchRatio) {
 	VertexData vertexData;
-	vertexData.vertexFloatNum = 14;
 	vertexData.vertexContentEnum = (VertexContentEnum::POSITION | VertexContentEnum::UV0 |
 	                                        VertexContentEnum::NORMAL | VertexContentEnum::TANGENT |
 	                                        VertexContentEnum::BITANGENT);
+	vertexData.vertexFloatNum = getFloatNumFromVertexContent(vertexData.vertexContentEnum);
 	auto &data = vertexData.data;
 	{//generate data
 		glm::vec3 t0, t1, b0, b1;

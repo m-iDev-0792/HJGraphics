@@ -5,8 +5,6 @@
 #include "system/CameraSystem.h"
 #include "component/CameraComponent.h"
 #include "ECS/ECSScene.h"
-#include "Log.h"
-#include "DebugUtility.h"
 #include "MathUtility.h"
 //todo. [ECS]also need to process camera's gizmo component
 void HJGraphics::CameraSystem::update(ECSScene *_scene, long long frameDeltaTime, long long elapsedTime,

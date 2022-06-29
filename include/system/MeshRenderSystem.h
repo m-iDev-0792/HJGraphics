@@ -27,10 +27,22 @@ namespace HJGraphics{
 		GLuint vertexContentEnum = 0;
 	};
 
+	struct DrawMeshOption{
+		enum {
+			NONE = 0,
+			USE_MATERIAL = 1,
+			OUTPUT_DEBUG_INFO = 1<<1,
+			IGNORE_FILTER = 1<<2
+		};
+	};
+
 	class MeshRenderSystem: public System{
 	public:
 		MeshRenderSystem()= default;
-
+		static void drawMesh(StaticMeshComponent *_meshComp, unsigned _filter, const std::shared_ptr<Shader> &_shader,
+		                     unsigned _option);
+		static void drawMeshes(ECSScene *_scene, unsigned int filter, const std::shared_ptr<Shader>& shader, bool outputDebugInfo = false);
+		static void drawMeshesWithSorting(ECSScene *_scene, unsigned int filter, const std::shared_ptr<Shader>& shader, bool outputDebugInfo = false);
 		void update(ECSScene *_scene, long long frameDeltaTime, long long elapsedTime, long long frameCount, void* extraData) override;
 
 	};

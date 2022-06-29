@@ -4,6 +4,7 @@ project(HJGraphics)
 set(CMAKE_CXX_STANDARD 17)
 #-----------include directories---------
 find_package(OpenMP)
+include_directories(${CMAKE_SOURCE_DIR})
 include_directories(include)
 include_directories(3rd-party)
 include_directories(3rd-party/freetype2)#set include path for freetype
