@@ -1,0 +1,15 @@
+{
+  "MotionBlur": true,
+  "DepthOfField": false,
+  "Bloom": false,
+  "SSR": false,
+  "SSR_Blur": true,
+  "SSR_Debug": false,
+  "MeshRenderSystemDebug": false,
+  "MeshRenderSystemSort" : true,
+  "TransformSystemDebug" : false,
+  "DeferredRendererECSDebug": false,
+  "LightUpdateSystemDebug": false,
+  "LightShadowSystemDebug": false,
+  "LightDeferredShadingSystemDebug": false
+}

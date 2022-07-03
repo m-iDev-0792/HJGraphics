@@ -7,10 +7,11 @@
 #include "MathUtility.h"
 #include "component/MeshComponent.h"
 #include "prefab/ShapePrefab.h"
+#include "Log.h"
 HJGraphics::SpotLightPrefab::SpotLightPrefab(glm::vec3 _position, glm::vec3 _direction, glm::vec3 _color, float _range,
                                              float _innerAngle, float _outerAngle) {
 	position = _position;
-	direction = _direction;
+	direction = glm::normalize(_direction);
 	light.color = _color;
 	light.range=_range;
 	light.innerAngle=_innerAngle;
@@ -25,6 +26,9 @@ bool HJGraphics::SpotLightPrefab::instantiate(HJGraphics::ECSScene *_scene, cons
 	if(lightComp&&transComp){
 		//set up light component
 		*lightComp=light;
+		if(lightComp->castShadow){
+			lightComp->shadowMap=std::make_shared<ShadowMap>(lightComp->shadowMapSize.x,lightComp->shadowMapSize.x);//intended to set a square size
+		}
 		//set up mesh component
 		static bool sharedSubmeshCreated=false;
 		static SubMesh submesh;
@@ -44,6 +48,12 @@ bool HJGraphics::SpotLightPrefab::instantiate(HJGraphics::ECSScene *_scene, cons
 		//set transform component
 		transComp->setTranslation(position);
 		transComp->setRotation(cameraDirectionToEulerAngle(direction));
+		auto rot=transComp->getRotation();
+		auto reconDir=applyEulerRotation(glm::vec3(0,0,-1),rot);
+		SPDLOG_DEBUG("original direction = ({}, {}, {}), rot = ({}, {}, {}), reconstructed dir = = ({}, {}, {})",
+					 direction.x,direction.y,direction.z,rot.x,rot.y,rot.z,reconDir.x,reconDir.y,reconDir.z);
+		auto diff = (direction-reconDir);
+		if(glm::length(diff)>0.1)SPDLOG_WARN("reconstructed direction is not same to original one, with diff ({},{},{}) length = {}",diff.x,diff.y,diff.z,glm::length(diff));
 		float r=light.range*glm::tan(glm::radians(light.outerAngle))*1.41f;
 		transComp->setScale(glm::vec3(r,r,light.range));
 		return true;
@@ -86,7 +96,7 @@ HJGraphics::SpotLightPrefab::generateSpotLightUnitVolume() {
 HJGraphics::ParallelLightPrefab::ParallelLightPrefab(glm::vec3 _direction, glm::vec3 _position, glm::vec3 _color,
                                                      float _shadowRange) {
 	position = _position;
-	direction = _direction;
+	direction = glm::normalize(_direction);
 	light.color = _color;
 	light.range=0;
 	light.shadowRange=_shadowRange;
@@ -100,6 +110,9 @@ bool HJGraphics::ParallelLightPrefab::instantiate(HJGraphics::ECSScene *_scene, 
 	if(lightComp&&transComp&&meshComp){
 		//set up light component
 		*lightComp=light;
+		if(lightComp->castShadow){
+			lightComp->shadowMap=std::make_shared<ShadowMap>(lightComp->shadowMapSize.x,lightComp->shadowMapSize.x);//intended to set a square size
+		}
 		//set up mesh component
 		static bool sharedSubmeshCreated=false;
 		static SubMesh submesh;
@@ -155,11 +168,14 @@ bool HJGraphics::PointLightPrefab::instantiate(HJGraphics::ECSScene *_scene, con
 	if(lightComp&&transComp&&meshComp){
 		//set up light component
 		*lightComp=light;
+		if(lightComp->castShadow){
+			lightComp->shadowCubeMap=std::make_shared<ShadowCubeMap>(lightComp->shadowMapSize.x,lightComp->shadowMapSize.x);//intended to set a square size
+		}
 		//set up mesh component
 		static bool sharedSubmeshCreated=false;
 		static SubMesh submesh;
 		if(!sharedSubmeshCreated){
-			submesh.name = "DefaultSpotLightVolumeMesh";
+			submesh.name = "DefaultPointLightVolumeMesh";
 			submesh.vertexData= generatePointLightUnitVolume();
 			submesh.drawStart = 0;
 			submesh.drawNum = submesh.vertexData.data.size() / getFloatNumFromVertexContent(submesh.vertexData.vertexContentEnum);
@@ -169,6 +185,7 @@ bool HJGraphics::PointLightPrefab::instantiate(HJGraphics::ECSScene *_scene, con
 			submesh.vertexData.free();
 			submesh.renderAttribute=RenderAttributeEnum::IGNORED;//light mesh will be ignored
 			sharedSubmeshCreated=true;
+			SPDLOG_DEBUG("created point light sub mesh VAO = {}, drawStart = {}, drawNum = {}",submesh.buffer.VAO,submesh.drawStart,submesh.drawNum);
 		}
 		meshComp->submeshes.push_back(submesh);
 		//set up transform component

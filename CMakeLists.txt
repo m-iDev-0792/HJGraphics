@@ -50,6 +50,12 @@ ENDIF()
 
 #Set up HJGraphics lib
 add_library(HJGraphics SHARED ${HJGRAPHICS_SRC} ${GLAD_SRC})
+IF(WIN32)
+    # make sure VC++ generates HJGraphics.lib for linking on Windows when
+    # see https://stackoverflow.com/questions/33062728/cmake-link-shared-library-on-windows
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+    set(BUILD_SHARED_LIBS  TRUE)
+ENDIF()
 target_link_libraries(HJGraphics PUBLIC ${GLFW3_LIB}  ${ASSIMP_LIB} ${FREETYPE_LIB} ${SPDLOG_LIB})
 target_include_directories(HJGraphics PUBLIC ${HJGRAPHICS_INCLUDE})
 if(OpenMP_CXX_FOUND)

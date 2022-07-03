@@ -15,6 +15,7 @@ namespace HJGraphics{
 		void disable(GLenum _state);
 
 		void useProgram(GLuint _program);
+		GLuint getCurrentProgram()const{return program;}
 
 		void activeTexture(GLuint _slot);
 		void bindTexture(GLenum _texType,GLuint _tex);

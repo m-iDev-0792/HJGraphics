@@ -18,7 +18,8 @@
 #include <initializer_list>
 #include "OpenGLHeader.h"
 #include "Common.h"
-//#define SHADER_UNIFORM_DEBUG
+#include "Log.h"
+#define SHADER_UNIFORM_DEBUG
 namespace HJGraphics {
 	enum class ShaderCodeType{
 		Vertex,
@@ -54,72 +55,108 @@ namespace HJGraphics {
 		void use() const { GL.useProgram(id); };
 
 		void setFloat(const std::string &name, float value) const {
+#ifdef SHADER_UNIFORM_DEBUG
+			if (id != GL.getCurrentProgram())
+				SPDLOG_WARN("Bound shader {}, but try to set uniform for shader {}", GL.getCurrentProgram(), id);
+#endif
 			auto loc=glGetUniformLocation(id, name.c_str());
 			if(loc>=0)glUniform1f(loc, value);
 #ifdef SHADER_UNIFORM_DEBUG
-			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+			else SPDLOG_WARN("No uniform named {} in shader {}",name,id);
 #endif
 		};
 
 		void setBool(const std::string &name, bool value) const {
+#ifdef SHADER_UNIFORM_DEBUG
+			if (id != GL.getCurrentProgram())
+				SPDLOG_WARN("Bound shader {}, but try to set uniform for shader {}", GL.getCurrentProgram(), id);
+#endif
 			auto loc=glGetUniformLocation(id, name.c_str());
 			if(loc>=0)glUniform1i(loc, (int)value);
 #ifdef SHADER_UNIFORM_DEBUG
-			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+			else SPDLOG_WARN("No uniform named {} in shader {}",name,id);
 #endif
 		};
 
 		void setInt(const std::string &name, int value) const  {
+#ifdef SHADER_UNIFORM_DEBUG
+			if (id != GL.getCurrentProgram())
+				SPDLOG_WARN("Bound shader {}, but try to set uniform for shader {}", GL.getCurrentProgram(), id);
+#endif
 			auto loc=glGetUniformLocation(id, name.c_str());
 			if(loc>=0)glUniform1i(loc, value);
 #ifdef SHADER_UNIFORM_DEBUG
-			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+			else SPDLOG_WARN("No uniform named {} in shader {}",name,id);
 #endif
 		};
 		void setUint(const std::string &name, unsigned int value) const {
+#ifdef SHADER_UNIFORM_DEBUG
+			if (id != GL.getCurrentProgram())
+				SPDLOG_WARN("Bound shader {}, but try to set uniform for shader {}", GL.getCurrentProgram(), id);
+#endif
 			auto loc=glGetUniformLocation(id, name.c_str());
 			if(loc>=0)glUniform1ui(loc, value);
 #ifdef SHADER_UNIFORM_DEBUG
-			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+			else SPDLOG_WARN("No uniform named {} in shader {}",name,id);
 #endif
 		};
 
 		void setIntArray(const std::string &name, int *value, int count) const {
+#ifdef SHADER_UNIFORM_DEBUG
+			if (id != GL.getCurrentProgram())
+				SPDLOG_WARN("Bound shader {}, but try to set uniform for shader {}", GL.getCurrentProgram(), id);
+#endif
 			auto loc=glGetUniformLocation(id, name.c_str());
 			if(loc>=0)glUniform1iv(loc, count, value);
 #ifdef SHADER_UNIFORM_DEBUG
-			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+			else SPDLOG_WARN("No uniform named {} in shader {}",name,id);
 #endif
 		}
 
 		void set3fv(const std::string &name, glm::vec3 value) const {
+#ifdef SHADER_UNIFORM_DEBUG
+			if (id != GL.getCurrentProgram())
+				SPDLOG_WARN("Bound shader {}, but try to set uniform for shader {}", GL.getCurrentProgram(), id);
+#endif
 			auto loc=glGetUniformLocation(id, name.c_str());
 			if(loc>=0)glUniform3f(loc, value.x, value.y, value.z);
 #ifdef SHADER_UNIFORM_DEBUG
-			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+			else SPDLOG_WARN("No uniform named {} in shader {}",name,id);
 #endif
 		};
 		void set4fv(const std::string &name, glm::vec4 value) const {
+#ifdef SHADER_UNIFORM_DEBUG
+			if (id != GL.getCurrentProgram())
+				SPDLOG_WARN("Bound shader {}, but try to set uniform for shader {}", GL.getCurrentProgram(), id);
+#endif
 			auto loc=glGetUniformLocation(id, name.c_str());
 			if(loc>=0)glUniform4f(loc, value.x, value.y, value.z, value.w);
 #ifdef SHADER_UNIFORM_DEBUG
-			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+			else SPDLOG_WARN("No uniform named {} in shader {}",name,id);
 #endif
 		};
 
 		void set2fv(const std::string &name, glm::vec2 value) const {
+#ifdef SHADER_UNIFORM_DEBUG
+			if (id != GL.getCurrentProgram())
+				SPDLOG_WARN("Bound shader {}, but try to set uniform for shader {}", GL.getCurrentProgram(), id);
+#endif
 			auto loc=glGetUniformLocation(id, name.c_str());
 			if(loc>=0)glUniform2f(loc, value.x, value.y);
 #ifdef SHADER_UNIFORM_DEBUG
-			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+			else SPDLOG_WARN("No uniform named {} in shader {}",name,id);
 #endif
 		};
 
 		void set4fm(const std::string &name, glm::mat4 value) const {
+#ifdef SHADER_UNIFORM_DEBUG
+			if (id != GL.getCurrentProgram())
+				SPDLOG_WARN("Bound shader {}, but try to set uniform for shader {}", GL.getCurrentProgram(), id);
+#endif
 			auto loc=glGetUniformLocation(id, name.c_str());
 			if(loc>=0)glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 #ifdef SHADER_UNIFORM_DEBUG
-			else std::cerr<<"No Uniform named "<<name<<" in the shader!"<<std::endl;
+			else SPDLOG_WARN("No uniform named {} in shader {}",name,id);
 #endif
 		};
 
@@ -128,7 +165,7 @@ namespace HJGraphics {
 			auto routineIndex=glGetSubroutineIndex(id,shaderType,routineName.c_str());
 			if(uniformLoc < fragSubroutine.size())fragSubroutine[uniformLoc]=routineIndex;
 #ifdef SHADER_UNIFORM_DEBUG
-				else std::cerr<<"routineUniform "<<uniformName<<" exceeded the routine value size"<<std::endl;
+			else SPDLOG_WARN("routineUniform {} exceeded the routine value size in shader {}",uniformName,id);
 #endif
 		}
 		void commitSubroutine(int shaderType=GL_FRAGMENT_SHADER){

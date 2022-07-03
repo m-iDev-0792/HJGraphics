@@ -7,7 +7,8 @@
 #include "Log.h"
 #include "DebugUtility.h"
 #include "Config.h"
-
+#include "component/CameraComponent.h"
+#include "IBLManager.h"
 void
 HJGraphics::MeshRenderSystem::update(HJGraphics::ECSScene *_scene, long long int frameDeltaTime,
                                      long long int elapsedTime,
@@ -116,30 +117,35 @@ void HJGraphics::MeshRenderSystem::drawMeshesWithSorting(ECSScene *_scene, unsig
 
 void HJGraphics::MeshRenderSystem::drawMesh(StaticMeshComponent *_meshComp, unsigned _filter,
                                             const std::shared_ptr<Shader> &_shader, unsigned _option) {
-	if (!_meshComp)return;
+	if (!_meshComp){
+		SPDLOG_WARN("mesh component is nullptr, returned");
+		return;
+	}
 	bool useMaterial = _option & DrawMeshOption::USE_MATERIAL;
 	bool outputDebugInfo = _option & DrawMeshOption::OUTPUT_DEBUG_INFO;
-	bool ignoreFilter=_option&DrawMeshOption::IGNORE_FILTER;
-	static bool firstDraw = true;
-	static GLuint lastVAO = 0;
+	bool ignoreFilter=_option & DrawMeshOption::IGNORE_FILTER;
+	bool isFirstDraw = true;
+	GLuint lastVAO = 0;
 	std::shared_ptr<Material> lastMaterial = nullptr;//DO NOT use static prefix, to avoid memory leaking
 	for (auto &submesh: _meshComp->submeshes) {
 		if (submesh.renderAttribute & _filter || ignoreFilter) {
 			if (submesh.material != lastMaterial && useMaterial) {
 				lastMaterial = submesh.material;
-				lastMaterial->bindTexture();
-				lastMaterial->writeToShader(_shader);
+				if(lastMaterial){
+					lastMaterial->bindTexture();
+					lastMaterial->writeToShader(_shader);
+				}
 				if (outputDebugInfo)SPDLOG_DEBUG("bind material {}", lastMaterial->name);
 			}
-			if (submesh.buffer.VAO != lastVAO || firstDraw) {
-				if (firstDraw)firstDraw = false;
+			if (submesh.buffer.VAO != lastVAO || isFirstDraw) {
+				if (isFirstDraw)isFirstDraw = false;
 				lastVAO = submesh.buffer.VAO;
-				glBindVertexArray(submesh.buffer.VAO);
-				if (outputDebugInfo)SPDLOG_DEBUG("Binding VAO {}", submesh.buffer.VAO);
+				glBindVertexArray(lastVAO);
+				if (outputDebugInfo)SPDLOG_DEBUG("Binding VAO {}", lastVAO);
 			}
 			if (outputDebugInfo)
-				SPDLOG_DEBUG("drawing submesh {}, drawStart = {}, drawNum = {}", submesh.name,
-				             submesh.drawStart, submesh.drawNum);
+				SPDLOG_DEBUG("drawing submesh {}, drawStart = {}, drawNum = {}, VAO = {}", submesh.name,
+				             submesh.drawStart, submesh.drawNum, lastVAO);
 			if (submesh.vertexData.vertexContentEnum & VertexContentEnum::INDEX) {
 				glDrawElements(submesh.vertexData.primitiveType, submesh.drawNum, GL_UNSIGNED_INT,
 				               (void *) (submesh.drawStart * sizeof(GLuint)));
@@ -151,4 +157,96 @@ void HJGraphics::MeshRenderSystem::drawMesh(StaticMeshComponent *_meshComp, unsi
 			             submesh.renderAttribute, _filter);
 		}
 	}
+}
+
+void HJGraphics::CustomMeshRenderSystem::update(HJGraphics::ECSScene *_scene, long long int frameDeltaTime,
+                                                long long int elapsedTime, long long int frameCount, void *extraData) {
+	if(!_scene)return;
+	auto customMeshes=_scene->getEntities<CustomMeshComponent,TransformComponent>();
+	bool isFirstDraw=true;
+	GLuint lastVAO = 0;
+	std::shared_ptr<Material> lastMaterial=nullptr;
+	for(auto& entity:customMeshes){
+		auto customComp=_scene->getComponent<CustomMeshComponent>(entity);
+		auto tranComp=_scene->getComponent<TransformComponent>(entity);
+		if(customComp&&tranComp){
+			const auto& shader=customComp->customShader;
+			{//bind shader and write uniform
+				shader->use();
+				auto model = tranComp->getWorldModel();
+				auto previousModel = tranComp->getPreviousWorldModel();
+				shader->set4fm("model", model);
+				shader->set4fm("normalModel", glm::transpose(glm::inverse(model)));
+				shader->set4fm("previousModel", previousModel);
+				if(customComp->uniformWriter){
+					customComp->uniformWriter(customComp->customShader);
+				}
+			}
+			for (auto &submesh: customComp->submeshes) {
+				if (submesh.renderAttribute & RenderAttributeEnum::VISIBLE) {
+					if (submesh.material != lastMaterial) {
+						lastMaterial = submesh.material;
+						if(lastMaterial){
+							lastMaterial->bindTexture();
+							lastMaterial->writeToShader(shader);
+						}
+					}
+					if (submesh.buffer.VAO != lastVAO || isFirstDraw) {
+						if (isFirstDraw)isFirstDraw = false;
+						lastVAO = submesh.buffer.VAO;
+						glBindVertexArray(lastVAO);
+					}
+					if (submesh.vertexData.vertexContentEnum & VertexContentEnum::INDEX) {
+						glDrawElements(submesh.vertexData.primitiveType, submesh.drawNum, GL_UNSIGNED_INT,
+						               (void *) (submesh.drawStart * sizeof(GLuint)));
+					} else {
+						glDrawArrays(submesh.vertexData.primitiveType, submesh.drawStart, submesh.drawNum);
+					}
+				}
+			}
+		}
+	}
+}
+
+void HJGraphics::SkyboxRenderSystem::update(HJGraphics::ECSScene *_scene, long long int frameDeltaTime,
+                                            long long int elapsedTime, long long int frameCount, void *_extraData) {
+	if(!_scene)return;
+	auto existingSkybox=_scene->getEntities<TransformComponent,SkyboxComponent>();
+	if(!existingSkybox.empty()){
+		auto skybox=*existingSkybox.begin();
+		auto name=_scene->getEntityData(skybox)->name;
+		if(existingSkybox.size()>1)SPDLOG_WARN("There are {} skybox found in the scene, [{}] will be used to render",name);
+		auto skyComp=_scene->getComponent<SkyboxComponent>(skybox);
+		auto tranComp=_scene->getComponent<TransformComponent>(skybox);
+		auto mainCamComp=_scene->getComponent<CameraComponent>(_scene->mainCameraEntityID);
+		auto mainCamTranComp=_scene->getComponent<TransformComponent>(_scene->mainCameraEntityID);
+		if(skyComp&&tranComp&&mainCamComp&&mainCamTranComp){
+			const auto& defaultShader=skyComp->skyboxShader;
+			auto translateMat=glm::translate(glm::mat4(1.0f), mainCamTranComp->getTranslation());
+			auto model= translateMat * tranComp->getWorldModel();
+			auto previousModel= translateMat * tranComp->getPreviousWorldModel();
+			auto projectionView=mainCamComp->projection*mainCamComp->view;
+			auto previousProjectionView=mainCamComp->previousProjection*mainCamComp->previousView;
+			defaultShader->use();
+			defaultShader->set4fm("model",model);
+			defaultShader->set4fm("previousModel",previousModel);
+			defaultShader->set4fm("projectionView",projectionView);
+			defaultShader->set4fm("previousProjectionView",previousProjectionView);
+			defaultShader->setInt("skybox",0);
+			GL.activeTexture(GL_TEXTURE0);
+			auto cubeMapDisplayType=*reinterpret_cast<int*>(_extraData);
+			int cubeMapID=0;
+			if(cubeMapDisplayType==SkyboxTextureDisplayEnum::EnvironmentCubeMap){
+				cubeMapID=skyComp->iblManager->environmentCubeMap->id;
+			}else if(cubeMapDisplayType==SkyboxTextureDisplayEnum::DiffuseIrradiance){
+				cubeMapID=skyComp->iblManager->diffuseIrradiance->id;
+			}else if(cubeMapDisplayType==SkyboxTextureDisplayEnum::SpecularPrefiltered){
+				cubeMapID=skyComp->iblManager->specularPrefiltered->id;
+			}
+			GL.bindTexture(GL_TEXTURE_CUBE_MAP, cubeMapID);
+			glBindVertexArray(skyComp->submeshes[0].buffer.VAO);
+			glDrawArrays(skyComp->submeshes[0].vertexData.primitiveType,skyComp->submeshes[0].drawStart,skyComp->submeshes[0].drawNum);
+		}
+	}
+
 }

@@ -24,6 +24,7 @@ namespace HJGraphics {
 		void setMainScene(std::shared_ptr<Scene> _mainScene) { mainScene = _mainScene; }
 
         void render(long long frameDeltaTime, long long elapsedTime, long long frameCount);
+		void render2(long long frameDeltaTime, long long elapsedTime, long long frameCount);
 
         void renderInit();
 
@@ -80,12 +81,6 @@ namespace HJGraphics {
 		int motionBlurSampleNum;
 		int motionBlurTargetFPS;
 		float motionBlurPower;
-		enum SkyboxTextureDisplayEnum{
-			EnvironmentCubeMap,
-			DiffuseIrradiance,
-			SpecularPrefiltered,
-			SkyboxTextureDisplayEnumNum
-		};
 		int skyboxTextureDisplayEnum;
 		
 		//shadow maps

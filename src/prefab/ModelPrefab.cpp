@@ -4,8 +4,7 @@
 #include "prefab/ModelPrefab.h"
 #include "Log.h"
 #include "ECS/ECSScene.h"
-
-//todo. consider cases that mesh does not have indices
+#include <filesystem>
 std::map<std::string, std::shared_ptr<HJGraphics::Texture>> HJGraphics::ModelPrefab::textures_loaded;
 
 HJGraphics::ModelPrefab::ModelPrefab(const std::string &_path, unsigned int _option) {

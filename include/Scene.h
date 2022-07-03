@@ -27,8 +27,12 @@ namespace HJGraphics {
 		CameraSystem cameraSystem;
 		TransformSystem transformSystem;
 		MeshRenderSystem renderSystem;
+		SkyboxRenderSystem skyboxRenderSystem;
+
+		LightUpdateSystem lightUpdateSystem;
 		LightShadowSystem lightShadowSystem;
 		LightDeferredShadingSystem lightShadingSystem;
+
 		SineAnimationSystem sineAnimationSystem;
 	private:
 		GLfloat ambientFactor;

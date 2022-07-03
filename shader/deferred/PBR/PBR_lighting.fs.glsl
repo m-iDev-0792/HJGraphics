@@ -12,6 +12,7 @@ uniform sampler2D gDepth;//3
 uniform sampler2D gAO;//4
 uniform vec2 gBufferSize;
 
+//corresponding definition is located in Light.h
 const int PARALLELLIGHT=0;
 const int SPOTLIGHT=1;
 const int POINTLIGHT=2;
@@ -40,6 +41,7 @@ uniform samplerCube shadowCubeMap;//11
 #include"PBR_Common.glsl"
 
 void main() {
+//    FragColor=vec4(1,0,0,1);return;
     vec2 uv=vec2(gl_FragCoord.x/gBufferSize.x,gl_FragCoord.y/gBufferSize.y);
 
     //material property

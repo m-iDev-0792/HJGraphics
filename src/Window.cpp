@@ -154,7 +154,7 @@ void HJGraphics::Window::inputCallback(long long deltaTime) {
 
 	if(glfwGetKey(windowPtr, GLFW_KEY_C) == GLFW_PRESS){
 		const char* info[]={"Environment cubemap","Diffuse irradiance","Specular prefiltered"};
-		renderer->skyboxTextureDisplayEnum=(renderer->skyboxTextureDisplayEnum+1)%DeferredRenderer::SkyboxTextureDisplayEnum::SkyboxTextureDisplayEnumNum;
+		renderer->skyboxTextureDisplayEnum=(renderer->skyboxTextureDisplayEnum+1)%SkyboxTextureDisplayEnum::SkyboxTextureDisplayEnumNum;
 		SPDLOG_INFO("Skybox texture = {}",info[renderer->skyboxTextureDisplayEnum]);
 	}
 }
@@ -162,7 +162,7 @@ void HJGraphics::Window::mouseButtonCallback(GLFWwindow *window, int button, int
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		mouseDown = true;
 		originalDirection=renderer->mainScene->getMainCamera()->direction;
-		if(false){//todo. [ECS]replace it with ecs version
+		{//todo. [ECS]replace it with ecs version
 			auto pCameraTransComp=renderer->mainScene->getComponent<TransformComponent>(renderer->mainScene->mainCameraEntityID);
 			originalDirection=getECSCameraDirection(pCameraTransComp->getRotation());
 		}
@@ -257,7 +257,7 @@ void HJGraphics::Window::run() {
 	std::cout<<"view matrix correct rate "<<renderer->sameCount<<"/"<<renderer->viewFrameCount<<std::endl;
 }
 void HJGraphics::Window::render(long long frameDeltaTime,long long elapsedTime,long long frameCount) {
-	if(renderer)renderer->render(frameDeltaTime, elapsedTime, frameCount);
+	if(renderer)renderer->render2(frameDeltaTime, elapsedTime, frameCount);
 }
 void HJGraphics::Window::renderUI(long long  deltaTime) {
 	if(textRenderer==nullptr)return;

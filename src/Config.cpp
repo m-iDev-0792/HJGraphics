@@ -4,7 +4,7 @@
 
 #include "Config.h"
 #include <fstream>
-std::shared_ptr<HJGraphics::Config> HJGraphics::Config::globalConfig=std::make_shared<Config>("config.json");
+std::shared_ptr<HJGraphics::Config> HJGraphics::Config::globalConfig=std::make_shared<Config>("../config/config.json");
 HJGraphics::Config::Config(const std::string &_path) {
 	if(!_path.empty()){
 		std::ifstream in(_path);

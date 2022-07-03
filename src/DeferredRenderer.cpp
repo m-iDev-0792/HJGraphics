@@ -2,6 +2,7 @@
 #include "IBLManager.h"
 #include "Utility.h"
 #include "component/CameraComponent.h"
+#include "component/MeshComponent.h"
 #include "Config.h"
 #include "Log.h"
 HJGraphics::DeferredRenderer::DeferredRenderer(int _width, int _height) {
@@ -126,9 +127,25 @@ HJGraphics::DeferredRenderer::postprocess(long long frameDeltaTime, Sizei size, 
 	GL.enable(GL_DEPTH_TEST);
 }
 void HJGraphics::DeferredRenderer::renderInit() {
-	iblManager=IBLManager::bakeIBLMap(mainScene->environmentMap,Sizei(512,512),
+	//todo. migrate code to ecs version(get skybox entity and assign an iblManager for it)
+	if(mainScene->environmentMap)iblManager=IBLManager::bakeIBLMap(mainScene->environmentMap,Sizei(512,512),
 									  Sizei(128,128),Sizei(128,128),
 									  0.125,1024);
+	{
+		auto skyboxes=mainScene->getEntities<SkyboxComponent,TransformComponent>();
+		if(skyboxes.size() > 1)SPDLOG_WARN("found more than one ({}) skyboxes in the scene",skyboxes.size());
+		for(auto& id:skyboxes){
+			auto name=mainScene->getEntityData(id)->name;
+			auto skyboxComp=mainScene->getComponent<SkyboxComponent>(id);
+			if(skyboxComp){
+				skyboxComp->iblManager=IBLManager::bakeIBLMap(skyboxComp->environmentMap,Sizei(512,512),
+				                                              Sizei(128,128),Sizei(128,128),
+				                                              0.125,1024);
+			}
+		}
+	}
+
+
 	std::vector<float> gizmoData;
 	//Allocate shadow maps for lights that casts shadow
 	for (int i = 0; i < mainScene->parallelLights.size(); ++i) {
@@ -560,11 +577,11 @@ void HJGraphics::DeferredRenderer::render(long long frameDeltaTime, long long el
 			auto& skybox=mainScene->skybox;
 			skybox->projectionView = projectionView;
 			skybox->previousProjectionView = previousProjectionView;
-			if(skyboxTextureDisplayEnum==EnvironmentCubeMap&&iblManager){
+			if(skyboxTextureDisplayEnum==SkyboxTextureDisplayEnum::EnvironmentCubeMap&&iblManager){
 				skybox->draw(&iblManager->environmentCubeMap->id);
-			}else if(skyboxTextureDisplayEnum==DiffuseIrradiance&&iblManager){
+			}else if(skyboxTextureDisplayEnum==SkyboxTextureDisplayEnum::DiffuseIrradiance&&iblManager){
 				skybox->draw(&iblManager->diffuseIrradiance->id);
-			}else if(skyboxTextureDisplayEnum==SpecularPrefiltered&&iblManager){
+			}else if(skyboxTextureDisplayEnum==SkyboxTextureDisplayEnum::SpecularPrefiltered&&iblManager){
 				skybox->draw(&iblManager->specularPrefiltered->id);
 			}
 		}

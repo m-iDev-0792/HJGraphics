@@ -14,11 +14,13 @@
 #include "DebugUtility.h"
 #include "Shader.h"
 namespace HJGraphics {
-	enum LightType {
-		ParallelLightType,
-		SpotLightType,
-        PointLightType,
-        AmbientType
+	struct LightType {
+		enum{
+			ParallelLightType = 0,
+			SpotLightType = 1,
+			PointLightType = 2,
+			AmbientType = 3
+		};
 	};
 
 	class Mesh;
@@ -29,7 +31,7 @@ namespace HJGraphics {
 		
 		GLfloat shadowZNear;
 		GLfloat shadowZFar;
-		LightType type;
+		unsigned type;
 
 		bool castShadow=true;
 

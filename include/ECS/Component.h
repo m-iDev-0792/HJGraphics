@@ -262,6 +262,7 @@ namespace HJGraphics {
 			auto iter = compHashToIndexMap.find(hc);
 			if (iter == compHashToIndexMap.end()) {
 				auto idx = compStorage.size();
+#ifdef __APPLE__
 				compStorage.template emplace_back(sizeof(T), COMPONENT_DATA_STORAGE_DEFAULT_CAPACITY,
 				                                  [](void *d) { reinterpret_cast<T *>(d)->~T(); },
 				                                  [](void *dst, void *src) {
@@ -269,6 +270,16 @@ namespace HJGraphics {
 					                                  *reinterpret_cast<EntityID *>(static_cast<char *>(dst) + sizeof(T))
 													  = *reinterpret_cast<EntityID *>(static_cast<char *>(src) + sizeof(T));
 				                                  });
+#endif
+#ifdef _WIN32
+				compStorage.emplace_back(sizeof(T), COMPONENT_DATA_STORAGE_DEFAULT_CAPACITY,
+				                                  [](void *d) { reinterpret_cast<T *>(d)->~T(); },
+				                                  [](void *dst, void *src) {
+					                                  new(dst) T(std::move(*reinterpret_cast<T *>(src)));
+					                                  *reinterpret_cast<EntityID *>(static_cast<char *>(dst) + sizeof(T))
+													  = *reinterpret_cast<EntityID *>(static_cast<char *>(src) + sizeof(T));
+				                                  });
+#endif
 				compHashToIndexMap[hc] = idx;
 				return idx;
 			}

@@ -8,7 +8,7 @@
 #include "component/LightComponent.h"
 #include "component/MeshComponent.h"
 #include "ECS/Entity.h"
-//todo. instantiate shadow map and shadow cube map
+
 namespace HJGraphics {
 	//LightPrefab has light component, transform component, mesh component(light volume)
 
@@ -16,7 +16,7 @@ namespace HJGraphics {
 		SpotLightPrefab() = default;
 
 		SpotLightPrefab(glm::vec3 _position, glm::vec3 _direction, glm::vec3 _color = glm::vec3(1.0f),
-		                float _range = 10.0f, float _innerAngle = 15.0f, float _outerAngle = 25.0f);
+		                float _range = 20.0f, float _innerAngle = 15.0f, float _outerAngle = 25.0f);
 
 		bool instantiate(ECSScene *_scene, const EntityID &_id) const override;
 
@@ -45,7 +45,7 @@ namespace HJGraphics {
 	struct PointLightPrefab : Prefab {
 		PointLightPrefab() = default;
 
-		explicit PointLightPrefab(glm::vec3 _position, glm::vec3 _color = glm::vec3(1.0f), float _range = 10.0f);
+		explicit PointLightPrefab(glm::vec3 _position, glm::vec3 _color = glm::vec3(1.0f), float _range = 20.0f);
 
 		bool instantiate(ECSScene *_scene, const EntityID &_id) const override;
 

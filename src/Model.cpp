@@ -181,7 +181,7 @@ std::vector<std::shared_ptr<HJGraphics::Texture>> HJGraphics::Model::loadMateria
 #endif
 #ifdef _WIN32
 			std::replace(texPathStr.begin(), texPathStr.end(), '/', '\\');
-			auto texture=std::make_shared<Texture2D>(texStdStrPath,option);
+			auto texture=std::make_shared<Texture2D>(texPathStr,option);
 #endif
 			texture->usage = texUsage;
 			texture->path = texPathStr;

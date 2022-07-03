@@ -46,5 +46,18 @@ namespace HJGraphics{
 		void update(ECSScene *_scene, long long frameDeltaTime, long long elapsedTime, long long frameCount, void* extraData) override;
 
 	};
+
+	class CustomMeshRenderSystem:public System{
+	public:
+		CustomMeshRenderSystem()=default;
+		void update(ECSScene *_scene, long long frameDeltaTime, long long elapsedTime, long long frameCount, void* extraData) override;
+	};
+	class SkyboxRenderSystem:public System{
+	public:
+		SkyboxRenderSystem()=default;
+		void update(ECSScene *_scene, long long frameDeltaTime, long long elapsedTime, long long frameCount, void* extraData) override;
+	};
+
+
 }
 #endif //HJGRAPHICS_MESHRENDERSYSTEM_H

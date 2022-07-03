@@ -102,6 +102,27 @@ namespace HJGraphics {
 	struct StaticMeshComponent {
 		std::vector<SubMesh> submeshes;
 	};
+
+	struct CustomMeshComponent {
+		std::vector<SubMesh> submeshes;
+		std::shared_ptr<Shader> customShader;
+		std::function<void(const std::shared_ptr<Shader>&)> uniformWriter;
+	};
+	class IBLManager;
+	struct SkyboxTextureDisplayEnum{
+		enum{
+			EnvironmentCubeMap,
+			DiffuseIrradiance,
+			SpecularPrefiltered,
+			SkyboxTextureDisplayEnumNum
+		};
+	};
+	struct SkyboxComponent{
+		std::vector<SubMesh> submeshes;
+		std::shared_ptr<Shader> skyboxShader;
+		std::shared_ptr<IBLManager> iblManager;//later assigned or managed by DeferredRenderer
+		std::shared_ptr<Texture2D> environmentMap;
+	};
 }
 
 #endif //HJGRAPHICS_MESHCOMPONENT_H

@@ -14,6 +14,7 @@
 namespace HJGraphics{
 	//update transform setting for lights to ensure light volumes are rendered properly
 	class LightUpdateSystem : public System{
+	public:
 		LightUpdateSystem()=default;
 		void update(ECSScene *_scene, long long frameDeltaTime, long long elapsedTime, long long frameCount, void* extraData) override;
 	};

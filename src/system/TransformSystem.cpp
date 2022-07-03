@@ -88,9 +88,10 @@ void HJGraphics::TransformSystem::update(ECSScene *_scene, long long frameDeltaT
 		if (trans->isDirty) {
 			trans->previousLocalModel = trans->localModel;
 			trans->localModel = glm::translate(glm::mat4(1.0f), trans->translation);
-			trans->localModel = glm::rotate(trans->localModel, glm::radians(trans->rotation.x), glm::vec3(1, 0, 0));
-			trans->localModel = glm::rotate(trans->localModel, glm::radians(trans->rotation.y), glm::vec3(0, 1, 0));
+			//todo. [caution] I just changed the rotation order to XYZ in 2022.6.30
 			trans->localModel = glm::rotate(trans->localModel, glm::radians(trans->rotation.z), glm::vec3(0, 0, 1));
+			trans->localModel = glm::rotate(trans->localModel, glm::radians(trans->rotation.y), glm::vec3(0, 1, 0));
+			trans->localModel = glm::rotate(trans->localModel, glm::radians(trans->rotation.x), glm::vec3(1, 0, 0));
 			trans->localModel = glm::scale(trans->localModel, trans->scale);
 			trans->isDirty = false;
 		}

@@ -2,11 +2,12 @@
 // Created by 何振邦 on 2022/6/4.
 //
 #include "HJGraphics.h"
-#include "prefab/CameraPrefab.h"
 #include "Log.h"
+#include "prefab/CameraPrefab.h"
 #include "prefab/ModelPrefab.h"
 #include "prefab/ShapePrefab.h"
 #include "prefab/LightPrefab.h"
+#include "prefab/SkyboxPrefab.h"
 #include "component/AnimationComponent.h"
 using namespace std;
 using namespace glm;
@@ -22,11 +23,11 @@ int main() {
 	modelPrefab.scale=glm::vec3(0.0025);
 
 
-	ModelPrefab glockPrefab("../model/Glock/Glock.obj",
-	                        CLEAR_VERTEX | RELEASE_ASSIMP_DATA);
-	glockPrefab.position=glm::vec3(0,1,4);
-	glockPrefab.scale=glm::vec3(15);
-	glockPrefab.rotation=glm::vec3(0,90,0);
+//	ModelPrefab glockPrefab("../model/Glock/Glock.obj",
+//	                        CLEAR_VERTEX | RELEASE_ASSIMP_DATA);
+//	glockPrefab.position=glm::vec3(0,1,4);
+//	glockPrefab.scale=glm::vec3(15);
+//	glockPrefab.rotation=glm::vec3(0,90,0);
 
 	glm::vec3 cameraPos = glm::vec3(5.0f, 5.0f, 10.0f);
 	glm::vec3 cameraDirection = glm::vec3(0.0f, 0.0f, 0.0f) - cameraPos;
@@ -60,7 +61,13 @@ int main() {
 	auto spotLight = make_shared<SpotLight>(glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(-5.0f, 5.0f, 3.0f), glm::vec3(3));
 	auto pointLight = make_shared<PointLight>(glm::vec3(0.0f, 2.0f, 2.0f), glm::vec3(5));
 
-	SpotLightPrefab spotLightPrefab(glm::vec3(-5.0f, 5.0f, 3.0f),glm::vec3(1.0f, -1.0f, -1.0f),glm::vec3(20,0,0));
+	glm::vec3 spotlightPosition(10.0f, 10.0f, 0.0f);
+	glm::vec3 pointlightPosition(2.0f, 2.0f, 2.0f);
+	SpotLightPrefab spotLightPrefab(spotlightPosition,-spotlightPosition,glm::vec3(10));
+	PointLightPrefab pointLightPrefab(pointlightPosition, glm::vec3(10),20);
+	ParallelLightPrefab parallelLightPrefab(glm::vec3(-1.0f, -0.7f, -2.0f), glm::vec3(6.0f, 6.0f, 0.0f),
+	                                        glm::vec3(10.0f));
+	SkyboxPrefab skyboxPrefab(50.0f, std::make_shared<Texture2D>("../texture/beach.hdr", TextureOption::withMipMap()));
 
 	auto scene = make_shared<Scene>(0.3, glm::vec3(0));
 	auto camRes = scene->instantiate(cameraPrefab, "mainCamera");
@@ -72,9 +79,8 @@ int main() {
 	scene->instantiate(boxPrefab, "Box");
 	scene->instantiate(planePrefab, "Plane");
 	scene->instantiate(modelPrefab,"FireExt");
-	scene->instantiate(glockPrefab,"Glock");
+//	scene->instantiate(glockPrefab,"Glock");
 	scene->instantiate(floor,"Floor");
-	scene->instantiate(spotLightPrefab,"spotlight");
 	{
 		//1
 		//|
@@ -122,12 +128,16 @@ int main() {
 		}
 	}
 
-	scene->addLight(pointLight);
+//	scene->addLight(pointLight);
 //	scene->addLight(spotLight);
 //	scene->addLight(paraLight);
+	scene->instantiate(pointLightPrefab,"PointLight");
+//	scene->instantiate(parallelLightPrefab,"ParallelLight");
+//	scene->instantiate(spotLightPrefab,"SpotLight");
+	auto skyboxRes=scene->instantiate(skyboxPrefab,"Skybox");
 	scene->addCamera(camera);
 	scene->addObject(coord);
-	scene->setSkybox(50.0f, std::make_shared<Texture2D>("../texture/beach.hdr", TextureOption::withMipMap()));
+//	scene->setSkybox(50.0f, std::make_shared<Texture2D>("../texture/beach.hdr", TextureOption::withMipMap()));
 
 	auto renderer = make_shared<DeferredRenderer>(1600, 1200);
 	renderer->setMainScene(scene);

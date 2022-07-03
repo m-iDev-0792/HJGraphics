@@ -43,7 +43,7 @@ namespace HJGraphics {
 			ArcheType archeType=INVALID_COMPONENT_TYPE;
 			for(size_t i=0;i<sizeof...(Args);++i){
 				auto iter=cm.compHashToIndexMap.find(hashCodes[i]);
-				if(iter==cm.compHashToIndexMap.end())continue;
+				if(iter==cm.compHashToIndexMap.end())return std::set<EntityID>{};//no such type of component
 				archeType=archeType|(1<<iter->second);
 			}
 			return em.getEntities(archeType);
